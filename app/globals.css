@@ -1,0 +1,115 @@
+@import "tailwindcss";
+
+@theme {
+  --color-background: #000000; /* Negro */
+  --color-foreground: #ffffff; /* Blanco */
+  --color-card-bg: rgba(56, 56, 56, 0.65); /* Gris Oscuro */
+  --color-border-color: rgba(84, 84, 84, 0.4); /* Gris Oscuro #545454 */
+  
+  --font-sans: var(--font-satoshi), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+
+  /* Mapear las clases de emerald (verde) al Amarillo #800 */
+  --color-emerald-500: #ffe600; /* Amarillo #800 */
+  --color-emerald-450: #ffe600;
+  --color-emerald-400: #ffff33; /* Amarillo claro */
+  --color-emerald-300: #ffff66;
+  --color-emerald-600: #d4c000;
+  --color-emerald-700: #a89800;
+  --color-emerald-800: #7d7100;
+  --color-emerald-900: #524a00;
+
+  /* Mapear las clases de slate/gray a la paleta de grises oscuros y negro */
+  --color-slate-950: #000000; /* Negro profundo */
+  --color-slate-900: #1a1a1a; /* Gris oscuro medio */
+  --color-slate-850: #2d2d2d;
+  --color-slate-800: #383838; /* Gris Oscuro solicitado #545454 */
+  --color-slate-700: #545454; /* Gris intermedio */
+}
+
+html, body {
+  scrollbar-gutter: stable;
+}
+
+/* Custom Scrollbar Styles for premium feel */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #ffe600 #000000;
+}
+
+/* Custom Scrollbar Styles for Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+  width: 6px !important;
+  height: 6px !important;
+}
+
+*::-webkit-scrollbar-track {
+  background: #000000 !important;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #ffe600 !important;
+  border-radius: 3px !important;
+  border: 1.5px solid #000000 !important;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: #ffff33 !important;
+}
+
+/* Lenis Scroll Specific Styles */
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
+}
+
+/* Premium gradient utility classes */
+.text-gradient-gold {
+  background: linear-gradient(135deg, #fef08a 0%, #fbbf24 50%, #d97706 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-emerald {
+  background: linear-gradient(135deg, #fef08a 0%, #facc15 50%, #854d0e 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.glass-panel {
+  background: rgba(28, 28, 28, 0.45);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(84, 84, 84, 0.2);
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+}
+
+/* Hide scrollbar utility class */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
