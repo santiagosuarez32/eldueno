@@ -53,7 +53,7 @@ export default function Hero() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.1 }}
-                className="text-4xl sm:text-6xl font-extrabold tracking-tight text-white leading-tight font-sans"
+                className="text-5xl sm:text-7xl font-bold tracking-tight text-white leading-[0.9] font-sans"
               >
                 Encontrá el hogar <br />
                 <span className="text-emerald-400">de tus sueños</span>

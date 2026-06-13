@@ -1,20 +1,19 @@
 import Link from 'next/link';
-import { Building, Mail, Phone, MapPin, Heart } from 'lucide-react';
+import { Mail, Phone, MapPin } from 'lucide-react';
 
 export default function Footer() {
   return (
-    <footer className="bg-slate-950 border-t border-slate-900 pt-16 pb-8 text-slate-400">
+    <footer className="bg-slate-50 border-t border-slate-200 pt-16 pb-8 text-slate-600">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
           {/* Brand Column */}
           <div className="space-y-4">
-            <Link href="/" className="flex items-center space-x-2 group">
-              <div className="bg-gradient-to-tr from-emerald-500 to-teal-400 p-2 rounded-xl text-slate-950 font-bold">
-                <Building className="h-6 w-6" />
-              </div>
-              <span className="text-xl font-bold tracking-tight text-white">
-                Dueño<span className="text-emerald-400">Directo</span>
-              </span>
+            <Link href="/" className="flex items-center group">
+              <img
+                src="/navbar.png"
+                alt="DueñoDirecto"
+                className="h-16 w-auto object-contain transition-all duration-300 group-hover:scale-102 brightness-0"
+              />
             </Link>
             <p className="text-sm leading-relaxed text-slate-500">
               Conectamos a dueños y compradores directamente. Sin intermediarios, sin comisiones inmobiliarias. Tu hogar, al precio real de mercado.
@@ -23,63 +22,63 @@ export default function Footer() {
 
           {/* Quick Links */}
           <div>
-            <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">Plataforma</h3>
+            <h3 className="text-sm font-semibold text-slate-900 tracking-wider mb-4">Enlaces rápidos</h3>
             <ul className="space-y-3 text-sm">
               <li>
-                <Link href="/" className="hover:text-emerald-400 transition-colors">Inicio</Link>
+                <Link href="/" className="text-slate-600 hover:text-emerald-600 transition-colors">Inicio</Link>
               </li>
               <li>
-                <Link href="/propiedades" className="hover:text-emerald-400 transition-colors">Buscar Propiedades</Link>
+                <Link href="/nosotros" className="text-slate-600 hover:text-emerald-600 transition-colors">Nosotros</Link>
               </li>
               <li>
-                <Link href="/publicar" className="hover:text-emerald-400 transition-colors">Publicar Propiedad</Link>
+                <Link href="/propiedades" className="text-slate-600 hover:text-emerald-600 transition-colors">Propiedades</Link>
+              </li>
+              <li>
+                <Link href="/servicios" className="text-slate-600 hover:text-emerald-600 transition-colors">Servicios</Link>
+              </li>
+              <li>
+                <Link href="/contacto" className="text-slate-600 hover:text-emerald-600 transition-colors">Contacto</Link>
               </li>
             </ul>
           </div>
 
           {/* Legal / Services */}
           <div>
-            <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">Servicios Opcionales</h3>
+            <h3 className="text-sm font-semibold text-slate-900 tracking-wider mb-4">Servicios</h3>
             <ul className="space-y-3 text-sm">
-              <li className="hover:text-emerald-400 cursor-pointer transition-colors">Asesoramiento Legal</li>
-              <li className="hover:text-emerald-400 cursor-pointer transition-colors">Escribanía y Boleto Seguro</li>
-              <li className="hover:text-emerald-400 cursor-pointer transition-colors">Fotografía Profesional</li>
+              <li className="text-slate-600 hover:text-emerald-600 cursor-pointer transition-colors">Compra y Venta de Propiedades</li>
+              <li className="text-slate-600 hover:text-emerald-600 cursor-pointer transition-colors">Prestamos hipotecarios</li>
+              <li className="text-slate-600 hover:text-emerald-600 cursor-pointer transition-colors">Servicios de arquitectura</li>
             </ul>
           </div>
 
           {/* Contact info */}
           <div>
-            <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">Contacto</h3>
+            <h3 className="text-sm font-semibold text-slate-900 tracking-wider mb-4">Contacto</h3>
             <ul className="space-y-3 text-sm">
-              <li className="flex items-center gap-2">
-                <Mail className="h-4 w-4 text-emerald-400" />
-                <span>soporte@duenodirecto.com</span>
+              <li className="flex items-start gap-2">
+                <MapPin className="h-4 w-4 text-emerald-600 mt-0.5 flex-shrink-0" />
+                <span>Heredia, Asunción de Belén, diagonal a la plaza de deportes.</span>
               </li>
               <li className="flex items-center gap-2">
-                <Phone className="h-4 w-4 text-emerald-400" />
-                <span>+506 2201-0800</span>
+                <Phone className="h-4 w-4 text-emerald-600 flex-shrink-0" />
+                <span>+506 2280-6665</span>
               </li>
               <li className="flex items-center gap-2">
-                <MapPin className="h-4 w-4 text-emerald-400" />
-                <span>Escazú, San José, Costa Rica</span>
+                <Phone className="h-4 w-4 text-emerald-600 flex-shrink-0" />
+                <span>+506 8620-8287</span>
+              </li>
+              <li className="flex items-center gap-2">
+                <Mail className="h-4 w-4 text-emerald-600 flex-shrink-0" />
+                <span>bienesraices@elduenovende.com</span>
               </li>
             </ul>
           </div>
         </div>
 
-        {/* Legal Disclaimer */}
-        <div className="border-t border-slate-900/60 pt-8 pb-6 text-xs text-slate-600 leading-relaxed">
-          <p className="mb-4">
-            *Aviso Legal: DueñoDirecto no actúa como corredor inmobiliario, intermediario o agente de bienes raíces. Todos los listados son provistos directamente por sus respectivos dueños. DueñoDirecto no cobra comisión alguna sobre la venta o alquiler de los inmuebles. Se recomienda que los interesados realicen el correspondiente estudio de títulos y cuenten con asesoría legal profesional antes de formalizar cualquier transacción.
-          </p>
-        </div>
-
         {/* Copyright */}
-        <div className="border-t border-slate-900/40 pt-6 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500">
+        <div className="border-t border-slate-200/80 pt-6 text-center text-xs text-slate-500">
           <p>© {new Date().getFullYear()} DueñoDirecto. Todos los derechos reservados.</p>
-          <p className="flex items-center gap-1 mt-2 sm:mt-0">
-            Hecho con <Heart className="h-3.5 w-3.5 text-red-500 fill-red-500 animate-pulse" /> para Dueño Vende
-          </p>
         </div>
       </div>
     </footer>

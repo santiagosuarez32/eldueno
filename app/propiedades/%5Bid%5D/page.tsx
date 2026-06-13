@@ -112,7 +112,7 @@ export default async function PropertyDetailPage({ params }: PropertyDetailPageP
                 </div>
 
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                  <h1 className="text-2xl sm:text-4xl font-extrabold text-white tracking-tight leading-snug">
+                  <h1 className="text-2xl sm:text-4xl font-bold text-white tracking-tight leading-snug">
                     {property.title}
                   </h1>
                   <span className="text-3xl font-extrabold text-emerald-400 tracking-tight shrink-0">

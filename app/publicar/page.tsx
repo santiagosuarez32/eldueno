@@ -64,7 +64,7 @@ export default function PublishPage() {
           
           {/* Header */}
           <div className="text-center mb-10 space-y-2">
-            <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+            <h1 className="text-3xl sm:text-4xl font-bold text-white tracking-tight">
               Publicá tu Propiedad
             </h1>
             <p className="text-slate-400 text-sm">

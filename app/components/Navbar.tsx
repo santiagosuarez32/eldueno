@@ -27,16 +27,16 @@ export default function Navbar() {
   const navLinks = [
     { name: 'Inicio', href: '/' },
     { name: 'Nosotros', href: '/nosotros' },
+    { name: 'Propiedades', href: '/propiedades' },
     { name: 'Servicios', href: '/servicios' },
     { name: 'Contacto', href: '/contacto' },
-    { name: 'Ubicación', href: '/ubicacion' },
   ];
 
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled
-          ? 'bg-black border-b border-slate-800/50 py-3 shadow-lg shadow-black/40'
+          ? 'bg-white border-b border-slate-200 py-3 shadow-lg shadow-black/5'
           : 'bg-transparent py-5 border-b border-transparent'
       }`}
     >
@@ -47,7 +47,7 @@ export default function Navbar() {
             <img
               src="/navbar.png"
               alt="DueñoDirecto"
-              className="h-16 w-auto object-contain transition-transform duration-200 group-hover:scale-102"
+              className={`h-16 w-auto object-contain transition-all duration-300 group-hover:scale-102 ${scrolled ? 'brightness-0' : ''}`}
             />
           </Link>
 
@@ -58,7 +58,7 @@ export default function Navbar() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="relative text-[15px] font-normal text-slate-350 hover:text-[#ffe600] transition-colors duration-200 py-1.5 after:absolute after:bottom-[3px] after:left-0 after:h-[1.5px] after:w-full after:bg-[#ffe600] after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 after:origin-left"
+                  className={`relative text-[15px] font-normal transition-colors duration-200 py-1.5 after:absolute after:bottom-[3px] after:left-0 after:h-[1.5px] after:w-full after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 after:origin-left ${scrolled ? 'text-slate-600 hover:text-slate-950 after:bg-slate-950' : 'text-slate-350 hover:text-[#ffe600] after:bg-[#ffe600]'}`}
                 >
                   {link.name}
                 </Link>
@@ -70,12 +70,12 @@ export default function Navbar() {
           <div className="hidden md:flex items-center space-x-4">
             <Link
               href="/propiedades"
-              className="px-4 py-2 text-sm font-medium text-slate-300 hover:text-white transition-colors"
+              className={`px-4 py-2 text-sm font-medium transition-colors ${scrolled ? 'text-slate-600 hover:text-slate-950' : 'text-slate-300 hover:text-white'}`}
             >
               Buscar Propiedades
             </Link>
             <Link href="/contacto">
-              <FlowButton text="Contáctenos" variant="primary" />
+              <FlowButton text="Contáctenos" variant="primary-solid" />
             </Link>
           </div>
 
@@ -83,7 +83,11 @@ export default function Navbar() {
           <div className="md:hidden flex items-center">
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="inline-flex items-center justify-center p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-900 focus:outline-none transition-colors border border-slate-800"
+              className={`inline-flex items-center justify-center p-2 rounded-xl focus:outline-none transition-colors border ${
+                scrolled
+                  ? 'text-slate-600 hover:text-slate-950 hover:bg-slate-100 border-slate-200'
+                  : 'text-slate-400 hover:text-white hover:bg-slate-900 border-slate-800'
+              }`}
               aria-label="Toggle menu"
             >
               {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -124,7 +128,7 @@ export default function Navbar() {
                   Buscar Propiedades
                 </Link>
                 <Link href="/contacto" onClick={() => setIsOpen(false)}>
-                  <FlowButton text="Contáctenos" variant="primary" />
+                  <FlowButton text="Contáctenos" variant="primary-solid" />
                 </Link>
               </div>
             </div>

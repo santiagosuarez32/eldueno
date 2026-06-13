@@ -4,10 +4,11 @@ import { ArrowRight } from 'lucide-react';
 
 interface FlowButtonProps {
   text?: string;
-  variant?: 'primary' | 'secondary' | 'light';
+  variant?: 'primary' | 'secondary' | 'light' | 'primary-solid';
+  className?: string;
 }
 
-export function FlowButton({ text = "Modern Button", variant = "primary" }: FlowButtonProps) {
+export function FlowButton({ text = "Modern Button", variant = "primary", className = "" }: FlowButtonProps) {
   // Determine color theme based on the variant prop
   let borderClass = "border-white/20";
   let textClass = "text-white";
@@ -15,6 +16,7 @@ export function FlowButton({ text = "Modern Button", variant = "primary" }: Flow
   let hoverTextClass = "hover:text-slate-950 hover:border-transparent";
   let arrowStroke = "stroke-white";
   let arrowHoverStroke = "group-hover:stroke-slate-950";
+  let defaultBgClass = "bg-transparent";
 
   if (variant === 'primary') {
     // Bright Yellow brand button
@@ -40,10 +42,19 @@ export function FlowButton({ text = "Modern Button", variant = "primary" }: Flow
     hoverTextClass = "hover:text-white";
     arrowStroke = "stroke-[#111111]";
     arrowHoverStroke = "group-hover:stroke-white";
+  } else if (variant === 'primary-solid') {
+    // Solid Yellow brand button that inverts to black on hover
+    borderClass = "border-slate-950/20 hover:border-transparent";
+    textClass = "text-slate-950";
+    bgCircleClass = "bg-slate-950";
+    hoverTextClass = "hover:text-[#ffe600]";
+    arrowStroke = "stroke-slate-950";
+    arrowHoverStroke = "group-hover:stroke-[#ffe600]";
+    defaultBgClass = "bg-[#ffe600]";
   }
 
   return (
-    <button className={`group relative flex items-center gap-1 overflow-hidden rounded-[100px] border-[1.5px] ${borderClass} bg-transparent px-8 py-3 text-sm font-semibold ${textClass} ${hoverTextClass} cursor-pointer transition-all duration-[600ms] ease-[cubic-bezier(0.23,1,0.32,1)] hover:rounded-[12px] active:scale-[0.95]`}>
+    <button className={`group relative flex items-center gap-1 overflow-hidden rounded-[100px] border-[1.5px] ${borderClass} ${className || defaultBgClass} px-8 py-3 text-sm font-semibold ${textClass} ${hoverTextClass} cursor-pointer transition-all duration-[600ms] ease-[cubic-bezier(0.23,1,0.32,1)] hover:rounded-[12px] active:scale-[0.95]`}>
       {/* Left arrow (arr-2) */}
       <ArrowRight 
         className={`absolute w-4 h-4 left-[-25%] ${arrowStroke} fill-none z-[9] group-hover:left-4 ${arrowHoverStroke} transition-all duration-[800ms] ease-[cubic-bezier(0.34,1.56,0.64,1)]`} 

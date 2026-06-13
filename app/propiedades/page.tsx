@@ -86,7 +86,7 @@ function PropertiesContent() {
           
           {/* Header */}
           <div className="mb-10 space-y-2">
-            <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+            <h1 className="text-3xl sm:text-4xl font-bold text-white tracking-tight">
               Catálogo de Propiedades
             </h1>
             <p className="text-slate-400 text-sm sm:text-base">
