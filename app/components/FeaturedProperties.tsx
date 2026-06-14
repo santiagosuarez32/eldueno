@@ -117,7 +117,7 @@ export default function FeaturedProperties() {
                     <div className="absolute top-4 right-4 z-10">
                       <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-900/80 backdrop-blur-sm border border-slate-700/50 text-slate-300 text-[10px] font-semibold shadow-sm">
                         <MapPin className="h-3 w-3 text-white flex-shrink-0" />
-                        Dueño Directo
+                        Costa Rica
                       </span>
                     </div>
 

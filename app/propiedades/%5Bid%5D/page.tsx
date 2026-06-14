@@ -232,7 +232,7 @@ export default async function PropertyDetailPage({ params }: PropertyDetailPageP
                   Operación Transparente
                 </div>
                 <p className="text-slate-500 text-xs leading-relaxed">
-                  Para tu tranquilidad, DueñoDirecto te ofrece el servicio de **Boleto Seguro**. Te proveemos plantillas contractuales homologadas y asesoría con escribanos matriculados que supervisan la firma del boleto.
+                  Para tu tranquilidad, El Dueño Vende te ofrece el servicio de **Boleto Seguro**. Te proveemos plantillas contractuales homologadas y asesoría con escribanos matriculados que supervisan la firma del boleto.
                 </p>
               </div>
 

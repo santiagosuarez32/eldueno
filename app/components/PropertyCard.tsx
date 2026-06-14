@@ -35,7 +35,7 @@ export default function PropertyCard({ property }: PropertyCardProps) {
         <div className="absolute top-4 left-4 z-20 flex flex-col gap-2">
           <span className="bg-slate-950/80 backdrop-blur-md text-emerald-400 text-xs font-semibold px-3 py-1.5 rounded-full flex items-center gap-1 border border-emerald-500/25">
             <ShieldCheck className="h-3.5 w-3.5 flex-shrink-0" />
-            Dueño Directo
+            Costa Rica
           </span>
           {property.featured && (
             <span className="bg-amber-500/90 text-slate-950 text-[10px] uppercase font-bold tracking-wider px-2.5 py-1 rounded-full w-fit">

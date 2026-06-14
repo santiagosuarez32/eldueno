@@ -107,7 +107,7 @@ export default function Calculator() {
                 <p className="text-white text-sm">4.0% total</p>
               </div>
               <div className="space-y-1">
-                <p>Costo en DueñoDirecto</p>
+                <p>Costo en El Dueño Vende</p>
                 <p className="text-emerald-400 text-sm">0% Gratis</p>
               </div>
             </div>

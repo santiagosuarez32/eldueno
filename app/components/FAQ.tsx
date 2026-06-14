@@ -8,8 +8,8 @@ import Link from 'next/link';
 const faqs = [
   {
     id: 'item-1',
-    question: '¿Qué es DueñoDirecto?',
-    answer: 'DueñoDirecto es una plataforma que conecta directamente a dueños de propiedades con compradores e inquilinos interesados, eliminando intermediarios y comisiones inmobiliarias. Ofrecemos un servicio transparente, ágil y seguro para que encuentres tu próximo hogar.'
+    question: '¿Qué es El Dueño Vende?',
+    answer: 'El Dueño Vende es una plataforma que conecta directamente a dueños de propiedades con compradores e inquilinos interesados, eliminando intermediarios y comisiones inmobiliarias. Ofrecemos un servicio transparente, ágil y seguro para que encuentres tu próximo hogar.'
   },
   {
     id: 'item-2',
@@ -19,7 +19,7 @@ const faqs = [
   {
     id: 'item-3',
     question: '¿Cuánto cuesta publicar en la plataforma?',
-    answer: 'Publicar tu propiedad en DueñoDirecto es completamente gratuito. No cobramos comisiones por venta ni por alquiler. Nuestro objetivo es facilitar la conexión directa entre dueños y compradores sin costos ocultos.'
+    answer: 'Publicar tu propiedad en El Dueño Vende es completamente gratuito. No cobramos comisiones por venta ni por alquiler. Nuestro objetivo es facilitar la conexión directa entre dueños y compradores sin costos ocultos.'
   },
   {
     id: 'item-4',
@@ -41,7 +41,7 @@ export default function FAQ() {
   };
 
   return (
-    <section className="bg-white py-20 md:py-32">
+    <section className="bg-white pt-20 pb-10 md:pt-32 md:pb-12">
       <div className="mx-auto max-w-7xl px-4 md:px-6">
         <div className="grid gap-10 md:grid-cols-5 md:gap-16">
           
@@ -63,7 +63,7 @@ export default function FAQ() {
               ¿No encontrás lo que buscás? Contactá a nuestro{' '}
               <Link
                 href="/contacto"
-                className="text-emerald-500 font-medium hover:underline"
+                className="text-black font-bold underline decoration-[#ffe600] decoration-[3px] underline-offset-4 hover:text-black transition-colors"
               >
                 equipo de soporte
               </Link>
@@ -118,7 +118,7 @@ export default function FAQ() {
             ¿No encontrás lo que buscás? Contactá a nuestro{' '}
             <Link
               href="/contacto"
-              className="text-emerald-500 font-medium hover:underline"
+              className="text-black font-bold underline decoration-[#ffe600] decoration-[3px] underline-offset-4 hover:text-black transition-colors"
             >
               equipo de soporte
             </Link>

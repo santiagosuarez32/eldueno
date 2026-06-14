@@ -438,7 +438,7 @@ export default function PublishPage() {
 
                       {/* Info / Terms block */}
                       <div className="p-4 bg-slate-950/60 border border-slate-900 rounded-2xl text-[10px] sm:text-xs text-slate-500 leading-relaxed">
-                        *Al publicar tu propiedad, confirmás que sos el propietario legítimo o tenés autorización legal de venta del inmueble. DueñoDirecto no intervendrá en las conversaciones, ofertas o firmas contractuales, operando únicamente como nexo de comunicación directa.
+                        *Al publicar tu propiedad, confirmás que sos el propietario legítimo o tenés autorización legal de venta del inmueble. El Dueño Vende no intervendrá en las conversaciones, ofertas o firmas contractuales, operando únicamente como nexo de comunicación directa.
                       </div>
                     </div>
                   )}

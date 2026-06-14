@@ -1,6 +1,60 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { useState, useEffect, useRef } from 'react';
+import { motion, useInView } from 'framer-motion';
+
+interface AnimatedCounterProps {
+  value: number;
+  duration?: number;
+  prefix?: string;
+  suffix?: string;
+}
+
+function AnimatedCounter({ value, duration = 2, prefix = '', suffix = '' }: AnimatedCounterProps) {
+  const [count, setCount] = useState(0);
+  const ref = useRef<HTMLSpanElement>(null);
+  const isInView = useInView(ref, { once: true, margin: '-50px' });
+
+  useEffect(() => {
+    if (!isInView) return;
+
+    let start = 0;
+    const end = value;
+    const totalDuration = duration * 1000;
+    const startTime = performance.now();
+    let animationFrameId: number;
+
+    const updateCount = (currentTime: number) => {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / totalDuration, 1);
+      
+      // Easing out cubic for premium smooth feel
+      const easeOutCubic = 1 - Math.pow(1 - progress, 3);
+      
+      setCount(Math.floor(easeOutCubic * (end - start) + start));
+
+      if (progress < 1) {
+        animationFrameId = requestAnimationFrame(updateCount);
+      }
+    };
+
+    animationFrameId = requestAnimationFrame(updateCount);
+
+    return () => {
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+      }
+    };
+  }, [value, duration, isInView]);
+
+  return (
+    <span ref={ref} className="inline-block tabular-nums">
+      {prefix}
+      {count}
+      {suffix}
+    </span>
+  );
+}
 
 export default function StatsSection() {
   return (
@@ -36,15 +90,21 @@ export default function StatsSection() {
             {/* Counters */}
             <div className="grid grid-cols-3 gap-6 sm:gap-8">
               <div>
-                <h3 className="text-3xl sm:text-4xl font-bold text-slate-950 mb-2">+100</h3>
+                <h3 className="text-3xl sm:text-4xl font-bold text-slate-950 mb-2">
+                  <AnimatedCounter value={100} prefix="+" />
+                </h3>
                 <p className="text-sm sm:text-base text-slate-500 font-medium">Propiedades</p>
               </div>
               <div>
-                <h3 className="text-3xl sm:text-4xl font-bold text-slate-950 mb-2">+60K</h3>
+                <h3 className="text-3xl sm:text-4xl font-bold text-slate-950 mb-2">
+                  <AnimatedCounter value={60} prefix="+" suffix="K" />
+                </h3>
                 <p className="text-sm sm:text-base text-slate-500 font-medium">Usuarios</p>
               </div>
               <div>
-                <h3 className="text-3xl sm:text-4xl font-bold text-slate-950 mb-2">+70K</h3>
+                <h3 className="text-3xl sm:text-4xl font-bold text-slate-950 mb-2">
+                  <AnimatedCounter value={70} prefix="+" suffix="K" />
+                </h3>
                 <p className="text-sm sm:text-base text-slate-500 font-medium">Visitas</p>
               </div>
             </div>

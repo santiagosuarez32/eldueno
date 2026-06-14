@@ -46,7 +46,7 @@ export default function Navbar() {
           <Link href="/" className="flex items-center group">
             <img
               src="/navbar.png"
-              alt="DueñoDirecto"
+              alt="El Dueño Vende"
               className={`h-16 w-auto object-contain transition-all duration-300 group-hover:scale-102 ${scrolled ? 'brightness-0' : ''}`}
             />
           </Link>
@@ -58,7 +58,7 @@ export default function Navbar() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`relative text-[15px] font-normal transition-colors duration-200 py-1.5 after:absolute after:bottom-[3px] after:left-0 after:h-[1.5px] after:w-full after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 after:origin-left ${scrolled ? 'text-slate-600 hover:text-slate-950 after:bg-slate-950' : 'text-slate-350 hover:text-[#ffe600] after:bg-[#ffe600]'}`}
+                  className={`relative text-[17px] font-medium transition-colors duration-200 py-1.5 after:absolute after:bottom-[3px] after:left-0 after:h-[1.5px] after:w-full after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 after:origin-left ${scrolled ? 'text-slate-600 hover:text-slate-950 after:bg-slate-950' : 'text-slate-350 hover:text-[#ffe600] after:bg-[#ffe600]'}`}
                 >
                   {link.name}
                 </Link>
@@ -70,7 +70,7 @@ export default function Navbar() {
           <div className="hidden md:flex items-center space-x-4">
             <Link
               href="/propiedades"
-              className={`px-4 py-2 text-sm font-medium transition-colors ${scrolled ? 'text-slate-600 hover:text-slate-950' : 'text-slate-300 hover:text-white'}`}
+              className={`px-4 py-2 text-base font-medium transition-colors ${scrolled ? 'text-slate-600 hover:text-slate-950' : 'text-slate-300 hover:text-white'}`}
             >
               Buscar Propiedades
             </Link>

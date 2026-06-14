@@ -46,7 +46,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "DueñoDirecto | Propiedades Sin Intermediarios",
+  title: "El Dueño Vende | Propiedades Sin Intermediarios",
   description: "La plataforma premium para comprar y vender propiedades directamente entre particulares. Ahorrá miles de dólares en comisiones inmobiliarias. Trato directo y verificado con el dueño.",
 };
 
