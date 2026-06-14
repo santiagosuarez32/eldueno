@@ -19,6 +19,15 @@ export interface Property {
     phone: string;
     whatsappUrl: string;
   };
+  gallery: string[];
+  views: number;
+  saves: number;
+  code: string;
+  energyRating: 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G';
+  furnished: 'Sí' | 'No' | 'Parcial';
+  gardenArea?: number;
+  terraceArea?: number;
+  cadastralIncome?: number;
 }
 
 export const mockProperties: Property[] = [
@@ -42,7 +51,20 @@ export const mockProperties: Property[] = [
       name: "Mariana Rodríguez",
       phone: "+506 8876-5432",
       whatsappUrl: "https://wa.me/50688765432?text=Hola%20Mariana,%20estoy%20interesado%20en%20el%20Duplex%20de%20Escazu%20que%20vi%20en%20Due%C3%B1oDirecto."
-    }
+    },
+    gallery: [
+      "/images/prop-1.png",
+      "/images/prop-2.png",
+      "/images/prop-3.png",
+      "/images/prop-4.png"
+    ],
+    views: 142,
+    saves: 12,
+    code: "EDV-10901",
+    energyRating: "B",
+    furnished: "Parcial",
+    terraceArea: 24,
+    cadastralIncome: 1250
   },
   {
     id: "prop-2",
@@ -64,7 +86,21 @@ export const mockProperties: Property[] = [
       name: "Juan Pablo Gómez",
       phone: "+506 8765-4321",
       whatsappUrl: "https://wa.me/50687654321?text=Hola%20Juan%20Pablo,%20estoy%20interesado%20en%20la%20Casa%20con%20Piscina%20en%20Santa%20Ana%20que%20vi%20en%20Due%C3%B1oDirecto."
-    }
+    },
+    gallery: [
+      "/images/prop-2.png",
+      "/images/prop-5.png",
+      "/images/prop-6.png",
+      "/images/prop-1.png"
+    ],
+    views: 298,
+    saves: 45,
+    code: "EDV-10902",
+    energyRating: "D",
+    furnished: "No",
+    gardenArea: 150,
+    terraceArea: 35,
+    cadastralIncome: 2100
   },
   {
     id: "prop-3",
@@ -86,7 +122,19 @@ export const mockProperties: Property[] = [
       name: "Roberto Peralta",
       phone: "+506 8321-0987",
       whatsappUrl: "https://wa.me/50683210987?text=Hola%20Roberto,%20estoy%20interesado%20en%20el%20Loft%20Industrial%20en%20Barrio%20Amon%20que%20vi%20en%20Due%C3%B1oDirecto."
-    }
+    },
+    gallery: [
+      "/images/prop-3.png",
+      "/images/prop-4.png",
+      "/images/prop-1.png",
+      "/images/prop-5.png"
+    ],
+    views: 89,
+    saves: 7,
+    code: "EDV-10903",
+    energyRating: "E",
+    furnished: "Sí",
+    cadastralIncome: 800
   },
   {
     id: "prop-4",
@@ -108,7 +156,20 @@ export const mockProperties: Property[] = [
       name: "Clara Mitre",
       phone: "+506 8987-6543",
       whatsappUrl: "https://wa.me/50689876543?text=Hola%20Clara,%20estoy%20interesada%20en%20el%20Penthouse%20en%20Tamarindo%20que%20vi%20en%20Due%C3%B1oDirecto."
-    }
+    },
+    gallery: [
+      "/images/prop-4.png",
+      "/images/prop-1.png",
+      "/images/prop-3.png",
+      "/images/prop-6.png"
+    ],
+    views: 412,
+    saves: 83,
+    code: "EDV-10904",
+    energyRating: "A",
+    furnished: "Sí",
+    terraceArea: 40,
+    cadastralIncome: 3400
   },
   {
     id: "prop-5",
@@ -130,7 +191,21 @@ export const mockProperties: Property[] = [
       name: "Esteban Paz",
       phone: "+506 8678-4321",
       whatsappUrl: "https://wa.me/50686784321?text=Hola%20Esteban,%20estoy%20interesado%20en%20la%20Casa%20en%20Cariari%20que%20vi%20en%20Due%C3%B1oDirecto."
-    }
+    },
+    gallery: [
+      "/images/prop-5.png",
+      "/images/prop-2.png",
+      "/images/prop-6.png",
+      "/images/prop-3.png"
+    ],
+    views: 176,
+    saves: 22,
+    code: "EDV-10905",
+    energyRating: "C",
+    furnished: "No",
+    gardenArea: 80,
+    terraceArea: 15,
+    cadastralIncome: 1800
   },
   {
     id: "prop-6",
@@ -152,6 +227,20 @@ export const mockProperties: Property[] = [
       name: "Alejandro Szabo",
       phone: "+506 8345-6789",
       whatsappUrl: "https://wa.me/50683456789?text=Hola%20Alejandro,%20estoy%20interesado%20en%20la%20Casa%20en%20Tres%20Rios%20que%20vi%20en%20Due%C3%B1oDirecto."
-    }
+    },
+    gallery: [
+      "/images/prop-6.png",
+      "/images/prop-2.png",
+      "/images/prop-5.png",
+      "/images/prop-4.png"
+    ],
+    views: 520,
+    saves: 94,
+    code: "EDV-10906",
+    energyRating: "A",
+    furnished: "No",
+    gardenArea: 200,
+    terraceArea: 50,
+    cadastralIncome: 4200
   }
 ];
