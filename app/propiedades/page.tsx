@@ -5,8 +5,8 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import Navbar from '@/app/components/Navbar';
 import Footer from '@/app/components/Footer';
 import PropertyCard from '@/app/components/PropertyCard';
-import { mockProperties, Property } from '@/app/data/properties';
-import { Search, MapPin, Building, DollarSign, Filter, RotateCcw, BedDouble } from 'lucide-react';
+import { mockProperties } from '@/app/data/properties';
+import { Search, RotateCcw } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 function PropertiesContent() {
@@ -39,6 +39,16 @@ function PropertiesContent() {
     }
   }, [initialType, initialLocation, initialPriceRange, initialSearch]);
 
+  // Dynamics to force body background to white for light theme feel
+  useEffect(() => {
+    document.body.classList.add('bg-white', 'text-slate-900');
+    document.body.classList.remove('bg-slate-950', 'text-slate-100');
+    return () => {
+      document.body.classList.remove('bg-white', 'text-slate-900');
+      document.body.classList.add('bg-slate-950', 'text-slate-100');
+    };
+  }, []);
+
   // Filter Logic
   const filteredProperties = mockProperties.filter((property) => {
     // 1. Text Search (title, description, neighborhood)
@@ -60,12 +70,12 @@ function PropertiesContent() {
     // 4. Bedrooms
     const matchesBeds =
       selectedBeds === 'all' ||
-      (selectedBeds === 4 ? property.beds >= 4 : property.beds === selectedBeds);
+      (property.beds && (selectedBeds === 4 ? property.beds >= 4 : property.beds === selectedBeds));
 
     // 5. Price
     const matchesPrice = property.price <= maxPrice;
 
-    return matchesSearch && matchesType && matchesLocation && matchesBeds && matchesPrice;
+    return matchesSearch && matchesType && matchesLocation && (property.type === 'terreno' ? true : matchesBeds) && matchesPrice;
   });
 
   const resetFilters = () => {
@@ -81,15 +91,15 @@ function PropertiesContent() {
     <>
       <Navbar />
 
-      <main className="flex-grow pt-28 pb-24 bg-slate-950">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <main className="flex-grow pt-28 pb-24 bg-white text-slate-900">
+        <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
           
           {/* Header */}
           <div className="mb-10 space-y-2">
-            <h1 className="text-3xl sm:text-4xl font-bold text-white tracking-tight">
+            <h1 className="text-3xl sm:text-5xl font-bold text-slate-950 tracking-tight">
               Catálogo de Propiedades
             </h1>
-            <p className="text-slate-400 text-sm sm:text-base">
+            <p className="text-slate-500 text-sm sm:text-base leading-relaxed">
               Propiedades directas publicadas por sus dueños. Ahorrá comisiones intermediarias.
             </p>
           </div>
@@ -97,15 +107,15 @@ function PropertiesContent() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             
             {/* Filter Sidebar */}
-            <aside className="lg:col-span-4 bg-slate-900/40 border border-slate-800/80 rounded-3xl p-6 sm:p-8 space-y-6 sticky top-24">
-              <div className="flex items-center justify-between border-b border-slate-800/60 pb-4">
-                <span className="font-bold text-white flex items-center gap-2">
-                  <Filter className="h-4.5 w-4.5 text-emerald-400" />
+            <aside className="lg:col-span-3 bg-slate-50 border border-slate-200/60 rounded-3xl p-6 sm:p-8 space-y-6 sticky top-24 shadow-sm">
+              <div className="flex items-center justify-between border-b border-slate-200/60 pb-4">
+                <span className="font-bold text-slate-955 flex items-center gap-2">
+                  <img src="/icons-filters/filter.png" className="h-5 w-5 object-contain" alt="" />
                   Filtros Activos
                 </span>
                 <button
                   onClick={resetFilters}
-                  className="text-xs font-semibold text-slate-400 hover:text-emerald-400 flex items-center gap-1 transition-colors"
+                  className="text-xs font-semibold text-slate-500 hover:text-emerald-600 flex items-center gap-1 transition-colors"
                 >
                   <RotateCcw className="h-3.5 w-3.5" />
                   Reiniciar
@@ -114,78 +124,80 @@ function PropertiesContent() {
 
               {/* Keyword Search */}
               <div className="space-y-2">
-                <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Buscar por Palabra Clave</label>
+                <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Buscar por Palabra Clave</label>
                 <div className="relative rounded-2xl shadow-sm">
                   <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                    <Search className="h-4 w-4 text-slate-500" />
+                    <Search className="h-4 w-4 text-slate-400" />
                   </div>
                   <input
                     type="text"
                     placeholder="Ej. Terraza, Cochera, Belgrano..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="block w-full rounded-2xl bg-slate-950/60 border border-slate-800 focus:border-emerald-500 focus:outline-none pl-10 pr-4 py-2.5 text-white text-sm"
+                    className="block w-full rounded-2xl bg-white border border-slate-200 focus:border-emerald-500 focus:outline-none pl-10 pr-4 py-2.5 text-slate-900 text-sm shadow-sm"
                   />
                 </div>
               </div>
 
               {/* Property Type */}
               <div className="space-y-2">
-                <label className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1">
-                  <Building className="h-3.5 w-3.5 text-emerald-400" />
+                <label className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
+                  <img src="/icons-filters/property.png" className="h-4 w-4 object-contain" alt="" />
                   Tipo de Propiedad
                 </label>
                 <select
                   value={selectedType}
                   onChange={(e) => setSelectedType(e.target.value)}
-                  className="w-full bg-slate-950/60 border border-slate-800 focus:border-emerald-500 focus:outline-none rounded-2xl px-3 py-2.5 text-sm text-white transition-colors"
+                  className="w-full bg-white border border-slate-200 focus:border-emerald-500 focus:outline-none rounded-2xl px-3 py-2.5 text-sm text-slate-900 shadow-sm cursor-pointer transition-colors"
                 >
-                  <option value="" className="bg-slate-950">Todos los tipos</option>
-                  <option value="departamento" className="bg-slate-950">Departamento</option>
-                  <option value="casa" className="bg-slate-950">Casa</option>
-                  <option value="ph" className="bg-slate-950">PH</option>
-                  <option value="loft" className="bg-slate-950">Loft</option>
+                  <option value="">Todos los tipos</option>
+                  <option value="departamento">Departamento</option>
+                  <option value="casa">Casa</option>
+                  <option value="terreno">Terreno</option>
+                  <option value="comercial">Local / Edificación Comercial</option>
+                  <option value="ph">PH</option>
+                  <option value="loft">Loft</option>
                 </select>
               </div>
 
               {/* Location */}
               <div className="space-y-2">
-                <label className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1">
-                  <MapPin className="h-3.5 w-3.5 text-emerald-400" />
+                <label className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
+                  <img src="/icons-filters/ubication.png" className="h-4 w-4 object-contain" alt="" />
                   Barrio o Zona
                 </label>
                 <select
                   value={selectedLocation}
                   onChange={(e) => setSelectedLocation(e.target.value)}
-                  className="w-full bg-slate-950/60 border border-slate-800 focus:border-emerald-500 focus:outline-none rounded-2xl px-3 py-2.5 text-sm text-white transition-colors"
+                  className="w-full bg-white border border-slate-200 focus:border-emerald-500 focus:outline-none rounded-2xl px-3 py-2.5 text-sm text-slate-900 shadow-sm cursor-pointer transition-colors"
                 >
-                  <option value="" className="bg-slate-950">Cualquier zona</option>
-                  <option value="Escazú" className="bg-slate-950">Escazú, San José</option>
-                  <option value="Santa Ana" className="bg-slate-950">Santa Ana, San José</option>
-                  <option value="Barrio Amón" className="bg-slate-950">Barrio Amón, San José</option>
-                  <option value="Tamarindo" className="bg-slate-950">Tamarindo, Guanacaste</option>
-                  <option value="Cariari" className="bg-slate-950">Cariari, Heredia</option>
-                  <option value="Tres Ríos" className="bg-slate-950">Tres Ríos, Cartago</option>
+                  <option value="">Cualquier zona</option>
+                  <option value="Escazú">Escazú, San José</option>
+                  <option value="Santa Ana">Santa Ana, San José</option>
+                  <option value="Barrio Amón">Barrio Amón, San José</option>
+                  <option value="Tamarindo">Tamarindo, Guanacaste</option>
+                  <option value="Cariari">Cariari, Heredia</option>
+                  <option value="Tres Ríos">Tres Ríos, Cartago</option>
                 </select>
               </div>
 
               {/* Bedrooms */}
               <div className="space-y-2">
-                <label className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1">
-                  <BedDouble className="h-3.5 w-3.5 text-emerald-400" />
+                <label className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
+                  <img src="/icons-filters/bedrooms.png" className="h-4 w-4 object-contain" alt="" />
                   Dormitorios
                 </label>
-                <div className="grid grid-cols-5 gap-1.5 bg-slate-950/60 p-1.5 rounded-2xl border border-slate-800">
+                <div className="grid grid-cols-5 gap-1.5 bg-slate-100 p-1.5 rounded-2xl border border-slate-200">
                   {(['all', 1, 2, 3, 4] as const).map((bedsOption) => {
                     const isSelected = selectedBeds === bedsOption;
                     return (
                       <button
                         key={bedsOption}
                         onClick={() => setSelectedBeds(bedsOption)}
-                        className={`py-1.5 text-xs font-bold rounded-xl transition-all duration-200 ${
+                        className={`py-1.5 text-xs font-bold rounded-xl transition-all duration-200 cursor-pointer ${
                           isSelected
-                            ? 'bg-emerald-500 text-slate-950 shadow-md shadow-emerald-500/10'
-                            : 'text-slate-400 hover:text-white'
+                            ? 'bg-emerald-500 text-slate-950 shadow-md'
+                            : 'text-slate-500 hover:text-slate-950'
                         }`}
                       >
                         {bedsOption === 'all' ? 'Todo' : bedsOption === 4 ? '4+' : bedsOption}
@@ -197,12 +209,12 @@ function PropertiesContent() {
 
               {/* Max Price Slider */}
               <div className="space-y-3">
-                <div className="flex items-center justify-between text-xs font-bold text-slate-400 uppercase tracking-wider">
-                  <span className="flex items-center gap-1">
-                    <DollarSign className="h-3.5 w-3.5 text-emerald-400" />
+                <div className="flex items-center justify-between text-xs font-bold text-slate-500 uppercase tracking-wider">
+                  <span className="flex items-center gap-1.5">
+                    <img src="/icons-filters/price.png" className="h-4 w-4 object-contain" alt="" />
                     Precio Máximo
                   </span>
-                  <span className="text-white normal-case font-bold text-sm">
+                  <span className="text-slate-950 normal-case font-bold text-sm">
                     USD {new Intl.NumberFormat('en-US').format(maxPrice)}
                   </span>
                 </div>
@@ -213,9 +225,9 @@ function PropertiesContent() {
                   step="25000"
                   value={maxPrice}
                   onChange={(e) => setMaxPrice(Number(e.target.value))}
-                  className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-emerald-500"
+                  className="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-emerald-500"
                 />
-                <div className="flex justify-between text-[10px] text-slate-500 font-semibold">
+                <div className="flex justify-between text-[10px] text-slate-400 font-semibold">
                   <span>USD 100k</span>
                   <span>USD 1M</span>
                 </div>
@@ -223,12 +235,12 @@ function PropertiesContent() {
             </aside>
 
             {/* Properties Grid */}
-            <div className="lg:col-span-8 space-y-6">
+            <div className="lg:col-span-9 space-y-6">
               
               {/* Info Bar */}
-              <div className="flex items-center justify-between text-xs text-slate-450 font-semibold px-2">
+              <div className="flex items-center justify-between text-xs text-slate-500 font-semibold px-2">
                 <span>
-                  Mostrando <strong className="text-white">{filteredProperties.length}</strong> propiedades
+                  Mostrando <strong className="text-slate-950">{filteredProperties.length}</strong> propiedades
                 </span>
                 <span>Filtro en tiempo real</span>
               </div>
@@ -238,7 +250,7 @@ function PropertiesContent() {
                 {filteredProperties.length > 0 ? (
                   <motion.div
                     layout
-                    className="grid grid-cols-1 md:grid-cols-2 gap-6"
+                    className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6"
                   >
                     {filteredProperties.map((property) => (
                       <motion.div
@@ -257,15 +269,15 @@ function PropertiesContent() {
                   <motion.div
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="glass-panel text-center py-20 px-4 rounded-3xl border border-slate-800/80 space-y-4"
+                    className="bg-slate-50 border border-slate-200/60 text-center py-20 px-4 rounded-3xl space-y-4 shadow-sm"
                   >
-                    <p className="text-slate-400 text-lg font-semibold">No encontramos propiedades con estos filtros</p>
+                    <p className="text-slate-950 text-lg font-semibold">No encontramos propiedades con estos filtros</p>
                     <p className="text-slate-500 text-sm max-w-md mx-auto">
                       Intentá reiniciar los filtros o buscar palabras clave más generales para encontrar propiedades publicadas por sus dueños.
                     </p>
                     <button
                       onClick={resetFilters}
-                      className="bg-slate-900 border border-slate-800 text-emerald-400 font-bold px-6 py-2.5 rounded-2xl text-xs hover:border-emerald-500/30 hover:bg-emerald-500/5 transition-colors"
+                      className="bg-white border border-slate-200 text-slate-800 font-bold px-6 py-2.5 rounded-2xl text-xs hover:border-emerald-500/30 hover:text-emerald-600 transition-colors shadow-sm cursor-pointer"
                     >
                       Restablecer Filtros
                     </button>
@@ -287,7 +299,7 @@ export default function PropertiesPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-slate-950 text-white flex items-center justify-center font-semibold text-lg">
+        <div className="min-h-screen bg-white text-slate-900 flex items-center justify-center font-semibold text-lg">
           Cargando propiedades directas...
         </div>
       }

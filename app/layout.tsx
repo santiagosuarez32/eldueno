@@ -3,6 +3,7 @@ import { Geist_Mono } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
 import SmoothScroll from "@/app/components/SmoothScroll";
+import FloatingWhatsApp from "@/app/components/FloatingWhatsApp";
 
 const satoshi = localFont({
   src: [
@@ -63,6 +64,7 @@ export default function RootLayout({
       <body className={`${satoshi.className} min-h-full flex flex-col bg-slate-950 text-slate-100`}>
         <SmoothScroll>
           {children}
+          <FloatingWhatsApp />
         </SmoothScroll>
       </body>
     </html>

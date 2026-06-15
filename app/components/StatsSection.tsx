@@ -2,6 +2,8 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
+import Link from 'next/link';
+import { ArrowUpRight } from 'lucide-react';
 
 interface AnimatedCounterProps {
   value: number;
@@ -57,6 +59,33 @@ function AnimatedCounter({ value, duration = 2, prefix = '', suffix = '' }: Anim
 }
 
 export default function StatsSection() {
+  const blogPosts = [
+    {
+      slug: 'como-vender-sin-comisiones',
+      category: 'Guía Práctica',
+      date: '12 de Junio, 2026',
+      title: 'Cómo vender tu propiedad sin comisiones inmobiliarias',
+      excerpt: 'Descubrí los pasos clave para publicar, promocionar y negociar tu inmueble de forma directa y segura ahorrando miles de dólares.',
+      image: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
+    },
+    {
+      slug: 'documentos-compra-directa',
+      category: 'Legal',
+      date: '8 de Junio, 2026',
+      title: 'Documentos necesarios para comprar directo al dueño',
+      excerpt: 'Todo lo que necesitás saber sobre boletos de compraventa, escrituras y trámites legales para operar de forma transparente y protegida.',
+      image: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
+    },
+    {
+      slug: 'zonas-crecimiento-costa-rica',
+      category: 'Tendencias',
+      date: '3 de Junio, 2026',
+      title: 'Zonas con mayor crecimiento y retorno en Costa Rica',
+      excerpt: 'Analizamos los barrios y distritos que están experimentando el mayor auge inmobiliario, ideales para invertir o mudarte.',
+      image: 'https://images.unsplash.com/photo-1542838132-92c53300491e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
+    }
+  ];
+
   return (
     <section className="bg-white py-24 text-slate-900 relative overflow-hidden">
       <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
@@ -71,11 +100,11 @@ export default function StatsSection() {
             transition={{ duration: 0.6 }}
           >
             <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-slate-950 tracking-tight leading-[1.1]">
-              Disfrutá de la mejor calidad de vida
+              Recursos y Guías útiles
             </h2>
           </motion.div>
 
-          {/* Right: Description & Counters */}
+          {/* Right: Description */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -83,71 +112,61 @@ export default function StatsSection() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="flex flex-col justify-center"
           >
-            <p className="text-slate-600 text-lg sm:text-xl leading-relaxed mb-10">
-              Encontrá la propiedad de tus sueños sin comisiones inmobiliarias. Conectamos directamente a dueños y compradores para una experiencia transparente, ágil y segura.
+            <p className="text-slate-600 text-lg sm:text-xl leading-relaxed">
+              Información de valor, guías prácticas y tendencias del mercado inmobiliario. Consejos prácticos de expertos para comprar, vender o alquilar propiedades de forma directa, segura y libre de intermediarios.
             </p>
-
-            {/* Counters */}
-            <div className="grid grid-cols-3 gap-6 sm:gap-8">
-              <div>
-                <h3 className="text-3xl sm:text-4xl font-bold text-slate-950 mb-2">
-                  <AnimatedCounter value={100} prefix="+" />
-                </h3>
-                <p className="text-sm sm:text-base text-slate-500 font-medium">Propiedades</p>
-              </div>
-              <div>
-                <h3 className="text-3xl sm:text-4xl font-bold text-slate-950 mb-2">
-                  <AnimatedCounter value={60} prefix="+" suffix="K" />
-                </h3>
-                <p className="text-sm sm:text-base text-slate-500 font-medium">Usuarios</p>
-              </div>
-              <div>
-                <h3 className="text-3xl sm:text-4xl font-bold text-slate-950 mb-2">
-                  <AnimatedCounter value={70} prefix="+" suffix="K" />
-                </h3>
-                <p className="text-sm sm:text-base text-slate-500 font-medium">Visitas</p>
-              </div>
-            </div>
           </motion.div>
         </div>
 
-        {/* Bottom Image Grid */}
+        {/* Bottom Cards Grid */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-50px' }}
           transition={{ duration: 0.8, delay: 0.4 }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-4 h-[400px] sm:h-[500px] lg:h-[600px]"
+          className="grid grid-cols-1 md:grid-cols-3 gap-8"
         >
-          {/* Main Large Image */}
-          <div className="md:col-span-2 relative rounded-[32px] overflow-hidden group">
-            <img 
-              src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2075&q=80" 
-              alt="Casa de lujo exterior" 
-              className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out"
-            />
-            <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-500"></div>
-          </div>
-          
-          {/* Two Smaller Stacked Images */}
-          <div className="hidden md:flex flex-col gap-4 h-full">
-            <div className="flex-1 relative rounded-[32px] overflow-hidden group">
-              <img 
-                src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80" 
-                alt="Interior moderno" 
-                className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out"
-              />
-              <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-500"></div>
-            </div>
-            <div className="flex-1 relative rounded-[32px] overflow-hidden group">
-              <img 
-                src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" 
-                alt="Sala de estar" 
-                className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out"
-              />
-              <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-500"></div>
-            </div>
-          </div>
+          {blogPosts.map((post, idx) => (
+            <Link
+              key={idx}
+              href={`/blog/${post.slug}`}
+              className="group flex flex-col bg-white rounded-[32px] overflow-hidden border border-slate-200/60 hover:border-slate-200 shadow-sm hover:shadow-xl transition-all duration-300"
+            >
+              {/* Image Container */}
+              <div className="relative aspect-[16/10] overflow-hidden bg-slate-100">
+                <img 
+                  src={post.image} 
+                  alt={post.title} 
+                  className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out"
+                />
+                <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors duration-500" />
+              </div>
+              
+              {/* Content Box */}
+              <div className="p-6 sm:p-8 flex flex-col flex-grow space-y-4">
+                <div className="flex items-center justify-between text-xs text-slate-500 font-medium">
+                  <span className="text-emerald-600 font-bold uppercase tracking-wider">{post.category}</span>
+                  <span>{post.date}</span>
+                </div>
+                
+                <h3 className="text-xl font-bold text-slate-950 group-hover:text-emerald-500 transition-colors line-clamp-2 leading-snug">
+                  {post.title}
+                </h3>
+                
+                <p className="text-slate-500 text-sm leading-relaxed line-clamp-3">
+                  {post.excerpt}
+                </p>
+
+                {/* Bottom link line */}
+                <div className="pt-4 mt-auto border-t border-slate-100 flex items-center justify-between text-xs font-extrabold text-slate-950 group-hover:text-emerald-500 transition-colors">
+                  <span>Leer Artículo</span>
+                  <div className="h-8 w-8 rounded-full bg-slate-950 text-white flex items-center justify-center transition-all duration-300 group-hover:bg-emerald-500 group-hover:text-slate-950 group-hover:rotate-45 shadow-sm">
+                    <ArrowUpRight size={14} />
+                  </div>
+                </div>
+              </div>
+            </Link>
+          ))}
         </motion.div>
 
       </div>

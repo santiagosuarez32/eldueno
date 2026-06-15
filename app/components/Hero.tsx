@@ -1,141 +1,421 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
-import { Search, MapPin, Building2, TreePine } from 'lucide-react';
+import { Search, MapPin, Building2, TreePine, X } from 'lucide-react';
 import { FlowButton } from './FlowButton';
+import { mockProperties, Property } from '@/app/data/properties';
+import PropertyCard from './PropertyCard';
+
+// Helper to remove accents / diacritics for search normalization
+const normalizeString = (str: string): string => {
+  if (!str) return '';
+  return str
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase();
+};
 
 export default function Hero() {
   const router = useRouter();
   const [searchValue, setSearchValue] = useState('');
+  const [isSearching, setIsSearching] = useState(false);
+  const [showResults, setShowResults] = useState(false);
+  const [searchResults, setSearchResults] = useState<Property[]>([]);
+  const [isOpenModal, setIsOpenModal] = useState(false);
+
+  // Esc key listener to close search modal
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setIsOpenModal(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
+  // Prevent body scroll when search modal is open
+  useEffect(() => {
+    if (isOpenModal) {
+      document.body.classList.add('overflow-hidden');
+    } else {
+      document.body.classList.remove('overflow-hidden');
+    }
+    return () => {
+      document.body.classList.remove('overflow-hidden');
+    };
+  }, [isOpenModal]);
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const params = new URLSearchParams();
-    if (searchValue.trim()) {
-      params.set('search', searchValue.trim());
+    if (!searchValue.trim()) return;
+
+    setIsSearching(true);
+    setIsOpenModal(true);
+
+    const query = searchValue.toLowerCase().trim();
+    const queryNorm = normalizeString(query);
+    const matches = mockProperties.filter((property) => {
+      const titleNorm = normalizeString(property.title);
+      const locationNorm = normalizeString(property.location);
+      const neighborhoodNorm = normalizeString(property.neighborhood);
+      const typeNorm = normalizeString(property.type);
+      const descNorm = normalizeString(property.description);
+
+      return (
+        titleNorm.includes(queryNorm) ||
+        locationNorm.includes(queryNorm) ||
+        neighborhoodNorm.includes(queryNorm) ||
+        typeNorm.includes(queryNorm) ||
+        descNorm.includes(queryNorm)
+      );
+    });
+
+    setSearchResults(matches);
+
+    // Latency simulator
+    setTimeout(() => {
+      setIsSearching(false);
+    }, 800);
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    setSearchValue(val);
+    if (!val.trim()) {
+      setSearchResults([]);
+      return;
     }
-    router.push(`/propiedades?${params.toString()}`);
+
+    const query = val.toLowerCase().trim();
+    const queryNorm = normalizeString(query);
+    const matches = mockProperties.filter((property) => {
+      const titleNorm = normalizeString(property.title);
+      const locationNorm = normalizeString(property.location);
+      const neighborhoodNorm = normalizeString(property.neighborhood);
+      const typeNorm = normalizeString(property.type);
+      const descNorm = normalizeString(property.description);
+
+      return (
+        titleNorm.includes(queryNorm) ||
+        locationNorm.includes(queryNorm) ||
+        neighborhoodNorm.includes(queryNorm) ||
+        typeNorm.includes(queryNorm) ||
+        descNorm.includes(queryNorm)
+      );
+    });
+
+    setSearchResults(matches);
+  };
+
+  const triggerQuickSearch = (tag: string) => {
+    setSearchValue(tag);
+    setIsSearching(true);
+    setIsOpenModal(true);
+
+    const queryNorm = normalizeString(tag);
+    const matches = mockProperties.filter((property) => {
+      const titleNorm = normalizeString(property.title);
+      const locationNorm = normalizeString(property.location);
+      const neighborhoodNorm = normalizeString(property.neighborhood);
+      const typeNorm = normalizeString(property.type);
+      const descNorm = normalizeString(property.description);
+
+      return (
+        titleNorm.includes(queryNorm) ||
+        locationNorm.includes(queryNorm) ||
+        neighborhoodNorm.includes(queryNorm) ||
+        typeNorm.includes(queryNorm) ||
+        descNorm.includes(queryNorm)
+      );
+    });
+
+    setSearchResults(matches);
+
+    setTimeout(() => {
+      setIsSearching(false);
+    }, 500);
   };
 
   return (
     <section className="relative min-h-screen flex items-center justify-center pt-28 pb-20 overflow-hidden bg-slate-950">
-      {/* Background Image with Dark Gradient Overlay */}
+      {/* Background Image with Centered Easing Overlay */}
       <div className="absolute inset-0 z-0">
         <img
           src="/hero.jpeg"
           alt="Modern House"
-          className="w-full h-full object-cover filter brightness-[0.45]"
+          className="w-full h-full object-cover"
         />
-        {/* Soft bottom vignette vignette */}
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent" />
+        {/* Subtle radial dark overlay with easing */}
+        <div 
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background: 'radial-gradient(circle at center, rgba(2, 6, 23, 0.45) 0%, rgba(2, 6, 23, 0.68) 60%, rgba(2, 6, 23, 0.85) 100%)'
+          }}
+        />
+        {/* Subtle bottom vignette to blend with the container */}
+        <div 
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background: 'linear-gradient(to top, rgba(2, 6, 23, 0.78) 0%, rgba(2, 6, 23, 0.38) 35%, rgba(2, 6, 23, 0) 80%)'
+          }}
+        />
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          
-          {/* Left Column: Text & Actions */}
-          <div className="lg:col-span-7 space-y-6 text-left">
-            <motion.div
-              initial={{ opacity: 0, y: -15 }}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full flex flex-col items-center">
+        
+        {/* Top Centered: Title & Subtitle */}
+        <div className="text-center max-w-3xl space-y-6 mb-12 flex flex-col items-center">
+          <motion.div
+            initial={{ opacity: 0, y: -15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-900/80 backdrop-blur-sm border border-slate-700/50 text-slate-300 text-xs font-semibold"
+          >
+            <MapPin className="h-3.5 w-3.5 text-emerald-400 flex-shrink-0" />
+            Dueño Directo • Costa Rica
+          </motion.div>
+
+          <div className="space-y-4">
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-900/80 backdrop-blur-sm border border-slate-700/50 text-slate-300 text-xs font-semibold"
+              transition={{ duration: 0.8, delay: 0.1 }}
+              className="text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-white leading-[1.05] font-sans"
             >
-              <MapPin className="h-3.5 w-3.5 text-emerald-400 flex-shrink-0" />
-              Dueño Directo • Costa Rica
-            </motion.div>
+              Encontrá el hogar <br />
+              <span className="text-emerald-400">de tus sueños</span>
+            </motion.h1>
 
-            <div className="space-y-4">
-              <motion.h1
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.1 }}
-                className="text-5xl sm:text-7xl font-bold tracking-tight text-white leading-[0.9] font-sans"
-              >
-                Encontrá el hogar <br />
-                <span className="text-emerald-400">de tus sueños</span>
-              </motion.h1>
-
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.2 }}
-                className="text-slate-200 text-base sm:text-lg max-w-xl leading-snug"
-              >
-                Propiedades exclusivas publicadas directamente por sus dueños. Sin intermediarios, sin comisiones inmobiliarias. Operaciones transparentes y seguras.
-              </motion.p>
-            </div>
-
-            {/* Actions Buttons */}
-            <motion.div
-              initial={{ opacity: 0, y: 15 }}
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.3 }}
-              className="flex flex-wrap items-center gap-4 pt-2"
-            >
-              <Link href="/propiedades">
-                <FlowButton text="Ver Propiedades" variant="primary" />
-              </Link>
-              <Link href="/contacto">
-                <FlowButton text="Contactar con un asesor" variant="secondary" />
-              </Link>
-            </motion.div>
-          </div>
-
-          {/* Right Column: Floating Search Card */}
-          <div className="lg:col-span-5 flex justify-center lg:justify-end">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="w-full max-w-md bg-white rounded-3xl p-6 sm:p-8 shadow-2xl flex flex-col space-y-6"
+              className="text-slate-200 text-sm sm:text-lg max-w-2xl leading-normal mx-auto"
             >
-              <div className="space-y-1">
-                <h3 className="text-xl font-bold text-slate-900">Busca tu propiedad ideal</h3>
-              </div>
-
-              {/* Intuitive Single Search Form */}
-              <form onSubmit={handleSearchSubmit}>
-                <div className="relative rounded-2xl shadow-sm">
-                  <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
-                    <Search className="h-5 w-5 text-slate-400" />
-                  </div>
-                  <input
-                    type="text"
-                    required
-                    value={searchValue}
-                    onChange={(e) => setSearchValue(e.target.value)}
-                    placeholder="Escribe ubicación, tipo de propiedad..."
-                    className="block w-full rounded-2xl border border-slate-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 focus:outline-none pl-12 pr-4 py-4 text-slate-900 placeholder-slate-400 text-sm font-medium transition-all"
-                  />
-                </div>
-              </form>
-
-              {/* Statistics / Badges row */}
-              <div className="pt-4 border-t border-slate-100 flex flex-wrap items-center justify-center gap-1.5 sm:gap-2 text-[10px] sm:text-xs">
-                <span className="flex items-center justify-center gap-1 bg-slate-50 border border-slate-100 px-2 sm:px-3 py-1.5 rounded-full flex-shrink-0">
-                  <Building2 className="h-3.5 w-3.5 text-black flex-shrink-0" />
-                  <span className="font-extrabold text-black">7,000+</span>
-                  <span className="font-normal text-slate-700">Propiedades</span>
-                </span>
-                <span className="flex items-center justify-center gap-1 bg-slate-50 border border-slate-100 px-2 sm:px-3 py-1.5 rounded-full flex-shrink-0">
-                  <MapPin className="h-3.5 w-3.5 text-black flex-shrink-0" />
-                  <span className="font-extrabold text-black">7</span>
-                  <span className="font-normal text-slate-700">Provincias</span>
-                </span>
-                <span className="flex items-center justify-center gap-1 bg-slate-50 border border-slate-100 px-2 sm:px-3 py-1.5 rounded-full flex-shrink-0">
-                  <TreePine className="h-3.5 w-3.5 text-black flex-shrink-0" />
-                  <span className="font-extrabold text-black">18+</span>
-                  <span className="font-normal text-slate-700">Años</span>
-                </span>
-              </div>
-            </motion.div>
+              Propiedades exclusivas publicadas directamente por sus dueños. Sin intermediarios, sin comisiones inmobiliarias. Operaciones transparentes y seguras.
+            </motion.p>
           </div>
 
+          {/* Actions Buttons */}
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="flex flex-wrap items-center justify-center gap-4 pt-2"
+          >
+            <Link href="/propiedades">
+              <FlowButton text="Ver Propiedades" variant="primary" />
+            </Link>
+            <Link href="/contacto">
+              <FlowButton text="Contactar con un asesor" variant="secondary" />
+            </Link>
+          </motion.div>
         </div>
+
+        {/* Bottom Centered: Wide Single Search Input */}
+        <motion.div
+          initial={{ opacity: 0, y: 25 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.3 }}
+          className="w-full max-w-3xl"
+        >
+          <div 
+            onClick={() => {
+              setIsOpenModal(true);
+              if (searchValue.trim()) {
+                const query = searchValue.toLowerCase().trim();
+                const queryNorm = normalizeString(query);
+                const matches = mockProperties.filter((property) => {
+                  const titleNorm = normalizeString(property.title);
+                  const locationNorm = normalizeString(property.location);
+                  const neighborhoodNorm = normalizeString(property.neighborhood);
+                  const typeNorm = normalizeString(property.type);
+                  const descNorm = normalizeString(property.description);
+
+                  return (
+                    titleNorm.includes(queryNorm) ||
+                    locationNorm.includes(queryNorm) ||
+                    neighborhoodNorm.includes(queryNorm) ||
+                    typeNorm.includes(queryNorm) ||
+                    descNorm.includes(queryNorm)
+                  );
+                });
+                setSearchResults(matches);
+              }
+            }}
+            className="bg-white rounded-3xl md:rounded-full p-2 shadow-2xl flex flex-col md:flex-row items-stretch md:items-center border border-slate-100 cursor-pointer"
+          >
+            <div className="flex-1 flex items-center pl-6 pr-4 py-3 md:py-2">
+              <Search className="h-5 w-5 text-slate-400 mr-3 shrink-0" />
+              <input
+                type="text"
+                readOnly
+                value={searchValue}
+                placeholder="Escribe ubicación, tipo de propiedad, barrio..."
+                className="w-full bg-transparent border-0 p-0 text-slate-900 text-sm md:text-base font-semibold placeholder-slate-400 focus:ring-0 focus:outline-none cursor-pointer"
+              />
+            </div>
+            <button
+              type="button"
+              className="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold px-8 py-4 rounded-2xl md:rounded-full flex items-center justify-center gap-2 transition-all duration-300 shadow-md hover:shadow-lg hover:shadow-emerald-500/20 active:scale-95 shrink-0 md:mr-1 cursor-pointer"
+            >
+              <Search className="h-4 w-4" />
+              <span>Buscar</span>
+            </button>
+          </div>
+
+          {/* Search Overlay Modal */}
+          <AnimatePresence>
+            {isOpenModal && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                data-lenis-prevent
+                className="fixed inset-0 z-[100] bg-slate-950/85 backdrop-blur-md flex items-start justify-center pt-24 md:pt-32 px-4 overflow-y-auto"
+                onClick={() => setIsOpenModal(false)}
+              >
+                <motion.div
+                  initial={{ y: -25, scale: 0.96 }}
+                  animate={{ y: 0, scale: 1 }}
+                  exit={{ y: -25, scale: 0.96 }}
+                  transition={{ type: 'spring', damping: 25, stiffness: 350 }}
+                  className="w-full max-w-6xl xl:max-w-7xl bg-white rounded-[32px] shadow-2xl p-6 sm:p-8 flex flex-col relative text-left"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  {/* Modal Search Form */}
+                  <div className="flex items-center gap-3 bg-slate-50 border border-slate-200 rounded-full p-2 pl-5 pr-3 shadow-inner mb-6">
+                    <Search className="h-5 w-5 text-slate-400 shrink-0" />
+                    <input
+                      type="text"
+                      autoFocus
+                      value={searchValue}
+                      onChange={handleInputChange}
+                      placeholder="Escribe ubicación, tipo de propiedad, barrio..."
+                      className="flex-grow bg-transparent border-0 p-0 text-slate-900 text-sm sm:text-base font-semibold placeholder-slate-450 focus:ring-0 focus:outline-none"
+                    />
+                    {searchValue && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setSearchValue('');
+                          setSearchResults([]);
+                        }}
+                        className="p-1 text-slate-400 hover:text-slate-655 rounded-full cursor-pointer hover:bg-slate-200 transition-colors mr-1"
+                      >
+                        <X className="h-4 w-4" />
+                      </button>
+                    )}
+                    <button
+                      type="button"
+                      onClick={() => setIsOpenModal(false)}
+                      className="bg-slate-950 text-white font-bold px-5 py-2.5 rounded-full text-xs hover:bg-slate-900 transition-all cursor-pointer shrink-0"
+                    >
+                      Cerrar
+                    </button>
+                  </div>
+
+                  {/* Header */}
+                  {searchValue.trim() !== '' && (
+                    <div className="flex items-center justify-between pb-3 border-b border-slate-150 mb-4 px-2">
+                      <span className="text-xs font-medium text-slate-500">
+                        {isSearching ? 'Buscando propiedades directas...' : `Resultados para "${searchValue}"`}
+                      </span>
+                    </div>
+                  )}
+
+                  {/* Results panel */}
+                  <div className="flex-grow min-h-0">
+                    {isSearching ? (
+                      <div className="flex flex-col items-center justify-center py-16 space-y-3">
+                        <div className="animate-spin rounded-full h-8 w-8 border-2 border-emerald-500 border-t-transparent" />
+                        <p className="text-slate-550 text-xs font-bold animate-pulse">
+                          Consultando listados directos del dueño...
+                        </p>
+                      </div>
+                    ) : (
+                      <>
+                        {searchValue.trim() === '' ? (
+                          <div className="py-12 text-center text-slate-400 space-y-5">
+                            <p className="text-xs font-medium text-slate-500 font-medium">Escribe tu búsqueda para empezar o selecciona un tag rápido:</p>
+                            <div className="flex flex-wrap justify-center gap-2 max-w-md mx-auto">
+                              {['San José', 'Santa Ana', 'Escazú', 'Casa', 'Terreno', 'Comercial'].map((tag) => (
+                                <button
+                                  key={tag}
+                                  type="button"
+                                  onClick={() => triggerQuickSearch(tag)}
+                                  className="bg-slate-50 hover:bg-slate-100 border border-slate-200/60 text-slate-600 text-xs font-semibold px-4 py-2 rounded-full cursor-pointer transition-colors"
+                                >
+                                  {tag}
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+                        ) : searchResults.length > 0 ? (
+                          <>
+                            <div 
+                              data-lenis-prevent
+                              className="max-h-[550px] overflow-y-auto pr-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 hide-scrollbar pb-2"
+                            >
+                              {searchResults.map((property) => (
+                                <PropertyCard key={property.id} property={property} />
+                              ))}
+                            </div>
+
+                            <div className="mt-5 pt-4 border-t border-slate-100 flex justify-center">
+                              <Link
+                                href={`/propiedades?search=${encodeURIComponent(searchValue.trim())}`}
+                                className="text-xs font-bold text-emerald-600 hover:text-emerald-700 hover:underline flex items-center gap-1"
+                              >
+                                Ver todos los resultados en el catálogo completo ({searchResults.length})
+                              </Link>
+                            </div>
+                          </>
+                        ) : (
+                          <div className="text-center py-12 space-y-2">
+                            <p className="text-slate-900 text-sm font-bold">No se encontraron propiedades</p>
+                            <p className="text-slate-500 text-xs max-w-sm mx-auto font-medium">
+                              No encontramos propiedades para &quot;{searchValue}&quot;. Intentá buscar con otros términos como &quot;San José&quot;, &quot;casa&quot; o &quot;terreno&quot;.
+                            </p>
+                          </div>
+                        )}
+                      </>
+                    )}
+                  </div>
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Statistics / Badges row */}
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5 }}
+            className="mt-6 flex flex-wrap items-center justify-center gap-3 text-xs"
+          >
+            <span className="flex items-center gap-1.5 bg-slate-900/60 backdrop-blur-sm border border-slate-800 px-3 py-1.5 rounded-full text-slate-300">
+              <Building2 className="h-3.5 w-3.5 text-emerald-400 flex-shrink-0" />
+              <span className="font-extrabold text-white">7,000+</span>
+              <span className="font-normal text-slate-300">Propiedades</span>
+            </span>
+            <span className="flex items-center gap-1.5 bg-slate-900/60 backdrop-blur-sm border border-slate-800 px-3 py-1.5 rounded-full text-slate-300">
+              <MapPin className="h-3.5 w-3.5 text-emerald-400 flex-shrink-0" />
+              <span className="font-extrabold text-white">7</span>
+              <span className="font-normal text-slate-300">Provincias</span>
+            </span>
+            <span className="flex items-center gap-1.5 bg-slate-900/60 backdrop-blur-sm border border-slate-800 px-3 py-1.5 rounded-full text-slate-300">
+              <TreePine className="h-3.5 w-3.5 text-emerald-400 flex-shrink-0" />
+              <span className="font-extrabold text-white">18+</span>
+              <span className="font-normal text-slate-300">Años de Trayectoria</span>
+            </span>
+          </motion.div>
+        </motion.div>
+
       </div>
     </section>
   );

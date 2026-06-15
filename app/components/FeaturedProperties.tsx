@@ -92,91 +92,93 @@ export default function FeaturedProperties() {
               }).format(property.price);
 
               return (
-                <motion.div
+                <Link
                   key={property.id}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: '-50px' }}
-                  transition={{ duration: 0.5 }}
-                  className="w-[300px] sm:w-[500px] md:w-[580px] lg:w-[670px] bg-white border border-slate-200/60 rounded-[32px] overflow-hidden flex flex-col group snap-start shadow-sm hover:shadow-xl transition-all duration-300 flex-shrink-0"
+                  href={`/propiedades/${property.id}`}
+                  className="w-[300px] sm:w-[500px] md:w-[580px] lg:w-[670px] flex-shrink-0 snap-start block cursor-pointer"
                 >
-                  {/* Image Container */}
-                  <div className="relative aspect-[16/10] w-full overflow-hidden bg-slate-100">
-                    {/* Floating Action Overlay on Hover */}
-                    <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20 flex items-center justify-center">
-                      <Link 
-                        href={`/propiedades/${property.id}`}
-                        className="bg-yellow-400 text-slate-950 font-light text-[12px] tracking-wider w-20 h-20 rounded-full flex flex-col items-center justify-center text-center p-2 transform scale-90 group-hover:scale-100 transition-all duration-300 shadow-xl"
-                      >
-                        <span>Ver</span>
-                        <span>detalle</span>
-                      </Link>
+                  <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: '-50px' }}
+                    transition={{ duration: 0.5 }}
+                    className="w-full bg-white border border-slate-200/60 rounded-[32px] overflow-hidden flex flex-col group shadow-sm hover:shadow-xl transition-all duration-300 h-full"
+                  >
+                    {/* Image Container */}
+                    <div className="relative aspect-[16/10] w-full overflow-hidden bg-slate-100">
+                      {/* Floating Action Overlay on Hover */}
+                      <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20 flex items-center justify-center">
+                        <div 
+                          className="bg-yellow-400 text-slate-955 font-light text-[12px] tracking-wider w-20 h-20 rounded-full flex flex-col items-center justify-center text-center p-2 transform scale-90 group-hover:scale-100 transition-all duration-300 shadow-xl"
+                        >
+                          <span>Ver</span>
+                          <span>detalle</span>
+                        </div>
+                      </div>
+
+                      {/* Dueño Directo Badge */}
+                      <div className="absolute top-4 right-4 z-10">
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-900/80 backdrop-blur-sm border border-slate-700/50 text-slate-300 text-[10px] font-semibold shadow-sm">
+                          <MapPin className="h-3 w-3 text-white flex-shrink-0" />
+                          Costa Rica
+                        </span>
+                      </div>
+
+                      {/* Property Image */}
+                      <img
+                        src={property.image}
+                        alt={property.title}
+                        className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out"
+                        onError={(e) => {
+                          e.currentTarget.style.display = 'none';
+                        }}
+                      />
+                      {/* Fallback pattern */}
+                      <div className="absolute inset-0 bg-gradient-to-tr from-slate-100 to-slate-200 -z-10 flex items-center justify-center">
+                        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#000_1px,transparent_1px)] [background-size:16px_16px]" />
+                        <span className="text-xs text-slate-455 font-semibold">Imágenes de la propiedad</span>
+                      </div>
                     </div>
 
-                    {/* Dueño Directo Badge */}
-                    <div className="absolute top-4 right-4 z-10">
-                      <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-900/80 backdrop-blur-sm border border-slate-700/50 text-slate-300 text-[10px] font-semibold shadow-sm">
-                        <MapPin className="h-3 w-3 text-white flex-shrink-0" />
-                        Costa Rica
-                      </span>
-                    </div>
-
-                    {/* Property Image */}
-                    <img
-                      src={property.image}
-                      alt={property.title}
-                      className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out"
-                      onError={(e) => {
-                        e.currentTarget.style.display = 'none';
-                      }}
-                    />
-                    {/* Fallback pattern */}
-                    <div className="absolute inset-0 bg-gradient-to-tr from-slate-100 to-slate-200 -z-10 flex items-center justify-center">
-                      <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#000_1px,transparent_1px)] [background-size:16px_16px]" />
-                      <span className="text-xs text-slate-455 font-semibold">Imágenes de la propiedad</span>
-                    </div>
-                  </div>
-
-                  {/* Content Section */}
-                  <div className="px-6 pt-5 pb-5 sm:px-10 sm:pt-6 sm:pb-6 flex flex-col flex-grow bg-white">
-                    
-                    {/* Title & Price Header */}
-                    <div className="flex justify-between items-start gap-6 mb-2">
-                      <div className="space-y-1.5 flex-grow">
-                        <Link href={`/propiedades/${property.id}`}>
-                          <h3 className="text-base sm:text-xl font-semibold text-slate-950 hover:text-emerald-500 transition-colors line-clamp-1 leading-snug">
+                    {/* Content Section */}
+                    <div className="px-6 pt-5 pb-5 sm:px-10 sm:pt-6 sm:pb-6 flex flex-col flex-grow bg-white">
+                      
+                      {/* Title & Price Header */}
+                      <div className="flex justify-between items-start gap-6 mb-2">
+                        <div className="space-y-1.5 flex-grow">
+                          <h3 className="text-base sm:text-xl font-semibold text-slate-950 group-hover:text-emerald-500 transition-colors line-clamp-1 leading-snug">
                             {property.title}
                           </h3>
-                        </Link>
-                        <p className="text-xs sm:text-base text-slate-500 font-normal">
-                          {property.neighborhood}, {property.location}
-                        </p>
+                          <p className="text-xs sm:text-base text-slate-500 font-normal">
+                            {property.neighborhood}, {property.location}
+                          </p>
+                        </div>
+
+                        <div className="text-left shrink-0">
+                          <span className="text-[10px] sm:text-xs text-slate-400 font-normal block">Precio:</span>
+                          <span className="text-lg sm:text-2xl font-bold text-slate-955 block">{formattedPrice}</span>
+                        </div>
                       </div>
 
-                      <div className="text-left shrink-0">
-                        <span className="text-[10px] sm:text-xs text-slate-400 font-normal block">Precio:</span>
-                        <span className="text-lg sm:text-2xl font-bold text-slate-950 block">{formattedPrice}</span>
+                      {/* Property Specs */}
+                      <div className="flex items-center gap-6 sm:gap-8 text-xs sm:text-base text-slate-605 font-normal mt-2.5">
+                        <div className="flex items-center gap-2">
+                          <img src="/icons-property/dormitorios.png" className="h-5 w-5 object-contain flex-shrink-0" alt="" />
+                          <span>{property.beds} Dorms</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <img src="/icons-property/baños.png" className="h-5 w-5 object-contain flex-shrink-0" alt="" />
+                          <span>{property.baths} Baños</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <img src="/icons-property/m2.png" className="h-5 w-5 object-contain flex-shrink-0" alt="" />
+                          <span>{property.area} m²</span>
+                        </div>
                       </div>
+
                     </div>
-
-                    {/* Property Specs */}
-                    <div className="flex items-center gap-6 sm:gap-8 text-xs sm:text-base text-slate-600 font-normal mt-2.5">
-                      <div className="flex items-center gap-2">
-                        <TbBed className="h-5 w-5 text-black flex-shrink-0" />
-                        <span>{property.beds} Dorms</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <TbBath className="h-5 w-5 text-black flex-shrink-0" />
-                        <span>{property.baths} Baños</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <TbRuler2 className="h-5 w-5 text-black flex-shrink-0" />
-                        <span>{property.area} m²</span>
-                      </div>
-                    </div>
-
-                  </div>
-                </motion.div>
+                  </motion.div>
+                </Link>
               );
             })}
           </div>

@@ -12,7 +12,7 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
 
-  const isLightPage = pathname.startsWith('/propiedades/') && pathname !== '/propiedades';
+  const isLightPage = pathname.startsWith('/propiedades') || pathname.startsWith('/blog');
 
   useEffect(() => {
     const handleScroll = () => {

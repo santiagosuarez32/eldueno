@@ -5,14 +5,18 @@ export interface Property {
   price: number;
   location: string;
   neighborhood: string;
-  beds: number;
-  baths: number;
-  area: number; // in m²
+  beds?: number;
+  baths?: number;
+  area?: number; // built construction area (m²)
+  landArea?: number; // land plot area (m²)
+  constructionArea?: number; // construction area (m²)
+  parkingSpaces?: number; // number of parking spaces
+  aposentos?: number; // number of spaces/rooms for commercial
   image: string;
-  type: 'departamento' | 'casa' | 'ph' | 'loft';
+  type: 'casa' | 'departamento' | 'terreno' | 'comercial' | 'ph' | 'loft';
   featured: boolean;
-  expenses?: number; // in CRC or USD
-  age?: number; // in years
+  expenses?: number;
+  age?: number;
   parking?: boolean;
   owner: {
     name: string;
@@ -28,6 +32,7 @@ export interface Property {
   gardenArea?: number;
   terraceArea?: number;
   cadastralIncome?: number;
+  videoUrl?: string;
 }
 
 export const mockProperties: Property[] = [
@@ -41,10 +46,11 @@ export const mockProperties: Property[] = [
     beds: 2,
     baths: 2,
     area: 95,
+    landArea: 120,
     image: "/images/prop-1.png",
     type: "departamento",
     featured: true,
-    expenses: 85, // USD
+    expenses: 85,
     age: 0,
     parking: true,
     owner: {
@@ -75,7 +81,10 @@ export const mockProperties: Property[] = [
     neighborhood: "Santa Ana",
     beds: 4,
     baths: 3,
-    area: 280,
+    area: 280, // m² de construcción
+    landArea: 450, // m² de terreno
+    constructionArea: 280, // m² de construcción
+    parkingSpaces: 3, // Estacionamientos
     image: "/images/prop-2.png",
     type: "casa",
     featured: true,
@@ -115,7 +124,7 @@ export const mockProperties: Property[] = [
     image: "/images/prop-3.png",
     type: "loft",
     featured: true,
-    expenses: 60, // USD
+    expenses: 60,
     age: 80,
     parking: false,
     owner: {
@@ -149,7 +158,7 @@ export const mockProperties: Property[] = [
     image: "/images/prop-4.png",
     type: "departamento",
     featured: false,
-    expenses: 250, // USD
+    expenses: 250,
     age: 5,
     parking: true,
     owner: {
@@ -173,20 +182,18 @@ export const mockProperties: Property[] = [
   },
   {
     id: "prop-5",
-    title: "Casa de Lujo en Zona Cariari",
-    description: "Hermosa residencia de lujo reciclada por completo con acabados de primera en el área del Club de Golf Cariari. Amplio hall de entrada, living con techos altos, terraza y 2 suites completas. Cocina con sobres de cuarzo y desayunador.",
-    price: 450000,
+    title: "Terreno Listo para Construir en Condominio",
+    description: "Excelente lote totalmente plano listo para construir en exclusivo condominio en Cariari. Cuenta con todos los servicios públicos subterráneos habilitados, calles adoquinadas, seguridad perimetral y vigilancia privada las 24 horas. Listo para escriturar y construir la casa de tus sueños.",
+    price: 195000,
     location: "Heredia, Costa Rica",
     neighborhood: "Cariari",
-    beds: 3,
-    baths: 2.5,
-    area: 220,
+    landArea: 650, // Metros de terreno
     image: "/images/prop-5.png",
-    type: "casa",
+    type: "terreno",
     featured: false,
-    expenses: 120, // USD
-    age: 15,
-    parking: true,
+    expenses: 120,
+    age: 0,
+    parking: false,
     owner: {
       name: "Esteban Paz",
       phone: "+506 8678-4321",
@@ -203,25 +210,23 @@ export const mockProperties: Property[] = [
     code: "EDV-10905",
     energyRating: "C",
     furnished: "No",
-    gardenArea: 80,
-    terraceArea: 15,
     cadastralIncome: 1800
   },
   {
     id: "prop-6",
-    title: "Casa Minimalista con Vista a las Montañas",
-    description: "Imponente casa moderna en condominio privado en Tres Ríos, Cartago. Estilo racionalista con grandes paños vidriados. Living comedor de doble altura. Piscina infinity integrada al paisaje. Galería cubierta, master suite y 3 dormitorios en planta alta. Domótica integrada.",
-    price: 980000,
+    title: "Edificación Comercial / Locales en Excelente Ubicación",
+    description: "Edificio comercial de dos plantas en excelente ubicación comercial sobre avenida principal de Tres Ríos. Cuenta con 8 amplios aposentos ideales para oficinas, consultorios o cubículos comerciales, y estacionamiento frontal cómodo para clientes. Alta afluencia de personas y excelente exposición de marca.",
+    price: 680000,
     location: "Cartago, Costa Rica",
     neighborhood: "Tres Ríos",
-    beds: 5,
-    baths: 5,
-    area: 410,
+    parkingSpaces: 10, // Estacionamientos
+    aposentos: 8, // Aposentos
+    area: 380, // m² de construcción
     image: "/images/prop-6.png",
-    type: "casa",
+    type: "comercial",
     featured: false,
-    expenses: 150, // USD
-    age: 2,
+    expenses: 150,
+    age: 5,
     parking: true,
     owner: {
       name: "Alejandro Szabo",
@@ -239,8 +244,6 @@ export const mockProperties: Property[] = [
     code: "EDV-10906",
     energyRating: "A",
     furnished: "No",
-    gardenArea: 200,
-    terraceArea: 50,
     cadastralIncome: 4200
   }
 ];
