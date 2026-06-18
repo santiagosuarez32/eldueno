@@ -19,7 +19,7 @@ export default function AboutFeatures() {
   ];
 
   return (
-    <section className="bg-slate-50 text-slate-900 relative overflow-hidden flex flex-col lg:flex-row">
+    <section className="bg-white text-slate-900 relative overflow-hidden flex flex-col lg:flex-row">
         
         {/* Left: Image (50% width, full height) */}
         <motion.div
@@ -32,7 +32,7 @@ export default function AboutFeatures() {
           <img 
             src="/about.png" 
             alt="Sobre nosotros" 
-            className="w-full h-full object-contain object-left"
+            className="w-full h-full object-cover rounded-r-3xl"
           />
         </motion.div>
 
