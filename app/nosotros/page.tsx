@@ -18,7 +18,6 @@ import {
 } from 'lucide-react';
 import Navbar from '@/app/components/Navbar';
 import Footer from '@/app/components/Footer';
-import AboutFeatures from '@/app/components/AboutFeatures';
 import { FlowButton } from '@/app/components/FlowButton';
 
 // Stats counter sub-component
@@ -67,7 +66,7 @@ function AnimatedCounter({ value, duration = 2, prefix = '', suffix = '' }: Anim
   }, [value, duration, isInView]);
 
   return (
-    <span ref={ref} className="inline-block tabular-nums font-extrabold text-5xl sm:text-6xl lg:text-7xl">
+    <span ref={ref} className="inline-block tabular-nums font-extrabold text-4xl sm:text-5xl lg:text-6xl">
       {prefix}
       {count.toLocaleString()}
       {suffix}
@@ -103,7 +102,8 @@ export default function NosotrosPage() {
 
   return (
     <>
-           <main className="flex-grow bg-slate-950 text-slate-100">
+      <Navbar />
+      <main className="flex-grow bg-slate-950 text-slate-100">
         
         {/* HERO SECTION - Ref. Dribbble "Poperty" style */}
         <section className="relative h-screen flex items-end pb-16 sm:pb-24 overflow-hidden bg-slate-950">
@@ -175,20 +175,18 @@ export default function NosotrosPage() {
           </div>
         </section>
 
-        {/* SECOND SECTION - STATS SECTION (Dark styled) */}
-        <section id="stats" className="bg-slate-950 text-white py-24 sm:py-32 relative overflow-hidden border-t border-slate-900 border-b border-slate-800">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_right,rgba(16,185,129,0.06),transparent_40%)] pointer-events-none" />
+        {/* SECOND SECTION - STATS SECTION (Light styled) */}
+        <section id="stats" className="bg-white text-slate-900 py-16 sm:py-20 relative overflow-hidden border-t border-slate-100 border-b border-slate-100">
           
           <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center max-w-3xl mx-auto space-y-4 mb-20">
-              <span className="text-xs font-bold text-emerald-400 uppercase tracking-widest block">EL VALOR EN NÚMEROS</span>
-              <h2 className="text-3xl sm:text-5xl font-bold tracking-tight">Nuestra presencia y confiabilidad</h2>
-              <p className="text-slate-400 text-base sm:text-lg">
+            <div className="text-center max-w-3xl mx-auto space-y-4 mb-14">
+              <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-slate-950">Nuestra presencia y confiabilidad</h2>
+              <p className="text-slate-500 text-base sm:text-lg">
                 La solidez de una plataforma diseñada para conectar personas y simplificar negociaciones a escala nacional.
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {stats.map((stat, idx) => (
                 <motion.div
                   key={idx}
@@ -196,14 +194,14 @@ export default function NosotrosPage() {
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: idx * 0.1 }}
-                  className="bg-slate-900/40 backdrop-blur-sm border border-slate-800/80 rounded-3xl p-8 hover:border-slate-700/50 transition-colors flex flex-col space-y-4"
+                  className="bg-slate-50/50 border border-slate-100 rounded-2xl p-6 hover:bg-slate-50 hover:border-slate-200 transition-all duration-300 flex flex-col space-y-3 shadow-sm"
                 >
-                  <div className="text-emerald-400 flex items-baseline gap-0.5">
+                  <div className="text-emerald-600 flex items-baseline gap-0.5">
                     <AnimatedCounter value={stat.value} prefix={stat.prefix} suffix={stat.suffix} />
                   </div>
                   <div className="space-y-1">
-                    <h4 className="text-base sm:text-lg font-bold text-white leading-snug">{stat.label}</h4>
-                    <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">{stat.desc}</p>
+                    <h4 className="text-base sm:text-lg font-bold text-slate-900 leading-snug">{stat.label}</h4>
+                    <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">{stat.desc}</p>
                   </div>
                 </motion.div>
               ))}
@@ -272,7 +270,7 @@ export default function NosotrosPage() {
 
                 {/* About Us Title and 2 Column Description */}
                 <div className="space-y-4">
-                  <span className="text-xs font-bold text-slate-500 uppercase tracking-widest block">Sobre nosotros</span>
+                  <span className="text-base text-slate-500 block">Sobre nosotros</span>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12">
                     <p className="text-slate-650 text-base leading-relaxed">
                       En <strong>El Dueño Vende</strong>, creemos firmemente que la búsqueda del hogar de tus sueños debe ser un camino emocionante y sin fricciones. Facilitamos la conexión directa entre propietarios y buscadores, impulsando la transparencia del mercado y garantizando que cada negociación sea libre de intermediarios y comisiones excesivas.
@@ -289,7 +287,7 @@ export default function NosotrosPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.8 }}
-                  className="pt-6 border-t border-slate-100"
+                  className="pt-6"
                 >
                   <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-950 tracking-tight leading-tight">
                     Propiedades exclusivas, precios competitivos y trato directo — todo en un solo lugar.
@@ -332,9 +330,6 @@ export default function NosotrosPage() {
             </div>
           </div>
         </section>
-
-        {/* FEATURES COMPONENT (Reusing existing components/AboutFeatures.tsx) */}
-        <AboutFeatures />
 
       </main>
 

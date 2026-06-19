@@ -5,6 +5,7 @@ import WhyChooseUs from '@/app/components/WhyChooseUs';
 import PremiumProperties from '@/app/components/PremiumProperties';
 import StatsSection from '@/app/components/StatsSection';
 import FAQ from '@/app/components/FAQ';
+import PartnersCarousel from '@/app/components/PartnersCarousel';
 import Footer from '@/app/components/Footer';
 
 export default function Home() {
@@ -18,6 +19,7 @@ export default function Home() {
         <PremiumProperties />
         <StatsSection />
         <FAQ />
+        <PartnersCarousel />
       </main>
       <Footer />
     </>
