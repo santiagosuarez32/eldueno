@@ -83,6 +83,14 @@ export default function StatsSection() {
       title: 'Zonas con mayor crecimiento y retorno en Costa Rica',
       excerpt: 'Analizamos los barrios y distritos que están experimentando el mayor auge inmobiliario, ideales para invertir o mudarte.',
       image: 'https://images.unsplash.com/photo-1542838132-92c53300491e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
+    },
+    {
+      slug: 'consejos-negociacion-directa',
+      category: 'Negociación',
+      date: '1 de Junio, 2026',
+      title: 'Consejos para negociar el precio cara a cara con el dueño',
+      excerpt: 'Aprendé las mejores técnicas para pactar el valor de tu futura casa de forma transparente, logrando un acuerdo justo para ambas partes.',
+      image: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
     }
   ];
 
@@ -103,7 +111,7 @@ export default function StatsSection() {
               Recursos y Guías útiles
             </h2>
           </motion.div>
-
+ 
           {/* Right: Description */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -117,20 +125,20 @@ export default function StatsSection() {
             </p>
           </motion.div>
         </div>
-
+ 
         {/* Bottom Cards Grid */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-50px' }}
           transition={{ duration: 0.8, delay: 0.4 }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-8"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
         >
           {blogPosts.map((post, idx) => (
             <Link
               key={idx}
               href={`/blog/${post.slug}`}
-              className="group flex flex-col bg-white rounded-[32px] overflow-hidden border border-slate-200/60 hover:border-slate-200 shadow-sm hover:shadow-xl transition-all duration-300"
+              className="group flex flex-col bg-white rounded-[24px] overflow-hidden border border-slate-200/60 hover:border-slate-200 shadow-sm hover:shadow-xl transition-all duration-300"
             >
               {/* Image Container */}
               <div className="relative aspect-[16/10] overflow-hidden bg-slate-100">
@@ -143,25 +151,25 @@ export default function StatsSection() {
               </div>
               
               {/* Content Box */}
-              <div className="p-6 sm:p-8 flex flex-col flex-grow space-y-4">
-                <div className="flex items-center justify-between text-xs text-slate-500 font-medium">
-                  <span className="text-emerald-600 font-bold uppercase tracking-wider">{post.category}</span>
+              <div className="p-5 sm:p-6 flex flex-col flex-grow space-y-3">
+                <div className="flex items-center justify-between text-[11px] text-slate-500 font-medium">
+                  <span className="text-emerald-600 font-bold">{post.category}</span>
                   <span>{post.date}</span>
                 </div>
                 
-                <h3 className="text-xl font-bold text-slate-950 group-hover:text-emerald-500 transition-colors line-clamp-2 leading-snug">
+                <h3 className="text-base sm:text-lg font-bold text-slate-950 group-hover:text-emerald-500 transition-colors line-clamp-2 leading-snug">
                   {post.title}
                 </h3>
                 
-                <p className="text-slate-500 text-sm leading-relaxed line-clamp-3">
+                <p className="text-slate-500 text-xs sm:text-sm leading-relaxed line-clamp-3">
                   {post.excerpt}
                 </p>
-
+ 
                 {/* Bottom link line */}
-                <div className="pt-4 mt-auto border-t border-slate-100 flex items-center justify-between text-xs font-extrabold text-slate-950 group-hover:text-emerald-500 transition-colors">
+                <div className="pt-3 mt-auto border-t border-slate-100 flex items-center justify-between text-xs font-extrabold text-slate-955 group-hover:text-emerald-500 transition-colors">
                   <span>Leer Artículo</span>
-                  <div className="h-8 w-8 rounded-full bg-slate-950 text-white flex items-center justify-center transition-all duration-300 group-hover:bg-emerald-500 group-hover:text-slate-950 group-hover:rotate-45 shadow-sm">
-                    <ArrowUpRight size={14} />
+                  <div className="h-7 w-7 rounded-full bg-slate-950 text-white flex items-center justify-center transition-all duration-300 group-hover:bg-emerald-500 group-hover:text-slate-955 group-hover:rotate-45 shadow-sm">
+                    <ArrowUpRight size={12} />
                   </div>
                 </div>
               </div>

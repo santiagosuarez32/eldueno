@@ -108,7 +108,7 @@ export default function BlogPage() {
                     {/* Content Box */}
                     <div className="p-6 sm:p-8 flex flex-col flex-grow space-y-4">
                       <div className="flex items-center justify-between text-xs text-slate-400 font-medium">
-                        <span className="text-emerald-400 font-bold uppercase tracking-wider">{post.category}</span>
+                        <span className="text-emerald-400 font-bold">{post.category}</span>
                         <span>{post.date}</span>
                       </div>
                       

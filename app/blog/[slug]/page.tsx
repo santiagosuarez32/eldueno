@@ -174,7 +174,7 @@ Favorecidos por la concentración de zonas francas industriales y de tecnología
                   </div>
                   <div className="p-6 space-y-2 flex-grow flex flex-col justify-between">
                     <div className="space-y-2">
-                      <span className="text-[10px] text-emerald-600 font-bold uppercase tracking-wider block">{relPost.category}</span>
+                      <span className="text-[10px] text-emerald-600 font-bold block">{relPost.category}</span>
                       <h4 className="text-base font-bold text-slate-900 group-hover:text-emerald-500 transition-colors line-clamp-2 leading-snug">
                         {relPost.title}
                       </h4>

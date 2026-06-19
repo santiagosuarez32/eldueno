@@ -124,7 +124,7 @@ function PropertiesContent() {
 
               {/* Keyword Search */}
               <div className="space-y-2">
-                <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Buscar por Palabra Clave</label>
+                <label className="text-xs sm:text-[13px] font-medium text-slate-700">Buscar por palabra clave</label>
                 <div className="relative rounded-2xl shadow-sm">
                   <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
                     <Search className="h-4 w-4 text-slate-400" />
@@ -141,9 +141,9 @@ function PropertiesContent() {
 
               {/* Property Type */}
               <div className="space-y-2">
-                <label className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
+                <label className="text-xs sm:text-[13px] font-medium text-slate-700 flex items-center gap-1.5">
                   <img src="/icons-filters/property.png" className="h-4 w-4 object-contain" alt="" />
-                  Tipo de Propiedad
+                  Tipo de propiedad
                 </label>
                 <select
                   value={selectedType}
@@ -162,9 +162,9 @@ function PropertiesContent() {
 
               {/* Location */}
               <div className="space-y-2">
-                <label className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
+                <label className="text-xs sm:text-[13px] font-medium text-slate-700 flex items-center gap-1.5">
                   <img src="/icons-filters/ubication.png" className="h-4 w-4 object-contain" alt="" />
-                  Barrio o Zona
+                  Barrio o zona
                 </label>
                 <select
                   value={selectedLocation}
@@ -183,7 +183,7 @@ function PropertiesContent() {
 
               {/* Bedrooms */}
               <div className="space-y-2">
-                <label className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
+                <label className="text-xs sm:text-[13px] font-medium text-slate-700 flex items-center gap-1.5">
                   <img src="/icons-filters/bedrooms.png" className="h-4 w-4 object-contain" alt="" />
                   Dormitorios
                 </label>
@@ -209,10 +209,10 @@ function PropertiesContent() {
 
               {/* Max Price Slider */}
               <div className="space-y-3">
-                <div className="flex items-center justify-between text-xs font-bold text-slate-500 uppercase tracking-wider">
+                <div className="flex items-center justify-between text-xs sm:text-[13px] font-medium text-slate-700">
                   <span className="flex items-center gap-1.5">
                     <img src="/icons-filters/price.png" className="h-4 w-4 object-contain" alt="" />
-                    Precio Máximo
+                    Precio máximo
                   </span>
                   <span className="text-slate-950 normal-case font-bold text-sm">
                     USD {new Intl.NumberFormat('en-US').format(maxPrice)}

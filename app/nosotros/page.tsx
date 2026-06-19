@@ -3,19 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 import Link from 'next/link';
-import { 
-  ArrowUpRight, 
-  ArrowRight,
-  ShieldCheck, 
-  Sparkles, 
-  Users, 
-  TrendingUp, 
-  Building2, 
-  CheckCircle,
-  Building,
-  Heart,
-  Scale
-} from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import Navbar from '@/app/components/Navbar';
 import Footer from '@/app/components/Footer';
 import { FlowButton } from '@/app/components/FlowButton';
@@ -80,24 +68,6 @@ export default function NosotrosPage() {
     { value: 7000, prefix: '+', suffix: '', label: 'Propiedades directas', desc: 'Un catálogo amplio y en crecimiento constante a lo largo de todo el país.' },
     { value: 18, prefix: '+', suffix: ' Años', label: 'Trayectoria en el mercado', desc: 'Acompañando a miles de familias y dueños directos a concretar sus operaciones.' },
     { value: 100, prefix: '', suffix: '%', label: 'Listados verificados', desc: 'Validamos detalladamente cada publicación para garantizar la veracidad de los datos.' }
-  ];
-
-  const values = [
-    {
-      icon: <Scale className="h-6 w-6 text-emerald-400" />,
-      title: 'Trato Transparente',
-      desc: 'Creemos en la honestidad de las negociaciones directas, facilitando el diálogo directo y abierto entre dueños y compradores.'
-    },
-    {
-      icon: <ShieldCheck className="h-6 w-6 text-emerald-400" />,
-      title: 'Seguridad Operativa',
-      desc: 'Ofrecemos herramientas y guías completas para asegurar que cada transacción se realice bajo un marco legal claro y protegido.'
-    },
-    {
-      icon: <Heart className="h-6 w-6 text-emerald-400" />,
-      title: 'Propósito Humano',
-      desc: 'Priorizamos las necesidades reales de las personas frente a las ganancias inmobiliarias corporativas tradicionales.'
-    }
   ];
 
   return (
@@ -273,10 +243,10 @@ export default function NosotrosPage() {
                   <span className="text-base text-slate-500 block">Sobre nosotros</span>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12">
                     <p className="text-slate-650 text-base leading-relaxed">
-                      En <strong>El Dueño Vende</strong>, creemos firmemente que la búsqueda del hogar de tus sueños debe ser un camino emocionante y sin fricciones. Facilitamos la conexión directa entre propietarios y buscadores, impulsando la transparencia del mercado y garantizando que cada negociación sea libre de intermediarios y comisiones excesivas.
+                      <strong>El Dueño Vende</strong> es una compañía especializada en bienes raíces, brindamos la mejor asesoría en compra, venta y renta de propiedades dentro del área metropolitana. También, brindamos oportunidades de inversión y soluciones de crédito.
                     </p>
-                    <p className="text-slate-550 text-base leading-relaxed">
-                      Ya sea que busques un departamento urbano, una residencia moderna o un terreno comercial estratégico, te acompañamos con herramientas de publicación avanzadas y asesoría clara en todo el proceso.
+                    <p className="text-slate-555 text-base leading-relaxed">
+                      Con más de 30 años de experiencia nos desenvolvemos con agilidad en el mercado de bienes raíces; cientos de personas y empresas que han confiado sus inversiones a El Dueño Vende dan respaldo de nuestra trayectoria.
                     </p>
                   </div>
                 </div>
@@ -295,38 +265,6 @@ export default function NosotrosPage() {
                 </motion.div>
               </div>
 
-            </div>
-          </div>
-        </section>
-
-        {/* VALUES SECTION */}
-        <section className="bg-white text-slate-900 py-24">
-          <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center max-w-3xl mx-auto space-y-4 mb-20">
-              <span className="text-xs font-extrabold text-emerald-600 uppercase tracking-widest block">NUESTROS PILARES</span>
-              <h2 className="text-3xl sm:text-5xl font-bold text-slate-950 tracking-tight">Valores que nos definen</h2>
-              <p className="text-slate-500 text-base sm:text-lg">
-                Guiamos cada una de nuestras decisiones y el desarrollo de nuestra plataforma bajo principios claros de respeto y honestidad.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {values.map((val, idx) => (
-                <motion.div
-                  key={idx}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: idx * 0.15 }}
-                  className="bg-slate-50 rounded-3xl p-8 border border-slate-200/60 shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all duration-350"
-                >
-                  <div className="h-12 w-12 rounded-2xl bg-emerald-50 flex items-center justify-center mb-6">
-                    {val.icon}
-                  </div>
-                  <h3 className="text-xl font-bold text-slate-950 mb-3">{val.title}</h3>
-                  <p className="text-slate-500 text-sm sm:text-base leading-relaxed">{val.desc}</p>
-                </motion.div>
-              ))}
             </div>
           </div>
         </section>

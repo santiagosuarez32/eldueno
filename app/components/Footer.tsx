@@ -53,12 +53,12 @@ export default function Footer() {
               
               <div className="flex flex-wrap gap-x-12 gap-y-4 pt-1">
                 <div>
-                  <span className="block text-xs uppercase tracking-wider text-slate-500 font-bold mb-1">Teléfonos</span>
+                  <span className="block text-xs text-slate-500 font-bold mb-1">Teléfonos</span>
                   <a href="tel:+50622806665" className="text-white hover:text-[#ffe600] transition-colors font-medium text-sm sm:text-base block">+506 2280-6665</a>
                   <a href="tel:+50686208287" className="text-white hover:text-[#ffe600] transition-colors font-medium text-sm sm:text-base block">+506 8620-8287</a>
                 </div>
                 <div>
-                  <span className="block text-xs uppercase tracking-wider text-slate-500 font-bold mb-1">Email</span>
+                  <span className="block text-xs text-slate-500 font-bold mb-1">Email</span>
                   <a href="mailto:bienesraices@elduenovende.com" className="text-white hover:text-[#ffe600] transition-colors font-medium text-sm sm:text-base block">bienesraices@elduenovende.com</a>
                 </div>
               </div>
@@ -103,7 +103,7 @@ export default function Footer() {
 
             {/* Quick Links */}
             <div>
-              <h3 className="text-sm font-semibold text-white tracking-wider uppercase mb-6">Enlaces rápidos</h3>
+              <h3 className="text-sm font-bold text-white mb-6">Enlaces rápidos</h3>
               <ul className="space-y-3 text-sm">
                 <li>
                   <Link href="/" className="text-slate-400 hover:text-[#ffe600] transition-colors">Inicio</Link>
@@ -125,7 +125,7 @@ export default function Footer() {
 
             {/* Legal / Services */}
             <div>
-              <h3 className="text-sm font-semibold text-white tracking-wider uppercase mb-6">Servicios</h3>
+              <h3 className="text-sm font-bold text-white mb-6">Servicios</h3>
               <ul className="space-y-3 text-sm">
                 <li className="text-slate-400 hover:text-[#ffe600] cursor-pointer transition-colors">Compra y Venta de Propiedades</li>
                 <li className="text-slate-400 hover:text-[#ffe600] cursor-pointer transition-colors">Préstamos hipotecarios</li>
@@ -135,7 +135,7 @@ export default function Footer() {
 
             {/* Contact info */}
             <div>
-              <h3 className="text-sm font-semibold text-white tracking-wider uppercase mb-6">Ubicación</h3>
+              <h3 className="text-sm font-bold text-white mb-6">Ubicación</h3>
               <ul className="space-y-3 text-sm">
                 <li className="flex items-start gap-2">
                   <MapPin className="h-4 w-4 text-[#ffe600] mt-0.5 flex-shrink-0" />

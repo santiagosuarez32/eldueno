@@ -240,92 +240,106 @@ export default function PropertyDetailClient({ property, relatedProperties }: Pr
           </div>
         </div>
 
-        {/* Gallery Section */}
-        {/* Gallery Section */}
-        <div className="relative w-full rounded-3xl overflow-hidden shadow-md mb-10 group bg-slate-200">
-          {/* Main Display Image */}
+        {/* Gallery Bento Grid (Matching Reference Screenshot Layout) */}
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-4 w-full mb-10">
+          
+          {/* Main Photo (Left side, takes 8/12 grid-cols) */}
           <div 
-            onClick={() => setIsLightboxOpen(true)}
-            className="relative aspect-video sm:aspect-[2.2/1] w-full overflow-hidden cursor-zoom-in"
+            onClick={() => {
+              setActiveImage(0);
+              setIsLightboxOpen(true);
+            }}
+            className="col-span-1 md:col-span-8 relative aspect-video md:aspect-auto md:h-[500px] rounded-3xl overflow-hidden cursor-zoom-in group bg-slate-100 shadow-sm border border-slate-200/40"
           >
-            <AnimatePresence initial={false}>
-              <motion.img
-                key={activeImage}
-                src={property.gallery[activeImage]}
-                alt={`${property.title} - Foto ${activeImage + 1}`}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.35, ease: 'easeInOut' }}
-                className="absolute inset-0 w-full h-full object-cover"
-              />
-            </AnimatePresence>
+            <img
+              src={property.gallery[0]}
+              alt={`${property.title} - Principal`}
+              className="w-full h-full absolute inset-0 object-cover transform group-hover:scale-[1.015] transition-transform duration-500 ease-out"
+            />
+            <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors duration-300 pointer-events-none" />
             
-            {/* Dark gradient overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/40 via-transparent to-slate-950/20 pointer-events-none" />
-
-            {/* Overlays */}
-            <div className="absolute top-4 sm:top-6 left-4 sm:left-6 right-4 sm:right-6 z-20 flex justify-end items-center">
-              <div className="flex items-center gap-2">
-                <span className="bg-slate-900/80 backdrop-blur-md text-white text-xs font-medium px-3.5 py-1.5 rounded-full border border-slate-800/20 shadow-md">
-                  Publicado: Octubre 2022
-                </span>
-                
-                {/* Share button */}
-                <div className="relative">
-                  <button
-                    onClick={handleShare}
-                    className="p-2.5 rounded-full bg-white/95 backdrop-blur-md border border-slate-200 text-slate-700 hover:text-slate-900 hover:bg-white transition-all duration-300 shadow-md cursor-pointer"
-                    aria-label="Compartir propiedad"
-                  >
-                    <Share className="h-4.5 w-4.5" />
-                  </button>
-                  {/* Share Toast */}
-                  <AnimatePresence>
-                    {showShareToast && (
-                      <motion.div
-                        initial={{ opacity: 0, scale: 0.9, y: 10 }}
-                        animate={{ opacity: 1, scale: 1, y: 0 }}
-                        exit={{ opacity: 0, scale: 0.9, y: 10 }}
-                        className="absolute right-0 bottom-full mb-2 bg-slate-900 border border-slate-800 px-3 py-1.5 rounded-xl text-xs font-semibold text-emerald-400 whitespace-nowrap shadow-xl flex items-center gap-1 z-30"
-                      >
-                        <CheckCircle className="h-3.5 w-3.5" />
-                        ¡Enlace copiado!
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
+            {/* Share and Metadata Floating Badges */}
+            <div className="absolute top-4 right-4 z-20 flex items-center gap-2">
+              <span className="bg-slate-900/80 backdrop-blur-md text-white text-xs font-medium px-3.5 py-1.5 rounded-full border border-slate-800/20 shadow-md">
+                Publicado: {property.age === 0 ? 'A estrenar' : `Antigüedad: ${property.age} años`}
+              </span>
+              
+              {/* Share button */}
+              <div className="relative">
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleShare();
+                  }}
+                  className="p-2.5 rounded-full bg-white/95 backdrop-blur-md border border-slate-200 text-slate-700 hover:text-slate-900 hover:bg-white transition-all duration-300 shadow-md cursor-pointer"
+                  aria-label="Compartir propiedad"
+                >
+                  <Share className="h-4.5 w-4.5" />
+                </button>
+                {/* Share Toast */}
+                <AnimatePresence>
+                  {showShareToast && (
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.9, y: 10 }}
+                      animate={{ opacity: 1, scale: 1, y: 0 }}
+                      exit={{ opacity: 0, scale: 0.9, y: 10 }}
+                      className="absolute right-0 bottom-full mb-2 bg-slate-900 border border-slate-800 px-3 py-1.5 rounded-xl text-xs font-semibold text-emerald-400 whitespace-nowrap shadow-xl flex items-center gap-1 z-30"
+                    >
+                      <CheckCircle className="h-3.5 w-3.5" />
+                      ¡Enlace copiado!
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             </div>
-
-            {/* Left & Right navigation chevrons */}
-            <button
-              onClick={handlePrevImage}
-              className="absolute left-4 top-1/2 -translate-y-1/2 p-2 rounded-full bg-white/90 hover:bg-white border border-slate-200 text-slate-800 transition-all opacity-0 group-hover:opacity-100 duration-300 shadow-lg cursor-pointer z-10"
-            >
-              <ChevronLeft className="h-6 w-6" />
-            </button>
-            <button
-              onClick={handleNextImage}
-              className="absolute right-4 top-1/2 -translate-y-1/2 p-2 rounded-full bg-white/90 hover:bg-white border border-slate-200 text-slate-800 transition-all opacity-0 group-hover:opacity-100 duration-300 shadow-lg cursor-pointer z-10"
-            >
-              <ChevronRight className="h-6 w-6" />
-            </button>
-
-            {/* Dots indicators overlaid on the bottom of the image */}
-            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex gap-1.5 bg-slate-950/45 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10 shadow-md">
-              {property.gallery.map((_, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => setActiveImage(idx)}
-                  className={`rounded-full transition-all duration-300 cursor-pointer ${
-                    idx === activeImage ? 'w-1.5 h-1.5 bg-white' : 'w-1.5 h-1.5 bg-white/40 hover:bg-white/70'
-                  }`}
-                  aria-label={`Ir a foto ${idx + 1}`}
-                />
-              ))}
-            </div>
           </div>
+
+          {/* Right Stacked Photos (Right side, takes 4/12 grid-cols) */}
+          <div className="col-span-1 md:col-span-4 flex flex-row md:flex-col gap-4 h-auto md:h-[500px]">
+            
+            {/* Top Right Photo */}
+            <div 
+              onClick={() => {
+                setActiveImage(1);
+                setIsLightboxOpen(true);
+              }}
+              className="flex-1 relative aspect-video md:aspect-auto md:h-[calc(50%-8px)] rounded-3xl overflow-hidden cursor-zoom-in group bg-slate-100 shadow-sm border border-slate-200/40"
+            >
+              <img
+                src={property.gallery[1] || property.image}
+                alt={`${property.title} - Detalle 1`}
+                className="w-full h-full absolute inset-0 object-cover transform group-hover:scale-[1.015] transition-transform duration-500 ease-out"
+              />
+              <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors duration-300 pointer-events-none" />
+            </div>
+
+            {/* Bottom Right Photo (with "+N" overlay for remaining gallery items) */}
+            <div 
+              onClick={() => {
+                setActiveImage(2);
+                setIsLightboxOpen(true);
+              }}
+              className="flex-1 relative aspect-video md:aspect-auto md:h-[calc(50%-8px)] rounded-3xl overflow-hidden cursor-zoom-in group bg-slate-100 shadow-sm border border-slate-200/40"
+            >
+              <img
+                src={property.gallery[2] || property.image}
+                alt={`${property.title} - Detalle 2`}
+                className="w-full h-full absolute inset-0 object-cover transform group-hover:scale-[1.015] transition-transform duration-500 ease-out"
+              />
+              <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors duration-300 pointer-events-none" />
+              
+              {/* "+N" Overlay */}
+              {property.gallery.length > 3 && (
+                <div className="absolute inset-0 bg-slate-950/40 backdrop-blur-[2px] flex items-center justify-center text-white transition-colors duration-300 group-hover:bg-slate-950/50">
+                  <span className="text-3xl sm:text-4xl font-extrabold tracking-wide">
+                    +{property.gallery.length - 2}
+                  </span>
+                </div>
+              )}
+            </div>
+
+          </div>
+
         </div>
 
         {/* Content Layout */}
@@ -595,9 +609,15 @@ export default function PropertyDetailClient({ property, relatedProperties }: Pr
       {/* FULLSCREEN LIGHTBOX MODAL */}
       <AnimatePresence>
         {isLightboxOpen && (
-          <div className="fixed inset-0 z-[100] flex flex-col items-center justify-between bg-black/95 p-4 select-none">
+          <div 
+            onClick={() => setIsLightboxOpen(false)}
+            className="fixed inset-0 z-[100] flex flex-col items-center justify-between bg-black/95 p-4 select-none"
+          >
             {/* Top Bar */}
-            <div className="w-full flex items-center justify-between z-10 px-4 py-2">
+            <div 
+              onClick={(e) => e.stopPropagation()}
+              className="w-full flex items-center justify-between z-10 px-4 py-2"
+            >
               <span className="text-white text-xs sm:text-sm font-medium truncate max-w-[50vw]">
                 {property.title}
               </span>
@@ -640,6 +660,7 @@ export default function PropertyDetailClient({ property, relatedProperties }: Pr
               {/* Lightbox Image Container */}
               <div 
                 className="w-full h-full flex items-center justify-center overflow-auto p-4 md:p-8 select-none"
+                onClick={() => setIsLightboxOpen(false)}
               >
                 <motion.img
                   key={activeImage}
@@ -650,12 +671,15 @@ export default function PropertyDetailClient({ property, relatedProperties }: Pr
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.35, ease: 'easeInOut' }}
                   className="object-contain max-w-[85vw] max-h-[75vh] rounded-none transition-all duration-300 ease-in-out shadow-2xl"
+                  onClick={(e) => e.stopPropagation()}
                 />
               </div>
             </div>
 
             {/* Bottom Bar info */}
-            <div className="w-full flex flex-col items-center gap-4 z-10 py-2">
+            <div 
+              onClick={(e) => e.stopPropagation()}
+              className="w-full flex flex-col items-center gap-4 z-10 py-2">
               <span className="text-white/60 text-xs font-semibold">
                 Foto {activeImage + 1} de {property.gallery.length}
               </span>
