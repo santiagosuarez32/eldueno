@@ -127,7 +127,7 @@ export default function Navbar() {
           {/* Logo */}
           <Link href="/" className="flex items-center group">
             <img
-              src="/navbar.png"
+              src="/navbar.webp"
               alt="El Dueño Vende"
               className={`h-11 md:h-16 w-auto object-contain transition-all duration-300 group-hover:scale-102 ${
                 shouldShowScrolledState ? 'brightness-0' : ''
@@ -243,7 +243,7 @@ export default function Navbar() {
         {/* Drawer Header */}
         <div className="flex shrink-0 items-center border-b border-white/10 px-6 py-5">
           <Link href="/" onClick={closeMobileMenu} className="inline-flex">
-            <img src="/navbar.png" alt="El Dueño Vende Logo" className="h-9 w-auto object-contain brightness-0 invert" />
+            <img src="/navbar.webp" alt="El Dueño Vende Logo" className="h-9 w-auto object-contain brightness-0 invert" />
           </Link>
         </div>
 

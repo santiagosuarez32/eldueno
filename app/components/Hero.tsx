@@ -145,7 +145,7 @@ export default function Hero() {
       {/* Background Image with Centered Easing Overlay */}
       <div className="absolute inset-0 z-0">
         <img
-          src="/hero.jpeg"
+          src="/hero.webp"
           alt="Modern House"
           className="w-full h-full object-cover"
         />

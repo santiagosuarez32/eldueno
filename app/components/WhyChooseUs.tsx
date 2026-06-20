@@ -25,7 +25,7 @@ export default function WhyChooseUs() {
       description: 'Accedé a financiamiento y opciones de crédito hipotecario adaptadas a tus necesidades para adquirir tu propiedad rápidamente.',
       link: '/contacto',
       buttonText: 'Consultar Préstamo',
-      image: '/services/creditos.jpeg',
+      image: '/services/creditos.webp',
       counters: [
         { value: '95%', label: 'Tasa de Aprobación' },
         { value: '24 hs', label: 'Pre-aprobación' }
@@ -36,7 +36,7 @@ export default function WhyChooseUs() {
       description: 'Consultá por remodelaciones, planos y asesoría técnica de diseño para transformar tu nuevo espacio con profesionales.',
       link: '/contacto',
       buttonText: 'Solicitar Asesoría',
-      image: '/services/arquitectura.jpeg',
+      image: '/services/arquitectura.webp',
       counters: [
         { value: '150+', label: 'Proyectos Entregados' },
         { value: '15+', label: 'Arquitectos Asociados' }

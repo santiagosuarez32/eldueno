@@ -47,7 +47,7 @@ export const mockProperties: Property[] = [
     baths: 2,
     area: 95,
     landArea: 120,
-    image: "/images/prop-1.png",
+    image: "/images/prop-1.webp",
     type: "departamento",
     featured: true,
     expenses: 85,
@@ -59,10 +59,10 @@ export const mockProperties: Property[] = [
       whatsappUrl: "https://wa.me/50688765432?text=Hola%20Mariana,%20estoy%20interesado%20en%20el%20Duplex%20de%20Escazu%20que%20vi%20en%20Due%C3%B1oDirecto."
     },
     gallery: [
-      "/images/prop-1.png",
-      "/images/prop-2.png",
-      "/images/prop-3.png",
-      "/images/prop-4.png"
+      "/images/prop-1.webp",
+      "/images/prop-2.webp",
+      "/images/prop-3.webp",
+      "/images/prop-4.webp"
     ],
     views: 142,
     saves: 12,
@@ -85,7 +85,7 @@ export const mockProperties: Property[] = [
     landArea: 450, // m² de terreno
     constructionArea: 280, // m² de construcción
     parkingSpaces: 3, // Estacionamientos
-    image: "/images/prop-2.png",
+    image: "/images/prop-2.webp",
     type: "casa",
     featured: true,
     expenses: 0,
@@ -97,10 +97,10 @@ export const mockProperties: Property[] = [
       whatsappUrl: "https://wa.me/50687654321?text=Hola%20Juan%20Pablo,%20estoy%20interesado%20en%20la%20Casa%20con%20Piscina%20en%20Santa%20Ana%20que%20vi%20en%20Due%C3%B1oDirecto."
     },
     gallery: [
-      "/images/prop-2.png",
-      "/images/prop-5.png",
-      "/images/prop-6.png",
-      "/images/prop-1.png"
+      "/images/prop-2.webp",
+      "/images/prop-5.webp",
+      "/images/prop-6.webp",
+      "/images/prop-1.webp"
     ],
     views: 298,
     saves: 45,
@@ -121,7 +121,7 @@ export const mockProperties: Property[] = [
     beds: 1,
     baths: 1,
     area: 72,
-    image: "/images/prop-3.png",
+    image: "/images/prop-3.webp",
     type: "loft",
     featured: true,
     expenses: 60,
@@ -133,10 +133,10 @@ export const mockProperties: Property[] = [
       whatsappUrl: "https://wa.me/50683210987?text=Hola%20Roberto,%20estoy%20interesado%20en%20el%20Loft%20Industrial%20en%20Barrio%20Amon%20que%20vi%20en%20Due%C3%B1oDirecto."
     },
     gallery: [
-      "/images/prop-3.png",
-      "/images/prop-4.png",
-      "/images/prop-1.png",
-      "/images/prop-5.png"
+      "/images/prop-3.webp",
+      "/images/prop-4.webp",
+      "/images/prop-1.webp",
+      "/images/prop-5.webp"
     ],
     views: 89,
     saves: 7,
@@ -155,7 +155,7 @@ export const mockProperties: Property[] = [
     beds: 3,
     baths: 4,
     area: 210,
-    image: "/images/prop-4.png",
+    image: "/images/prop-4.webp",
     type: "departamento",
     featured: false,
     expenses: 250,
@@ -167,10 +167,10 @@ export const mockProperties: Property[] = [
       whatsappUrl: "https://wa.me/50689876543?text=Hola%20Clara,%20estoy%20interesada%20en%20el%20Penthouse%20en%20Tamarindo%20que%20vi%20en%20Due%C3%B1oDirecto."
     },
     gallery: [
-      "/images/prop-4.png",
-      "/images/prop-1.png",
-      "/images/prop-3.png",
-      "/images/prop-6.png"
+      "/images/prop-4.webp",
+      "/images/prop-1.webp",
+      "/images/prop-3.webp",
+      "/images/prop-6.webp"
     ],
     views: 412,
     saves: 83,
@@ -188,7 +188,7 @@ export const mockProperties: Property[] = [
     location: "Heredia, Costa Rica",
     neighborhood: "Cariari",
     landArea: 650, // Metros de terreno
-    image: "/images/prop-5.png",
+    image: "/images/prop-5.webp",
     type: "terreno",
     featured: false,
     expenses: 120,
@@ -200,10 +200,10 @@ export const mockProperties: Property[] = [
       whatsappUrl: "https://wa.me/50686784321?text=Hola%20Esteban,%20estoy%20interesado%20en%20la%20Casa%20en%20Cariari%20que%20vi%20en%20Due%C3%B1oDirecto."
     },
     gallery: [
-      "/images/prop-5.png",
-      "/images/prop-2.png",
-      "/images/prop-6.png",
-      "/images/prop-3.png"
+      "/images/prop-5.webp",
+      "/images/prop-2.webp",
+      "/images/prop-6.webp",
+      "/images/prop-3.webp"
     ],
     views: 176,
     saves: 22,
@@ -222,7 +222,7 @@ export const mockProperties: Property[] = [
     parkingSpaces: 10, // Estacionamientos
     aposentos: 8, // Aposentos
     area: 380, // m² de construcción
-    image: "/images/prop-6.png",
+    image: "/images/prop-6.webp",
     type: "comercial",
     featured: false,
     expenses: 150,
@@ -234,10 +234,10 @@ export const mockProperties: Property[] = [
       whatsappUrl: "https://wa.me/50683456789?text=Hola%20Alejandro,%20estoy%20interesado%20en%20la%20Casa%20en%20Tres%20Rios%20que%20vi%20en%20Due%C3%B1oDirecto."
     },
     gallery: [
-      "/images/prop-6.png",
-      "/images/prop-2.png",
-      "/images/prop-5.png",
-      "/images/prop-4.png"
+      "/images/prop-6.webp",
+      "/images/prop-2.webp",
+      "/images/prop-5.webp",
+      "/images/prop-4.webp"
     ],
     views: 520,
     saves: 94,

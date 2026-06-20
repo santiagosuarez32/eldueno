@@ -5,12 +5,12 @@ import { motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const partners = [
-  { id: 0, name: 'MUCAP', logo: '/partners/1(1)_transparent_hd.png' },
-  { id: 1, name: 'Coope Ande', logo: '/partners/2(1)_transparent_hd.png' },
-  { id: 2, name: 'Banco de Costa Rica', logo: '/partners/3(1)_transparent_hd.png' },
-  { id: 3, name: 'Banco Popular', logo: '/partners/4_transparent_hd.png' },
-  { id: 4, name: 'Davivienda', logo: '/partners/5_transparent_hd.png' },
-  { id: 5, name: 'Scotiabank', logo: '/partners/6_transparent_hd.png' }
+  { id: 0, name: 'MUCAP', logo: '/partners/1(1)_transparent_hd.webp' },
+  { id: 1, name: 'Coope Ande', logo: '/partners/2(1)_transparent_hd.webp' },
+  { id: 2, name: 'Banco de Costa Rica', logo: '/partners/3(1)_transparent_hd.webp' },
+  { id: 3, name: 'Banco Popular', logo: '/partners/4_transparent_hd.webp' },
+  { id: 4, name: 'Davivienda', logo: '/partners/5_transparent_hd.webp' },
+  { id: 5, name: 'Scotiabank', logo: '/partners/6_transparent_hd.webp' }
 ];
 
 export default function PartnersCarousel() {

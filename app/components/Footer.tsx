@@ -11,7 +11,7 @@ export default function Footer() {
           
           {/* Background Hero Image */}
           <img
-            src="/hero.jpeg"
+            src="/hero.webp"
             alt="Hero background texture"
             className="absolute inset-0 w-full h-full object-cover pointer-events-none"
           />
@@ -91,7 +91,7 @@ export default function Footer() {
             <div className="space-y-4">
               <Link href="/" className="flex items-center group">
                 <img
-                  src="/navbar.png"
+                  src="/navbar.webp"
                   alt="El Dueño Vende"
                   className="h-16 w-auto object-contain transition-all duration-300 group-hover:scale-102 brightness-0 invert"
                 />

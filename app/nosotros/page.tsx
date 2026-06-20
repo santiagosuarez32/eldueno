@@ -80,7 +80,7 @@ export default function NosotrosPage() {
           {/* Background image & overlays */}
           <div className="absolute inset-0 z-0">
             <img
-              src="/images/about-hero.png"
+              src="/images/about-hero.webp"
               alt="Luxury minimalist interior architecture with tall arches"
               className="w-full h-full object-cover object-center"
             />
@@ -199,7 +199,7 @@ export default function NosotrosPage() {
                   className="rounded-[32px] overflow-hidden shadow-xl h-[360px] sm:h-[460px] w-full bg-slate-100"
                 >
                   <img
-                    src="/images/about-living-room.png"
+                    src="/images/about-living-room.webp"
                     alt="Interior de sala de estar moderna"
                     className="w-full h-full object-cover"
                   />
@@ -218,7 +218,7 @@ export default function NosotrosPage() {
                     className="rounded-[32px] overflow-hidden shadow-md h-[170px] sm:h-[220px] w-full bg-slate-100"
                   >
                     <img
-                      src="/images/about-villa-concrete.png"
+                      src="/images/about-villa-concrete.webp"
                       alt="Exterior de casa de hormigón moderna"
                       className="w-full h-full object-cover"
                     />
@@ -231,7 +231,7 @@ export default function NosotrosPage() {
                     className="rounded-[32px] overflow-hidden shadow-md h-[170px] sm:h-[220px] w-full bg-slate-100"
                   >
                     <img
-                      src="/images/about-villa-balcony.png"
+                      src="/images/about-villa-balcony.webp"
                       alt="Apartamento moderno con balcón y árboles"
                       className="w-full h-full object-cover"
                     />

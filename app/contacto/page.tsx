@@ -88,7 +88,7 @@ export default function ContactoPage() {
       {/* 1. HERO SECTION (Dark Blue Theme with Background Image) */}
       <section 
         className="text-white pt-28 pb-14 relative overflow-hidden bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: "url('/images/contacto-hero.png')" }}
+        style={{ backgroundImage: "url('/images/contacto-hero.webp')" }}
       >
         {/* Dark overlay for readability */}
         <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/65 to-black/35" />
@@ -133,7 +133,7 @@ export default function ContactoPage() {
               {/* Physical Contact Details */}
               <div className="space-y-5 border-y border-slate-100 py-8">
                 <div className="flex gap-4 items-center">
-                  <img src="/contact/1.png" className="w-8 h-8 object-contain flex-shrink-0" alt="Teléfono" />
+                  <img src="/contact/1.webp" className="w-8 h-8 object-contain flex-shrink-0" alt="Teléfono" />
                   <div>
                     <p className="text-[13px] sm:text-[14px] font-bold text-slate-800">Teléfono / WhatsApp</p>
                     <p className="text-[11px] sm:text-[12px] font-medium text-slate-700 hover:text-emerald-700 transition-colors mt-0.5">
@@ -143,7 +143,7 @@ export default function ContactoPage() {
                 </div>
 
                 <div className="flex gap-4 items-center">
-                  <img src="/contact/email.png" className="w-8 h-8 object-contain flex-shrink-0" alt="Correo electrónico" />
+                  <img src="/contact/email.webp" className="w-8 h-8 object-contain flex-shrink-0" alt="Correo electrónico" />
                   <div>
                     <p className="text-[13px] sm:text-[14px] font-bold text-slate-800">Correo electrónico</p>
                     <p className="text-[11px] sm:text-[12px] font-medium text-slate-700 hover:text-emerald-700 transition-colors mt-0.5">
