@@ -126,50 +126,58 @@ export default function StatsSection() {
           </motion.div>
         </div>
  
-        {/* Bottom Cards Grid */}
+        {/* Bottom Cards Grid / Carousel */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-50px' }}
           transition={{ duration: 0.8, delay: 0.4 }}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
+          className="flex lg:grid gap-0 lg:gap-6 overflow-x-auto lg:overflow-x-visible pb-8 lg:pb-0 snap-x snap-mandatory scroll-smooth hide-scrollbar w-screen -mx-4 sm:-mx-6 lg:w-full lg:mx-0 px-4 lg:px-0 lg:grid-cols-4"
+          style={{
+            scrollbarWidth: 'none',
+            msOverflowStyle: 'none',
+          }}
         >
           {blogPosts.map((post, idx) => (
             <Link
               key={idx}
               href={`/blog/${post.slug}`}
-              className="group flex flex-col bg-white rounded-[24px] overflow-hidden border border-slate-200/60 hover:border-slate-200 shadow-sm hover:shadow-xl transition-all duration-300"
+              className="w-screen shrink-0 snap-center px-4 sm:px-6 lg:w-auto lg:shrink lg:snap-align-none lg:px-0 block cursor-pointer flex flex-col"
             >
-              {/* Image Container */}
-              <div className="relative aspect-[16/10] overflow-hidden bg-slate-100">
-                <img 
-                  src={post.image} 
-                  alt={post.title} 
-                  className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out"
-                />
-                <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors duration-500" />
-              </div>
-              
-              {/* Content Box */}
-              <div className="p-5 sm:p-6 flex flex-col flex-grow space-y-3">
-                <div className="flex items-center justify-between text-[11px] text-slate-500 font-medium">
-                  <span className="text-emerald-600 font-bold">{post.category}</span>
-                  <span>{post.date}</span>
+              <div
+                className="w-full bg-white border border-slate-200/60 rounded-[32px] overflow-hidden flex flex-col group transition-all duration-300 h-full shadow-none hover:shadow-xl hover:border-slate-200"
+              >
+                {/* Image Container */}
+                <div className="relative aspect-[16/10] overflow-hidden bg-slate-100">
+                  <img 
+                    src={post.image} 
+                    alt={post.title} 
+                    className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out"
+                  />
+                  <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors duration-500" />
                 </div>
                 
-                <h3 className="text-base sm:text-lg font-bold text-slate-950 group-hover:text-emerald-500 transition-colors line-clamp-2 leading-snug">
-                  {post.title}
-                </h3>
-                
-                <p className="text-slate-500 text-xs sm:text-sm leading-relaxed line-clamp-3">
-                  {post.excerpt}
-                </p>
- 
-                {/* Bottom link line */}
-                <div className="pt-3 mt-auto border-t border-slate-100 flex items-center justify-between text-xs font-extrabold text-slate-955 group-hover:text-emerald-500 transition-colors">
-                  <span>Leer Artículo</span>
-                  <div className="h-7 w-7 rounded-full bg-slate-950 text-white flex items-center justify-center transition-all duration-300 group-hover:bg-emerald-500 group-hover:text-slate-955 group-hover:rotate-45 shadow-sm">
-                    <ArrowUpRight size={12} />
+                {/* Content Box */}
+                <div className="px-6 pt-5 pb-5 sm:px-10 sm:pt-6 sm:pb-6 flex flex-col flex-grow space-y-3 bg-white">
+                  <div className="flex items-center justify-between text-[11px] text-slate-500 font-medium">
+                    <span className="text-emerald-600 font-bold">{post.category}</span>
+                    <span>{post.date}</span>
+                  </div>
+                  
+                  <h3 className="text-base sm:text-lg font-bold text-slate-950 group-hover:text-emerald-500 transition-colors line-clamp-2 leading-snug">
+                    {post.title}
+                  </h3>
+                  
+                  <p className="text-slate-500 text-xs sm:text-sm leading-relaxed line-clamp-3">
+                    {post.excerpt}
+                  </p>
+  
+                  {/* Bottom link line */}
+                  <div className="pt-3 mt-auto border-t border-slate-100 flex items-center justify-between text-xs font-extrabold text-slate-955 group-hover:text-emerald-500 transition-colors">
+                    <span>Leer Artículo</span>
+                    <div className="h-7 w-7 rounded-full bg-slate-950 text-white flex items-center justify-center transition-all duration-300 group-hover:bg-emerald-500 group-hover:text-slate-955 group-hover:rotate-45 shadow-sm">
+                      <ArrowUpRight size={12} />
+                    </div>
                   </div>
                 </div>
               </div>

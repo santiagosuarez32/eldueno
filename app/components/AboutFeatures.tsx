@@ -27,12 +27,12 @@ export default function AboutFeatures() {
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true, margin: '-50px' }}
           transition={{ duration: 0.8 }}
-          className="w-full lg:w-1/2 flex items-stretch"
+          className="w-full lg:w-1/2 flex"
         >
           <img 
             src="/about.png" 
             alt="Sobre nosotros" 
-            className="w-full h-full object-cover rounded-r-3xl"
+            className="w-full h-[300px] sm:h-[400px] lg:h-auto object-cover rounded-b-[32px] lg:rounded-r-[32px] lg:rounded-bl-none"
           />
         </motion.div>
 

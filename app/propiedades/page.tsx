@@ -107,7 +107,7 @@ function PropertiesContent() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             
             {/* Filter Sidebar */}
-            <aside className="lg:col-span-3 bg-slate-50 border border-slate-200/60 rounded-3xl p-6 sm:p-8 space-y-6 sticky top-24 shadow-sm">
+            <aside className="lg:col-span-3 bg-slate-50 border border-slate-200/60 rounded-3xl p-6 sm:p-8 space-y-6 lg:sticky lg:top-24 shadow-sm">
               <div className="flex items-center justify-between border-b border-slate-200/60 pb-4">
                 <span className="font-bold text-slate-955 flex items-center gap-2">
                   <img src="/icons-filters/filter.png" className="h-5 w-5 object-contain" alt="" />

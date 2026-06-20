@@ -27,7 +27,7 @@ export default function FeaturedProperties() {
 
   return (
     <section className="bg-white py-24 text-slate-900 relative overflow-hidden">
-      <div className="max-w-[1600px] mx-auto px-4 sm:px-4 lg:px-4">
+      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Header Section */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
@@ -76,7 +76,7 @@ export default function FeaturedProperties() {
         {/* Carousel Container */}
         <div 
           ref={carouselRef}
-          className="flex gap-6 overflow-x-auto pb-8 snap-x snap-mandatory scroll-smooth hide-scrollbar -mx-4 px-4"
+          className="flex gap-0 lg:gap-6 overflow-x-auto pb-8 snap-x snap-mandatory scroll-smooth hide-scrollbar w-screen -mx-4 sm:-mx-6 lg:w-full lg:mx-0 px-4"
           style={{
             scrollbarWidth: 'none',
             msOverflowStyle: 'none',
@@ -95,21 +95,21 @@ export default function FeaturedProperties() {
                 <Link
                   key={property.id}
                   href={`/propiedades/${property.id}`}
-                  className="w-[300px] sm:w-[500px] md:w-[580px] lg:w-[670px] flex-shrink-0 snap-start block cursor-pointer"
+                  className="w-screen shrink-0 snap-center px-4 sm:px-6 lg:w-[670px] lg:shrink lg:snap-start lg:px-0 block cursor-pointer"
                 >
                   <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: '-50px' }}
                     transition={{ duration: 0.5 }}
-                    className="w-full bg-white border border-slate-200/60 rounded-[32px] overflow-hidden flex flex-col group shadow-sm hover:shadow-xl transition-all duration-300 h-full"
+                    className="w-full bg-white border border-slate-200/60 rounded-[32px] overflow-hidden flex flex-col group transition-all duration-300 h-full shadow-none"
                   >
                     {/* Image Container */}
                     <div className="relative aspect-[16/10] w-full overflow-hidden bg-slate-100">
                       {/* Floating Action Overlay on Hover */}
                       <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20 flex items-center justify-center">
                         <div 
-                          className="bg-yellow-400 text-slate-955 font-light text-[12px] tracking-wider w-20 h-20 rounded-full flex flex-col items-center justify-center text-center p-2 transform scale-90 group-hover:scale-100 transition-all duration-300 shadow-xl"
+                          className="bg-yellow-400 text-slate-955 font-light text-[12px] tracking-wider w-20 h-20 rounded-full flex flex-col items-center justify-center text-center p-2 transform scale-90 group-hover:scale-100 transition-all duration-300"
                         >
                           <span>Ver</span>
                           <span>detalle</span>
@@ -118,7 +118,7 @@ export default function FeaturedProperties() {
 
                       {/* Dueño Directo Badge */}
                       <div className="absolute top-4 right-4 z-10">
-                        <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-900/80 backdrop-blur-sm border border-slate-700/50 text-slate-300 text-[10px] font-semibold shadow-sm">
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-900/80 backdrop-blur-sm border border-slate-700/50 text-slate-300 text-[10px] font-semibold">
                           <MapPin className="h-3 w-3 text-white flex-shrink-0" />
                           Costa Rica
                         </span>
@@ -182,7 +182,6 @@ export default function FeaturedProperties() {
               );
             })}
           </div>
-
       </div>
     </section>
   );

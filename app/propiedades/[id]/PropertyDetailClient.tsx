@@ -220,14 +220,7 @@ export default function PropertyDetailClient({ property, relatedProperties }: Pr
             <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-slate-900 leading-tight">
               {property.title}
             </h1>
-                     <p className="text-slate-500 text-xs font-medium flex flex-wrap items-center gap-2">
-              {metadataItems.map((item, idx) => (
-                <span key={idx} className="flex items-center gap-2">
-                  {idx > 0 && <span className="text-slate-350 mr-1">•</span>}
-                  {item}
-                </span>
-              ))}
-            </p>
+        
           </div>
 
           <div className="flex flex-col items-start md:items-end gap-1.5 shrink-0">

@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import Navbar from '@/app/components/Navbar';
 import Footer from '@/app/components/Footer';
@@ -7,6 +8,45 @@ import PropertyDetailClient from './PropertyDetailClient';
 
 interface PropertyDetailPageProps {
   params: Promise<{ id: string }>;
+}
+
+export async function generateMetadata({
+  params,
+}: PropertyDetailPageProps): Promise<Metadata> {
+  const { id } = await params;
+  const property = mockProperties.find((p) => p.id === id);
+
+  if (!property) {
+    return {
+      title: 'Propiedad No Encontrada | El Dueño Vende',
+    };
+  }
+
+  const title = `${property.title} | El Dueño Vende`;
+  const description = `${property.description.slice(0, 155)}...`;
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      type: 'article',
+      url: `https://elduenovende.com/propiedades/${id}`,
+      images: [
+        {
+          url: property.image,
+          alt: property.title,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: [property.image],
+    },
+  };
 }
 
 export default async function PropertyDetailPage({ params }: PropertyDetailPageProps) {

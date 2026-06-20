@@ -153,14 +153,14 @@ export default function Hero() {
         <div 
           className="absolute inset-0 pointer-events-none"
           style={{
-            background: 'radial-gradient(circle at center, rgba(2, 6, 23, 0.45) 0%, rgba(2, 6, 23, 0.68) 60%, rgba(2, 6, 23, 0.85) 100%)'
+            background: 'radial-gradient(circle at center, rgba(0, 0, 0, 0.35) 0%, rgba(0, 0, 0, 0.55) 60%, rgba(0, 0, 0, 0.75) 100%)'
           }}
         />
         {/* Subtle bottom vignette to blend with the container */}
         <div 
           className="absolute inset-0 pointer-events-none"
           style={{
-            background: 'linear-gradient(to top, rgba(2, 6, 23, 0.78) 0%, rgba(2, 6, 23, 0.38) 35%, rgba(2, 6, 23, 0) 80%)'
+            background: 'linear-gradient(to top, rgba(0, 0, 0, 0.65) 0%, rgba(0, 0, 0, 0.32) 35%, rgba(0, 0, 0, 0) 80%)'
           }}
         />
       </div>
@@ -168,7 +168,7 @@ export default function Hero() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full flex flex-col items-center">
         
         {/* Top Centered: Title & Subtitle */}
-        <div className="text-center max-w-3xl space-y-6 mb-12 flex flex-col items-center">
+        <div className="text-center max-w-3xl space-y-4 sm:space-y-5 mb-6 sm:mb-8 flex flex-col items-center">
           <motion.div
             initial={{ opacity: 0, y: -15 }}
             animate={{ opacity: 1, y: 0 }}
@@ -179,7 +179,7 @@ export default function Hero() {
             Dueño Directo • Costa Rica
           </motion.div>
 
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -200,18 +200,18 @@ export default function Hero() {
             </motion.p>
           </div>
 
-          {/* Actions Buttons */}
+          {/* Actions Buttons (single line on mobile) */}
           <motion.div
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
-            className="flex flex-wrap items-center justify-center gap-4 pt-2"
+            className="flex flex-row items-center justify-center gap-2 sm:gap-4 pt-2 w-full"
           >
-            <Link href="/propiedades">
+            <Link href="/propiedades" className="flex-shrink-0">
               <FlowButton text="Ver Propiedades" variant="primary" />
             </Link>
-            <Link href="/contacto">
-              <FlowButton text="Contactar con un asesor" variant="secondary" />
+            <Link href="/contacto" className="flex-shrink-0">
+              <FlowButton text="Contactar Asesor" variant="secondary" />
             </Link>
           </motion.div>
         </div>
@@ -221,7 +221,7 @@ export default function Hero() {
           initial={{ opacity: 0, y: 25 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.3 }}
-          className="w-full max-w-3xl"
+          className="w-full max-w-[88%] sm:max-w-xl md:max-w-2xl mx-auto"
         >
           <div 
             onClick={() => {
@@ -247,24 +247,24 @@ export default function Hero() {
                 setSearchResults(matches);
               }
             }}
-            className="bg-white rounded-3xl md:rounded-full p-2 shadow-2xl flex flex-col md:flex-row items-stretch md:items-center border border-slate-100 cursor-pointer"
+            className="bg-white rounded-full p-1 sm:p-1.5 shadow-2xl flex flex-row items-center border border-slate-100 cursor-pointer"
           >
-            <div className="flex-1 flex items-center pl-6 pr-4 py-3 md:py-2">
-              <Search className="h-5 w-5 text-slate-400 mr-3 shrink-0" />
+            <div className="flex-1 flex items-center pl-4 sm:pl-6 pr-2 py-2 sm:py-2.5">
+              <Search className="h-4.5 w-4.5 sm:h-5 sm:w-5 text-slate-400 mr-2 sm:mr-3 shrink-0" />
               <input
                 type="text"
                 readOnly
                 value={searchValue}
-                placeholder="Escribe ubicación, tipo de propiedad, barrio..."
-                className="w-full bg-transparent border-0 p-0 text-slate-900 text-sm md:text-base font-semibold placeholder-slate-400 focus:ring-0 focus:outline-none cursor-pointer"
+                placeholder="Buscar ubicación, barrio, tipo..."
+                className="w-full bg-transparent border-0 p-0 text-slate-900 text-xs sm:text-sm md:text-base font-semibold placeholder-slate-400 focus:ring-0 focus:outline-none cursor-pointer truncate"
               />
             </div>
             <button
               type="button"
-              className="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold px-8 py-4 rounded-2xl md:rounded-full flex items-center justify-center gap-2 transition-all duration-300 shadow-md hover:shadow-lg hover:shadow-emerald-500/20 active:scale-95 shrink-0 md:mr-1 cursor-pointer"
+              className="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold p-2.5 sm:px-6 sm:py-2.5 rounded-full flex items-center justify-center gap-1.5 transition-all duration-300 shadow-md hover:shadow-lg hover:shadow-emerald-500/20 active:scale-95 shrink-0 mr-0.5 cursor-pointer"
             >
               <Search className="h-4 w-4" />
-              <span>Buscar</span>
+              <span className="hidden sm:inline text-xs sm:text-sm">Buscar</span>
             </button>
           </div>
 

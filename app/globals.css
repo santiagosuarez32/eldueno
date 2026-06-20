@@ -20,11 +20,14 @@
   --color-emerald-900: #524a00;
 
   /* Mapear las clases de slate/gray a la paleta de grises oscuros y negro */
+  --color-slate-955: #000000; /* Negro profundo fallback */
   --color-slate-950: #000000; /* Negro profundo */
   --color-slate-900: #1a1a1a; /* Gris oscuro medio */
   --color-slate-850: #2d2d2d;
   --color-slate-800: #383838; /* Gris Oscuro solicitado #545454 */
   --color-slate-700: #545454; /* Gris intermedio */
+  --color-slate-350: #cbd5e1; /* Gris claro fallback */
+  --color-slate-355: #cbd5e1; /* Gris claro fallback */
 }
 
 html, body {

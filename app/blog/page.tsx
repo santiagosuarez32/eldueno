@@ -6,41 +6,12 @@ import Footer from '@/app/components/Footer';
 import Link from 'next/link';
 import { Search, ArrowUpRight } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { mockBlogPosts } from '@/app/data/blog';
 
 export default function BlogPage() {
   const [searchTerm, setSearchTerm] = useState('');
 
-  const blogPosts = [
-    {
-      slug: 'como-vender-sin-comisiones',
-      category: 'Guía Práctica',
-      date: '12 de Junio, 2026',
-      title: 'Cómo vender tu propiedad sin comisiones inmobiliarias',
-      excerpt: 'Descubrí los pasos clave para publicar, promocionar y negociar tu inmueble de forma directa y segura ahorrando miles de dólares.',
-      image: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-      readTime: '5 min'
-    },
-    {
-      slug: 'documentos-compra-directa',
-      category: 'Legal',
-      date: '8 de Junio, 2026',
-      title: 'Documentos necesarios para comprar directo al dueño',
-      excerpt: 'Todo lo que necesitás saber sobre boletos de compraventa, escrituras y trámites legales para operar de forma transparente y protegida.',
-      image: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-      readTime: '7 min'
-    },
-    {
-      slug: 'zonas-crecimiento-costa-rica',
-      category: 'Tendencias',
-      date: '3 de Junio, 2026',
-      title: 'Zonas con mayor crecimiento y retorno en Costa Rica',
-      excerpt: 'Analizamos los barrios y distritos que están experimentando el mayor auge inmobiliario, ideales para invertir o mudarte.',
-      image: 'https://images.unsplash.com/photo-1542838132-92c53300491e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-      readTime: '4 min'
-    }
-  ];
-
-  const filteredPosts = blogPosts.filter(post => 
+  const filteredPosts = mockBlogPosts.filter(post => 
     post.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
     post.excerpt.toLowerCase().includes(searchTerm.toLowerCase()) ||
     post.category.toLowerCase().includes(searchTerm.toLowerCase())

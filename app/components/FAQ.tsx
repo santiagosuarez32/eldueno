@@ -42,7 +42,7 @@ export default function FAQ() {
 
   return (
     <section className="bg-white pt-20 pb-10 md:pt-32 md:pb-12">
-      <div className="mx-auto max-w-7xl px-4 md:px-6">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid gap-10 md:grid-cols-5 md:gap-16">
           
           {/* Left: Title */}

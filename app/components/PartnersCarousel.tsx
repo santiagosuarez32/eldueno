@@ -101,7 +101,7 @@ export default function PartnersCarousel() {
           {/* Left Arrow */}
           <button 
             onClick={handlePrev}
-            className="p-1 sm:p-2 text-slate-400 hover:text-slate-950 transition-colors shrink-0 cursor-pointer"
+            className="p-1 sm:p-2 text-slate-400 hover:text-slate-955 transition-colors shrink-0 cursor-pointer"
             aria-label="Anterior"
           >
             <ChevronLeft size={44} className="stroke-[1.5]" />
@@ -110,8 +110,8 @@ export default function PartnersCarousel() {
           {/* Slider Window */}
           <div className="relative overflow-hidden flex-grow px-2">
             {/* Fade Overlays for smooth edge clipping */}
-            <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-white via-white/80 to-transparent z-10 pointer-events-none" />
-            <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-white via-white/80 to-transparent z-10 pointer-events-none" />
+            <div className="absolute left-0 top-0 bottom-0 w-6 sm:w-20 bg-gradient-to-r from-white via-white/80 to-transparent z-10 pointer-events-none" />
+            <div className="absolute right-0 top-0 bottom-0 w-6 sm:w-20 bg-gradient-to-l from-white via-white/80 to-transparent z-10 pointer-events-none" />
 
             <motion.div
               className="flex items-center"
@@ -122,13 +122,14 @@ export default function PartnersCarousel() {
               {list.map((partner) => (
                 <div 
                   key={partner.id} 
-                  className="w-1/2 sm:w-1/3 lg:w-1/5 shrink-0 px-4 flex items-center justify-center"
+                  className="shrink-0 px-1.5 sm:px-4 flex items-center justify-center"
+                  style={{ width: `${100 / itemsToShow}%` }}
                 >
-                  <div className="h-44 w-full flex items-center justify-center">
+                  <div className="h-32 sm:h-44 w-full flex items-center justify-center">
                     <img
                       src={partner.logo}
                       alt={partner.name}
-                      className="max-h-32 max-w-full object-contain filter grayscale-0 hover:grayscale opacity-100 hover:opacity-50 transition-all duration-300"
+                      className="max-h-24 sm:max-h-32 max-w-full object-contain filter grayscale-0 hover:grayscale opacity-100 hover:opacity-50 transition-all duration-300"
                     />
                   </div>
                 </div>

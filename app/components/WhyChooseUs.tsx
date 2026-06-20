@@ -45,7 +45,7 @@ export default function WhyChooseUs() {
   ];
 
   return (
-    <section className="bg-white py-24 text-slate-900 relative overflow-hidden">
+    <section id="servicios" className="bg-white py-24 text-slate-900 relative overflow-hidden">
       <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Top Section Header */}
@@ -109,7 +109,7 @@ export default function WhyChooseUs() {
                         transition={{ duration: 0.3, ease: 'easeInOut' }}
                         className="overflow-hidden"
                       >
-                        <div className="pl-14 pt-4 pb-2 space-y-6">
+                        <div className="pl-0 sm:pl-14 pt-4 pb-2 space-y-6">
                           <p className="text-slate-500 text-base sm:text-lg leading-relaxed">
                             {feature.description}
                           </p>
@@ -152,7 +152,7 @@ export default function WhyChooseUs() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: '-50px' }}
             transition={{ duration: 0.8 }}
-            className="lg:col-span-6 relative aspect-[4/3] rounded-[32px] overflow-hidden shadow-2xl bg-slate-100 min-h-[300px] lg:min-h-0"
+            className="lg:col-span-6 relative h-[180px] sm:h-[250px] lg:h-auto lg:aspect-[4/3] rounded-[32px] overflow-hidden shadow-md bg-slate-100"
           >
             {features.map((feature, idx) => (
               <img

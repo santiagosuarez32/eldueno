@@ -47,8 +47,40 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "El Dueño Vende | Propiedades Sin Intermediarios",
-  description: "La plataforma premium para comprar y vender propiedades directamente entre particulares. Ahorrá miles de dólares en comisiones inmobiliarias. Trato directo y verificado con el dueño.",
+  metadataBase: new URL("https://elduenovende.com"),
+  title: "El Dueño Vende | Propiedades Directas Sin Intermediarios",
+  description: "La plataforma premium para comprar y vender propiedades directamente entre particulares en Costa Rica. Ahorrá miles de dólares en comisiones inmobiliarias. Trato directo y verificado con el dueño.",
+  keywords: "dueño vende, trato directo, sin inmobiliaria, sin comisiones, comprar casa costa rica, vender departamento, alquiler directo, propiedades costa rica",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+    },
+  },
+  openGraph: {
+    title: "El Dueño Vende | Propiedades Directas Sin Intermediarios",
+    description: "La plataforma premium para comprar y vender propiedades directamente entre particulares. Ahorrá miles de dólares en comisiones inmobiliarias. Trato directo y verificado con el dueño.",
+    url: "https://elduenovende.com",
+    siteName: "El Dueño Vende",
+    images: [
+      {
+        url: "/og.webp",
+        width: 1200,
+        height: 630,
+        alt: "El Dueño Vende - Propiedades Directas Sin Intermediarios",
+      },
+    ],
+    locale: "es_CR",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "El Dueño Vende | Propiedades Directas Sin Intermediarios",
+    description: "La plataforma premium para comprar y vender propiedades directamente entre particulares. Ahorrá miles de dólares en comisiones inmobiliarias. Trato directo y verificado con el dueño.",
+    images: ["/og.webp"],
+  },
 };
 
 export default function RootLayout({

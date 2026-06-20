@@ -88,13 +88,13 @@ export default function NosotrosPage() {
             <div 
               className="absolute inset-0 pointer-events-none"
               style={{
-                background: 'radial-gradient(circle at center, rgba(2, 6, 23, 0.35) 0%, rgba(2, 6, 23, 0.65) 60%, rgba(2, 6, 23, 0.85) 100%)'
+                background: 'radial-gradient(circle at center, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.55) 60%, rgba(0, 0, 0, 0.75) 100%)'
               }}
             />
             <div 
               className="absolute inset-0 pointer-events-none"
               style={{
-                background: 'linear-gradient(to top, rgba(2, 6, 23, 0.95) 0%, rgba(2, 6, 23, 0.45) 40%, rgba(2, 6, 23, 0.1) 100%)'
+                background: 'linear-gradient(to top, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.4) 40%, rgba(0, 0, 0, 0.08) 100%)'
               }}
             />
           </div>

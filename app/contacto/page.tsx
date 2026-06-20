@@ -1,48 +1,72 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Navbar from '@/app/components/Navbar';
 import Footer from '@/app/components/Footer';
 import { 
-  Mail, 
-  Phone, 
-  MapPin, 
-  Clock, 
   Send, 
   Check, 
   Loader2, 
-  MessageSquare,
   Building,
-  ArrowRight
+  ArrowRight,
+  Phone,
+  Mail,
+  MapPin,
+  Clock
 } from 'lucide-react';
 import { FaFacebookF, FaInstagram, FaTwitter } from 'react-icons/fa';
 
 export default function ContactoPage() {
+  // Force light body background to match this page's design
+  useEffect(() => {
+    document.body.classList.add('bg-white', 'text-slate-900');
+    document.body.classList.remove('bg-slate-950', 'text-slate-100');
+    return () => {
+      document.body.classList.remove('bg-white', 'text-slate-900');
+      document.body.classList.add('bg-slate-950', 'text-slate-100');
+    };
+  }, []);
+
   // Form State
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     phone: '',
-    reason: 'Comprar una propiedad',
-    message: ''
+    service: 'Comprar una propiedad',
+    message: '',
+    agree: false
   });
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
 
   // Input Handlers
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
+    const { name, value, type } = e.target;
+    
+    if (type === 'checkbox') {
+      const target = e.target as HTMLInputElement;
+      setFormData(prev => ({
+        ...prev,
+        [name]: target.checked
+      }));
+    } else {
+      setFormData(prev => ({
+        ...prev,
+        [name]: value
+      }));
+    }
   };
 
   // Form Submit Handler
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!formData.agree) {
+      alert('Por favor, acepta el procesamiento de datos personales.');
+      return;
+    }
     setStatus('submitting');
 
-    // Simulate high-fidelity network request
+    // Simulate network request
     setTimeout(() => {
       setStatus('success');
       // Reset form after success
@@ -50,8 +74,9 @@ export default function ContactoPage() {
         name: '',
         email: '',
         phone: '',
-        reason: 'Comprar una propiedad',
-        message: ''
+        service: 'Comprar una propiedad',
+        message: '',
+        agree: false
       });
     }, 1800);
   };
@@ -59,153 +84,105 @@ export default function ContactoPage() {
   return (
     <>
       <Navbar />
-
-      <main className="min-h-screen bg-slate-950 text-slate-100 pt-28 pb-12 overflow-hidden relative">
-        {/* Decorative background gradients (Dribbble dark theme style) */}
-        <div className="absolute top-1/4 left-0 w-[500px] h-[500px] bg-emerald-500/10 rounded-full blur-[120px] pointer-events-none" />
-        <div className="absolute bottom-1/4 right-0 w-[500px] h-[500px] bg-blue-500/5 rounded-full blur-[120px] pointer-events-none" />
-
+      
+      {/* 1. HERO SECTION (Dark Blue Theme with Background Image) */}
+      <section 
+        className="text-white pt-28 pb-14 relative overflow-hidden bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: "url('/images/contacto-hero.png')" }}
+      >
+        {/* Dark overlay for readability */}
+        <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/65 to-black/35" />
+        
         <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          {/* Header Section */}
-          <div className="max-w-4xl mb-16 space-y-4">
-            <motion.span 
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold uppercase tracking-wider"
-            >
-              Comunicate con nosotros
-            </motion.span>
+          <div className="max-w-2xl space-y-4">
+            <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight leading-[1.1] text-white">
+              Contactános
+            </h1>
+            <p className="text-slate-300 text-sm sm:text-base leading-relaxed max-w-xl">
+              Para consultas generales, publicaciones de propiedades o asesoramiento especializado para comprar y vender sin intermediarios, por favor completá tus datos a continuación.
+            </p>
             
-            <motion.h1 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              className="text-4xl sm:text-6xl font-bold tracking-tight text-white leading-tight"
-            >
-              Estamos aquí para <br />
-              <span className="text-emerald-400">asesorarte de forma directa</span>
-            </motion.h1>
-            
-            <motion.p 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-slate-400 text-base sm:text-lg max-w-2xl leading-relaxed"
-            >
-              ¿Tenés dudas sobre cómo comprar o vender sin pagar comisiones? Completá el formulario o contactanos por cualquiera de nuestros canales.
-            </motion.p>
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-2 pt-2 text-[11px] font-medium text-slate-400">
+              <span className="flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" /> Respuesta en menos de 24hs
+              </span>
+              <span className="w-1 h-1 rounded-full bg-slate-600" />
+              <span>Trato 100% Directo</span>
+            </div>
           </div>
+        </div>
+      </section>
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start mb-20">
-            {/* Left Side: Contact Information Cards */}
-            <div className="lg:col-span-5 space-y-6">
-              
-              {/* WhatsApp Card */}
-              <motion.a 
-                href="https://wa.me/50686208287"
-                target="_blank"
-                rel="noopener noreferrer"
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.5, delay: 0.3 }}
-                className="group flex items-start gap-5 p-6 bg-slate-900/40 rounded-[24px] border border-slate-800/80 hover:border-emerald-500/30 hover:bg-slate-900/60 transition-all duration-300 shadow-lg cursor-pointer"
-              >
-                <div className="p-4 rounded-2xl bg-emerald-500/10 text-emerald-400 group-hover:bg-emerald-500 group-hover:text-slate-950 transition-all duration-300">
-                  <MessageSquare className="h-6 w-6" />
-                </div>
-                <div className="space-y-1">
-                  <span className="text-xs text-slate-500 font-semibold uppercase tracking-wider block">WhatsApp Directo</span>
-                  <p className="text-base sm:text-lg font-bold text-white group-hover:text-[#ffe600] transition-colors">+506 8620-8287</p>
-                  <p className="text-xs sm:text-sm text-slate-400">Escribinos y chateá con un asesor inmobiliario en tiempo real.</p>
-                </div>
-              </motion.a>
-
-              {/* Call Card */}
-              <motion.div 
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.5, delay: 0.4 }}
-                className="group flex items-start gap-5 p-6 bg-slate-900/40 rounded-[24px] border border-slate-800/80 hover:border-[#ffe600]/30 hover:bg-slate-900/60 transition-all duration-300 shadow-lg"
-              >
-                <div className="p-4 rounded-2xl bg-[#ffe600]/10 text-[#ffe600] group-hover:bg-[#ffe600] group-hover:text-slate-950 transition-all duration-300">
-                  <Phone className="h-6 w-6" />
-                </div>
-                <div className="space-y-2 flex-grow">
-                  <span className="text-xs text-slate-500 font-semibold uppercase tracking-wider block">Teléfonos de Oficina</span>
-                  <div className="space-y-1">
-                    <a href="tel:+50622806665" className="text-base sm:text-lg font-bold text-white hover:text-[#ffe600] transition-colors block">+506 2280-6665</a>
-                    <a href="tel:+50686208287" className="text-base sm:text-lg font-bold text-white hover:text-[#ffe600] transition-colors block">+506 8620-8287</a>
-                  </div>
-                  <p className="text-xs sm:text-sm text-slate-400 pt-1 border-t border-slate-800/60">Llamanos de Lunes a Viernes de 8:00 AM a 6:00 PM.</p>
-                </div>
-              </motion.div>
-
-              {/* Email Card */}
-              <motion.a 
-                href="mailto:bienesraices@elduenovende.com"
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.5, delay: 0.5 }}
-                className="group flex items-start gap-5 p-6 bg-slate-900/40 rounded-[24px] border border-slate-800/80 hover:border-blue-500/30 hover:bg-slate-900/60 transition-all duration-300 shadow-lg cursor-pointer"
-              >
-                <div className="p-4 rounded-2xl bg-blue-500/10 text-blue-400 group-hover:bg-blue-500 group-hover:text-slate-950 transition-all duration-300">
-                  <Mail className="h-6 w-6" />
-                </div>
-                <div className="space-y-1">
-                  <span className="text-xs text-slate-500 font-semibold uppercase tracking-wider block">Correo Electrónico</span>
-                  <p className="text-base sm:text-lg font-bold text-white group-hover:text-[#ffe600] transition-colors">bienesraices@elduenovende.com</p>
-                  <p className="text-xs sm:text-sm text-slate-400">Respondemos en menos de 24 horas hábiles.</p>
-                </div>
-              </motion.a>
-
-              {/* Location Card */}
-              <motion.div 
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.5, delay: 0.6 }}
-                className="group flex items-start gap-5 p-6 bg-slate-900/40 rounded-[24px] border border-slate-800/80 hover:border-slate-700 hover:bg-slate-900/60 transition-all duration-300 shadow-lg"
-              >
-                <div className="p-4 rounded-2xl bg-slate-800 text-slate-350 group-hover:bg-white group-hover:text-slate-950 transition-all duration-300">
-                  <MapPin className="h-6 w-6" />
-                </div>
-                <div className="space-y-1">
-                  <span className="text-xs text-slate-500 font-semibold uppercase tracking-wider block">Ubicación Física</span>
-                  <p className="text-base font-bold text-white">Heredia, Costa Rica</p>
-                  <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">Asunción de Belén, diagonal a la plaza de deportes.</p>
-                </div>
-              </motion.div>
-
-              {/* Social Media Link section */}
-              <div className="flex items-center space-x-4 pt-4 px-2">
-                <span className="text-sm text-slate-500 font-medium">Seguinos:</span>
-                <a href="#" className="w-10 h-10 rounded-full border border-slate-800 flex items-center justify-center text-slate-400 hover:text-white hover:border-[#ffe600] hover:bg-slate-900 transition-all duration-300">
-                  <FaFacebookF className="h-4 w-4" />
-                </a>
-                <a href="#" className="w-10 h-10 rounded-full border border-slate-800 flex items-center justify-center text-slate-400 hover:text-white hover:border-[#ffe600] hover:bg-slate-900 transition-all duration-300">
-                  <FaInstagram className="h-4 w-4" />
-                </a>
-                <a href="#" className="w-10 h-10 rounded-full border border-slate-800 flex items-center justify-center text-slate-400 hover:text-white hover:border-[#ffe600] hover:bg-slate-900 transition-all duration-300">
-                  <FaTwitter className="h-4 w-4" />
-                </a>
+      {/* 2. FORM & INFO SECTION (Light Theme) */}
+      <section className="bg-white py-16 sm:py-24 text-slate-900">
+        <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
+            
+            {/* Left Column: Direct Communication details */}
+            <div className="lg:col-span-5 space-y-8">
+              <div className="space-y-4">
+                <span className="text-[13px] sm:text-[14px] font-bold text-slate-800 block">Comunicate</span>
+                <h2 className="text-3xl sm:text-4.5xl font-bold tracking-tight text-slate-950 leading-tight">
+                  Escribinos y hablemos de tu próxima propiedad
+                </h2>
+                <p className="text-slate-500 text-sm sm:text-base leading-relaxed">
+                  El Dueño Vende mantiene un enfoque directo y transparente para la comunicación en el sector inmobiliario. Nuestro equipo de asesores revisa minuciosamente cada solicitud recibida y responde a la brevedad para garantizar el mejor servicio y una negociación limpia, libre de comisiones intermediarias.
+                </p>
               </div>
 
-            </div>
-
-            {/* Right Side: Contact Form Card */}
-            <div className="lg:col-span-7">
-              <motion.div 
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.3 }}
-                className="bg-slate-900/30 backdrop-blur-xl border border-slate-800/80 rounded-[32px] p-8 sm:p-10 shadow-2xl relative"
-              >
-                {/* Form header */}
-                <div className="mb-8 space-y-1">
-                  <h2 className="text-2xl font-bold text-white">Envianos un mensaje</h2>
-                  <p className="text-sm text-slate-400">Completá los campos y te contactaremos a la brevedad.</p>
+              {/* Physical Contact Details */}
+              <div className="space-y-5 border-y border-slate-100 py-8">
+                <div className="flex gap-4 items-center">
+                  <img src="/contact/1.png" className="w-8 h-8 object-contain flex-shrink-0" alt="Teléfono" />
+                  <div>
+                    <p className="text-[13px] sm:text-[14px] font-bold text-slate-800">Teléfono / WhatsApp</p>
+                    <p className="text-[11px] sm:text-[12px] font-medium text-slate-700 hover:text-emerald-700 transition-colors mt-0.5">
+                      <a href="https://wa.me/50688888888" target="_blank" rel="noopener noreferrer">+506 8888-8888</a>
+                    </p>
+                  </div>
                 </div>
 
+                <div className="flex gap-4 items-center">
+                  <img src="/contact/email.png" className="w-8 h-8 object-contain flex-shrink-0" alt="Correo electrónico" />
+                  <div>
+                    <p className="text-[13px] sm:text-[14px] font-bold text-slate-800">Correo electrónico</p>
+                    <p className="text-[11px] sm:text-[12px] font-medium text-slate-700 hover:text-emerald-700 transition-colors mt-0.5">
+                      <a href="mailto:info@elduenovende.com">info@elduenovende.com</a>
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex gap-4 items-center">
+                  <img src="/icons-filters/ubication.png" className="w-8 h-8 object-contain flex-shrink-0" alt="Ubicación" />
+                  <div>
+                    <p className="text-[13px] sm:text-[14px] font-bold text-slate-800">Dirección física</p>
+                    <p className="text-[11px] sm:text-[12px] font-medium text-slate-700 mt-0.5">
+                      Belén, Heredia Province, Costa Rica
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Social Media Link Section */}
+              <div className="flex items-center space-x-4">
+                <span className="text-[13px] sm:text-[14px] font-bold text-slate-800">Seguinos:</span>
+                <div className="flex items-center space-x-2">
+                  <a href="#" className="w-9 h-9 rounded-full border border-slate-200 flex items-center justify-center text-slate-500 hover:text-slate-950 hover:border-slate-450 hover:bg-slate-50 transition-all duration-300">
+                    <FaFacebookF className="h-4 w-4" />
+                  </a>
+                  <a href="#" className="w-9 h-9 rounded-full border border-slate-200 flex items-center justify-center text-slate-500 hover:text-slate-950 hover:border-slate-450 hover:bg-slate-50 transition-all duration-300">
+                    <FaInstagram className="h-4 w-4" />
+                  </a>
+                  <a href="#" className="w-9 h-9 rounded-full border border-slate-200 flex items-center justify-center text-slate-500 hover:text-slate-950 hover:border-slate-450 hover:bg-slate-50 transition-all duration-300">
+                    <FaTwitter className="h-4 w-4" />
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Column: Custom High-Fidelity Form */}
+            <div className="lg:col-span-7">
+              <div className="bg-white rounded-3xl border border-slate-100 p-5 sm:p-8 shadow-xl shadow-slate-100/50">
                 <AnimatePresence mode="wait">
                   {status === 'success' ? (
                     <motion.div 
@@ -215,18 +192,18 @@ export default function ContactoPage() {
                       exit={{ opacity: 0, scale: 0.95 }}
                       className="py-12 flex flex-col items-center justify-center text-center space-y-5"
                     >
-                      <div className="h-16 w-16 rounded-full bg-emerald-500/10 text-emerald-400 flex items-center justify-center border border-emerald-500/20 shadow-[0_0_30px_rgba(16,185,129,0.15)]">
+                      <div className="h-16 w-16 rounded-full bg-[#ffe600]/10 text-slate-950 flex items-center justify-center border border-[#ffe600]/30 shadow-md">
                         <Check className="h-8 w-8 stroke-[2.5]" />
                       </div>
                       <div className="space-y-2">
-                        <h3 className="text-2xl font-bold text-white">¡Mensaje Enviado!</h3>
-                        <p className="text-slate-400 text-sm max-w-sm leading-relaxed">
-                          Gracias por ponerte en contacto. Un miembro de nuestro equipo revisará tu consulta y te responderá lo antes posible.
+                        <h3 className="text-2xl font-extrabold text-slate-950">¡Mensaje Enviado con Éxito!</h3>
+                        <p className="text-slate-500 text-sm max-w-sm leading-relaxed mx-auto">
+                          Tu consulta ha sido procesada de manera directa. Un miembro de nuestro equipo se pondrá en contacto con vos en las próximas horas.
                         </p>
                       </div>
                       <button 
                         onClick={() => setStatus('idle')}
-                        className="mt-4 px-6 py-2.5 rounded-2xl bg-slate-800 text-white font-semibold text-xs hover:bg-slate-700 transition-colors cursor-pointer"
+                        className="mt-4 px-6 py-2.5 rounded-full bg-slate-950 text-white font-bold text-xs hover:bg-slate-900 transition-colors cursor-pointer uppercase tracking-wider"
                       >
                         Enviar otro mensaje
                       </button>
@@ -235,27 +212,27 @@ export default function ContactoPage() {
                     <motion.form 
                       key="form"
                       onSubmit={handleSubmit} 
-                      className="space-y-6"
+                      className="space-y-5"
                     >
-                      {/* Grid for Name and Email */}
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                        {/* Full Name */}
-                        <div className="space-y-2">
-                          <label className="text-xs font-semibold text-slate-400 tracking-wide block">Nombre Completo</label>
-                          <input 
-                            type="text" 
-                            name="name"
-                            required
-                            value={formData.name}
-                            onChange={handleChange}
-                            placeholder="Ej. Juan Pérez"
-                            className="w-full rounded-2xl bg-slate-950/60 border border-slate-800 focus:border-emerald-500 focus:outline-none px-4 py-3 text-white text-sm transition-colors duration-200 placeholder:text-slate-650"
-                          />
-                        </div>
+                      {/* Full Name */}
+                      <div className="space-y-1.5">
+                        <label className="text-[13px] sm:text-[14px] font-bold text-slate-800 block">Nombre completo*</label>
+                        <input 
+                          type="text" 
+                          name="name"
+                          required
+                          value={formData.name}
+                          onChange={handleChange}
+                          placeholder="Ej. Juan Pérez"
+                          className="w-full rounded-2xl bg-slate-50 border border-slate-200 focus:border-[#ffe600] focus:bg-white focus:outline-none px-4 py-2.5 text-slate-900 text-sm transition-all duration-200 placeholder:text-slate-400 font-medium shadow-sm"
+                        />
+                      </div>
 
-                        {/* Email */}
-                        <div className="space-y-2">
-                          <label className="text-xs font-semibold text-slate-400 tracking-wide block">Correo Electrónico</label>
+                      {/* Grid for Email and Phone */}
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                        {/* Email Address */}
+                        <div className="space-y-1.5">
+                          <label className="text-[13px] sm:text-[14px] font-bold text-slate-800 block">Correo electrónico*</label>
                           <input 
                             type="email" 
                             name="email"
@@ -263,16 +240,13 @@ export default function ContactoPage() {
                             value={formData.email}
                             onChange={handleChange}
                             placeholder="ejemplo@correo.com"
-                            className="w-full rounded-2xl bg-slate-950/60 border border-slate-800 focus:border-emerald-500 focus:outline-none px-4 py-3 text-white text-sm transition-colors duration-200 placeholder:text-slate-650"
+                            className="w-full rounded-2xl bg-slate-50 border border-slate-200 focus:border-[#ffe600] focus:bg-white focus:outline-none px-4 py-2.5 text-slate-900 text-sm transition-all duration-200 placeholder:text-slate-400 font-medium shadow-sm"
                           />
                         </div>
-                      </div>
 
-                      {/* Phone and Reason */}
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                        {/* Phone */}
-                        <div className="space-y-2">
-                          <label className="text-xs font-semibold text-slate-400 tracking-wide block">Teléfono (WhatsApp)</label>
+                        {/* Phone Number */}
+                        <div className="space-y-1.5">
+                          <label className="text-[13px] sm:text-[14px] font-bold text-slate-800 block">Teléfono (WhatsApp)*</label>
                           <input 
                             type="tel" 
                             name="phone"
@@ -280,65 +254,81 @@ export default function ContactoPage() {
                             value={formData.phone}
                             onChange={handleChange}
                             placeholder="Ej. +506 8888-8888"
-                            className="w-full rounded-2xl bg-slate-950/60 border border-slate-800 focus:border-emerald-500 focus:outline-none px-4 py-3 text-white text-sm transition-colors duration-200 placeholder:text-slate-650"
+                            className="w-full rounded-2xl bg-slate-50 border border-slate-200 focus:border-[#ffe600] focus:bg-white focus:outline-none px-4 py-2.5 text-slate-900 text-sm transition-all duration-200 placeholder:text-slate-400 font-medium shadow-sm"
                           />
                         </div>
+                      </div>
 
-                        {/* Reason select */}
-                        <div className="space-y-2">
-                          <label className="text-xs font-semibold text-slate-400 tracking-wide block">Motivo de Consulta</label>
-                          <div className="relative">
-                            <select 
-                              name="reason"
-                              value={formData.reason}
-                              onChange={handleChange}
-                              className="w-full rounded-2xl bg-slate-950/60 border border-slate-800 focus:border-emerald-500 focus:outline-none px-4 py-3 text-white text-sm transition-colors duration-200 appearance-none cursor-pointer"
-                            >
-                              <option value="Comprar una propiedad">Comprar una propiedad</option>
-                              <option value="Vender mi propiedad">Vender mi propiedad</option>
-                              <option value="Opciones de financiación">Opciones de financiación</option>
-                              <option value="Alquilar propiedad">Alquilar propiedad</option>
-                              <option value="Otras consultas">Otras consultas</option>
-                            </select>
-                            {/* Down arrow icon */}
-                            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-4 text-slate-500">
-                              <svg className="h-4 w-4 fill-current" viewBox="0 0 20 20">
-                                <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
-                              </svg>
-                            </div>
+                      {/* Services interested in dropdown */}
+                      <div className="space-y-1.5">
+                        <label className="text-[13px] sm:text-[14px] font-bold text-slate-800 block">¿En qué servicio estás interesado?*</label>
+                        <div className="relative">
+                          <select 
+                            name="service"
+                            value={formData.service}
+                            onChange={handleChange}
+                            className="w-full rounded-2xl bg-slate-50 border border-slate-200 focus:border-[#ffe600] focus:bg-white focus:outline-none px-4 py-2.5 text-slate-900 text-sm transition-all duration-200 cursor-pointer appearance-none font-medium shadow-sm pr-10"
+                          >
+                            <option value="Comprar una propiedad">Comprar una propiedad</option>
+                            <option value="Vender mi propiedad">Vender mi propiedad</option>
+                            <option value="Opciones de financiación">Opciones de financiación</option>
+                            <option value="Alquilar propiedad">Alquilar propiedad</option>
+                            <option value="Otras consultas">Otras consultas</option>
+                          </select>
+                          {/* Chevron Icon */}
+                          <div className="pointer-events-none absolute inset-y-0 right-4 flex items-center text-slate-450">
+                            <svg className="h-4 w-4 fill-current" viewBox="0 0 20 20">
+                              <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
+                            </svg>
                           </div>
                         </div>
                       </div>
 
-                      {/* Message */}
-                      <div className="space-y-2">
-                        <label className="text-xs font-semibold text-slate-400 tracking-wide block">Mensaje / Detalle de la Consulta</label>
+                      {/* Message / Describe */}
+                      <div className="space-y-1.5">
+                        <label className="text-[13px] sm:text-[14px] font-bold text-slate-800 block">Detalle de tu consulta*</label>
                         <textarea 
                           name="message"
                           required
-                          rows={5}
+                          rows={3}
                           value={formData.message}
                           onChange={handleChange}
-                          placeholder="Contanos detalladamente qué estás buscando o cómo podemos ayudarte..."
-                          className="w-full rounded-2xl bg-slate-950/60 border border-slate-800 focus:border-emerald-500 focus:outline-none px-4 py-3 text-white text-sm transition-colors duration-200 resize-none placeholder:text-slate-650"
+                          placeholder="Contanos detalladamente en qué podemos ayudarte..."
+                          className="w-full rounded-2xl bg-slate-50 border border-slate-200 focus:border-[#ffe600] focus:bg-white focus:outline-none px-4 py-2.5 text-slate-900 text-sm transition-all duration-200 resize-none placeholder:text-slate-400 font-medium shadow-sm"
                         />
+                      </div>
+
+                      {/* Terms Acceptance Checkbox */}
+                      <div className="flex items-start gap-3 pt-1">
+                        <input 
+                          type="checkbox" 
+                          id="agree"
+                          name="agree"
+                          required
+                          checked={formData.agree}
+                          onChange={handleChange}
+                          className="mt-1 w-4 h-4 rounded text-slate-950 focus:ring-slate-950 border-slate-350 cursor-pointer accent-slate-950"
+                        />
+                        <label htmlFor="agree" className="text-xs text-slate-500 select-none leading-relaxed font-medium">
+                          Al hacer clic en enviar, acepto el procesamiento de mis datos personales de acuerdo con las políticas de privacidad.
+                        </label>
                       </div>
 
                       {/* Submit Button */}
                       <button
                         type="submit"
                         disabled={status === 'submitting'}
-                        className="w-full group relative flex items-center justify-center gap-2 overflow-hidden rounded-[100px] border-[1.5px] border-[#ffe600]/40 hover:border-transparent bg-[#ffe600] px-8 py-3.5 text-sm font-bold text-slate-950 hover:bg-[#ffe600] active:scale-[0.98] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                        className="w-full sm:w-auto relative flex items-center justify-center gap-2 rounded-xl bg-slate-950 px-8 py-3 text-xs font-bold text-white uppercase tracking-wider hover:bg-slate-900 active:scale-[0.98] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer shadow-lg shadow-slate-950/15"
                       >
                         {status === 'submitting' ? (
                           <>
-                            <Loader2 className="h-4.5 w-4.5 animate-spin" />
-                            <span>Enviando mensaje...</span>
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                            <span>Enviando...</span>
                           </>
                         ) : (
                           <>
-                            <Send className="h-4 w-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-0.5" />
-                            <span>Enviar Mensaje</span>
+                            <span>Enviar Consulta</span>
+                            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                           </>
                         )}
                       </button>
@@ -346,54 +336,13 @@ export default function ContactoPage() {
                     </motion.form>
                   )}
                 </AnimatePresence>
-              </motion.div>
-            </div>
-          </div>
-
-          {/* Interactive Google Map Section */}
-          <motion.div 
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-50px' }}
-            transition={{ duration: 0.8 }}
-            className="w-full rounded-[32px] overflow-hidden border border-slate-800/80 shadow-2xl relative bg-slate-900/20"
-          >
-            {/* Header info overlays inside map container */}
-            <div className="p-8 border-b border-slate-800/80 bg-slate-900/40 backdrop-blur-md flex flex-col md:flex-row md:items-center justify-between gap-4">
-              <div className="space-y-1">
-                <div className="flex items-center gap-2 text-white">
-                  <Building className="h-4.5 w-4.5 text-emerald-400" />
-                  <h3 className="font-bold text-lg">Nuestra Oficina Central</h3>
-                </div>
-                <p className="text-sm text-slate-400">Vení a visitarnos y conversá directamente con nuestro equipo directivo.</p>
               </div>
-              <a 
-                href="https://maps.google.com/?q=Heredia,Asuncion+de+Belen,Costa+Rica"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-xs font-bold text-[#ffe600] hover:text-white transition-colors group"
-              >
-                Abrir en Google Maps
-                <ArrowRight className="h-3.5 w-3.5 transform group-hover:translate-x-0.5 transition-transform" />
-              </a>
             </div>
 
-            {/* Embedded Google Maps with premium feel */}
-            <div className="h-[400px] w-full relative grayscale opacity-75 hover:grayscale-0 hover:opacity-90 transition-all duration-700">
-              <iframe 
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m10!1m3!1d15719.645511037599!2d-84.1812975971485!3d9.940507204907994!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8fa0fa1e5d8eaab1%3A0x6b6fa35607bd4bf6!2sBel%C3%A9n%2C%20Heredia%20Province%2C%20Costa%20Rica!5e0!3m2!1sen!2s!4v1718828000000!5m2!1sen!2s" 
-                width="100%" 
-                height="100%" 
-                style={{ border: 0 }} 
-                allowFullScreen={true}
-                loading="lazy" 
-                referrerPolicy="no-referrer-when-downgrade"
-              />
-            </div>
-          </motion.div>
-
+          </div>
         </div>
-      </main>
+      </section>
+
 
       <Footer />
     </>
