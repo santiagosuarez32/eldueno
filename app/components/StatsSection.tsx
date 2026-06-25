@@ -121,7 +121,7 @@ export default function StatsSection() {
             className="flex flex-col justify-center"
           >
             <p className="text-slate-600 text-lg sm:text-xl leading-relaxed">
-              Información de valor, guías prácticas y tendencias del mercado inmobiliario. Consejos prácticos de expertos para comprar, vender o alquilar propiedades de forma directa, segura y libre de intermediarios.
+              Información de valor, guías prácticas y tendencias del mercado inmobiliario. Consejos prácticos de expertos para comprar, vender o alquilar propiedades de forma directa, segura.
             </p>
           </motion.div>
         </div>

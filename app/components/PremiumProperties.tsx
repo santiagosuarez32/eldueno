@@ -1,32 +1,68 @@
-'use client';
+"use client";
 
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import Link from 'next/link';
 import { ArrowRight, ArrowLeft } from 'lucide-react';
-import { mockProperties } from '@/app/data/properties';
+import { mockProperties, Property, mapDbToProperty, formatPropertyPrice } from '@/app/data/properties';
+import { supabase } from '@/lib/supabase';
 
 export default function PremiumProperties() {
   // Select 4 specific premium/featured properties for the section
   const premiumIds = ['prop-4', 'prop-2', 'prop-1', 'prop-3'];
-  const premiumProperties = mockProperties.filter((p) => premiumIds.includes(p.id));
+  const [properties, setProperties] = useState<Property[]>([]);
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  useEffect(() => {
+    async function load() {
+      try {
+        const { data, error } = await supabase
+          .from('properties')
+          .select('*')
+          .in('id', premiumIds);
+        if (error) throw error;
+        if (data && data.length > 0) {
+          const mapped = data.map(mapDbToProperty);
+          const sorted = mapped.sort((a, b) => premiumIds.indexOf(a.id) - premiumIds.indexOf(b.id));
+          setProperties(sorted);
+        } else {
+          setProperties(mockProperties.filter((p) => premiumIds.includes(p.id)));
+        }
+      } catch (err) {
+        console.warn("Error loading premium properties from Supabase. Falling back to local mocks:", err);
+        setProperties(mockProperties.filter((p) => premiumIds.includes(p.id)));
+      }
+    }
+    load();
+  }, []);
 
   // Carousel ref
   const carouselRef = useRef<HTMLDivElement>(null);
 
-  // Smooth scroll handler for the carousel
-  const scroll = (direction: 'left' | 'right') => {
-    if (carouselRef.current) {
-      const { scrollLeft } = carouselRef.current;
-      const firstChild = carouselRef.current.firstElementChild as HTMLElement;
-      const cardWidth = firstChild ? firstChild.offsetWidth + 24 : 694;
-      const offset = direction === 'left' ? -cardWidth : cardWidth;
-      
-      carouselRef.current.scrollTo({
-        left: scrollLeft + offset,
-        behavior: 'smooth',
-      });
-    }
+  const handlePrev = () => {
+    setActiveIndex((prev) => (prev > 0 ? prev - 1 : properties.length - 1));
   };
+
+  const handleNext = () => {
+    setActiveIndex((prev) => (prev < properties.length - 1 ? prev + 1 : 0));
+  };
+
+  // Scroll logic for responsive screen sizes
+  useEffect(() => {
+    if (carouselRef.current && properties.length > 0) {
+      const activeCard = carouselRef.current.children[activeIndex] as HTMLElement;
+      if (activeCard) {
+        const containerWidth = carouselRef.current.offsetWidth;
+        const cardWidth = activeCard.offsetWidth;
+        const cardLeft = activeCard.offsetLeft;
+        const targetScroll = cardLeft - (containerWidth / 2) + (cardWidth / 2);
+        
+        carouselRef.current.scrollTo({
+          left: targetScroll,
+          behavior: 'smooth',
+        });
+      }
+    }
+  }, [activeIndex, properties]);
 
   const typeLabels: Record<string, string> = {
     casa: 'Casa',
@@ -36,6 +72,8 @@ export default function PremiumProperties() {
     ph: 'PH',
     loft: 'Loft'
   };
+
+
 
   return (
     <section className="bg-white py-24 text-slate-900 overflow-hidden border-t border-slate-100">
@@ -50,20 +88,20 @@ export default function PremiumProperties() {
           </div>
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 lg:pt-8">
             <p className="text-slate-655 text-lg sm:text-xl leading-relaxed max-w-md">
-              Una selección exclusiva de residencias singulares, diseñadas para superar toda expectativa. Directo con sus dueños.
+              Una selección exclusiva de propiedades singulares, diseñadas para superar toda expectativa.
             </p>
             
             {/* Carousel Arrows */}
             <div className="flex items-center gap-3 shrink-0 self-start md:self-auto">
               <button
-                onClick={() => scroll('left')}
+                onClick={handlePrev}
                 className="h-12 w-12 rounded-full border border-slate-200 bg-white text-slate-800 hover:bg-slate-100 flex items-center justify-center transition-all duration-200 active:scale-95 shadow-sm cursor-pointer"
                 aria-label="Anterior"
               >
                 <ArrowLeft className="h-5 w-5" />
               </button>
               <button
-                onClick={() => scroll('right')}
+                onClick={handleNext}
                 className="h-12 w-12 rounded-full bg-slate-955 text-white hover:bg-slate-900 flex items-center justify-center transition-all duration-200 active:scale-95 shadow-md cursor-pointer"
                 aria-label="Siguiente"
               >
@@ -73,125 +111,133 @@ export default function PremiumProperties() {
           </div>
         </div>
 
-        {/* Carousel Container */}
+        {/* Interactive Accordion / Expandable Row inside a scrollable container with vertical padding to prevent clipping */}
         <div 
           ref={carouselRef}
-          className="flex gap-0 lg:gap-6 overflow-x-auto pb-8 snap-x snap-mandatory scroll-smooth hide-scrollbar w-screen -mx-4 sm:-mx-6 lg:w-full lg:mx-0 px-4"
+          className="flex gap-6 overflow-x-auto lg:overflow-x-visible py-6 snap-x snap-mandatory scroll-smooth hide-scrollbar -mx-4 px-4 lg:mx-0 lg:px-0 w-full"
           style={{
             scrollbarWidth: 'none',
             msOverflowStyle: 'none',
-            WebkitMaskImage: 'linear-gradient(to right, transparent, black 40px, black calc(100% - 40px), transparent)',
-            maskImage: 'linear-gradient(to right, transparent, black 40px, black calc(100% - 40px), transparent)'
           }}
         >
-          {premiumProperties.map((property) => {
-            const formattedPrice = new Intl.NumberFormat('en-US', {
-              style: 'currency',
-              currency: 'USD',
-              maximumFractionDigits: 0,
-            }).format(property.price);
+          {properties.map((property, idx) => {
+            const isActive = idx === activeIndex;
             const typeLabel = typeLabels[property.type] || property.type;
 
             return (
-              <Link
+              <div
                 key={property.id}
-                href={`/propiedades/${property.id}`}
-                className="w-screen shrink-0 snap-center px-4 sm:px-6 lg:w-[670px] lg:shrink lg:snap-start lg:px-0 block cursor-pointer"
+                onMouseEnter={() => setActiveIndex(idx)}
+                onClick={() => setActiveIndex(idx)}
+                className={`relative transition-all duration-500 ease-out cursor-pointer flex flex-col justify-between flex-shrink-0 lg:flex-shrink snap-start h-[450px] lg:h-[460px] ${
+                  isActive 
+                    ? 'w-[320px] sm:w-[480px] lg:w-auto lg:flex-[1.6] bg-white border border-slate-100/80 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.08)] p-3.5 rounded-[32px]' 
+                    : 'w-[280px] lg:w-auto lg:flex-[1] bg-slate-200 hover:scale-[1.005] p-0 rounded-[32px] shadow-sm'
+                }`}
               >
-                <div
-                  className="w-full bg-white border border-slate-200/60 rounded-[32px] overflow-hidden flex flex-col group transition-all duration-300 h-full shadow-none"
-                >
-                  {/* Image Container */}
-                  <div className="relative aspect-[16/10] w-full overflow-hidden bg-slate-100">
-                    {/* Floating Action Overlay on Hover */}
-                    <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20 flex items-center justify-center">
-                      <div 
-                        className="bg-yellow-400 text-slate-955 font-light text-[12px] tracking-wider w-20 h-20 rounded-full flex flex-col items-center justify-center text-center p-2 transform scale-90 group-hover:scale-100 transition-all duration-300"
-                      >
-                        <span>Ver</span>
-                        <span>detalle</span>
-                      </div>
-                    </div>
+                {/* Image Wrapper (fluidly changes height and rounded corners without visual jumps) */}
+                <div className={`relative w-full overflow-hidden transition-all duration-500 ease-out ${
+                  isActive ? 'h-[220px] rounded-[20px]' : 'h-full rounded-[32px]'
+                }`}>
+                  <img
+                    src={property.image}
+                    alt={property.title}
+                    className="absolute inset-0 w-full h-full object-cover"
+                  />
+                  {/* Dark overlay for inactive text readability, fades out when active */}
+                  <div className={`absolute inset-0 bg-gradient-to-t from-slate-950/95 via-slate-950/45 to-transparent transition-opacity duration-500 ${
+                    isActive ? 'opacity-0 pointer-events-none' : 'opacity-100'
+                  }`} />
 
-                    {/* Badges in the top-left */}
-                    <div className="absolute top-4 left-4 z-20 flex flex-row items-center gap-1.5 max-w-[calc(100%-24px)] min-w-0">
-                      {/* Property Type Badge */}
-                      <span className="bg-white/95 backdrop-blur-sm text-slate-700 text-[10px] font-semibold px-3 py-1.5 rounded-full border border-slate-200/40 shadow-sm shrink-0">
-                        {typeLabel}
-                      </span>
-                      {/* Location Badge */}
-                      <span className="bg-white/95 backdrop-blur-sm text-slate-700 text-[10px] font-semibold px-3 py-1.5 rounded-full flex items-center gap-1 border border-slate-200/40 shadow-sm min-w-0">
-                        <img src="/icons-filters/ubication.png" className="h-3.5 w-3.5 object-contain flex-shrink-0" alt="" />
-                        <span className="truncate text-slate-700">{property.neighborhood}</span>
-                      </span>
-                    </div>
-
-                    {/* Premium Tag on Top Right */}
-                    <div className="absolute top-4 right-4 z-10 bg-yellow-400 text-slate-955 text-[10px] font-bold px-3 py-1.5 rounded-full tracking-wider shadow-md">
-                      Premium
-                    </div>
-
-                    {/* Property Image */}
-                    <img
-                      src={property.image}
-                      alt={property.title}
-                      className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out"
-                      onError={(e) => {
-                        e.currentTarget.style.display = 'none';
-                      }}
-                    />
-                    {/* Fallback pattern */}
-                    <div className="absolute inset-0 bg-gradient-to-tr from-slate-100 to-slate-200 -z-10 flex items-center justify-center">
-                      <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#000_1px,transparent_1px)] [background-size:16px_16px]" />
-                      <span className="text-xs text-slate-455 font-semibold">Imágenes de la propiedad</span>
-                    </div>
+                  {/* Badges in the top-left, matching main properties catalog card badges */}
+                  <div className={`absolute top-3 left-3 z-20 flex flex-row items-center gap-1.5 max-w-[calc(100%-24px)] min-w-0 transition-opacity duration-500 ${
+                    isActive ? 'opacity-100' : 'opacity-0 pointer-events-none'
+                  }`}>
+                    {/* Property Type Badge */}
+                    <span className="bg-white/95 backdrop-blur-sm text-slate-700 text-[9px] sm:text-[10px] font-medium px-2 py-0.5 rounded-full border border-slate-200/40 shadow-sm shrink-0">
+                      {typeLabel}
+                    </span>
+                    {/* Location Badge */}
+                    <span className="bg-white/95 backdrop-blur-sm text-slate-700 text-[9px] sm:text-[10px] font-medium px-2 py-0.5 rounded-full flex items-center gap-1 border border-slate-200/40 shadow-sm min-w-0">
+                      <img src="/icons-filters/ubication.png" className="h-3 w-3 object-contain flex-shrink-0" alt="" />
+                      <span className="truncate text-slate-700">{property.neighborhood}</span>
+                    </span>
                   </div>
 
-                  {/* Content Section */}
-                  <div className="px-6 pt-5 pb-5 sm:px-10 sm:pt-6 sm:pb-6 flex flex-col flex-grow bg-white">
-                    
-                    {/* Title & Price Header */}
-                    <div className="flex justify-between items-start gap-6 mb-2">
-                      <div className="space-y-1.5 flex-grow">
-                        <h3 className="text-base sm:text-xl font-semibold text-slate-955 group-hover:text-emerald-500 transition-colors line-clamp-1 leading-snug">
-                          {property.title}
-                        </h3>
-                        <p className="text-xs sm:text-base text-slate-500 font-normal">
-                          {property.neighborhood}, {property.location}
-                        </p>
-                      </div>
-
-                      <div className="text-left shrink-0">
-                        <span className="text-[10px] sm:text-xs text-slate-400 font-normal block">Precio:</span>
-                        <span className="text-lg sm:text-2xl font-bold text-slate-955 block">{formattedPrice}</span>
-                      </div>
-                    </div>
-
-                    {/* Property Specs */}
-                    <div className="flex items-center gap-6 sm:gap-8 text-xs sm:text-base text-slate-605 font-normal mt-2.5">
-                      {property.beds && (
-                        <div className="flex items-center gap-2">
-                          <img src="/icons-property/dormitorios.png" className="h-5 w-5 object-contain flex-shrink-0" alt="" />
-                          <span>{property.beds} Dorms</span>
-                        </div>
-                      )}
-                      {property.baths && (
-                        <div className="flex items-center gap-2">
-                          <img src="/icons-property/baños.png" className="h-5 w-5 object-contain flex-shrink-0" alt="" />
-                          <span>{property.baths} Baños</span>
-                        </div>
-                      )}
-                      {property.area && (
-                        <div className="flex items-center gap-2">
-                          <img src="/icons-property/m2.png" className="h-5 w-5 object-contain flex-shrink-0" alt="" />
-                          <span>{property.area} m²</span>
-                        </div>
-                      )}
-                    </div>
-
+                  {/* Premium Tag on Top Right */}
+                  <div className={`absolute top-3 right-3 z-20 bg-yellow-400 text-slate-955 text-[10px] font-bold px-2.5 py-1 rounded-full tracking-wider shadow-md transition-opacity duration-500 ${
+                    isActive ? 'opacity-100' : 'opacity-0 pointer-events-none'
+                  }`}>
+                    Premium
                   </div>
                 </div>
-              </Link>
+
+                {/* INACTIVE STATE TEXT OVERLAY */}
+                <div className={`absolute bottom-6 left-6 right-6 z-10 transition-all duration-500 ease-out ${
+                  isActive ? 'opacity-0 pointer-events-none translate-y-2' : 'opacity-100 translate-y-0'
+                }`}>
+                  <div className="text-amber-400 text-[10px] font-bold tracking-wider">
+                    {property.neighborhood}
+                  </div>
+                  <h3 className="text-white text-sm font-bold leading-snug line-clamp-2">
+                    {property.title}
+                  </h3>
+                </div>
+
+                {/* ACTIVE STATE DETAILS (fades in and takes height only when active) */}
+                <div className={`transition-all duration-500 ease-out flex flex-col justify-between flex-grow ${
+                  isActive ? 'opacity-100 h-auto pt-4 px-2 pb-1' : 'opacity-0 h-0 overflow-hidden pointer-events-none'
+                }`}>
+                  <div className="space-y-1">
+                    <div className="flex items-center justify-between">
+                      <span className="text-slate-400 text-[10px] font-semibold uppercase tracking-wider">
+                        {typeLabel}
+                      </span>
+                      <span className="text-base font-extrabold text-slate-900">
+                        {formatPropertyPrice(property.price, property.moneda)}
+                      </span>
+                    </div>
+                    <h3 className="text-base font-bold text-slate-955 leading-snug line-clamp-1">
+                      {property.title}
+                    </h3>
+                    <p className="text-slate-500 text-[11px] leading-relaxed line-clamp-2 font-normal">
+                      {property.description}
+                    </p>
+                  </div>
+
+                  {/* Specs and Action Link */}
+                  <div className="flex items-center justify-between pt-3 border-t border-slate-100 mt-2">
+                    <div className="flex items-center gap-3 text-[11px] font-semibold text-slate-655">
+                      {property.beds && (
+                        <span className="flex items-center gap-1">
+                          <img src="/icons-property/dormitorios.png" className="h-3.5 w-3.5 object-contain" alt="" />
+                          {property.beds} Dorms
+                        </span>
+                      )}
+                      {property.baths && (
+                        <span className="flex items-center gap-1">
+                          <img src="/icons-property/baños.png" className="h-3.5 w-3.5 object-contain" alt="" />
+                          {property.baths} Baños
+                        </span>
+                      )}
+                      {property.area && (
+                        <span className="flex items-center gap-1">
+                          <img src="/icons-property/m2.png" className="h-3.5 w-3.5 object-contain" alt="" />
+                          {property.area} m²
+                        </span>
+                      )}
+                    </div>
+
+                    <Link
+                      href={`/propiedades/${property.id}`}
+                      className="inline-flex items-center gap-1 text-[11px] font-extrabold text-amber-600 hover:text-amber-700 transition-colors"
+                    >
+                      Ver detalle
+                      <ArrowRight className="h-3.5 w-3.5" />
+                    </Link>
+                  </div>
+                </div>
+              </div>
             );
           })}
         </div>

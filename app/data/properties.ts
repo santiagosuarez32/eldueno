@@ -17,11 +17,15 @@ export interface Property {
   featured: boolean;
   expenses?: number;
   age?: number;
+  created_at?: string;
   parking?: boolean;
   owner: {
     name: string;
     phone: string;
     whatsappUrl: string;
+    moneda?: string;
+    vendido?: boolean;
+    alquilado?: boolean;
   };
   gallery: string[];
   views: number;
@@ -33,6 +37,9 @@ export interface Property {
   terraceArea?: number;
   cadastralIncome?: number;
   videoUrl?: string;
+  moneda?: string;
+  vendido?: boolean;
+  alquilado?: boolean;
 }
 
 export const mockProperties: Property[] = [
@@ -247,3 +254,97 @@ export const mockProperties: Property[] = [
     cadastralIncome: 4200
   }
 ];
+
+export function mapDbToProperty(dbProp: any): Property {
+  // Support both English (database) and Spanish (alternative mappings)
+  const title = dbProp.title || dbProp.titulo || "";
+  const description = dbProp.description || "";
+  const price = Number(dbProp.price || dbProp.precio || 0);
+  const location = dbProp.location || dbProp.ubicacion || "Costa Rica";
+  const neighborhood = dbProp.neighborhood || dbProp.location || dbProp.ubicacion || "";
+  const beds = dbProp.beds || dbProp.dormitorios || undefined;
+  const baths = dbProp.baths || dbProp.banos || undefined;
+  const area = Number(dbProp.area || dbProp.metros_cubiertos || 0);
+  const landArea = Number(dbProp.landArea || dbProp.metros_lote || 0);
+  const constructionArea = Number(dbProp.constructionArea || dbProp.area || dbProp.metros_cubiertos || 0);
+  const parkingSpaces = dbProp.parkingSpaces || dbProp.cochera || undefined;
+  
+  // Gallery & Image mapping supporting both gallery/fotos and image/imagen
+  const gallery = dbProp.gallery || dbProp.fotos || [];
+  const image = dbProp.image || dbProp.imagen || gallery[0] || "/placeholder-property.jpg";
+  
+  const type = (dbProp.type || dbProp.tipo || "casa").toLowerCase();
+  const featured = dbProp.featured !== undefined ? Boolean(dbProp.featured) : Boolean(dbProp.published);
+
+  // Extract owner info and check for extra fields inside it
+  const owner = dbProp.owner || {};
+  const vendido = dbProp.vendido !== undefined ? Boolean(dbProp.vendido) : (owner.vendido !== undefined ? Boolean(owner.vendido) : false);
+  const alquilado = dbProp.alquilado !== undefined ? Boolean(dbProp.alquilado) : (owner.alquilado !== undefined ? Boolean(owner.alquilado) : false);
+  const moneda = dbProp.moneda || owner.moneda || "CRC";
+
+  return {
+    id: dbProp.id,
+    title,
+    description,
+    price,
+    location,
+    neighborhood,
+    beds,
+    baths,
+    area,
+    landArea,
+    constructionArea,
+    parkingSpaces,
+    image,
+    type: type as any,
+    featured,
+    owner: {
+      name: owner.name || "Maldonado Leonides",
+      phone: owner.phone || "+506 8888-8888",
+      whatsappUrl: owner.whatsappUrl || "https://wa.me/50688888888",
+      moneda,
+      vendido,
+      alquilado
+    },
+    gallery: gallery.length > 0 ? gallery : [image],
+    views: dbProp.views || 0,
+    saves: dbProp.saves || 0,
+    code: dbProp.code || ("EDV-" + String(dbProp.id || "000").substring(0, 5)),
+    energyRating: dbProp.energyRating || "A",
+    furnished: dbProp.furnished || "No",
+    moneda,
+    vendido,
+    alquilado,
+    age: dbProp.age !== undefined && dbProp.age !== null ? Number(dbProp.age) : undefined,
+    created_at: dbProp.created_at || undefined
+  };
+}
+
+export const CURRENCY_CONFIG = {
+  // mode can be: 'always-colon' | 'always-dollar' | 'dynamic'
+  mode: 'always-colon' as 'always-colon' | 'always-dollar' | 'dynamic',
+};
+
+export function formatPropertyPrice(price: number, propertyMoneda?: string) {
+  let targetCurrency = 'CRC';
+  let targetLocale = 'es-CR';
+
+  if (CURRENCY_CONFIG.mode === 'always-colon') {
+    targetCurrency = 'CRC';
+    targetLocale = 'es-CR';
+  } else if (CURRENCY_CONFIG.mode === 'always-dollar') {
+    targetCurrency = 'USD';
+    targetLocale = 'en-US';
+  } else {
+    // dynamic mode based on property metadata
+    const isUSD = propertyMoneda === 'USD';
+    targetCurrency = isUSD ? 'USD' : 'CRC';
+    targetLocale = isUSD ? 'en-US' : 'es-CR';
+  }
+
+  return new Intl.NumberFormat(targetLocale, {
+    style: 'currency',
+    currency: targetCurrency,
+    maximumFractionDigits: 0,
+  }).format(price);
+}

@@ -1,14 +1,37 @@
-'use client';
+"use client";
 
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ArrowLeft, ArrowRight, ArrowUpRight, Bed, Bath, Square, MapPin } from 'lucide-react';
 import { TbBed, TbBath, TbRuler2 } from 'react-icons/tb';
-import { mockProperties } from '@/app/data/properties';
+import { mockProperties, Property, mapDbToProperty, formatPropertyPrice } from '@/app/data/properties';
+import { supabase } from '@/lib/supabase';
 
 export default function FeaturedProperties() {
   const carouselRef = useRef<HTMLDivElement>(null);
+  const [properties, setProperties] = useState<Property[]>([]);
+
+  useEffect(() => {
+    async function load() {
+      try {
+        const { data, error } = await supabase
+          .from('properties')
+          .select('*')
+          .eq('published', true);
+        if (error) throw error;
+        if (data && data.length > 0) {
+          setProperties(data.map(mapDbToProperty));
+        } else {
+          setProperties(mockProperties.filter(p => p.featured));
+        }
+      } catch (err) {
+        console.warn("Error loading featured properties from Supabase. Falling back to local mocks:", err);
+        setProperties(mockProperties.filter(p => p.featured));
+      }
+    }
+    load();
+  }, []);
 
   // Smooth scroll handler for the carousel
   const scroll = (direction: 'left' | 'right') => {
@@ -33,10 +56,10 @@ export default function FeaturedProperties() {
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
           <div className="space-y-4 max-w-xl">
             <h2 className="text-3xl sm:text-5xl font-bold text-slate-950 tracking-tight leading-none">
-              Propiedades <span className="underline decoration-emerald-500 decoration-[3px] underline-offset-[5px]">Destacadas</span>
+              Nuestra Mejor <span className="underline decoration-emerald-500 decoration-[3px] underline-offset-[5px]">Selección</span>
             </h2>
             <p className="text-slate-500 text-sm sm:text-base leading-snug">
-              Propiedades exclusivas seleccionadas a mano, con ubicaciones privilegiadas y diseño destacado. Directo con el dueño.
+              Inversiones inteligentes seguras y hogares excepcionales pensados para cada estilo de vida.
             </p>
             
             {/* View Listings Button */}
@@ -84,12 +107,8 @@ export default function FeaturedProperties() {
             maskImage: 'linear-gradient(to right, transparent, black 40px, black calc(100% - 40px), transparent)'
           }}
         >
-            {mockProperties.filter(property => property.featured).map((property) => {
-              const formattedPrice = new Intl.NumberFormat('en-US', {
-                style: 'currency',
-                currency: 'USD',
-                maximumFractionDigits: 0,
-              }).format(property.price);
+            {properties.map((property) => {
+              const formattedPrice = formatPropertyPrice(property.price, property.moneda);
 
               return (
                 <Link

@@ -10,20 +10,31 @@ export default function WhyChooseUs() {
 
   const features = [
     {
-      title: 'Compra y venta de propiedades',
-      description: 'Buscá y negociá directamente con el dueño de la propiedad. Sin intermediarios, sin comisiones y con comunicación directa desde el primer día.',
-      link: '/propiedades',
-      buttonText: 'Ver Catálogo',
+      title: 'Servicios de Correduría',
+      description: 'Vende tu propiedad con el respaldo de expertos en bienes raíces.',
+      link: '/contacto?servicio=correduria',
+      buttonText: 'Más información',
+      image: 'https://images.unsplash.com/photo-1560520653-9e0e4c89fd11?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
+      counters: [
+        { value: '1500+', label: 'Transacciones' },
+        { value: '0%', label: 'de avalúo' }
+      ]
+    },
+    {
+      title: 'Compra de propiedades',
+      description: 'Le acompañamos en cada paso hacia la compra de la propiedad que se ajuste a su presupuesto y necesidades.',
+      link: '/contacto?servicio=compra',
+      buttonText: 'Más información',
       image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
       counters: [
-        { value: '1,200+', label: 'Transacciones' },
-        { value: '0%', label: 'Comisión Inmobiliaria' }
+        { value: '3,000+', label: 'Clientes Satisfechos' },
+        { value: 'CHECK', label: 'Asesoría personalizada' }
       ]
     },
     {
       title: 'Préstamos hipotecarios',
       description: 'Accedé a financiamiento y opciones de crédito hipotecario adaptadas a tus necesidades para adquirir tu propiedad rápidamente.',
-      link: '/contacto',
+      link: '/prestamos',
       buttonText: 'Consultar Préstamo',
       image: '/services/creditos.webp',
       counters: [
@@ -33,13 +44,13 @@ export default function WhyChooseUs() {
     },
     {
       title: 'Servicios de arquitectura',
-      description: 'Consultá por remodelaciones, planos y asesoría técnica de diseño para transformar tu nuevo espacio con profesionales.',
-      link: '/contacto',
+      description: 'Dale vida a tus ideas. Consultá por remodelaciones, diseño arquitectónico, planos y asesoría técnica profesional.',
+      link: '/arquitectura',
       buttonText: 'Solicitar Asesoría',
       image: '/services/arquitectura.webp',
       counters: [
         { value: '150+', label: 'Proyectos Entregados' },
-        { value: '15+', label: 'Arquitectos Asociados' }
+        { value: 'CHECK', label: 'Diseño personalizado' }
       ]
     }
   ];
@@ -69,7 +80,7 @@ export default function WhyChooseUs() {
             className="flex flex-col justify-center space-y-6 lg:pt-8"
           >
             <p className="text-slate-600 text-lg sm:text-xl leading-relaxed">
-              Desde la compra-venta directa hasta el diseño de tu próximo espacio y opciones de financiamiento a tu medida, te acompañamos para que operes con total confianza.
+              Hacemos realidad tus proyectos inmobiliarios. Desde la compra o venta de propiedades hasta el diseño y financiamiento personalizado, te brindamos el respaldo que necesitas para avanzar con seguridad.
             </p>
           </motion.div>
         </div>
@@ -116,12 +127,26 @@ export default function WhyChooseUs() {
                           
                           {/* Dynamic Counters Row */}
                           <div className="grid grid-cols-2 gap-4">
-                            {feature.counters.map((counter, cIdx) => (
-                              <div key={cIdx} className="bg-slate-50 rounded-2xl p-4 border border-slate-100 text-left">
-                                <span className="block text-2xl sm:text-3xl font-extrabold text-slate-950">{counter.value}</span>
-                                <span className="block text-xs text-slate-500 font-normal mt-1">{counter.label}</span>
-                              </div>
-                            ))}
+                            {feature.counters.map((counter, cIdx) => {
+                              const isCheck = counter.value === 'CHECK';
+                              return (
+                                <div key={cIdx} className="bg-slate-50 rounded-2xl p-4 border border-slate-100 text-left h-full flex flex-col justify-center">
+                                  {isCheck ? (
+                                    <div className="flex items-center gap-2">
+                                      <svg className="h-5 w-5 text-emerald-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{ strokeWidth: 4 }}>
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                                      </svg>
+                                      <span className="block text-sm font-bold text-slate-950 leading-snug">{counter.label}</span>
+                                    </div>
+                                  ) : (
+                                    <>
+                                      <span className="block text-2xl sm:text-3xl font-extrabold text-slate-950">{counter.value}</span>
+                                      <span className="block text-xs text-slate-500 font-normal mt-1">{counter.label}</span>
+                                    </>
+                                  )}
+                                </div>
+                              );
+                            })}
                           </div>
 
                           {/* Premium Sliding Button */}

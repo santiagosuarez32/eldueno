@@ -9,27 +9,32 @@ const faqs = [
   {
     id: 'item-1',
     question: '¿Qué es El Dueño Vende?',
-    answer: 'El Dueño Vende es una plataforma que conecta directamente a dueños de propiedades con compradores e inquilinos interesados, eliminando intermediarios y comisiones inmobiliarias. Ofrecemos un servicio transparente, ágil y seguro para que encuentres tu próximo hogar.'
+    answer: 'El Dueño Vende es una empresa inmobiliaria costarricense con más de 35 años de trayectoria en el mercado. Nos especializamos en la compra, venta y alquiler de propiedades, así como en servicios de arquitectura, préstamos hipotecarios y reunificación de deudas en la Gran Área Metropolitana. Nuestro compromiso es brindar soluciones integrales, asesoría profesional y un servicio personalizado que permita a cada cliente alcanzar sus objetivos inmobiliarios y financieros con seguridad, confianza y transparencia.'
   },
   {
     id: 'item-2',
-    question: '¿Cómo puedo publicar mi propiedad?',
-    answer: 'Publicar tu propiedad es muy sencillo. Solo tenés que crear una cuenta, completar los datos de tu propiedad (fotos, descripción, precio, ubicación) y listo. Tu propiedad estará visible para miles de usuarios interesados en cuestión de minutos.'
+    question: '¿Cómo puedo vender mi propiedad?',
+    answer: 'Vender tu propiedad nunca fue tan sencillo. En El Dueño Vende, te brindamos la tranquilidad y seguridad de contar con profesionales que te acompañarán en cada etapa del proceso. Nos encargamos de la promoción, asesoría, negociación y gestión necesaria para que tu propiedad se venda de forma eficiente, transparente y al mejor valor de mercado.'
   },
   {
     id: 'item-3',
-    question: '¿Cuánto cuesta publicar en la plataforma?',
-    answer: 'Publicar tu propiedad en El Dueño Vende es completamente gratuito. No cobramos comisiones por venta ni por alquiler. Nuestro objetivo es facilitar la conexión directa entre dueños y compradores sin costos ocultos.'
+    question: '¿Qué documentos necesito para vender una propiedad?',
+    answer: 'Generalmente se requiere la escritura de la propiedad, plano catastrado, identificación del propietario y otros documentos que nuestro equipo le indicará según cada caso.'
   },
   {
     id: 'item-4',
-    question: '¿Qué tipo de propiedades puedo encontrar?',
-    answer: 'En nuestra plataforma podés encontrar una amplia variedad de propiedades: casas, departamentos, lofts, terrenos, locales comerciales y más. Todas publicadas directamente por sus dueños en las mejores ubicaciones de Costa Rica.'
+    question: '¿Pueden ayudarme a encontrar una propiedad para comprar?',
+    answer: 'Sí. Contamos con una amplia cartera de propiedades y asesoría personalizada para encontrar la opción que mejor se adapte a sus necesidades y presupuesto.'
   },
   {
     id: 'item-5',
-    question: '¿Cómo me contacto con el dueño de una propiedad?',
-    answer: 'Cada publicación incluye los datos de contacto del dueño. Podés comunicarte directamente por WhatsApp, teléfono o email. La comunicación es directa, sin intermediarios, para que puedas coordinar visitas y resolver todas tus dudas.'
+    question: '¿Ofrecen financiamiento o préstamos hipotecarios?',
+    answer: 'Sí. Brindamos asesoría y gestión de préstamos hipotecarios para facilitar la compra de su propiedad.'
+  },
+  {
+    id: 'item-6',
+    question: '¿Qué es la reunificación de deudas?',
+    answer: 'Es un proceso que permite consolidar varias obligaciones financieras en una sola cuota, facilitando su administración y mejorando su flujo de caja.'
   }
 ];
 
@@ -65,7 +70,7 @@ export default function FAQ() {
                 href="/contacto"
                 className="text-black font-bold underline decoration-[#ffe600] decoration-[3px] underline-offset-4 hover:text-black transition-colors"
               >
-                equipo de soporte
+                equipo
               </Link>
             </p>
           </motion.div>
@@ -120,7 +125,7 @@ export default function FAQ() {
               href="/contacto"
               className="text-black font-bold underline decoration-[#ffe600] decoration-[3px] underline-offset-4 hover:text-black transition-colors"
             >
-              equipo de soporte
+              equipo
             </Link>
           </p>
 

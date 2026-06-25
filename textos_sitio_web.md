@@ -12,6 +12,8 @@ Este archivo contiene todos los textos actuales del sitio web organizados por se
     *   Nosotros
     *   Propiedades
     *   Servicios
+        *   Arquitectura
+        *   Préstamos
     *   Contacto
 *   **Botón de Acción Secundario:** Buscar Propiedades
 *   **Botón de Acción Principal:** Contáctenos / Contactar con un asesor
@@ -21,49 +23,55 @@ Este archivo contiene todos los textos actuales del sitio web organizados por se
 ## 2. PÁGINA DE INICIO (Home)
 
 ### Sección 1: Hero (Cabecera Principal)
-*   **Etiqueta superior:** Dueño Directo • Costa Rica
+*   **Etiqueta superior:** El Dueño Vende • Costa Rica
 *   **Título Principal (H1):** Encontrá el hogar de tus sueños
-*   **Descripción/Subtítulo:** Propiedades exclusivas publicadas directamente por sus dueños. Sin intermediarios, sin comisiones inmobiliarias. Operaciones transparentes y seguras.
+*   **Descripción/Subtítulo:** Empresa costarricense con más de 35 años de trayectoria, especializada en la Compra, Venta, Alquiler, Arquitectura y Préstamos hipotecarios en el Gran Área Metropolitana.
 *   **Botón Principal (Verde):** Ver Propiedades
-*   **Botón Secundario:** Contactar con un asesor
+*   **Botón Secundario:** Contactar Asesor
 *   **Buscador (Barra de búsqueda):**
-    *   *Texto de sugerencia (Placeholder):* Escribe ubicación, tipo de propiedad, barrio...
+    *   *Texto de sugerencia (Placeholder):* Escribe ubicación, tipo de propiedad, distrito...
     *   *Botón:* Buscar
 *   **Etiquetas de datos/Estadísticas rápidas:**
-    *   **7,000+** Propiedades
-    *   **7** Provincias
-    *   **18+ Años** de Trayectoria
+    *   **1,500+** Propiedades vendidas
+    *   **3,000+** Clientes Satisfechos
+    *   **35+** de Experiencia
 
 ### Sección 2: Propiedades Destacadas
-*   **Título:** Propiedades Destacadas
-*   **Descripción:** Propiedades exclusivas seleccionadas a mano, con ubicaciones privilegiadas y diseño destacado. Directo con el dueño.
+*   **Título:** Nuestra Mejor Selección
+*   **Descripción:** Inversiones inteligentes seguras y hogares excepcionales pensados para cada estilo de vida.
 *   **Botón:** Ver Catálogo
 
 ### Sección 3: Nuestros Servicios
 *   **Título:** Nuestros servicios
-*   **Descripción General:** Desde la compra-venta directa hasta el diseño de tu próximo espacio y opciones de financiamiento a tu medida, te acompañamos para que operes con total confianza.
-*   **Servicio 1: Compra y venta de propiedades**
-    *   *Descripción:* Buscá y negociá directamente con el dueño de la propiedad. Sin intermediarios, sin comisiones y con comunicación directa desde el primer día.
+*   **Descripción General:** Hacemos realidad tus proyectos inmobiliarios. Desde la compra o venta de propiedades hasta el diseño y financiamiento personalizado, te brindamos el respaldo que necesitas para avanzar con seguridad.
+*   **Servicio 1: Servicios de Correduría**
+    *   *Descripción:* Vende tu propiedad con el respaldo de expertos en bienes raíces.
     *   *Indicadores de valor:*
-        *   **1,200+** Transacciones
-        *   **0%** Comisión Inmobiliaria
-    *   *Botón:* Ver Catálogo
-*   **Servicio 2: Préstamos hipotecarios**
+        *   **1500+** Transacciones
+        *   **0%** de avalúo
+    *   *Botón:* Más información
+*   **Servicio 2: Compra de propiedades**
+    *   *Descripción:* Le acompañamos en cada paso hacia la compra de la propiedad que se ajuste a su presupuesto y necesidades.
+    *   *Indicadores de valor:*
+        *   **3,000+** Clientes Satisfechos
+        *   **✓** Asesoría personalizada
+    *   *Botón:* Más información
+*   **Servicio 3: Préstamos hipotecarios**
     *   *Descripción:* Accedé a financiamiento y opciones de crédito hipotecario adaptadas a tus necesidades para adquirir tu propiedad rápidamente.
     *   *Indicadores de valor:*
         *   **95%** Tasa de Aprobación
         *   **24 hs** Pre-aprobación
     *   *Botón:* Consultar Préstamo
-*   **Servicio 3: Servicios de arquitectura**
-    *   *Descripción:* Consultá por remodelaciones, planos y asesoría técnica de diseño para transformar tu nuevo espacio con profesionales.
+*   **Servicio 4: Servicios de arquitectura**
+    *   *Descripción:* Dale vida a tus ideas. Consultá por remodelaciones, diseño arquitectónico, planos y asesoría técnica profesional.
     *   *Indicadores de valor:*
         *   **150+** Proyectos Entregados
-        *   **15+** Arquitectos Asociados
+        *   **✓** Diseño personalizado
     *   *Botón:* Solicitar Asesoría
 
 ### Sección 4: Propiedades Premium
 *   **Título:** Propiedades premium
-*   **Descripción:** Una selección exclusiva de residencias singulares, diseñadas para superar toda expectativa. Directo con sus dueños.
+*   **Descripción:** Una selección exclusiva de propiedades singulares, diseñadas para superar toda expectativa.
 
 ### Sección 5: Simulador de Ahorro (Calculadora)
 *   **Etiqueta superior:** Simulador de Ahorro
@@ -89,27 +97,29 @@ Este archivo contiene todos los textos actuales del sitio web organizados por se
 
 ### Sección 6: Recursos y Guías Útiles (Blog)
 *   **Título:** Recursos y Guías útiles
-*   **Descripción:** Información de valor, guías prácticas y tendencias del mercado inmobiliario. Consejos prácticos de expertos para comprar, vender o alquilar propiedades de forma directa, segura y libre de intermediarios.
+*   **Descripción:** Información de valor, guías prácticas y tendencias del mercado inmobiliario. Consejos prácticos de expertos para comprar, vender o alquilar propiedades de forma directa, segura.
 
 ### Sección 7: Preguntas Frecuentes (FAQ)
 *   **Título:** Preguntas Frecuentes
 *   **Subtítulo:** Tus preguntas, respondidas
-*   **Texto de soporte:** ¿No encontrás lo que buscás? Contactá a nuestro equipo de soporte.
+*   **Texto de soporte:** ¿No encontrás lo que buscás? Contactá a nuestro equipo.
 *   **Preguntas y Respuestas:**
     1.  *Pregunta:* ¿Qué es El Dueño Vende?
-        *Respuesta:* El Dueño Vende es una plataforma que conecta directamente a dueños de propiedades con compradores e inquilinos interesados, eliminando intermediarios y comisiones inmobiliarias. Ofrecemos un servicio transparente, ágil y seguro para que encuentres tu próximo hogar.
-    2.  *Pregunta:* ¿Cómo puedo publicar mi propiedad?
-        *Respuesta:* Publicar tu propiedad es muy sencillo. Solo tenés que crear una cuenta, completar los datos de tu propiedad (fotos, descripción, precio, ubicación) y listo. Tu propiedad estará visible para miles de usuarios interesados en cuestión de minutos.
-    3.  *Pregunta:* ¿Cuánto cuesta publicar en la plataforma?
-        *Respuesta:* Publicar tu propiedad en El Dueño Vende es completamente gratuito. No cobramos comisiones por venta ni por alquiler. Nuestro objetivo es facilitar la conexión directa entre dueños y compradores sin costos ocultos.
-    4.  *Pregunta:* ¿Qué tipo de propiedades puedo encontrar?
-        *Respuesta:* En nuestra plataforma podés encontrar una amplia variedad de propiedades: casas, departamentos, lofts, terrenos, locales comerciales y más. Todas publicadas directamente por sus dueños en las mejores ubicaciones de Costa Rica.
-    5.  *Pregunta:* ¿Cómo me contacto con el dueño de una propiedad?
-        *Respuesta:* Cada publicación incluye los datos de contacto del dueño. Podés comunicarte directamente por WhatsApp, teléfono o email. La comunicación es directa, sin intermediarios, para que puedas coordinar visitas y resolver todas tus dudas.
+        *Respuesta:* El Dueño Vende es una empresa inmobiliaria costarricense con más de 35 años de trayectoria en el mercado. Nos especializamos en la compra, venta y alquiler de propiedades, así como en servicios de arquitectura, préstamos hipotecarios y reunificación de deudas en la Gran Área Metropolitana. Nuestro compromiso es brindar soluciones integrales, asesoría profesional y un servicio personalizado que permita a cada cliente alcanzar sus objetivos inmobiliarios y financieros con seguridad, confianza y transparencia.
+    2.  *Pregunta:* ¿Cómo puedo vender mi propiedad?
+        *Respuesta:* Vender tu propiedad nunca fue tan sencillo. En El Dueño Vende, te brindamos la tranquilidad y seguridad de contar con profesionales que te acompañarán en cada etapa del proceso. Nos encargamos de la promoción, asesoría, negociación y gestión necesaria para que tu propiedad se venda de forma eficiente, transparente y al mejor valor de mercado.
+    3.  *Pregunta:* ¿Qué documentos necesito para vender una propiedad?
+        *Respuesta:* Generalmente se requiere la escritura de la propiedad, plano catastrado, identificación del propietario y otros documentos que nuestro equipo le indicará según cada caso.
+    4.  *Pregunta:* ¿Pueden ayudarme a encontrar una propiedad para comprar?
+        *Respuesta:* Sí. Contamos con una amplia cartera de propiedades y asesoría personalizada para encontrar la opción que mejor se adapte a sus necesidades y presupuesto.
+    5.  *Pregunta:* ¿Ofrecen financiamiento o préstamos hipotecarios?
+        *Respuesta:* Sí. Brindamos asesoría y gestión de préstamos hipotecarios para facilitar la compra de su propiedad.
+    6.  *Pregunta:* ¿Qué es la reunificación de deudas?
+        *Respuesta:* Es un proceso que permite consolidar varias obligaciones financieras en una sola cuota, facilitando su administración y mejorando su flujo de caja.
 
 ### Sección 8: Partners (Entidades Financieras)
-*   **Título:** Partners
-*   **Descripción:** Trabajamos con las principales entidades financieras para facilitarte las opciones de crédito y financiamiento más convenientes.
+*   **Título:** Nuestros Aliados
+*   **Descripción:** Trabajamos con las principales entidades financieras del país para ofrecerte opciones de crédito y financiamiento flexibles, confiables y diseñadas para tus necesidades.
 *   *Marcas que se muestran:* MUCAP, Coope Ande, Banco de Costa Rica, Banco Popular, Davivienda, Scotiabank.
 
 ---
@@ -117,27 +127,27 @@ Este archivo contiene todos los textos actuales del sitio web organizados por se
 ## 3. PÁGINA "NOSOTROS"
 
 ### Sección 1: Hero de Nosotros
-*   **Título Principal:** Descubrí tu espacio ideal. Sin intermediarios.
-*   **Descripción:** Propiedades exclusivas, precios reales y trato directo. Hacemos posible una experiencia de compra y venta transparente, ágil y libre de comisiones inmobiliarias.
+*   **Título Principal:** “ De Sueño a Dueño “
+*   **Descripción:** En El Dueño Vende, le acompañamos durante todo el proceso de compra, venta o alquiler de su propiedad, brindándole asesoría profesional, transparencia y seguridad en cada etapa.
 *   **Botones:**
     *   Explorar Propiedades
     *   Conocer Más
 
 ### Sección 2: Presencia y Confiabilidad (Estadísticas)
-*   **Título:** Nuestra presencia y confiabilidad
-*   **Descripción:** La solidez de una plataforma diseñada para conectar personas y simplificar negociaciones a escala nacional.
+*   **Título:** Nuestra trayectoria marca la diferencia
+*   **Descripción:** El Dueño Vende, se distingue por su sólida presencia en el mercado inmobiliario y por la confianza que ha construido a lo largo de los años. Nos caracterizamos por brindar un servicio transparente, responsable y orientado a resultados.
 *   **Métricas detalladas:**
-    *   **0%** Comisiones de intermediarios: *No cobramos ningún tipo de comisión, lo que permite un trato directo y transparente.*
-    *   **7,000+** Propiedades directas: *Un catálogo amplio y en crecimiento constante a lo largo de todo el país.*
-    *   **18+ Años** Trayectoria en el mercado: *Acompañando a miles de familias y dueños directos a concretar sus operaciones.*
+    *   **1500+** Propiedades vendidas
+    *   **3.000+** Clientes Satisfechos: *Nuestro mayor respaldo.*
+    *   **35+ Años** Trayectoria en el mercado: *Acompañando a miles de familias y dueños directos a concretar sus objetivos.*
     *   **100%** Listados verificados: *Validamos detalladamente cada publicación para garantizar la veracidad de los datos.*
 
 ### Sección 3: Trayectoria (Sobre Nosotros)
-*   **Título:** Tu socio de confianza en bienes raíces
+*   **Título:** Somos una empresa con historia y resultados
 *   **Etiqueta:** Sobre nosotros
 *   **Columna 1:** **El Dueño Vende** es una compañía especializada en bienes raíces, brindamos la mejor asesoría en compra, venta y renta de propiedades dentro del área metropolitana. También, brindamos oportunidades de inversión y soluciones de crédito.
-*   **Columna 2:** Con más de 30 años de experiencia nos desenvolvemos con agilidad en el mercado de bienes raíces; cientos de personas y empresas que han confiado sus inversiones a El Dueño Vende dan respaldo de nuestra trayectoria.
-*   **Frase destacada:** Propiedades exclusivas, precios competitivos y trato directo — todo en un solo lugar.
+*   **Columna 2:** Con más de 35 años de experiencia nos desenvolvemos con agilidad en el mercado de bienes raíces; cientos de personas y empresas que han confiado sus inversiones a El Dueño Vende dan respaldo de nuestra trayectoria.
+*   **Frase destacada:** Más de tres décadas asesorando con transparencia, agilidad y resultados. Experiencia real, soluciones integrales y un acompañamiento que genera confianza.
 
 ### Sección 4: Características Adicionales (AboutFeatures)
 *   **Ubicación Estratégica:** Nuestras propiedades destacadas se encuentran en zonas de fácil acceso desde diferentes puntos. Podés llegar al centro, zonas comerciales y lugares importantes de la ciudad de manera rápida y cómoda.
@@ -158,7 +168,7 @@ Este archivo contiene todos los textos actuales del sitio web organizados por se
 *   **Tipo de propiedad:** Todos los tipos, Departamento, Casa, Terreno, Local / Edificación Comercial, PH, Loft.
 *   **Barrio o zona:** Cualquier zona, Escazú (San José), Santa Ana (San José), Barrio Amón (San José), Tamarindo (Guanacaste), Cariari (Heredia), Tres Ríos (Cartago).
 *   **Dormitorios:** Todo, 1, 2, 3, 4+.
-*   **Precio máximo (Rango de Precios):** USD 100k a USD 1M.
+*   **Precio máximo (Rango de Precios):** ₡ 100k a ₡ 1M. (dólares y colones, usando el signo de colón ₡)
 
 ---
 
@@ -334,3 +344,44 @@ Este archivo contiene todos los textos actuales del sitio web organizados por se
 *   **Servicios Listados:** Compra y Venta de Propiedades, Préstamos hipotecarios, Servicios de arquitectura.
 *   **Ubicación:** Heredia, Asunción de Belén, diagonal a la plaza de deportes.
 *   **Derechos Reservados:** © 2026 El Dueño Vende. Todos los derechos reservados.
+
+---
+
+## 9. PÁGINA "ARQUITECTURA"
+*   **Cabecera de Página:**
+    *   **Título:** Servicios de Arquitectura
+    *   **Descripción:** Ofrecemos servicios de arquitectura enfocados en el diseño, planificación y remodelación de espacios residenciales, comerciales e industriales . Brindamos asesoría personalizada y elaboración de planos, creando soluciones funcionales, estéticas y adaptadas a cada necesidad. Nuestro objetivo es optimizar cada espacio, garantizando calidad, eficiencia y mayor valor para su propiedad.
+*   **Servicios Detallados:**
+    1. Construcción desde cero
+    2. Remodelación
+    3. Diseño
+    4. Tramitología
+    5. Inspección de sitio
+    6. Dirección de Obra
+*   **Botón de acción:** Más información (redirige a Formulario/CRM)
+
+---
+
+## 10. PÁGINA "PRÉSTAMOS"
+*   **Cabecera de Página:**
+    *   **Título:** Tipos de Financiamiento
+    *   **Descripción:** Nuestro equipo analiza cada caso de forma individual para ofrecer soluciones adaptadas a sus necesidades, facilitando el acceso a las mejores condiciones y soluciones de financiamiento.
+*   **Servicio 1: Préstamos para compra de propiedades**
+    *   **Descripción:** Evaluamos distintas alternativas con Bancos públicos como privados, ayudando a identificar la opción más conveniente en términos de cuotas, plazos y condiciones. Acompañamos al cliente desde la solicitud hasta la aprobación del crédito, garantizando un proceso claro, ágil y seguro.
+    *   **Botón:** Más información (redirige a Formulario)
+*   **Servicio 2: Préstamos sobre garantía inmobiliaria**
+    *   **Descripción:** El Dueño Vende, también ofrece préstamos privados, con requisitos accesibles y pre-aprobación en 24 horas, sobre propiedades dentro del Gran Área Metropolitana.
+    *   **Métricas e Indicadores de Valor:**
+        *   0% costo de avalúo
+        *   5% de comisión de formalización
+        *   24hrs Pre-Aprobación
+        *   50% monto máximo a financiar sobre monto de avalúo
+    *   **Botón:** Más información (redirige a Formulario)
+*   **Servicio 3: Reunificación de Deudas**
+    *   **Descripción:** Ofrecemos el servicio de unificación de deudas como una solución financiera que permite consolidar múltiples obligaciones en un solo pago mensual. Este proceso facilita la organización de las finanzas personales, reduce la carga administrativa y brinda mayor control sobre el presupuesto. Nuestro objetivo es ayudarle a mejorar su liquidez y estabilidad financiera mediante condiciones más ordenadas y accesibles, adaptadas a su situación económica.
+    *   **Métricas e Indicadores de Valor:**
+        *   0% costo de avalúo
+        *   5% de comisión de formalización
+        *   24hrs Pre-Aprobación
+        *   50% monto máximo a financiar sobre monto de avalúo
+    *   **Botón:** Más información (redirige a Formulario)

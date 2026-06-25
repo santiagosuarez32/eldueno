@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
-import { Geist_Mono } from "next/font/google";
+import { Geist_Mono, Geist } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
 import SmoothScroll from "@/app/components/SmoothScroll";
 import FloatingWhatsApp from "@/app/components/FloatingWhatsApp";
+import { cn } from "@/lib/utils";
+
+const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
 const satoshi = localFont({
   src: [
@@ -91,7 +94,7 @@ export default function RootLayout({
   return (
     <html
       lang="es"
-      className={`${satoshi.variable} ${geistMono.variable} h-full antialiased`}
+      className={cn("h-full", "antialiased", satoshi.variable, geistMono.variable, "font-sans", geist.variable)}
     >
       <body className={`${satoshi.className} min-h-full flex flex-col bg-slate-950 text-slate-100`}>
         <SmoothScroll>

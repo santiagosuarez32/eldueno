@@ -7,6 +7,7 @@ import { ArrowRight } from 'lucide-react';
 import Navbar from '@/app/components/Navbar';
 import Footer from '@/app/components/Footer';
 import { FlowButton } from '@/app/components/FlowButton';
+import AboutFeatures from '@/app/components/AboutFeatures';
 
 // Stats counter sub-component
 interface AnimatedCounterProps {
@@ -64,9 +65,9 @@ function AnimatedCounter({ value, duration = 2, prefix = '', suffix = '' }: Anim
 
 export default function NosotrosPage() {
   const stats = [
-    { value: 0, prefix: '', suffix: '%', label: 'Comisiones de intermediarios', desc: 'No cobramos ningún tipo de comisión, lo que permite un trato directo y transparente.' },
-    { value: 7000, prefix: '+', suffix: '', label: 'Propiedades directas', desc: 'Un catálogo amplio y en crecimiento constante a lo largo de todo el país.' },
-    { value: 18, prefix: '+', suffix: ' Años', label: 'Trayectoria en el mercado', desc: 'Acompañando a miles de familias y dueños directos a concretar sus operaciones.' },
+    { value: 1500, prefix: '', suffix: '+', label: 'Propiedades vendidas', desc: 'Casas, apartamentos y terrenos que han encontrado su dueño ideal.' },
+    { value: 3000, prefix: '', suffix: '+', label: 'Clientes Satisfechos', desc: 'Nuestro mayor respaldo.' },
+    { value: 35, prefix: '', suffix: '+ Años', label: 'Trayectoria en el mercado', desc: 'Acompañando a miles de familias y dueños directos a concretar sus objetivos.' },
     { value: 100, prefix: '', suffix: '%', label: 'Listados verificados', desc: 'Validamos detalladamente cada publicación para garantizar la veracidad de los datos.' }
   ];
 
@@ -110,8 +111,8 @@ export default function NosotrosPage() {
                   transition={{ duration: 0.8, delay: 0.1 }}
                   className="text-4xl sm:text-6xl lg:text-7.5xl font-bold tracking-tight text-white leading-[1.05]"
                 >
-                  Descubrí tu espacio ideal. <br />
-                  <span className="text-emerald-400">Sin intermediarios.</span>
+                  “ De Sueño <br />
+                  <span className="text-emerald-400">a Dueño “</span>
                 </motion.h1>
 
                 <motion.p
@@ -120,7 +121,7 @@ export default function NosotrosPage() {
                   transition={{ duration: 0.8, delay: 0.2 }}
                   className="text-slate-300 text-base sm:text-xl max-w-2xl leading-relaxed"
                 >
-                  Propiedades exclusivas, precios reales y trato directo. Hacemos posible una experiencia de compra y venta transparente, ágil y libre de comisiones inmobiliarias.
+                  En El Dueño Vende, le acompañamos durante todo el proceso de compra, venta o alquiler de su propiedad, brindándole asesoría profesional, transparencia y seguridad en cada etapa.
                 </motion.p>
               </div>
 
@@ -150,9 +151,9 @@ export default function NosotrosPage() {
           
           <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center max-w-3xl mx-auto space-y-4 mb-14">
-              <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-slate-950">Nuestra presencia y confiabilidad</h2>
+              <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-slate-950">Nuestra trayectoria marca la diferencia</h2>
               <p className="text-slate-500 text-base sm:text-lg">
-                La solidez de una plataforma diseñada para conectar personas y simplificar negociaciones a escala nacional.
+                El Dueño Vende, se distingue por su sólida presencia en el mercado inmobiliario y por la confianza que ha construido a lo largo de los años. Nos caracterizamos por brindar un servicio transparente, responsable y orientado a resultados.
               </p>
             </div>
 
@@ -187,8 +188,9 @@ export default function NosotrosPage() {
               {/* Left Column (5/12 width) */}
               <div className="lg:col-span-5 flex flex-col">
                 <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-slate-950 tracking-tight leading-[1.1] mb-10">
-                  Tu socio de confianza <br />
-                  en bienes raíces
+                  Somos una empresa <br />
+                  con historia <br />
+                  y resultados
                 </h2>
                 
                 <motion.div 
@@ -246,7 +248,7 @@ export default function NosotrosPage() {
                       <strong>El Dueño Vende</strong> es una compañía especializada en bienes raíces, brindamos la mejor asesoría en compra, venta y renta de propiedades dentro del área metropolitana. También, brindamos oportunidades de inversión y soluciones de crédito.
                     </p>
                     <p className="text-slate-555 text-base leading-relaxed">
-                      Con más de 30 años de experiencia nos desenvolvemos con agilidad en el mercado de bienes raíces; cientos de personas y empresas que han confiado sus inversiones a El Dueño Vende dan respaldo de nuestra trayectoria.
+                      Con más de 35 años de experiencia nos desenvolvemos con agilidad en el mercado de bienes raíces; cientos de personas y empresas que han confiado sus inversiones a El Dueño Vende dan respaldo de nuestra trayectoria.
                     </p>
                   </div>
                 </div>
@@ -257,17 +259,23 @@ export default function NosotrosPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.8 }}
-                  className="pt-6"
+                  className="pt-6 border-t border-slate-100"
                 >
-                  <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-950 tracking-tight leading-tight">
-                    Propiedades exclusivas, precios competitivos y trato directo — todo en un solo lugar.
+                  <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-950 tracking-tight leading-tight mb-3">
+                    Más de tres décadas asesorando con transparencia, agilidad y resultados.
                   </h3>
+                  <p className="text-slate-500 text-base sm:text-lg">
+                    Experiencia real, soluciones integrales y un acompañamiento que genera confianza.
+                  </p>
                 </motion.div>
               </div>
 
             </div>
           </div>
         </section>
+
+        {/* FOURTH SECTION - Características Adicionales */}
+        <AboutFeatures />
 
       </main>
 

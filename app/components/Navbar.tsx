@@ -63,7 +63,7 @@ export default function Navbar() {
   const [mobileAccordion, setMobileAccordion] = useState<string | null>(null);
   const pathname = usePathname();
 
-  const isLightPage = pathname.startsWith('/propiedades') || pathname.startsWith('/blog');
+  const isLightPage = pathname.startsWith('/propiedades') || pathname.startsWith('/blog') || pathname.startsWith('/admin') || pathname === '/login' || pathname.startsWith('/arquitectura') || pathname.startsWith('/prestamos');
 
   useEffect(() => {
     const handleScroll = () => {
@@ -100,8 +100,8 @@ export default function Navbar() {
 
   const serviciosList = [
     { label: "Compra y Venta de Propiedades", href: "/propiedades" },
-    { label: "Préstamos Hipotecarios", href: "/contacto" },
-    { label: "Servicios de Arquitectura", href: "/contacto" }
+    { label: "Préstamos Hipotecarios", href: "/prestamos" },
+    { label: "Servicios de Arquitectura", href: "/arquitectura" }
   ];
 
   return (
@@ -162,6 +162,49 @@ export default function Navbar() {
               Propiedades
             </Link>
 
+            {/* Desktop Servicios Dropdown */}
+            <div className="relative group py-1.5">
+              <button
+                className={`flex items-center gap-1 text-[17px] font-medium transition-colors duration-200 relative after:absolute after:bottom-0 after:left-0 after:h-[1.5px] after:w-full after:scale-x-0 group-hover:after:scale-x-100 after:transition-transform after:duration-300 after:origin-left ${
+                  shouldShowScrolledState ? 'text-slate-950 hover:text-black after:bg-slate-950' : 'text-slate-300 hover:text-[#ffe600] after:bg-[#ffe600]'
+                }`}
+              >
+                <span>Servicios</span>
+                <svg
+                  className="h-3.5 w-3.5 transition-transform duration-300 group-hover:rotate-180"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  style={{ strokeWidth: 3 }}
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                </svg>
+              </button>
+              
+              {/* Dropdown Menu Container */}
+              <div className="absolute left-1/2 -translate-x-1/2 mt-2 w-64 rounded-2xl bg-white border border-slate-200/80 shadow-xl py-2 z-50 transition-all duration-300 opacity-0 translate-y-2 scale-95 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:scale-100 group-hover:pointer-events-auto origin-top">
+                {/* Transparent bridge to prevent menu from closing when moving mouse */}
+                <div className="absolute -top-3 left-0 right-0 h-4 bg-transparent" />
+                
+                <Link
+                  href="/arquitectura"
+                  className="block px-5 py-3 hover:bg-slate-50 transition-colors"
+                >
+                  <div className="font-bold text-slate-900 text-sm hover:text-emerald-600 transition-colors">Servicios de Arquitectura</div>
+                  <div className="text-xs text-slate-500 font-normal mt-0.5">Diseño, planos y remodelaciones.</div>
+                </Link>
+                
+                <div className="border-t border-slate-100 my-1 mx-2" />
+                
+                <Link
+                  href="/prestamos"
+                  className="block px-5 py-3 hover:bg-slate-50 transition-colors"
+                >
+                  <div className="font-bold text-slate-900 text-sm hover:text-emerald-600 transition-colors">Préstamos Hipotecarios</div>
+                  <div className="text-xs text-slate-500 font-normal mt-0.5">Opciones de crédito a tu medida.</div>
+                </Link>
+              </div>
+            </div>
 
             <Link
               href="/contacto"
@@ -271,6 +314,16 @@ export default function Navbar() {
             Propiedades
           </Link>
 
+          <MobileAccordion
+            label="Servicios"
+            isOpen={mobileAccordion === 'servicios'}
+            onToggle={() => toggleAccordion('servicios')}
+            items={[
+              { label: 'Servicios de Arquitectura', href: '/arquitectura' },
+              { label: 'Préstamos Hipotecarios', href: '/prestamos' }
+            ]}
+            onNavigate={closeMobileMenu}
+          />
 
           <Link
             href="/contacto"

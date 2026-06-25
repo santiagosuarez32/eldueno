@@ -27,7 +27,7 @@ import {
   Film,
   Send
 } from 'lucide-react';
-import { Property } from '@/app/data/properties';
+import { Property, formatPropertyPrice } from '@/app/data/properties';
 import { FaWhatsapp } from 'react-icons/fa';
 
 interface PropertyDetailClientProps {
@@ -78,14 +78,7 @@ export default function PropertyDetailClient({ property, relatedProperties }: Pr
     }, 1200);
   };
 
-  // Currency Formatter (USD)
-  const formatUSD = (val: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      maximumFractionDigits: 0,
-    }).format(val);
-  };
+
 
   // Commission Savings (4%)
   const savings = (property.price * 4) / 100;
@@ -169,6 +162,14 @@ export default function PropertyDetailClient({ property, relatedProperties }: Pr
     }
   };
 
+  const formattedDate = property.created_at
+    ? new Date(property.created_at).toLocaleDateString('es-AR', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+      })
+    : '';
+
   return (
     <main className="min-h-screen pt-28 pb-24 bg-white text-slate-900 relative">
       {/* Subtle background gradient */}
@@ -227,7 +228,7 @@ export default function PropertyDetailClient({ property, relatedProperties }: Pr
             <div className="text-slate-500 text-xs font-medium">Precio publicado</div>
             <div className="flex items-center gap-3">
               <span className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-                {formatUSD(property.price)}
+                {formatPropertyPrice(property.price, property.moneda)}
               </span>
             </div>
           </div>
@@ -254,7 +255,7 @@ export default function PropertyDetailClient({ property, relatedProperties }: Pr
             {/* Share and Metadata Floating Badges */}
             <div className="absolute top-4 right-4 z-20 flex items-center gap-2">
               <span className="bg-slate-900/80 backdrop-blur-md text-white text-xs font-medium px-3.5 py-1.5 rounded-full border border-slate-800/20 shadow-md">
-                Publicado: {property.age === 0 ? 'A estrenar' : `Antigüedad: ${property.age} años`}
+                Publicado: {formattedDate || '—'}{property.age !== undefined && property.age !== null ? ` • ${property.age === 0 ? 'A estrenar' : `Antigüedad: ${property.age} años`}` : ''}
               </span>
               
               {/* Share button */}
@@ -589,7 +590,7 @@ export default function PropertyDetailClient({ property, relatedProperties }: Pr
                   </div>
                   
                   <p className="text-sm font-extrabold text-slate-900 pt-1">
-                    {formatUSD(relProp.price)}
+                    {formatPropertyPrice(relProp.price, relProp.moneda)}
                   </p>
                 </div>
               </Link>

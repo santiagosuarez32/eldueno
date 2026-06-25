@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ShieldCheck } from 'lucide-react';
-import { Property } from '@/app/data/properties';
+import { Property, formatPropertyPrice } from '@/app/data/properties';
 
 interface PropertyCardProps {
   property: Property;
@@ -11,11 +11,7 @@ interface PropertyCardProps {
 
 export default function PropertyCard({ property }: PropertyCardProps) {
   // Format price nicely
-  const formattedPrice = new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-    maximumFractionDigits: 0,
-  }).format(property.price);
+  const formattedPrice = formatPropertyPrice(property.price, property.moneda);
 
   const typeLabels: Record<string, string> = {
     casa: 'Casa',
@@ -44,13 +40,13 @@ export default function PropertyCard({ property }: PropertyCardProps) {
           {/* Badges */}
           <div className="absolute top-3 left-3 z-20 flex flex-row items-center gap-1.5 max-w-[calc(100%-24px)] min-w-0">
             {/* Property Type Badge */}
-            <span className="bg-white/95 backdrop-blur-sm text-slate-700 text-[9px] sm:text-[10px] font-medium px-2 py-0.5 rounded-full border border-slate-200/40 shadow-sm shrink-0">
+            <span className="bg-black text-white text-[9px] sm:text-[10px] font-bold px-2.5 py-1 rounded-full shadow-sm shrink-0">
               {typeLabel}
             </span>
             {/* Location Badge */}
-            <span className="bg-white/95 backdrop-blur-sm text-slate-700 text-[9px] sm:text-[10px] font-medium px-2 py-0.5 rounded-full flex items-center gap-1 border border-slate-200/40 shadow-sm min-w-0">
-              <img src="/icons-filters/ubication.png" className="h-3 w-3 object-contain flex-shrink-0" alt="" />
-              <span className="truncate text-slate-700">{property.neighborhood}, {property.location}</span>
+            <span className="bg-black text-white text-[9px] sm:text-[10px] font-bold px-2.5 py-1 rounded-full flex items-center gap-1 shadow-sm min-w-0">
+              <img src="/icons-filters/ubication.png" className="h-3 w-3 object-contain flex-shrink-0 invert" alt="" />
+              <span className="truncate">{property.neighborhood || property.location}</span>
             </span>
           </div>
 

@@ -37,6 +37,23 @@ export default function ContactoPage() {
     message: '',
     agree: false
   });
+
+  // Pre-select service based on URL search query parameters
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const servicioParam = params.get('servicio');
+      if (servicioParam === 'arquitectura') {
+        setFormData(prev => ({ ...prev, service: 'Otras consultas' }));
+      } else if (servicioParam === 'prestamos') {
+        setFormData(prev => ({ ...prev, service: 'Opciones de financiación' }));
+      } else if (servicioParam === 'compra') {
+        setFormData(prev => ({ ...prev, service: 'Comprar una propiedad' }));
+      } else if (servicioParam === 'correduria') {
+        setFormData(prev => ({ ...prev, service: 'Vender mi propiedad' }));
+      }
+    }
+  }, []);
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
 
   // Input Handlers
@@ -126,7 +143,7 @@ export default function ContactoPage() {
                   Escribinos y hablemos de tu próxima propiedad
                 </h2>
                 <p className="text-slate-500 text-sm sm:text-base leading-relaxed">
-                  El Dueño Vende mantiene un enfoque directo y transparente para la comunicación en el sector inmobiliario. Nuestro equipo de asesores revisa minuciosamente cada solicitud recibida y responde a la brevedad para garantizar el mejor servicio y una negociación limpia, libre de comisiones intermediarias.
+                  En El Dueño Vende estamos listos para asesorarte. Atendemos cada consulta de forma personalizada para brindarte soluciones ágiles, información clara y el acompañamiento profesional que necesitás para tomar las mejores decisiones seguras.
                 </p>
               </div>
 

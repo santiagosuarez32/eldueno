@@ -2,9 +2,10 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import Navbar from '@/app/components/Navbar';
 import Footer from '@/app/components/Footer';
-import { mockProperties } from '@/app/data/properties';
+import { mockProperties, Property, mapDbToProperty } from '@/app/data/properties';
 import { AlertTriangle } from 'lucide-react';
 import PropertyDetailClient from './PropertyDetailClient';
+import { supabase } from '@/lib/supabase';
 
 interface PropertyDetailPageProps {
   params: Promise<{ id: string }>;
@@ -14,7 +15,20 @@ export async function generateMetadata({
   params,
 }: PropertyDetailPageProps): Promise<Metadata> {
   const { id } = await params;
-  const property = mockProperties.find((p) => p.id === id);
+  
+  let property: Property | undefined = undefined;
+  try {
+    const { data } = await supabase.from('properties').select('*').eq('id', id).single();
+    if (data) {
+      property = mapDbToProperty(data);
+    }
+  } catch (err) {
+    console.warn("Error fetching metadata from Supabase:", err);
+  }
+
+  if (!property) {
+    property = mockProperties.find((p) => p.id === id);
+  }
 
   if (!property) {
     return {
@@ -51,7 +65,20 @@ export async function generateMetadata({
 
 export default async function PropertyDetailPage({ params }: PropertyDetailPageProps) {
   const { id } = await params;
-  const property = mockProperties.find((p) => p.id === id);
+  
+  let property: Property | undefined = undefined;
+  try {
+    const { data } = await supabase.from('properties').select('*').eq('id', id).single();
+    if (data) {
+      property = mapDbToProperty(data);
+    }
+  } catch (err) {
+    console.warn("Error fetching property details from Supabase:", err);
+  }
+
+  if (!property) {
+    property = mockProperties.find((p) => p.id === id);
+  }
 
   if (!property) {
     return (
@@ -76,7 +103,19 @@ export default async function PropertyDetailPage({ params }: PropertyDetailPageP
   }
 
   // Get related properties (excluding current one)
-  const relatedProperties = mockProperties.filter((p) => p.id !== property.id);
+  let relatedProperties: Property[] = [];
+  try {
+    const { data } = await supabase.from('properties').select('*').limit(6);
+    if (data && data.length > 0) {
+      relatedProperties = data.map(mapDbToProperty).filter((p) => p.id !== property!.id);
+    }
+  } catch (err) {
+    console.warn("Error fetching related properties from Supabase:", err);
+  }
+
+  if (relatedProperties.length === 0) {
+    relatedProperties = mockProperties.filter((p) => p.id !== property.id);
+  }
 
   return (
     <>

@@ -4,10 +4,12 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
-import { Search, MapPin, Building2, TreePine, X } from 'lucide-react';
+import { Search, MapPin, Building2, TreePine, X, Users, Award } from 'lucide-react';
 import { FlowButton } from './FlowButton';
-import { mockProperties, Property } from '@/app/data/properties';
+import { mockProperties, Property, mapDbToProperty } from '@/app/data/properties';
 import PropertyCard from './PropertyCard';
+import { supabase } from '@/lib/supabase';
+import { useLenis } from 'lenis/react';
 
 // Helper to remove accents / diacritics for search normalization
 const normalizeString = (str: string): string => {
@@ -25,6 +27,27 @@ export default function Hero() {
   const [showResults, setShowResults] = useState(false);
   const [searchResults, setSearchResults] = useState<Property[]>([]);
   const [isOpenModal, setIsOpenModal] = useState(false);
+  const [properties, setProperties] = useState<Property[]>([]);
+  const lenis = useLenis();
+
+  // Fetch properties from Supabase on mount
+  useEffect(() => {
+    async function load() {
+      try {
+        const { data, error } = await supabase.from('properties').select('*');
+        if (error) throw error;
+        if (data && data.length > 0) {
+          setProperties(data.map(mapDbToProperty));
+        } else {
+          setProperties(mockProperties);
+        }
+      } catch (err) {
+        console.warn("Error loading properties for search in Hero. Falling back to local mocks:", err);
+        setProperties(mockProperties);
+      }
+    }
+    load();
+  }, []);
 
   // Esc key listener to close search modal
   useEffect(() => {
@@ -41,13 +64,16 @@ export default function Hero() {
   useEffect(() => {
     if (isOpenModal) {
       document.body.classList.add('overflow-hidden');
+      lenis?.stop();
     } else {
       document.body.classList.remove('overflow-hidden');
+      lenis?.start();
     }
     return () => {
       document.body.classList.remove('overflow-hidden');
+      lenis?.start();
     };
-  }, [isOpenModal]);
+  }, [isOpenModal, lenis]);
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -58,7 +84,7 @@ export default function Hero() {
 
     const query = searchValue.toLowerCase().trim();
     const queryNorm = normalizeString(query);
-    const matches = mockProperties.filter((property) => {
+    const matches = properties.filter((property) => {
       const titleNorm = normalizeString(property.title);
       const locationNorm = normalizeString(property.location);
       const neighborhoodNorm = normalizeString(property.neighborhood);
@@ -92,7 +118,7 @@ export default function Hero() {
 
     const query = val.toLowerCase().trim();
     const queryNorm = normalizeString(query);
-    const matches = mockProperties.filter((property) => {
+    const matches = properties.filter((property) => {
       const titleNorm = normalizeString(property.title);
       const locationNorm = normalizeString(property.location);
       const neighborhoodNorm = normalizeString(property.neighborhood);
@@ -117,7 +143,7 @@ export default function Hero() {
     setIsOpenModal(true);
 
     const queryNorm = normalizeString(tag);
-    const matches = mockProperties.filter((property) => {
+    const matches = properties.filter((property) => {
       const titleNorm = normalizeString(property.title);
       const locationNorm = normalizeString(property.location);
       const neighborhoodNorm = normalizeString(property.neighborhood);
@@ -176,7 +202,7 @@ export default function Hero() {
             className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-900/80 backdrop-blur-sm border border-slate-700/50 text-slate-300 text-xs font-semibold"
           >
             <MapPin className="h-3.5 w-3.5 text-emerald-400 flex-shrink-0" />
-            Dueño Directo • Costa Rica
+            El Dueño Vende * Costa Rica
           </motion.div>
 
           <div className="space-y-3 sm:space-y-4">
@@ -196,7 +222,7 @@ export default function Hero() {
               transition={{ duration: 0.8, delay: 0.2 }}
               className="text-slate-200 text-sm sm:text-lg max-w-2xl leading-normal mx-auto"
             >
-              Propiedades exclusivas publicadas directamente por sus dueños. Sin intermediarios, sin comisiones inmobiliarias. Operaciones transparentes y seguras.
+              Empresa costarricense con más de 35 años de trayectoria, especializada en la Compra, Venta, Alquiler, Arquitectura y Préstamos hipotecarios en el Gran Área Metropolitana.
             </motion.p>
           </div>
 
@@ -229,7 +255,7 @@ export default function Hero() {
               if (searchValue.trim()) {
                 const query = searchValue.toLowerCase().trim();
                 const queryNorm = normalizeString(query);
-                const matches = mockProperties.filter((property) => {
+                const matches = properties.filter((property) => {
                   const titleNorm = normalizeString(property.title);
                   const locationNorm = normalizeString(property.location);
                   const neighborhoodNorm = normalizeString(property.neighborhood);
@@ -255,7 +281,7 @@ export default function Hero() {
                 type="text"
                 readOnly
                 value={searchValue}
-                placeholder="Buscar ubicación, barrio, tipo..."
+                placeholder="Escribe ubicación, tipo de propiedad, distrito..."
                 className="w-full bg-transparent border-0 p-0 text-slate-900 text-xs sm:text-sm md:text-base font-semibold placeholder-slate-400 focus:ring-0 focus:outline-none cursor-pointer truncate"
               />
             </div>
@@ -295,7 +321,7 @@ export default function Hero() {
                       autoFocus
                       value={searchValue}
                       onChange={handleInputChange}
-                      placeholder="Escribe ubicación, tipo de propiedad, barrio..."
+                      placeholder="Escribe ubicación, tipo de propiedad, distrito..."
                       className="flex-grow bg-transparent border-0 p-0 text-slate-900 text-sm sm:text-base font-semibold placeholder-slate-450 focus:ring-0 focus:outline-none"
                     />
                     {searchValue && (
@@ -400,18 +426,18 @@ export default function Hero() {
           >
             <span className="flex items-center gap-1.5 bg-slate-900/60 backdrop-blur-sm border border-slate-800 px-3 py-1.5 rounded-full text-slate-300">
               <Building2 className="h-3.5 w-3.5 text-emerald-400 flex-shrink-0" />
-              <span className="font-extrabold text-white">7,000+</span>
-              <span className="font-normal text-slate-300">Propiedades</span>
+              <span className="font-extrabold text-white">1,500+</span>
+              <span className="font-normal text-slate-300">Propiedades vendidas</span>
             </span>
             <span className="flex items-center gap-1.5 bg-slate-900/60 backdrop-blur-sm border border-slate-800 px-3 py-1.5 rounded-full text-slate-300">
-              <MapPin className="h-3.5 w-3.5 text-emerald-400 flex-shrink-0" />
-              <span className="font-extrabold text-white">7</span>
-              <span className="font-normal text-slate-300">Provincias</span>
+              <Users className="h-3.5 w-3.5 text-emerald-400 flex-shrink-0" />
+              <span className="font-extrabold text-white">3,000+</span>
+              <span className="font-normal text-slate-300">Clientes Satisfechos</span>
             </span>
             <span className="flex items-center gap-1.5 bg-slate-900/60 backdrop-blur-sm border border-slate-800 px-3 py-1.5 rounded-full text-slate-300">
-              <TreePine className="h-3.5 w-3.5 text-emerald-400 flex-shrink-0" />
-              <span className="font-extrabold text-white">18+</span>
-              <span className="font-normal text-slate-300">Años de Trayectoria</span>
+              <Award className="h-3.5 w-3.5 text-emerald-400 flex-shrink-0" />
+              <span className="font-extrabold text-white">35+</span>
+              <span className="font-normal text-slate-300">de Experiencia</span>
             </span>
           </motion.div>
         </motion.div>

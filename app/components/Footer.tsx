@@ -2,46 +2,52 @@ import Link from 'next/link';
 import { Mail, Phone, MapPin } from 'lucide-react';
 import { FaFacebookF, FaInstagram, FaTwitter } from 'react-icons/fa';
 
-export default function Footer() {
+interface FooterProps {
+  showCTA?: boolean;
+}
+
+export default function Footer({ showCTA = true }: FooterProps) {
   return (
     <div className="relative bg-white pt-8 sm:pt-12">
       {/* Call to Action (CTA) Section */}
-      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 relative z-20 mb-[-70px] md:mb-[-90px]">
-        <div className="bg-slate-950 rounded-[32px] overflow-hidden shadow-2xl border border-slate-800 relative">
-          
-          {/* Background Hero Image */}
-          <img
-            src="/hero.webp"
-            alt="Hero background texture"
-            className="absolute inset-0 w-full h-full object-cover pointer-events-none"
-          />
+      {showCTA && (
+        <div className="max-w-[1200px] mx-auto px-4 sm:px-6 relative z-20 mb-[-70px] md:mb-[-90px]">
+          <div className="bg-slate-950 rounded-[32px] overflow-hidden shadow-2xl border border-slate-800 relative">
+            
+            {/* Background Hero Image */}
+            <img
+              src="/hero.webp"
+              alt="Hero background texture"
+              className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+            />
 
-          {/* Dark Overlay */}
-          <div className="absolute inset-0 bg-slate-950/65 z-0 pointer-events-none" />
+            {/* Dark Overlay */}
+            <div className="absolute inset-0 bg-slate-950/65 z-0 pointer-events-none" />
 
-          {/* Left-Aligned Content */}
-          <div className="relative z-10 p-8 sm:p-12 lg:p-16 flex flex-col items-start text-left space-y-6 max-w-3xl mr-auto">
-            <h2 className="text-3xl sm:text-4xl lg:text-[42px] font-bold text-white tracking-tight leading-[1.15]">
-              ¿Listo para encontrar tu hogar perfecto?
-            </h2>
-            <p className="text-slate-200 text-base sm:text-lg leading-relaxed font-normal">
-              Conectá con nuestro equipo hoy y descubrí propiedades adaptadas a tu estilo de vida, presupuesto y metas futuras.
-            </p>
-            <div className="pt-2">
-              <Link href="/propiedades" className="inline-flex items-center group relative pb-1">
-                <span className="text-base sm:text-lg font-bold text-white group-hover:text-[#ffe600] transition-colors duration-200">
-                  Comenzar Búsqueda
-                </span>
-                <span className="absolute bottom-0 left-0 w-full h-[2px] bg-white group-hover:bg-[#ffe600] origin-left scale-x-100 group-hover:scale-x-0 transition-transform duration-300"></span>
-                <span className="absolute bottom-0 left-0 w-full h-[2px] bg-[#ffe600] origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></span>
-              </Link>
+            {/* Left-Aligned Content */}
+            <div className="relative z-10 p-8 sm:p-12 lg:p-16 flex flex-col items-start text-left space-y-6 max-w-3xl mr-auto">
+              <h2 className="text-3xl sm:text-4xl lg:text-[42px] font-bold text-white tracking-tight leading-[1.15]">
+                ¿Listo para encontrar tu hogar perfecto?
+              </h2>
+              <p className="text-slate-200 text-base sm:text-lg leading-relaxed font-normal">
+                Conectá con nuestro equipo hoy y descubrí propiedades adaptadas a tu estilo de vida, presupuesto y metas futuras.
+              </p>
+              <div className="pt-2">
+                <Link href="/propiedades" className="inline-flex items-center group relative pb-1">
+                  <span className="text-base sm:text-lg font-bold text-white group-hover:text-[#ffe600] transition-colors duration-200">
+                    Comenzar Búsqueda
+                  </span>
+                  <span className="absolute bottom-0 left-0 w-full h-[2px] bg-white group-hover:bg-[#ffe600] origin-left scale-x-100 group-hover:scale-x-0 transition-transform duration-300"></span>
+                  <span className="absolute bottom-0 left-0 w-full h-[2px] bg-[#ffe600] origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></span>
+                </Link>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* Footer Element */}
-      <footer className="bg-slate-950 text-slate-400 pt-40 pb-8 relative z-10 w-full">
+      <footer className={`bg-slate-950 text-slate-400 ${showCTA ? 'pt-40' : 'pt-16'} pb-8 relative z-10 w-full`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           
           {/* Main heading in footer as requested / as in screenshot */}
@@ -127,9 +133,15 @@ export default function Footer() {
             <div>
               <h3 className="text-sm font-bold text-white mb-6">Servicios</h3>
               <ul className="space-y-3 text-sm">
-                <li className="text-slate-400 hover:text-[#ffe600] cursor-pointer transition-colors">Compra y Venta de Propiedades</li>
-                <li className="text-slate-400 hover:text-[#ffe600] cursor-pointer transition-colors">Préstamos hipotecarios</li>
-                <li className="text-slate-400 hover:text-[#ffe600] cursor-pointer transition-colors">Servicios de arquitectura</li>
+                <li>
+                  <Link href="/propiedades" className="text-slate-400 hover:text-[#ffe600] transition-colors">Compra y Venta de Propiedades</Link>
+                </li>
+                <li>
+                  <Link href="/prestamos" className="text-slate-400 hover:text-[#ffe600] transition-colors">Préstamos hipotecarios</Link>
+                </li>
+                <li>
+                  <Link href="/arquitectura" className="text-slate-400 hover:text-[#ffe600] transition-colors">Servicios de arquitectura</Link>
+                </li>
               </ul>
             </div>
 

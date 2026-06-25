@@ -5,9 +5,10 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import Navbar from '@/app/components/Navbar';
 import Footer from '@/app/components/Footer';
 import PropertyCard from '@/app/components/PropertyCard';
-import { mockProperties } from '@/app/data/properties';
+import { mockProperties, Property, mapDbToProperty, CURRENCY_CONFIG } from '@/app/data/properties';
 import { Search, RotateCcw } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { supabase } from '@/lib/supabase';
 
 function PropertiesContent() {
   const searchParams = useSearchParams();
@@ -25,6 +26,29 @@ function PropertiesContent() {
   const [selectedLocation, setSelectedLocation] = useState(initialLocation);
   const [selectedBeds, setSelectedBeds] = useState<number | 'all'>('all');
   const [maxPrice, setMaxPrice] = useState<number>(1000000);
+  const [properties, setProperties] = useState<Property[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch properties from Supabase on mount
+  useEffect(() => {
+    async function load() {
+      try {
+        const { data, error } = await supabase.from('properties').select('*').order('id');
+        if (error) throw error;
+        if (data && data.length > 0) {
+          setProperties(data.map(mapDbToProperty));
+        } else {
+          setProperties(mockProperties);
+        }
+      } catch (err) {
+        console.warn("Error loading properties from Supabase. Falling back to static mock data:", err);
+        setProperties(mockProperties);
+      } finally {
+        setLoading(false);
+      }
+    }
+    load();
+  }, []);
 
   // Synchronize with URL search params changes if there are any
   useEffect(() => {
@@ -50,7 +74,7 @@ function PropertiesContent() {
   }, []);
 
   // Filter Logic
-  const filteredProperties = mockProperties.filter((property) => {
+  const filteredProperties = properties.filter((property) => {
     // 1. Text Search (title, description, neighborhood)
     const matchesSearch =
       searchTerm === '' ||
@@ -172,12 +196,12 @@ function PropertiesContent() {
                   className="w-full bg-white border border-slate-200 focus:border-emerald-500 focus:outline-none rounded-2xl px-3 py-2.5 text-sm text-slate-900 shadow-sm cursor-pointer transition-colors"
                 >
                   <option value="">Cualquier zona</option>
-                  <option value="Escazú">Escazú, San José</option>
-                  <option value="Santa Ana">Santa Ana, San José</option>
-                  <option value="Barrio Amón">Barrio Amón, San José</option>
-                  <option value="Tamarindo">Tamarindo, Guanacaste</option>
-                  <option value="Cariari">Cariari, Heredia</option>
-                  <option value="Tres Ríos">Tres Ríos, Cartago</option>
+                  <option value="Escazú">Escazú (San José)</option>
+                  <option value="Santa Ana">Santa Ana (San José)</option>
+                  <option value="Barrio Amón">Barrio Amón (San José)</option>
+                  <option value="Tamarindo">Tamarindo (Guanacaste)</option>
+                  <option value="Cariari">Cariari (Heredia)</option>
+                  <option value="Tres Ríos">Tres Ríos (Cartago)</option>
                 </select>
               </div>
 
@@ -214,8 +238,8 @@ function PropertiesContent() {
                     <img src="/icons-filters/price.png" className="h-4 w-4 object-contain" alt="" />
                     Precio máximo
                   </span>
-                  <span className="text-slate-950 normal-case font-bold text-sm">
-                    USD {new Intl.NumberFormat('en-US').format(maxPrice)}
+                  <span className="text-slate-955 normal-case font-bold text-sm">
+                    {CURRENCY_CONFIG.mode === 'always-dollar' ? 'USD' : '₡'} {new Intl.NumberFormat('en-US').format(maxPrice)}
                   </span>
                 </div>
                 <input
@@ -228,8 +252,8 @@ function PropertiesContent() {
                   className="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-emerald-500"
                 />
                 <div className="flex justify-between text-[10px] text-slate-400 font-semibold">
-                  <span>USD 100k</span>
-                  <span>USD 1M</span>
+                  <span>{CURRENCY_CONFIG.mode === 'always-dollar' ? 'USD 100k' : '₡ 100k'}</span>
+                  <span>{CURRENCY_CONFIG.mode === 'always-dollar' ? 'USD 1M' : '₡ 1M'}</span>
                 </div>
               </div>
             </aside>

@@ -89,10 +89,10 @@ export default function PartnersCarousel() {
         {/* Centered Header */}
         <div className="text-center max-w-3xl mx-auto space-y-3 mb-12">
           <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-slate-900">
-            Partners
+            Nuestros Aliados
           </h2>
           <p className="text-slate-500 text-sm sm:text-base">
-            Trabajamos con las principales entidades financieras para facilitarte las opciones de crédito y financiamiento más convenientes.
+            Trabajamos con las principales entidades financieras del país para ofrecerte opciones de crédito y financiamiento flexibles, confiables y diseñadas para tus necesidades.
           </p>
         </div>
 
