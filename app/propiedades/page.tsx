@@ -5,6 +5,7 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import Navbar from '@/app/components/Navbar';
 import Footer from '@/app/components/Footer';
 import PropertyCard from '@/app/components/PropertyCard';
+import PropertyCardSkeleton from '@/app/components/PropertyCardSkeleton';
 import { mockProperties, Property, mapDbToProperty, CURRENCY_CONFIG } from '@/app/data/properties';
 import { Search, RotateCcw } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -20,12 +21,18 @@ function PropertiesContent() {
   const initialPriceRange = searchParams.get('price') || '';
   const initialSearch = searchParams.get('search') || '';
 
+  const isAlwaysDollar = CURRENCY_CONFIG.mode === 'always-dollar';
+  const defaultMaxPrice = isAlwaysDollar ? 1000000 : 700000000;
+  const minPrice = isAlwaysDollar ? 100000 : 5000000;
+  const maxPriceLimit = isAlwaysDollar ? 1000000 : 700000000;
+  const priceStep = isAlwaysDollar ? 25000 : 5000000;
+
   // Filter States
   const [searchTerm, setSearchTerm] = useState(initialSearch);
   const [selectedType, setSelectedType] = useState(initialType);
   const [selectedLocation, setSelectedLocation] = useState(initialLocation);
   const [selectedBeds, setSelectedBeds] = useState<number | 'all'>('all');
-  const [maxPrice, setMaxPrice] = useState<number>(1000000);
+  const [maxPrice, setMaxPrice] = useState<number>(defaultMaxPrice);
   const [properties, setProperties] = useState<Property[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -57,9 +64,10 @@ function PropertiesContent() {
     if (initialSearch) setSearchTerm(initialSearch);
     
     if (initialPriceRange) {
-      if (initialPriceRange === '0-200000') setMaxPrice(200000);
-      else if (initialPriceRange === '200000-500000') setMaxPrice(500000);
-      else if (initialPriceRange === '500000-1000000') setMaxPrice(1000000);
+      const multiplier = isAlwaysDollar ? 1 : 550;
+      if (initialPriceRange === '0-200000') setMaxPrice(200000 * multiplier);
+      else if (initialPriceRange === '200000-500000') setMaxPrice(500000 * multiplier);
+      else if (initialPriceRange === '500000-1000000') setMaxPrice(1000000 * multiplier);
     }
   }, [initialType, initialLocation, initialPriceRange, initialSearch]);
 
@@ -107,7 +115,7 @@ function PropertiesContent() {
     setSelectedType('');
     setSelectedLocation('');
     setSelectedBeds('all');
-    setMaxPrice(1000000);
+    setMaxPrice(defaultMaxPrice);
     router.push('/propiedades'); // Clear URL params
   };
 
@@ -244,16 +252,16 @@ function PropertiesContent() {
                 </div>
                 <input
                   type="range"
-                  min="100000"
-                  max="1000000"
-                  step="25000"
+                  min={minPrice}
+                  max={maxPriceLimit}
+                  step={priceStep}
                   value={maxPrice}
                   onChange={(e) => setMaxPrice(Number(e.target.value))}
                   className="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-emerald-500"
                 />
                 <div className="flex justify-between text-[10px] text-slate-400 font-semibold">
-                  <span>{CURRENCY_CONFIG.mode === 'always-dollar' ? 'USD 100k' : '₡ 100k'}</span>
-                  <span>{CURRENCY_CONFIG.mode === 'always-dollar' ? 'USD 1M' : '₡ 1M'}</span>
+                  <span>{isAlwaysDollar ? 'USD 100k' : '₡ 5M'}</span>
+                  <span>{isAlwaysDollar ? 'USD 1M' : '₡ 700M'}</span>
                 </div>
               </div>
             </aside>
@@ -270,44 +278,52 @@ function PropertiesContent() {
               </div>
 
               {/* Grid List */}
-              <AnimatePresence mode="popLayout">
-                {filteredProperties.length > 0 ? (
-                  <motion.div
-                    layout
-                    className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6"
-                  >
-                    {filteredProperties.map((property) => (
-                      <motion.div
-                        key={property.id}
-                        layout
-                        initial={{ opacity: 0, scale: 0.95 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0, scale: 0.95 }}
-                        transition={{ duration: 0.3 }}
-                      >
-                        <PropertyCard property={property} />
-                      </motion.div>
-                    ))}
-                  </motion.div>
-                ) : (
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="bg-slate-50 border border-slate-200/60 text-center py-20 px-4 rounded-3xl space-y-4 shadow-sm"
-                  >
-                    <p className="text-slate-950 text-lg font-semibold">No encontramos propiedades con estos filtros</p>
-                    <p className="text-slate-500 text-sm max-w-md mx-auto">
-                      Intentá reiniciar los filtros o buscar palabras clave más generales para encontrar propiedades publicadas por sus dueños.
-                    </p>
-                    <button
-                      onClick={resetFilters}
-                      className="bg-white border border-slate-200 text-slate-800 font-bold px-6 py-2.5 rounded-2xl text-xs hover:border-emerald-500/30 hover:text-emerald-600 transition-colors shadow-sm cursor-pointer"
+              {loading ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                  {Array.from({ length: 6 }).map((_, i) => (
+                    <PropertyCardSkeleton key={i} />
+                  ))}
+                </div>
+              ) : (
+                <AnimatePresence mode="popLayout">
+                  {filteredProperties.length > 0 ? (
+                    <motion.div
+                      layout
+                      className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6"
                     >
-                      Restablecer Filtros
-                    </button>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+                      {filteredProperties.map((property) => (
+                        <motion.div
+                          key={property.id}
+                          layout
+                          initial={{ opacity: 0, scale: 0.95 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          exit={{ opacity: 0, scale: 0.95 }}
+                          transition={{ duration: 0.3 }}
+                        >
+                          <PropertyCard property={property} />
+                        </motion.div>
+                      ))}
+                    </motion.div>
+                  ) : (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="bg-slate-50 border border-slate-200/60 text-center py-20 px-4 rounded-3xl space-y-4 shadow-sm"
+                    >
+                      <p className="text-slate-950 text-lg font-semibold">No encontramos propiedades con estos filtros</p>
+                      <p className="text-slate-500 text-sm max-w-md mx-auto">
+                        Intentá reiniciar los filtros o buscar palabras clave más generales para encontrar propiedades publicadas por sus dueños.
+                      </p>
+                      <button
+                        onClick={resetFilters}
+                        className="bg-white border border-slate-200 text-slate-800 font-bold px-6 py-2.5 rounded-2xl text-xs hover:border-emerald-500/30 hover:text-emerald-600 transition-colors shadow-sm cursor-pointer"
+                      >
+                        Restablecer Filtros
+                      </button>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              )}
             </div>
 
           </div>

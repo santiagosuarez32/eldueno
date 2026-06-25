@@ -6,11 +6,13 @@ import { motion } from 'framer-motion';
 import { ArrowLeft, ArrowRight, ArrowUpRight, Bed, Bath, Square, MapPin } from 'lucide-react';
 import { TbBed, TbBath, TbRuler2 } from 'react-icons/tb';
 import { mockProperties, Property, mapDbToProperty, formatPropertyPrice } from '@/app/data/properties';
+import { FeaturedCardSkeleton } from '@/app/components/PropertyCardSkeleton';
 import { supabase } from '@/lib/supabase';
 
 export default function FeaturedProperties() {
   const carouselRef = useRef<HTMLDivElement>(null);
   const [properties, setProperties] = useState<Property[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function load() {
@@ -18,7 +20,7 @@ export default function FeaturedProperties() {
         const { data, error } = await supabase
           .from('properties')
           .select('*')
-          .eq('published', true);
+          .eq('featured', true);
         if (error) throw error;
         if (data && data.length > 0) {
           setProperties(data.map(mapDbToProperty));
@@ -28,6 +30,8 @@ export default function FeaturedProperties() {
       } catch (err) {
         console.warn("Error loading featured properties from Supabase. Falling back to local mocks:", err);
         setProperties(mockProperties.filter(p => p.featured));
+      } finally {
+        setLoading(false);
       }
     }
     load();
@@ -107,7 +111,14 @@ export default function FeaturedProperties() {
             maskImage: 'linear-gradient(to right, transparent, black 40px, black calc(100% - 40px), transparent)'
           }}
         >
-            {properties.map((property) => {
+          {loading ? (
+            <>
+              {Array.from({ length: 3 }).map((_, i) => (
+                <FeaturedCardSkeleton key={i} />
+              ))}
+            </>
+          ) : (
+            properties.map((property) => {
               const formattedPrice = formatPropertyPrice(property.price, property.moneda);
 
               return (
@@ -199,7 +210,8 @@ export default function FeaturedProperties() {
                   </motion.div>
                 </Link>
               );
-            })}
+            })
+          )}
           </div>
       </div>
     </section>

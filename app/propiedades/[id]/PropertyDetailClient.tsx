@@ -5,30 +5,16 @@ import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   ArrowLeft,
-  Bed,
-  Bath,
-  Square,
   MapPin,
-  Shield,
-  Calendar,
-  DollarSign,
   Phone,
-  MessageCircle,
-  AlertTriangle,
-  Heart,
   Share,
-  ChevronLeft,
-  ChevronRight,
-  Sparkles,
-  Navigation,
-  X,
-  Compass,
   CheckCircle,
   Film,
   Send
 } from 'lucide-react';
 import { Property, formatPropertyPrice } from '@/app/data/properties';
 import { FaWhatsapp } from 'react-icons/fa';
+import LightboxGallery from '@/app/components/LightboxGallery';
 
 interface PropertyDetailClientProps {
   property: Property;
@@ -51,7 +37,6 @@ export default function PropertyDetailClient({ property, relatedProperties }: Pr
   const [isSaved, setIsSaved] = useState(false);
   const [showShareToast, setShowShareToast] = useState(false);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
-  const [lightboxZoom, setLightboxZoom] = useState(false);
 
   // Description Read More State
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
@@ -600,99 +585,16 @@ export default function PropertyDetailClient({ property, relatedProperties }: Pr
 
       </div>
 
-      {/* FULLSCREEN LIGHTBOX MODAL */}
+      {/* FULLSCREEN LIGHTBOX MODAL with Zoom + Pan */}
       <AnimatePresence>
         {isLightboxOpen && (
-          <div 
-            onClick={() => setIsLightboxOpen(false)}
-            className="fixed inset-0 z-[100] flex flex-col items-center justify-between bg-black/95 p-4 select-none"
-          >
-            {/* Top Bar */}
-            <div 
-              onClick={(e) => e.stopPropagation()}
-              className="w-full flex items-center justify-between z-10 px-4 py-2"
-            >
-              <span className="text-white text-xs sm:text-sm font-medium truncate max-w-[50vw]">
-                {property.title}
-              </span>
-              <div className="flex items-center gap-4">
-                <button
-                  onClick={() => {
-                    setIsLightboxOpen(false);
-                  }}
-                  className="text-white hover:text-slate-300 p-2 bg-slate-900 border border-slate-800 rounded-xl cursor-pointer"
-                  aria-label="Cerrar galería"
-                >
-                  <X className="h-5 w-5" />
-                </button>
-              </div>
-            </div>
-
-            {/* Main Image Viewport */}
-            <div className="relative flex-grow w-full flex items-center justify-center overflow-hidden">
-              {/* Navigation chevrons inside lightbox */}
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handlePrevImage();
-                }}
-                className="absolute left-4 p-3 rounded-full bg-slate-900/60 hover:bg-slate-900 border border-slate-800 text-white z-20 cursor-pointer"
-              >
-                <ChevronLeft className="h-8 w-8" />
-              </button>
-              
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleNextImage();
-                }}
-                className="absolute right-4 p-3 rounded-full bg-slate-900/60 hover:bg-slate-900 border border-slate-800 text-white z-20 cursor-pointer"
-              >
-                <ChevronRight className="h-8 w-8" />
-              </button>
-
-              {/* Lightbox Image Container */}
-              <div 
-                className="w-full h-full flex items-center justify-center overflow-auto p-4 md:p-8 select-none"
-                onClick={() => setIsLightboxOpen(false)}
-              >
-                <motion.img
-                  key={activeImage}
-                  src={property.gallery[activeImage]}
-                  alt={`${property.title} - Foto ${activeImage + 1}`}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.35, ease: 'easeInOut' }}
-                  className="object-contain max-w-[85vw] max-h-[75vh] rounded-none transition-all duration-300 ease-in-out shadow-2xl"
-                  onClick={(e) => e.stopPropagation()}
-                />
-              </div>
-            </div>
-
-            {/* Bottom Bar info */}
-            <div 
-              onClick={(e) => e.stopPropagation()}
-              className="w-full flex flex-col items-center gap-4 z-10 py-2">
-              <span className="text-white/60 text-xs font-semibold">
-                Foto {activeImage + 1} de {property.gallery.length}
-              </span>
-              
-              {/* Dots navigation */}
-              <div className="flex gap-2 bg-slate-900/50 px-4 py-2 rounded-full border border-slate-850">
-                {property.gallery.map((_, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => setActiveImage(idx)}
-                    className={`h-1.5 w-1.5 rounded-full transition-all duration-300 cursor-pointer ${
-                      idx === activeImage ? 'bg-white scale-110' : 'bg-white/30 hover:bg-white/60'
-                    }`}
-                    aria-label={`Ir a foto ${idx + 1}`}
-                  />
-                ))}
-              </div>
-            </div>
-          </div>
+          <LightboxGallery
+            gallery={property.gallery}
+            title={property.title}
+            activeIndex={activeImage}
+            onClose={() => setIsLightboxOpen(false)}
+            onChangeIndex={(idx) => setActiveImage(idx)}
+          />
         )}
       </AnimatePresence>
     </main>
