@@ -3,10 +3,8 @@
 import { useEffect } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { ArrowRight, ClipboardCheck } from 'lucide-react';
 import Navbar from '@/app/components/Navbar';
 import Footer from '@/app/components/Footer';
-import { FlowButton } from '@/app/components/FlowButton';
 
 export default function ArquitecturaPage() {
   // Force body background to white for light theme feel
@@ -84,10 +82,6 @@ export default function ArquitecturaPage() {
           {/* Hero Content */}
           <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
             <div className="max-w-4xl space-y-6">
-              <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-transparent border border-emerald-500/30 text-emerald-400 text-xs font-bold uppercase tracking-wider">
-                Arquitectura Profesional
-              </div>
-
               <div className="space-y-4">
                 <motion.h1
                   initial={{ opacity: 0, y: 30 }}
@@ -111,76 +105,87 @@ export default function ArquitecturaPage() {
           </div>
         </section>
 
-        {/* SERVICES SECTION - Clean Typographic List (No cards, no color icon boxes) */}
-        <section className="py-24 bg-white">
+        {/* SERVICES SECTION - Bento Grid style matching the reference image */}
+        <section className="py-24 bg-slate-50/30">
           <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center max-w-3xl mx-auto space-y-4 mb-20">
-              <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-slate-950">
-                Especialidades y Soluciones
-              </h2>
-              <p className="text-slate-500 text-base sm:text-lg">
-                Desarrollamos proyectos inmobiliarios bajo altos estándares estéticos y funcionales en toda el Área Metropolitana.
-              </p>
-            </div>
-
-            {/* Typography Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-16 gap-y-16">
-              {services.map((service, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-50px" }}
-                  transition={{ duration: 0.6, delay: index * 0.05 }}
-                  className="space-y-4 border-t border-slate-100 pt-6"
-                >
-                  <div className="text-4xl sm:text-5xl font-extrabold text-emerald-500/20 tracking-tight">
-                    {service.number}
-                  </div>
-                  <h3 className="text-xl sm:text-2xl font-bold text-slate-950">
-                    {service.title}
-                  </h3>
-                  <p className="text-slate-500 text-sm sm:text-base leading-relaxed font-normal">
-                    {service.description}
-                  </p>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* CTA BANNER - Minimalist dark layout matching "Nosotros" */}
-        <section className="bg-slate-950 py-20 text-white relative overflow-hidden">
-          <div className="absolute inset-0 bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:24px_24px] opacity-20 pointer-events-none" />
-          
-          <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div className="max-w-4xl space-y-6">
-              <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-transparent border border-white/25 text-white/80 text-xs font-bold uppercase tracking-wider">
-                <ClipboardCheck className="h-3.5 w-3.5" />
-                Asesoría Gratuita
-              </div>
-              <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-white leading-tight">
-                ¿Listo para planificar tu próxima construcción o remodelación?
-              </h2>
-              <p className="text-slate-300 text-sm sm:text-base leading-relaxed max-w-2xl font-normal">
-                Ponete en contacto con nuestro equipo de arquitectura y obtené soluciones personalizadas para tus espacios. Estudiamos cada caso para ofrecerte la mayor eficiencia.
-              </p>
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
               
-              <div className="pt-4 flex flex-wrap items-center gap-4">
-                <Link href="/contacto?servicio=arquitectura">
-                  <FlowButton text="Más información" variant="primary" />
-                </Link>
-                <Link href="/contacto" className="inline-flex items-center gap-2 text-slate-400 hover:text-white font-bold transition-colors text-sm px-6 h-12">
-                  Contactar Asesor
-                  <ArrowRight className="h-4 w-4" />
-                </Link>
-              </div>
+              {/* Left Side: Large Image Card */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ duration: 0.5, delay: 0.1 }}
+                className="lg:col-span-4 relative rounded-[24px] overflow-hidden min-h-[350px] lg:min-h-[600px] shadow-[0_2px_8px_rgba(0,0,0,0.015)] border border-slate-200/60 group bg-slate-100"
+              >
+                <img
+                  src="/services/arquitectura.webp"
+                  alt="Diseño y planificación arquitectónica"
+                  className="w-full h-full object-cover object-center group-hover:scale-102 transition-transform duration-700"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/20 via-transparent to-transparent pointer-events-none" />
+              </motion.div>
+
+              {/* Right Side: Content card containing Title, Paragraph, Button and all 6 Cards */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="lg:col-span-8 bg-white border border-slate-200/60 rounded-[24px] p-6 sm:p-10 lg:p-12 flex flex-col justify-between gap-10 shadow-[0_2px_8px_rgba(0,0,0,0.015)]"
+              >
+                {/* Title & Description */}
+                <div className="space-y-5">
+                  <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+                    <div className="space-y-3 max-w-xl">
+                      <h2 className="text-3xl sm:text-4xl lg:text-[42px] font-bold tracking-tight text-slate-900 leading-[1.1]">
+                        Nuestros servicios
+                      </h2>
+                      <p className="text-slate-500 text-sm sm:text-base leading-relaxed font-normal">
+                        Aseguramos la máxima calidad y legalidad en cada fase de la obra, desde la valoración del terreno hasta la entrega llave en mano.
+                      </p>
+                    </div>
+                    <div className="flex-shrink-0">
+                      <Link
+                        href="/contacto?servicio=arquitectura"
+                        className="inline-flex items-center justify-center px-6 h-12 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-full transition-all duration-200 text-sm shadow-sm hover:shadow"
+                      >
+                        Iniciar Consulta
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Grid of all 6 cards inside */}
+                {/* List of all 6 cards stacked vertically in a single column */}
+                <div className="grid grid-cols-1 gap-4 pt-8 border-t border-slate-100">
+                  {services.map((service, index) => (
+                    <div
+                      key={index}
+                      className="group p-5 rounded-2xl bg-slate-50 border border-slate-200/60 shadow-[0_2px_8px_rgba(0,0,0,0.005)] hover:border-emerald-500/20 hover:bg-white hover:shadow-[0_4px_16px_rgba(0,0,0,0.02)] transition-all duration-300 flex items-start gap-5"
+                    >
+                      <div className="text-xs font-semibold text-slate-400 tracking-widest font-mono pt-1">
+                        {service.number}
+                      </div>
+                      <div className="space-y-1">
+                        <h4 className="font-bold text-slate-900 text-sm sm:text-base group-hover:text-emerald-600 transition-colors duration-200">
+                          {service.title}
+                        </h4>
+                        <p className="text-slate-500 text-xs sm:text-sm leading-relaxed font-normal">
+                          {service.description}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </motion.div>
             </div>
           </div>
         </section>
+
 
       </main>
-      <Footer />
+      <Footer showCTA={false} />
     </>
   );
 }
