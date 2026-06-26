@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ShieldCheck } from 'lucide-react';
 import { Property, formatPropertyPrice } from '@/app/data/properties';
+import { getOptimizedImageUrl } from '@/lib/utils';
 
 interface PropertyCardProps {
   property: Property;
@@ -50,18 +51,13 @@ export default function PropertyCard({ property }: PropertyCardProps) {
             </span>
           </div>
 
-          {/* Property Image / Gradient Mock */}
-          <div className="relative w-full h-full transform group-hover:scale-105 transition-transform duration-500 ease-out">
-            {/* Fallback elegant gradient background if image isn't loaded */}
-            <div className="absolute inset-0 bg-gradient-to-tr from-slate-100 via-slate-50 to-slate-200 flex items-center justify-center">
-              <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#000_1px,transparent_1px)] [background-size:16px_16px]" />
-              <span className="text-xs text-slate-400">Imágenes de la propiedad</span>
-            </div>
-            
+          {/* Property Image */}
+          <div className="relative w-full h-full transform group-hover:scale-105 transition-transform duration-500 ease-out bg-slate-100">
             <img
-              src={property.image}
+              src={getOptimizedImageUrl(property.image || '/images/placeholder.webp', 600)}
               alt={property.title}
               className="w-full h-full object-cover relative z-10"
+              loading="lazy"
               onError={(e) => {
                 e.currentTarget.style.display = 'none';
               }}

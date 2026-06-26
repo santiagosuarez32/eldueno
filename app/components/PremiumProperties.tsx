@@ -4,6 +4,7 @@ import { useRef, useState, useEffect } from 'react';
 import Link from 'next/link';
 import { ArrowRight, ArrowLeft } from 'lucide-react';
 import { mockProperties, Property, mapDbToProperty, formatPropertyPrice } from '@/app/data/properties';
+import { getOptimizedImageUrl } from '@/lib/utils';
 import { supabase } from '@/lib/supabase';
 
 export default function PremiumProperties() {
@@ -159,9 +160,10 @@ export default function PremiumProperties() {
                     isActive ? 'h-[220px] rounded-[20px]' : 'h-full rounded-[32px]'
                   }`}>
                     <img
-                      src={property.image}
+                      src={getOptimizedImageUrl(property.image || '/images/placeholder.webp', 800)}
                       alt={property.title}
                       className="absolute inset-0 w-full h-full object-cover"
+                      loading="lazy"
                     />
                     {/* Dark overlay for inactive text readability, fades out when active */}
                     <div className={`absolute inset-0 bg-gradient-to-t from-slate-950/95 via-slate-950/45 to-transparent transition-opacity duration-500 ${

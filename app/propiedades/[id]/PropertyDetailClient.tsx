@@ -15,6 +15,7 @@ import {
 import { Property, formatPropertyPrice } from '@/app/data/properties';
 import { FaWhatsapp } from 'react-icons/fa';
 import LightboxGallery from '@/app/components/LightboxGallery';
+import { getOptimizedImageUrl } from '@/lib/utils';
 
 interface PropertyDetailClientProps {
   property: Property;
@@ -231,9 +232,10 @@ export default function PropertyDetailClient({ property, relatedProperties }: Pr
             className="col-span-1 md:col-span-8 relative aspect-video md:aspect-auto md:h-[500px] rounded-3xl overflow-hidden cursor-zoom-in group bg-slate-100 shadow-sm border border-slate-200/40"
           >
             <img
-              src={property.gallery[0]}
+              src={getOptimizedImageUrl(property.gallery[0], 1200)}
               alt={`${property.title} - Principal`}
               className="w-full h-full absolute inset-0 object-cover transform group-hover:scale-[1.015] transition-transform duration-500 ease-out"
+              fetchPriority="high"
             />
             <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors duration-300 pointer-events-none" />
             
@@ -285,9 +287,10 @@ export default function PropertyDetailClient({ property, relatedProperties }: Pr
               className="flex-1 relative aspect-video md:aspect-auto md:h-[calc(50%-8px)] rounded-3xl overflow-hidden cursor-zoom-in group bg-slate-100 shadow-sm border border-slate-200/40"
             >
               <img
-                src={property.gallery[1] || property.image}
+                src={getOptimizedImageUrl(property.gallery[1] || property.image, 600)}
                 alt={`${property.title} - Detalle 1`}
                 className="w-full h-full absolute inset-0 object-cover transform group-hover:scale-[1.015] transition-transform duration-500 ease-out"
+                loading="lazy"
               />
               <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors duration-300 pointer-events-none" />
             </div>
@@ -301,9 +304,10 @@ export default function PropertyDetailClient({ property, relatedProperties }: Pr
               className="flex-1 relative aspect-video md:aspect-auto md:h-[calc(50%-8px)] rounded-3xl overflow-hidden cursor-zoom-in group bg-slate-100 shadow-sm border border-slate-200/40"
             >
               <img
-                src={property.gallery[2] || property.image}
+                src={getOptimizedImageUrl(property.gallery[2] || property.image, 600)}
                 alt={`${property.title} - Detalle 2`}
-                className="w-full h-full absolute inset-0 object-cover transform group-hover:scale-[1.015] transition-transform duration-500 ease-out"
+                className="w-full h-full absolute inset-0 object-cover transform group-hover:scale-[1.015] transition-transform duration-500 ease-out group-hover:brightness-[0.35]"
+                loading="lazy"
               />
               <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors duration-300 pointer-events-none" />
               

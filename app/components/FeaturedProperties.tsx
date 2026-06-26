@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ArrowLeft, ArrowRight, ArrowUpRight, Bed, Bath, Square, MapPin } from 'lucide-react';
 import { TbBed, TbBath, TbRuler2 } from 'react-icons/tb';
+import { getOptimizedImageUrl } from '@/lib/utils';
 import { mockProperties, Property, mapDbToProperty, formatPropertyPrice } from '@/app/data/properties';
 import { FeaturedCardSkeleton } from '@/app/components/PropertyCardSkeleton';
 import { supabase } from '@/lib/supabase';
@@ -103,7 +104,7 @@ export default function FeaturedProperties() {
         {/* Carousel Container */}
         <div 
           ref={carouselRef}
-          className="flex gap-0 lg:gap-6 overflow-x-auto pb-8 snap-x snap-mandatory scroll-smooth hide-scrollbar w-screen -mx-4 sm:-mx-6 lg:w-full lg:mx-0 px-4"
+          className="flex gap-4 lg:gap-5 overflow-x-auto pb-8 snap-x snap-mandatory scroll-smooth hide-scrollbar w-screen -mx-4 sm:-mx-6 lg:w-full lg:mx-0 px-4"
           style={{
             scrollbarWidth: 'none',
             msOverflowStyle: 'none',
@@ -113,7 +114,7 @@ export default function FeaturedProperties() {
         >
           {loading ? (
             <>
-              {Array.from({ length: 3 }).map((_, i) => (
+              {Array.from({ length: 4 }).map((_, i) => (
                 <FeaturedCardSkeleton key={i} />
               ))}
             </>
@@ -125,7 +126,7 @@ export default function FeaturedProperties() {
                 <Link
                   key={property.id}
                   href={`/propiedades/${property.id}`}
-                  className="w-screen shrink-0 snap-center px-4 sm:px-6 lg:w-[670px] lg:shrink lg:snap-start lg:px-0 block cursor-pointer"
+                  className="w-[85vw] sm:w-[75vw] shrink-0 snap-center lg:w-[calc(25%-15px)] lg:shrink-0 lg:snap-start block cursor-pointer"
                 >
                   <motion.div
                     initial={{ opacity: 0, y: 30 }}
@@ -154,56 +155,56 @@ export default function FeaturedProperties() {
                         </span>
                       </div>
 
-                      {/* Property Image */}
+                      {/* Price Tag Overlay (like catalog cards) */}
+                      <div className="absolute bottom-4 right-4 z-10 bg-slate-950 text-white font-bold px-4 py-2 rounded-2xl shadow-md text-sm">
+                        {formattedPrice}
+                      </div>
+
                       <img
-                        src={property.image}
+                        src={getOptimizedImageUrl(property.image || '/images/placeholder.webp', 600)}
                         alt={property.title}
                         className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out"
+                        loading="lazy"
                         onError={(e) => {
                           e.currentTarget.style.display = 'none';
                         }}
                       />
-                      {/* Fallback pattern */}
-                      <div className="absolute inset-0 bg-gradient-to-tr from-slate-100 to-slate-200 -z-10 flex items-center justify-center">
-                        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#000_1px,transparent_1px)] [background-size:16px_16px]" />
-                        <span className="text-xs text-slate-455 font-semibold">Imágenes de la propiedad</span>
-                      </div>
                     </div>
 
                     {/* Content Section */}
-                    <div className="px-6 pt-5 pb-5 sm:px-10 sm:pt-6 sm:pb-6 flex flex-col flex-grow bg-white">
+                    <div className="px-6 pt-5 pb-5 sm:px-8 sm:pt-5 sm:pb-5 flex flex-col flex-grow bg-white">
                       
-                      {/* Title & Price Header */}
-                      <div className="flex justify-between items-start gap-6 mb-2">
-                        <div className="space-y-1.5 flex-grow">
-                          <h3 className="text-base sm:text-xl font-semibold text-slate-950 group-hover:text-emerald-500 transition-colors line-clamp-1 leading-snug">
-                            {property.title}
-                          </h3>
-                          <p className="text-xs sm:text-base text-slate-500 font-normal">
-                            {property.neighborhood}, {property.location}
-                          </p>
-                        </div>
-
-                        <div className="text-left shrink-0">
-                          <span className="text-[10px] sm:text-xs text-slate-400 font-normal block">Precio:</span>
-                          <span className="text-lg sm:text-2xl font-bold text-slate-955 block">{formattedPrice}</span>
-                        </div>
+                      {/* Location */}
+                      <div className="flex items-center text-xs text-slate-500 mb-2 gap-1.5 font-medium">
+                        <img src="/icons-filters/ubication.png" className="h-4 w-4 object-contain shrink-0" alt="" />
+                        <span>{property.neighborhood}, {property.location}</span>
                       </div>
 
+                      {/* Title */}
+                      <h3 className="text-base sm:text-lg font-bold text-slate-950 group-hover:text-emerald-500 transition-colors line-clamp-1 leading-snug mb-4">
+                        {property.title}
+                      </h3>
+
                       {/* Property Specs */}
-                      <div className="flex items-center gap-6 sm:gap-8 text-xs sm:text-base text-slate-605 font-normal mt-2.5">
-                        <div className="flex items-center gap-2">
-                          <img src="/icons-property/dormitorios.png" className="h-5 w-5 object-contain flex-shrink-0" alt="" />
-                          <span>{property.beds} Dorms</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <img src="/icons-property/baños.png" className="h-5 w-5 object-contain flex-shrink-0" alt="" />
-                          <span>{property.baths} Baños</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <img src="/icons-property/m2.png" className="h-5 w-5 object-contain flex-shrink-0" alt="" />
-                          <span>{property.area} m²</span>
-                        </div>
+                      <div className="flex items-center gap-5 sm:gap-6 text-xs text-slate-600 font-medium pt-3 border-t border-slate-100 mt-auto">
+                        {property.beds != null && (
+                          <div className="flex items-center gap-1.5">
+                            <img src="/icons-property/dormitorios.png" className="h-4.5 w-4.5 object-contain flex-shrink-0" alt="" />
+                            <span className="font-semibold text-slate-700">{property.beds} Dorms</span>
+                          </div>
+                        )}
+                        {property.baths != null && (
+                          <div className="flex items-center gap-1.5">
+                            <img src="/icons-property/baños.png" className="h-4.5 w-4.5 object-contain flex-shrink-0" alt="" />
+                            <span className="font-semibold text-slate-700">{property.baths} Baños</span>
+                          </div>
+                        )}
+                        {property.area != null && (
+                          <div className="flex items-center gap-1.5">
+                            <img src="/icons-property/m2.png" className="h-4.5 w-4.5 object-contain flex-shrink-0" alt="" />
+                            <span className="font-semibold text-slate-700">{property.area} m²</span>
+                          </div>
+                        )}
                       </div>
 
                     </div>

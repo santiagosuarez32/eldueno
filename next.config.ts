@@ -10,6 +10,18 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'cenvyabnflzrygiengzj.supabase.co',
+      },
+      {
+        protocol: 'https',
+        hostname: 'www.elduenovende.com',
+      }
+    ],
+  },
 };
 
 export default nextConfig;

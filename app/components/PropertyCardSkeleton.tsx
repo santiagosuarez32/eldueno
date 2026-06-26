@@ -58,7 +58,7 @@ export default function PropertyCardSkeleton() {
  */
 export function FeaturedCardSkeleton() {
   return (
-    <div className="w-screen shrink-0 snap-center px-4 sm:px-6 lg:w-[670px] lg:shrink lg:snap-start lg:px-0">
+    <div className="w-[85vw] sm:w-[75vw] shrink-0 snap-center lg:w-[calc(25%-15px)] lg:shrink-0 lg:snap-start">
       <div className="w-full bg-white border border-slate-200/60 rounded-[32px] overflow-hidden flex flex-col h-full">
         {/* Image Skeleton */}
         <div className="relative aspect-[16/10] w-full overflow-hidden bg-slate-100">

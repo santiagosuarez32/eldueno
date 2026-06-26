@@ -36,6 +36,10 @@ function PropertiesContent() {
   const [properties, setProperties] = useState<Property[]>([]);
   const [loading, setLoading] = useState(true);
 
+  // Pagination State
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 9;
+
   // Fetch properties from Supabase on mount
   useEffect(() => {
     async function load() {
@@ -109,6 +113,17 @@ function PropertiesContent() {
 
     return matchesSearch && matchesType && matchesLocation && (property.type === 'terreno' ? true : matchesBeds) && matchesPrice;
   });
+
+  // Reset page to 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, selectedType, selectedLocation, selectedBeds, maxPrice]);
+
+  const totalPages = Math.ceil(filteredProperties.length / itemsPerPage);
+  const paginatedProperties = filteredProperties.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   const resetFilters = () => {
     setSearchTerm('');
@@ -291,7 +306,7 @@ function PropertiesContent() {
                       layout
                       className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6"
                     >
-                      {filteredProperties.map((property) => (
+                      {paginatedProperties.map((property) => (
                         <motion.div
                           key={property.id}
                           layout
@@ -323,6 +338,56 @@ function PropertiesContent() {
                     </motion.div>
                   )}
                 </AnimatePresence>
+              )}
+
+              {/* Pagination Controls */}
+              {!loading && totalPages > 1 && (
+                <div className="flex justify-center items-center gap-2 pt-8 pb-4">
+                  <button
+                    onClick={() => {
+                      setCurrentPage((p) => Math.max(1, p - 1));
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }}
+                    disabled={currentPage === 1}
+                    className="px-4 py-2 rounded-xl border border-slate-200 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-emerald-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  >
+                    Anterior
+                  </button>
+                  
+                  <div className="flex items-center gap-1.5">
+                    {Array.from({ length: totalPages }).map((_, i) => {
+                      const page = i + 1;
+                      const isCurrent = page === currentPage;
+                      return (
+                        <button
+                          key={page}
+                          onClick={() => {
+                            setCurrentPage(page);
+                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                          }}
+                          className={`w-9 h-9 rounded-xl text-sm font-bold flex items-center justify-center transition-all duration-200 ${
+                            isCurrent
+                              ? 'bg-emerald-500 text-slate-950 shadow-md'
+                              : 'text-slate-500 hover:bg-slate-100 hover:text-slate-900'
+                          }`}
+                        >
+                          {page}
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  <button
+                    onClick={() => {
+                      setCurrentPage((p) => Math.min(totalPages, p + 1));
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }}
+                    disabled={currentPage === totalPages}
+                    className="px-4 py-2 rounded-xl border border-slate-200 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-emerald-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  >
+                    Siguiente
+                  </button>
+                </div>
               )}
             </div>
 
