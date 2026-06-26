@@ -1,17 +1,38 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Navbar from '@/app/components/Navbar';
 import Footer from '@/app/components/Footer';
 import Link from 'next/link';
 import { Search, ArrowUpRight } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { mockBlogPosts } from '@/app/data/blog';
+import { mockBlogPosts, mapDbToBlogPost, BlogPost } from '@/app/data/blog';
+import { supabase } from '@/lib/supabase';
 
 export default function BlogPage() {
   const [searchTerm, setSearchTerm] = useState('');
+  const [posts, setPosts] = useState<BlogPost[]>(mockBlogPosts);
 
-  const filteredPosts = mockBlogPosts.filter(post => 
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('blogs')
+          .select('*')
+          .eq('published', true)
+          .order('created_at', { ascending: false });
+
+        if (!error && data && data.length > 0) {
+          setPosts(data.map(mapDbToBlogPost));
+        }
+      } catch (err) {
+        console.warn('Could not fetch blogs from Supabase, using mock fallback', err);
+      }
+    };
+    fetchPosts();
+  }, []);
+
+  const filteredPosts = posts.filter(post => 
     post.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
     post.excerpt.toLowerCase().includes(searchTerm.toLowerCase()) ||
     post.category.toLowerCase().includes(searchTerm.toLowerCase())

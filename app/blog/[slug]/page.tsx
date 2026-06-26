@@ -1,8 +1,9 @@
 import type { Metadata } from 'next';
 import Navbar from '@/app/components/Navbar';
 import Footer from '@/app/components/Footer';
-import { mockBlogPosts } from '@/app/data/blog';
+import { mockBlogPosts, mapDbToBlogPost } from '@/app/data/blog';
 import BlogPostDetailClient from './BlogPostDetailClient';
+import { supabase } from '@/lib/supabase';
 
 interface BlogPostDetailPageProps {
   params: Promise<{ slug: string }>;
@@ -12,7 +13,12 @@ export async function generateMetadata({
   params,
 }: BlogPostDetailPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const post = mockBlogPosts.find((p) => p.slug === slug);
+  
+  let post = mockBlogPosts.find((p) => p.slug === slug);
+  const { data } = await supabase.from('blogs').select('*').eq('slug', slug).single();
+  if (data) {
+    post = mapDbToBlogPost(data);
+  }
 
   if (!post) {
     return {
@@ -49,7 +55,12 @@ export async function generateMetadata({
 
 export default async function BlogPostDetailPage({ params }: BlogPostDetailPageProps) {
   const { slug } = await params;
-  const post = mockBlogPosts.find((p) => p.slug === slug);
+  
+  let post = mockBlogPosts.find((p) => p.slug === slug);
+  const { data: postData } = await supabase.from('blogs').select('*').eq('slug', slug).single();
+  if (postData) {
+    post = mapDbToBlogPost(postData);
+  }
 
   if (!post) {
     return (
@@ -66,8 +77,17 @@ export default async function BlogPostDetailPage({ params }: BlogPostDetailPageP
     );
   }
 
-  const relatedPosts = mockBlogPosts.filter((p) => p.slug !== post.slug);
-
+  let relatedPosts = mockBlogPosts.filter((p) => p.slug !== post?.slug);
+  const { data: relatedData } = await supabase
+    .from('blogs')
+    .select('*')
+    .eq('published', true)
+    .neq('slug', slug)
+    .limit(3);
+    
+  if (relatedData && relatedData.length > 0) {
+    relatedPosts = relatedData.map(mapDbToBlogPost);
+  }
   return (
     <>
       <Navbar />

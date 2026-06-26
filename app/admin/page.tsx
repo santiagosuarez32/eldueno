@@ -19,6 +19,8 @@ import Navbar from "@/app/components/Navbar";
 import Footer from "@/app/components/Footer";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import BlogsAdminTab from "./BlogsAdminTab";
+import UsersAdminTab from "./UsersAdminTab";
 
 const BRAND_COLOR = "#ffe600";
 const BRAND_HOVER = "#ffff33";
@@ -49,6 +51,7 @@ type Property = {
   published: boolean | null;
   vendido?: boolean | null;
   alquilado?: boolean | null;
+  premium?: boolean | null;
   age?: number | null;
   created_at?: string | null;
 };
@@ -76,6 +79,7 @@ type FormState = {
   published: boolean;
   vendido: boolean;
   alquilado: boolean;
+  premium: boolean;
   age: number | null;
   created_at: string;
   storageFolder: string;
@@ -127,6 +131,7 @@ function mapDbToAdminProperty(dbProp: any): Property {
     published: dbProp.featured !== undefined ? Boolean(dbProp.featured) : Boolean(dbProp.published),
     vendido: dbProp.vendido !== undefined ? Boolean(dbProp.vendido) : Boolean(owner.vendido),
     alquilado: dbProp.alquilado !== undefined ? Boolean(dbProp.alquilado) : Boolean(owner.alquilado),
+    premium: dbProp.premium !== undefined ? Boolean(dbProp.premium) : Boolean(owner.premium),
     age: dbProp.age !== undefined && dbProp.age !== null ? toInt(dbProp.age) : null,
     created_at: dbProp.created_at || null
   };
@@ -145,6 +150,7 @@ function AdminDashboardContent() {
   const router = useRouter();
   const [checking, setChecking] = useState(true);
   const [email, setEmail] = useState<string | null>(null);
+  const [role, setRole] = useState<"admin" | "editor">("admin");
 
   const [loading, setLoading] = useState(true);
   const [rows, setRows] = useState<Property[]>([]);
@@ -161,7 +167,7 @@ function AdminDashboardContent() {
   const [toast, setToast] = useState<{ type: "ok" | "err"; msg: string } | null>(null);
 
   // Backup system state
-  const [tab, setTab] = useState<"properties" | "backups">("properties");
+  const [tab, setTab] = useState<"properties" | "premium" | "backups" | "blogs" | "users">("properties");
   const [backups, setBackups] = useState<BackupItem[]>([]);
   const [loadingBackups, setLoadingBackups] = useState(false);
   const [confirmRestore, setConfirmRestore] = useState<BackupItem | null>(null);
@@ -273,27 +279,33 @@ function AdminDashboardContent() {
   // Guard: exigir sesión
   useEffect(() => {
     let mounted = true;
-    (async () => {
-      const { data: { user }, error } = await supabase.auth.getUser();
+    let authSub: any;
+
+    supabase.auth.getSession().then(({ data }) => {
       if (!mounted) return;
-      if (error || !user) {
-        // Limpiar sesión local si el token es inválido o el usuario fue eliminado
-        await supabase.auth.signOut();
+      if (!data.session) {
         router.replace("/admin/login?redirect=/admin");
       } else {
-        setEmail(user.email ?? null);
+        const userRole = data.session.user.user_metadata?.role || "admin";
+        setRole(userRole as "admin" | "editor");
+        setEmail(data.session.user.email ?? null);
         setChecking(false);
       }
-    })();
+    });
 
     const { data: sub } = supabase.auth.onAuthStateChange((_ev, session) => {
       if (!session) router.replace("/admin/login?redirect=/admin");
-      else setEmail(session.user?.email ?? null);
+      else {
+        const userRole = session.user.user_metadata?.role || "admin";
+        setRole(userRole as "admin" | "editor");
+        setEmail(session.user?.email ?? null);
+      }
     });
+    authSub = sub;
 
     return () => {
       mounted = false;
-      sub.subscription.unsubscribe();
+      if (authSub?.subscription) authSub.subscription.unsubscribe();
     };
   }, [router]);
 
@@ -355,6 +367,7 @@ function AdminDashboardContent() {
       published: false,
       vendido: false,
       alquilado: false,
+      premium: false,
       age: null,
       created_at: new Date().toISOString().split("T")[0],
       storageFolder: folder,
@@ -386,6 +399,7 @@ function AdminDashboardContent() {
       published: Boolean(p.published),
       vendido: Boolean(p.vendido),
       alquilado: Boolean(p.alquilado),
+      premium: Boolean(p.premium),
       age: p.age !== undefined && p.age !== null ? toInt(p.age) : null,
       created_at: p.created_at ? new Date(p.created_at).toISOString().split("T")[0] : new Date().toISOString().split("T")[0],
       storageFolder: String(p.id || crypto.randomUUID()),
@@ -451,6 +465,30 @@ function AdminDashboardContent() {
     } catch (err) {
       console.error(err);
       setToast({ type: "err", msg: "No se pudo actualizar el estado de alquiler." });
+    }
+  };
+
+  const togglePremium = async (p: Property) => {
+    await triggerAutoBackup(`Antes de cambiar estado premium de "${p.titulo}"`);
+    const next = !p.premium;
+    try {
+      const { data: existing } = await supabase.from("properties").select("owner").eq("id", p.id).single();
+      const currentOwner = existing?.owner || {};
+      const nextOwner = {
+        name: "Maldonado Leonides",
+        phone: "+506 8888-8888",
+        whatsappUrl: "https://wa.me/50688888888",
+        ...currentOwner,
+        premium: next
+      };
+      const { error } = await supabase.from("properties").update({ owner: nextOwner }).eq("id", p.id);
+      if (error) throw error;
+      setToast({ type: "ok", msg: next ? "Marcada como premium" : "Quitada de premium" });
+      await revalidateProperties();
+      await fetchData();
+    } catch (err) {
+      console.error(err);
+      setToast({ type: "err", msg: "No se pudo actualizar el estado premium." });
     }
   };
 
@@ -592,6 +630,7 @@ function AdminDashboardContent() {
         moneda: (f.moneda || "USD").toUpperCase(),
         vendido: Boolean(f.vendido),
         alquilado: Boolean(f.alquilado),
+        premium: Boolean(f.premium),
         plantas: toInt(f.plantas),
         cocina: f.cocina && f.cocina !== "" ? String(f.cocina) : null,
         oficina: f.oficina && f.oficina !== "" ? String(f.oficina) : null,
@@ -624,13 +663,17 @@ function AdminDashboardContent() {
   };
 
   const filtered = useMemo(() => {
-    if (!search.trim()) return rows;
+    let result = rows;
+    if (tab === "premium") {
+      result = result.filter(p => p.premium);
+    }
+    if (!search.trim()) return result;
     const q = search.toLowerCase();
-    return rows.filter((p) => {
+    return result.filter((p) => {
       const base = `${p.titulo ?? ""} ${p.tipo ?? ""} ${p.ubicacion ?? ""}`.toLowerCase();
       return base.includes(q);
     });
-  }, [rows, search]);
+  }, [rows, search, tab]);
 
   if (checking) {
     return (
@@ -697,16 +740,56 @@ function AdminDashboardContent() {
               </button>
               <button
                 type="button"
-                onClick={() => setTab("backups")}
+                onClick={() => setTab("premium")}
                 className={cx(
                   "flex w-full items-center justify-between rounded-lg px-3 py-2 text-sm font-semibold transition cursor-pointer",
-                  tab === "backups"
+                  tab === "premium"
+                    ? "text-neutral-900 bg-slate-100"
+                    : "text-neutral-700 hover:bg-neutral-50"
+                )}
+              >
+                Destacadas <span className="text-xs text-neutral-400 font-semibold">Premium</span>
+              </button>
+              {role !== "editor" && (
+                <button
+                  type="button"
+                  onClick={() => setTab("backups")}
+                  className={cx(
+                    "flex w-full items-center justify-between rounded-lg px-3 py-2 text-sm font-semibold transition cursor-pointer",
+                    tab === "backups"
+                      ? "text-neutral-900 bg-slate-100"
+                      : "text-neutral-750 hover:bg-neutral-50"
+                  )}
+                >
+                  Copias de seguridad <span className="text-xs text-neutral-400 font-semibold">Backups</span>
+                </button>
+              )}
+              <button
+                type="button"
+                onClick={() => setTab("blogs")}
+                className={cx(
+                  "flex w-full items-center justify-between rounded-lg px-3 py-2 text-sm font-semibold transition cursor-pointer",
+                  tab === "blogs"
                     ? "text-neutral-900 bg-slate-100"
                     : "text-neutral-750 hover:bg-neutral-50"
                 )}
               >
-                Copias de seguridad <span className="text-xs text-neutral-400 font-semibold">Backups</span>
+                Artículos <span className="text-xs text-neutral-400 font-semibold">Blogs</span>
               </button>
+              {role !== "editor" && (
+                <button
+                  type="button"
+                  onClick={() => setTab("users")}
+                  className={cx(
+                    "flex w-full items-center justify-between rounded-lg px-3 py-2 text-sm font-semibold transition cursor-pointer",
+                    tab === "users"
+                      ? "text-neutral-900 bg-slate-100"
+                      : "text-neutral-750 hover:bg-neutral-50"
+                  )}
+                >
+                  Usuarios y Roles <span className="text-xs text-neutral-400 font-semibold">Cuentas</span>
+                </button>
+              )}
               <Link href="/propiedades" className="flex items-center justify-between rounded-lg px-3 py-2 text-sm font-semibold text-neutral-700 hover:bg-neutral-50">
                 Ver propiedades <span className="text-xs text-neutral-400">Catálogo</span>
               </Link>
@@ -715,7 +798,11 @@ function AdminDashboardContent() {
 
           {/* Main */}
           <section className="space-y-6 lg:col-span-9">
-            {tab === "properties" ? (
+            {tab === "users" && role !== "editor" ? (
+              <UsersAdminTab setToast={setToast} />
+            ) : tab === "blogs" ? (
+              <BlogsAdminTab setToast={setToast} triggerAutoBackup={triggerAutoBackup} userRole={role} />
+            ) : tab === "properties" || tab === "premium" ? (
               <>
                 {/* Métricas */}
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
@@ -852,6 +939,11 @@ function AdminDashboardContent() {
                                       Alquilado
                                     </span>
                                   )}
+                                  {p.premium && (
+                                    <span className="rounded-full bg-yellow-400 px-2.5 py-0.5 text-[10px] font-bold text-slate-900 uppercase tracking-wider">
+                                      Premium
+                                    </span>
+                                  )}
                                 </div>
                                 <p className="truncate text-xs text-slate-500 font-semibold mt-0.5">
                                   {p.tipo ?? "—"} — {p.ubicacion ?? "—"}
@@ -916,18 +1008,33 @@ function AdminDashboardContent() {
                                 </button>
 
                                 <button
+                                  onClick={() => togglePremium(p)}
+                                  className={cx(
+                                    "rounded-full px-2.5 py-1 text-xs font-bold border transition cursor-pointer",
+                                    p.premium
+                                      ? "text-yellow-700 bg-yellow-50 border-yellow-300 hover:bg-yellow-100"
+                                      : "text-slate-700 border-slate-200 hover:bg-slate-100"
+                                  )}
+                                  title={p.premium ? "Quitar premium" : "Marcar premium"}
+                                >
+                                  {p.premium ? "Premium ★" : "Premium"}
+                                </button>
+
+                                <button
                                   onClick={() => editItem(p)}
                                   className="rounded-full border border-slate-200 px-3 py-1 text-xs font-bold text-slate-700 hover:bg-slate-50 cursor-pointer"
                                 >
                                   Editar
                                 </button>
 
-                                <button
-                                  onClick={() => setConfirmDel(p)}
-                                  className="rounded-full border border-red-200 px-3 py-1 text-xs font-bold text-red-700 hover:bg-red-50 cursor-pointer"
-                                >
-                                  Borrar
-                                </button>
+                                {role !== "editor" && (
+                                  <button
+                                    onClick={() => setConfirmDel(p)}
+                                    className="rounded-full border border-red-200 px-3 py-1 text-xs font-bold text-red-700 hover:bg-red-50 cursor-pointer"
+                                  >
+                                    Borrar
+                                  </button>
+                                )}
                               </div>
                             </div>
                           </li>
@@ -1397,11 +1504,12 @@ function SideForm({
           />
 
           {/* Precio + switches */}
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
             <Input type="number" label="Precio" value={String(form.precio ?? 0)} onChange={(v) => set("precio", v)} min="0" />
             <Toggle label="Publicado" checked={Boolean(form.published)} onChange={(v) => set("published", v)} />
             <Toggle label="Vendido" checked={Boolean(form.vendido)} onChange={(v) => set("vendido", v)} />
             <Toggle label="Alquilado" checked={Boolean(form.alquilado)} onChange={(v) => set("alquilado", v)} />
+            <Toggle label="Premium" checked={Boolean(form.premium)} onChange={(v) => set("premium", v)} />
           </div>
 
           {/* Antigüedad y Fecha de Publicación */}

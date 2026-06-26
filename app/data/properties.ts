@@ -26,6 +26,7 @@ export interface Property {
     moneda?: string;
     vendido?: boolean;
     alquilado?: boolean;
+    premium?: boolean;
   };
   gallery: string[];
   views: number;
@@ -40,6 +41,7 @@ export interface Property {
   moneda?: string;
   vendido?: boolean;
   alquilado?: boolean;
+  premium?: boolean;
 }
 
 export const mockProperties: Property[] = [
@@ -60,6 +62,7 @@ export const mockProperties: Property[] = [
     expenses: 85,
     age: 0,
     parking: true,
+    premium: true,
     owner: {
       name: "Mariana Rodríguez",
       phone: "+506 8876-5432",
@@ -98,6 +101,7 @@ export const mockProperties: Property[] = [
     expenses: 0,
     age: 12,
     parking: true,
+    premium: true,
     owner: {
       name: "Juan Pablo Gómez",
       phone: "+506 8765-4321",
@@ -134,6 +138,7 @@ export const mockProperties: Property[] = [
     expenses: 60,
     age: 80,
     parking: false,
+    premium: true,
     owner: {
       name: "Roberto Peralta",
       phone: "+506 8321-0987",
@@ -168,6 +173,7 @@ export const mockProperties: Property[] = [
     expenses: 250,
     age: 5,
     parking: true,
+    premium: true,
     owner: {
       name: "Clara Mitre",
       phone: "+506 8987-6543",
@@ -280,6 +286,7 @@ export function mapDbToProperty(dbProp: any): Property {
   const owner = dbProp.owner || {};
   const vendido = dbProp.vendido !== undefined ? Boolean(dbProp.vendido) : (owner.vendido !== undefined ? Boolean(owner.vendido) : false);
   const alquilado = dbProp.alquilado !== undefined ? Boolean(dbProp.alquilado) : (owner.alquilado !== undefined ? Boolean(owner.alquilado) : false);
+  const premium = dbProp.premium !== undefined ? Boolean(dbProp.premium) : (owner.premium !== undefined ? Boolean(owner.premium) : false);
   const moneda = dbProp.moneda || owner.moneda || "CRC";
 
   return {
@@ -315,6 +322,7 @@ export function mapDbToProperty(dbProp: any): Property {
     moneda,
     vendido,
     alquilado,
+    premium,
     age: dbProp.age !== undefined && dbProp.age !== null ? Number(dbProp.age) : undefined,
     created_at: dbProp.created_at || undefined
   };

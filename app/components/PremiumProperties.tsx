@@ -8,8 +8,6 @@ import { getOptimizedImageUrl } from '@/lib/utils';
 import { supabase } from '@/lib/supabase';
 
 export default function PremiumProperties() {
-  // Select 4 specific premium/featured properties for the section
-  const premiumIds = ['prop-4', 'prop-2', 'prop-1', 'prop-3'];
   const [properties, setProperties] = useState<Property[]>([]);
   const [activeIndex, setActiveIndex] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -20,18 +18,20 @@ export default function PremiumProperties() {
         const { data, error } = await supabase
           .from('properties')
           .select('*')
-          .in('id', premiumIds);
+          .contains('owner', { premium: true })
+          .limit(4);
+          
         if (error) throw error;
         if (data && data.length > 0) {
           const mapped = data.map(mapDbToProperty);
-          const sorted = mapped.sort((a, b) => premiumIds.indexOf(a.id) - premiumIds.indexOf(b.id));
-          setProperties(sorted);
+          setProperties(mapped);
         } else {
-          setProperties(mockProperties.filter((p) => premiumIds.includes(p.id)));
+          // Fallback to local mocks if none found or while setting up
+          setProperties(mockProperties.filter((p) => p.premium).slice(0, 4));
         }
       } catch (err) {
         console.warn("Error loading premium properties from Supabase. Falling back to local mocks:", err);
-        setProperties(mockProperties.filter((p) => premiumIds.includes(p.id)));
+        setProperties(mockProperties.filter((p) => p.premium).slice(0, 4));
       } finally {
         setLoading(false);
       }

@@ -8,6 +8,9 @@ export interface BlogPost {
   excerpt: string;
   image: string;
   content: string;
+  id?: string;
+  published?: boolean;
+  created_at?: string;
 }
 
 export const mockBlogPosts: BlogPost[] = [
@@ -93,3 +96,20 @@ El este del Gran Área Metropolitana está experimentando un desarrollo comercia
 Favorecidos por la concentración de zonas francas industriales y de tecnología. El alquiler residencial corporativo en estas ubicaciones cuenta con demanda constante de empleados calificados, lo que reduce las tasas de desocupación a mínimos históricos.`
   }
 ];
+
+export function mapDbToBlogPost(dbPost: any): BlogPost {
+  return {
+    slug: dbPost.slug || "",
+    category: dbPost.category || "General",
+    date: dbPost.date || "Fecha desconocida",
+    readTime: dbPost.read_time || "5 min",
+    author: dbPost.author || "Dueño Directo",
+    title: dbPost.title || "",
+    excerpt: dbPost.excerpt || "",
+    image: dbPost.image || "/placeholder-blog.jpg",
+    content: dbPost.content || "",
+    published: dbPost.published !== undefined ? Boolean(dbPost.published) : true,
+    id: dbPost.id || undefined,
+    created_at: dbPost.created_at || undefined
+  } as any;
+}
