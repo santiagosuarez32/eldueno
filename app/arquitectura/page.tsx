@@ -62,8 +62,6 @@ export default function ArquitecturaPage() {
     }
   ];
 
-  ];
-
   const container = useRef<HTMLElement>(null);
   
   useGSAP(() => {
@@ -158,7 +156,7 @@ export default function ArquitecturaPage() {
                   className="hero-subtitle text-slate-350 text-base sm:text-lg max-w-3xl leading-relaxed"
                 >
                   Ofrecemos servicios de arquitectura enfocados en el diseño, planificación y remodelación de espacios residenciales, comerciales e industriales. Brindamos asesoría personalizada y elaboración de planos, creando soluciones funcionales, estéticas y adaptadas a cada necesidad. Nuestro objetivo es optimizar cada espacio, garantizando calidad, eficiencia y mayor valor para su propiedad.
-                </motion.p>
+                </p>
               </div>
             </div>
           </div>

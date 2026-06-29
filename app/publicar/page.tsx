@@ -205,7 +205,6 @@ export default function PublishPage() {
                       Ir al Catálogo
                     </a>
                   </div>
-                  </div>
                 </div>
               ) : (
                 /* Form Steps */

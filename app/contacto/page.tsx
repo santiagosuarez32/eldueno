@@ -97,7 +97,6 @@ export default function ContactoPage() {
         agree: false
       });
     }, 1800);
-    }, 1800);
   };
 
   const container = useRef<HTMLDivElement>(null);
