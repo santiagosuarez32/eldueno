@@ -72,141 +72,179 @@ export default function PrestamosPage() {
           </div>
         </section>
 
-        {/* LOAN OPTIONS SECTION - Bento Grid style matching architecture page */}
-        <section className="py-24 bg-slate-50/30">
-          <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+        {/* LOAN OPTIONS SECTION - Redesigned Centered Grid */}
+        <section className="py-24 bg-white relative">
+          <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
+            
+            {/* Top Section: Title & Description */}
+            <div className="text-center max-w-3xl mx-auto space-y-6 mb-16">
+              <h2 className="text-3xl sm:text-4xl lg:text-[46px] font-bold tracking-tight text-slate-900 leading-[1.1]">
+                Nuestros servicios
+              </h2>
+              <p className="text-slate-600 text-base lg:text-lg leading-relaxed font-normal">
+                Conozca los tipos de financiamiento y soluciones de crédito diseñados para ayudarle a alcanzar sus metas inmobiliarias con total claridad y seguridad.
+              </p>
+              <div className="pt-4">
+                <Link
+                  href="/contacto?servicio=prestamos"
+                  className="inline-flex items-center justify-center px-8 h-12 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-full transition-all duration-300 text-sm shadow-sm hover:shadow-md"
+                >
+                  Iniciar Consulta
+                </Link>
+              </div>
+            </div>
+
+            {/* 3 Distinct Service Sections */}
+            <div className="space-y-24 lg:space-y-32 mt-20 max-w-6xl mx-auto">
               
-              {/* Left Side: Large Image Card */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-50px" }}
-                transition={{ duration: 0.5, delay: 0.1 }}
-                className="lg:col-span-4 relative rounded-[24px] overflow-hidden min-h-[350px] lg:min-h-[600px] shadow-[0_2px_8px_rgba(0,0,0,0.015)] border border-slate-200/60 group bg-slate-100"
-              >
-                <img
-                  src="/services/creditos.webp"
-                  alt="Financiamiento y préstamos"
-                  className="w-full h-full object-cover object-center group-hover:scale-102 transition-transform duration-700"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/20 via-transparent to-transparent pointer-events-none" />
-              </motion.div>
-
-              {/* Right Side: Bento container with all 3 loan option cards */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-50px" }}
-                transition={{ duration: 0.5, delay: 0.2 }}
-                className="lg:col-span-8 bg-white border border-slate-200/60 rounded-[24px] p-6 sm:p-10 lg:p-12 flex flex-col justify-between gap-10 shadow-[0_2px_8px_rgba(0,0,0,0.015)]"
-              >
-                {/* Header */}
-                <div className="space-y-4 max-w-2xl">
-                  <h2 className="text-3xl sm:text-4xl lg:text-[42px] font-bold tracking-tight text-slate-900 leading-[1.1]">
-                    Nuestros servicios
-                  </h2>
-                  <p className="text-slate-500 text-sm sm:text-base leading-relaxed font-normal">
-                    Conozca los tipos de financiamiento y soluciones de crédito diseñados para ayudarle a alcanzar sus metas inmobiliarias con total claridad y seguridad.
+              {/* Section 1 */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+                <motion.div
+                  initial={{ opacity: 0, x: -30 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ duration: 0.6 }}
+                  className="order-2 lg:order-1 space-y-6"
+                >
+                  <div className="w-12 h-12 bg-[#ffe600] rounded-full flex items-center justify-center font-bold text-xl text-slate-900 shadow-sm">
+                    1
+                  </div>
+                  <h3 className="text-3xl sm:text-4xl font-bold text-slate-900 leading-tight tracking-tight">
+                    Préstamos para compra de propiedades
+                  </h3>
+                  <p className="text-slate-600 text-lg leading-relaxed">
+                    Evaluamos distintas alternativas con Bancos públicos como privados, ayudando a identificar la opción más conveniente en términos de cuotas, plazos y condiciones. Acompañamos al cliente desde la solicitud hasta la aprobación del crédito, garantizando un proceso claro, ágil y seguro.
                   </p>
-                </div>
+                </motion.div>
+                <motion.div
+                  initial={{ opacity: 0, x: 30 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ duration: 0.6 }}
+                  className="order-1 lg:order-2"
+                >
+                  <div className="relative aspect-[4/3] rounded-[32px] overflow-hidden shadow-xl bg-slate-100">
+                    <img 
+                      src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" 
+                      alt="Compra de propiedades" 
+                      className="w-full h-full object-cover" 
+                    />
+                  </div>
+                </motion.div>
+              </div>
 
-                {/* List of all 3 cards stacked vertically in a single column */}
-                <div className="grid grid-cols-1 gap-4 pt-8 border-t border-slate-100">
+              {/* Section 2 */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+                <motion.div
+                  initial={{ opacity: 0, x: -30 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ duration: 0.6 }}
+                  className="order-1 lg:order-1"
+                >
+                  <div className="relative aspect-[4/3] rounded-[32px] overflow-hidden shadow-xl bg-slate-100">
+                    <img 
+                      src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" 
+                      alt="Garantía inmobiliaria" 
+                      className="w-full h-full object-cover" 
+                    />
+                  </div>
+                </motion.div>
+                <motion.div
+                  initial={{ opacity: 0, x: 30 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ duration: 0.6 }}
+                  className="order-2 lg:order-2 space-y-6"
+                >
+                  <div className="w-12 h-12 bg-[#ffe600] rounded-full flex items-center justify-center font-bold text-xl text-slate-900 shadow-sm">
+                    2
+                  </div>
+                  <h3 className="text-3xl sm:text-4xl font-bold text-slate-900 leading-tight tracking-tight">
+                    Préstamos sobre garantía inmobiliaria
+                  </h3>
+                  <p className="text-slate-600 text-lg leading-relaxed">
+                    El Dueño Vende también ofrece préstamos privados, con requisitos accesibles y pre-aprobación en 24 horas, sobre propiedades dentro del Gran Área Metropolitana.
+                  </p>
                   
-                  {/* Card 1 */}
-                  <div className="group p-6 rounded-2xl bg-slate-50 border border-slate-200/60 shadow-[0_2px_8px_rgba(0,0,0,0.005)] hover:border-emerald-500/20 hover:bg-white hover:shadow-[0_4px_16px_rgba(0,0,0,0.02)] transition-all duration-300 flex flex-col md:flex-row md:items-center justify-between gap-6">
-                    <div className="flex items-start gap-5 flex-grow">
-                      <div className="text-xs font-semibold text-slate-400 tracking-widest font-mono pt-1">
-                        01
-                      </div>
-                      <div className="space-y-2 max-w-xl">
-                        <h4 className="font-bold text-slate-900 text-base sm:text-lg group-hover:text-emerald-600 transition-colors duration-200 leading-tight">
-                          Préstamos para compra de propiedades
-                        </h4>
-                        <p className="text-slate-500 text-xs sm:text-sm leading-relaxed font-normal">
-                          Evaluamos distintas alternativas con Bancos públicos como privados, ayudando a identificar la opción más conveniente en términos de cuotas, plazos y condiciones. Acompañamos al cliente desde la solicitud hasta la aprobación del crédito, garantizando un proceso claro, ágil y seguro.
-                        </p>
-                      </div>
+                  {/* Metrics details */}
+                  <div className="grid grid-cols-2 gap-6 pt-6 border-t border-slate-200 mt-6">
+                    <div>
+                      <span className="text-slate-500 block text-sm mb-1 font-medium">Costo de avalúo</span>
+                      <span className="font-bold text-2xl text-slate-900">0%</span>
                     </div>
-                    <div className="flex-shrink-0 w-full md:w-auto">
-                      <Link
-                        href="/contacto?servicio=prestamos"
-                        className="inline-flex items-center justify-center w-full md:w-auto px-6 h-10 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-full transition-all duration-200 text-xs shadow-sm"
-                      >
-                        Más información
-                      </Link>
+                    <div>
+                      <span className="text-slate-500 block text-sm mb-1 font-medium">Comisión formalización</span>
+                      <span className="font-bold text-2xl text-slate-900">5%</span>
+                    </div>
+                    <div>
+                      <span className="text-slate-500 block text-sm mb-1 font-medium">Pre-aprobación</span>
+                      <span className="font-bold text-2xl text-slate-900">24 hrs</span>
+                    </div>
+                    <div>
+                      <span className="text-slate-500 block text-sm mb-1 font-medium">Máx. a financiar</span>
+                      <span className="font-bold text-2xl text-slate-900">50%</span>
                     </div>
                   </div>
+                </motion.div>
+              </div>
 
-                  {/* Card 2 */}
-                  <div className="group p-6 rounded-2xl bg-slate-50 border border-slate-200/60 shadow-[0_2px_8px_rgba(0,0,0,0.005)] hover:border-emerald-500/20 hover:bg-white hover:shadow-[0_4px_16px_rgba(0,0,0,0.02)] transition-all duration-300 flex flex-col md:flex-row md:items-center justify-between gap-6">
-                    <div className="flex items-start gap-5 flex-grow">
-                      <div className="text-xs font-semibold text-slate-400 tracking-widest font-mono pt-1">
-                        02
-                      </div>
-                      <div className="space-y-2 max-w-xl">
-                        <h4 className="font-bold text-slate-900 text-base sm:text-lg group-hover:text-emerald-600 transition-colors duration-200 leading-tight">
-                          Préstamos sobre garantía inmobiliaria
-                        </h4>
-                        <p className="text-slate-500 text-xs sm:text-sm leading-relaxed font-normal">
-                          El Dueño Vende también ofrece préstamos privados, con requisitos accesibles y pre-aprobación en 24 horas, sobre propiedades dentro del Gran Área Metropolitana.
-                        </p>
-                        
-                        {/* Metrics details */}
-                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-3 border-t border-slate-100 mt-3 text-[11px] sm:text-xs">
-                          <div><span className="text-slate-400 block">Costo de avalúo</span><span className="font-bold text-slate-800">0%</span></div>
-                          <div><span className="text-slate-400 block">Comisión formalización</span><span className="font-bold text-slate-800">5%</span></div>
-                          <div><span className="text-slate-400 block">Pre-aprobación</span><span className="font-bold text-slate-800">24 hrs</span></div>
-                          <div><span className="text-slate-400 block">Máx. a financiar</span><span className="font-bold text-slate-800">50%</span></div>
-                        </div>
-                      </div>
+              {/* Section 3 */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+                <motion.div
+                  initial={{ opacity: 0, x: -30 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ duration: 0.6 }}
+                  className="order-2 lg:order-1 space-y-6"
+                >
+                  <div className="w-12 h-12 bg-[#ffe600] rounded-full flex items-center justify-center font-bold text-xl text-slate-900 shadow-sm">
+                    3
+                  </div>
+                  <h3 className="text-3xl sm:text-4xl font-bold text-slate-900 leading-tight tracking-tight">
+                    Reunificación de Deudas
+                  </h3>
+                  <p className="text-slate-600 text-lg leading-relaxed">
+                    Ofrecemos el servicio de unificación de deudas como una solución financiera que permite consolidar múltiples obligaciones en un solo pago mensual. Este proceso facilita la organización de las finanzas personales, reduce la carga administrativa y brinda mayor control sobre el presupuesto. Nuestro objetivo es ayudarle a mejorar su liquidez y estabilidad financiera mediante condiciones más ordenadas y accesibles, adaptadas a su situación económica.
+                  </p>
+                  
+                  {/* Metrics details */}
+                  <div className="grid grid-cols-2 gap-6 pt-6 border-t border-slate-200 mt-6">
+                    <div>
+                      <span className="text-slate-500 block text-sm mb-1 font-medium">Costo de avalúo</span>
+                      <span className="font-bold text-2xl text-slate-900">0%</span>
                     </div>
-                    <div className="flex-shrink-0 w-full md:w-auto">
-                      <Link
-                        href="/contacto?servicio=prestamos"
-                        className="inline-flex items-center justify-center w-full md:w-auto px-6 h-10 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-full transition-all duration-200 text-xs shadow-sm"
-                      >
-                        Más información
-                      </Link>
+                    <div>
+                      <span className="text-slate-500 block text-sm mb-1 font-medium">Comisión formalización</span>
+                      <span className="font-bold text-2xl text-slate-900">5%</span>
+                    </div>
+                    <div>
+                      <span className="text-slate-500 block text-sm mb-1 font-medium">Pre-aprobación</span>
+                      <span className="font-bold text-2xl text-slate-900">24 hrs</span>
+                    </div>
+                    <div>
+                      <span className="text-slate-500 block text-sm mb-1 font-medium">Máx. a financiar</span>
+                      <span className="font-bold text-2xl text-slate-900">50%</span>
                     </div>
                   </div>
-
-                  {/* Card 3 */}
-                  <div className="group p-6 rounded-2xl bg-slate-50 border border-slate-200/60 shadow-[0_2px_8px_rgba(0,0,0,0.005)] hover:border-emerald-500/20 hover:bg-white hover:shadow-[0_4px_16px_rgba(0,0,0,0.02)] transition-all duration-300 flex flex-col md:flex-row md:items-center justify-between gap-6">
-                    <div className="flex items-start gap-5 flex-grow">
-                      <div className="text-xs font-semibold text-slate-400 tracking-widest font-mono pt-1">
-                        03
-                      </div>
-                      <div className="space-y-2 max-w-xl">
-                        <h4 className="font-bold text-slate-900 text-base sm:text-lg group-hover:text-emerald-600 transition-colors duration-200 leading-tight">
-                          Reunificación de Deudas
-                        </h4>
-                        <p className="text-slate-500 text-xs sm:text-sm leading-relaxed font-normal">
-                          Ofrecemos el servicio de unificación de deudas como una solución financiera que permite consolidar múltiples obligaciones en un solo pago mensual. Este proceso facilita la organización de las finanzas personales, reduce la carga administrativa y brinda mayor control sobre el presupuesto. Nuestro objetivo es ayudarle a mejorar su liquidez y estabilidad financiera mediante condiciones más ordenadas y accesibles, adaptadas a su situación económica.
-                        </p>
-
-                        {/* Metrics details */}
-                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-3 border-t border-slate-100 mt-3 text-[11px] sm:text-xs">
-                          <div><span className="text-slate-400 block">Costo de avalúo</span><span className="font-bold text-slate-800">0%</span></div>
-                          <div><span className="text-slate-400 block">Comisión formalización</span><span className="font-bold text-slate-800">5%</span></div>
-                          <div><span className="text-slate-400 block">Pre-aprobación</span><span className="font-bold text-slate-800">24 hrs</span></div>
-                          <div><span className="text-slate-400 block">Máx. a financiar</span><span className="font-bold text-slate-800">50%</span></div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex-shrink-0 w-full md:w-auto">
-                      <Link
-                        href="/contacto?servicio=prestamos"
-                        className="inline-flex items-center justify-center w-full md:w-auto px-6 h-10 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-full transition-all duration-200 text-xs shadow-sm"
-                      >
-                        Más información
-                      </Link>
-                    </div>
+                </motion.div>
+                <motion.div
+                  initial={{ opacity: 0, x: 30 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ duration: 0.6 }}
+                  className="order-1 lg:order-2"
+                >
+                  <div className="relative aspect-[4/3] rounded-[32px] overflow-hidden shadow-xl bg-slate-100">
+                    <img 
+                      src="https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" 
+                      alt="Reunificación de Deudas" 
+                      className="w-full h-full object-cover" 
+                    />
                   </div>
+                </motion.div>
+              </div>
 
-                </div>
-              </motion.div>
             </div>
           </div>
         </section>

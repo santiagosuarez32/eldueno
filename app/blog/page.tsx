@@ -52,7 +52,7 @@ export default function BlogPage() {
                 Blog & Recursos
               </h1>
               <p className="text-slate-400 text-sm sm:text-base leading-relaxed">
-                Consejos, novedades y guías prácticas de expertos para comprar, vender y alquilar de forma directa y 100% segura.
+                Consejos, novedades y guías prácticas de expertos para comprar, vender y alquilar de forma 100% segura.
               </p>
             </div>
 

@@ -15,7 +15,8 @@ import {
 import { Property, formatPropertyPrice } from '@/app/data/properties';
 import { FaWhatsapp } from 'react-icons/fa';
 import LightboxGallery from '@/app/components/LightboxGallery';
-import { getOptimizedImageUrl } from '@/lib/utils';
+import Image from 'next/image';
+import { getOptimizedImageUrl, supabaseImageLoader } from '@/lib/utils';
 
 interface PropertyDetailClientProps {
   property: Property;
@@ -231,11 +232,13 @@ export default function PropertyDetailClient({ property, relatedProperties }: Pr
             }}
             className="col-span-1 md:col-span-8 relative aspect-video md:aspect-auto md:h-[500px] rounded-3xl overflow-hidden cursor-zoom-in group bg-slate-100 shadow-sm border border-slate-200/40"
           >
-            <img
+            <Image
               src={getOptimizedImageUrl(property.gallery[0], 1200)}
               alt={`${property.title} - Principal`}
-              className="w-full h-full absolute inset-0 object-cover transform group-hover:scale-[1.015] transition-transform duration-500 ease-out"
-              fetchPriority="high"
+              fill
+              sizes="(max-width: 768px) 100vw, 66vw"
+              className="object-cover transform group-hover:scale-[1.015] transition-transform duration-500 ease-out"
+              priority
             />
             <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors duration-300 pointer-events-none" />
             
@@ -286,11 +289,13 @@ export default function PropertyDetailClient({ property, relatedProperties }: Pr
               }}
               className="flex-1 relative aspect-video md:aspect-auto md:h-[calc(50%-8px)] rounded-3xl overflow-hidden cursor-zoom-in group bg-slate-100 shadow-sm border border-slate-200/40"
             >
-              <img
+              <Image
                 src={getOptimizedImageUrl(property.gallery[1] || property.image, 600)}
                 alt={`${property.title} - Detalle 1`}
-                className="w-full h-full absolute inset-0 object-cover transform group-hover:scale-[1.015] transition-transform duration-500 ease-out"
-                loading="lazy"
+                fill
+                sizes="(max-width: 768px) 100vw, 33vw"
+                className="object-cover transform group-hover:scale-[1.015] transition-transform duration-500 ease-out"
+                priority
               />
               <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors duration-300 pointer-events-none" />
             </div>
@@ -303,11 +308,13 @@ export default function PropertyDetailClient({ property, relatedProperties }: Pr
               }}
               className="flex-1 relative aspect-video md:aspect-auto md:h-[calc(50%-8px)] rounded-3xl overflow-hidden cursor-zoom-in group bg-slate-100 shadow-sm border border-slate-200/40"
             >
-              <img
+              <Image
                 src={getOptimizedImageUrl(property.gallery[2] || property.image, 600)}
                 alt={`${property.title} - Detalle 2`}
-                className="w-full h-full absolute inset-0 object-cover transform group-hover:scale-[1.015] transition-transform duration-500 ease-out group-hover:brightness-[0.35]"
-                loading="lazy"
+                fill
+                sizes="(max-width: 768px) 100vw, 33vw"
+                className="object-cover transform group-hover:scale-[1.015] transition-transform duration-500 ease-out group-hover:brightness-[0.35]"
+                priority
               />
               <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors duration-300 pointer-events-none" />
               
@@ -539,10 +546,12 @@ export default function PropertyDetailClient({ property, relatedProperties }: Pr
               >
                 {/* Thumbnail */}
                 <div className="aspect-[1.5/1] w-full overflow-hidden bg-slate-100 relative">
-                  <img
-                    src={relProp.image}
+                  <Image
+                    src={getOptimizedImageUrl(relProp.image, 400)}
                     alt={relProp.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    fill
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
                   />
                 </div>
                 

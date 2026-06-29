@@ -14,7 +14,7 @@ export default function WhyChooseUs() {
       description: 'Vende tu propiedad con el respaldo de expertos en bienes raíces.',
       link: '/contacto?servicio=correduria',
       buttonText: 'Más información',
-      image: 'https://images.unsplash.com/photo-1560520653-9e0e4c89fd11?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
+      image: '/services/correduria.webp',
       counters: [
         { value: '1500+', label: 'Transacciones' },
         { value: '0%', label: 'de avalúo' }
@@ -25,7 +25,7 @@ export default function WhyChooseUs() {
       description: 'Le acompañamos en cada paso hacia la compra de la propiedad que se ajuste a su presupuesto y necesidades.',
       link: '/contacto?servicio=compra',
       buttonText: 'Más información',
-      image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
+      image: '/services/venta-propiedades.webp',
       counters: [
         { value: '3,000+', label: 'Clientes Satisfechos' },
         { value: 'CHECK', label: 'Asesoría personalizada' }
@@ -56,11 +56,11 @@ export default function WhyChooseUs() {
   ];
 
   return (
-    <section id="servicios" className="bg-white py-24 text-slate-900 relative overflow-hidden">
+    <section id="servicios" className="bg-white py-12 text-slate-900 relative overflow-hidden">
       <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Top Section Header */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-24 mb-16 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-24 mb-8 items-start">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -177,7 +177,7 @@ export default function WhyChooseUs() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: '-50px' }}
             transition={{ duration: 0.8 }}
-            className="lg:col-span-6 relative h-[180px] sm:h-[250px] lg:h-auto lg:aspect-[4/3] rounded-[32px] overflow-hidden shadow-md bg-slate-100"
+            className="lg:col-span-6 relative h-[180px] sm:h-[250px] lg:h-auto lg:aspect-video rounded-[32px] overflow-hidden shadow-md bg-slate-100"
           >
             {features.map((feature, idx) => (
               <img

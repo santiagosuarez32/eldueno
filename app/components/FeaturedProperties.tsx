@@ -3,9 +3,10 @@
 import { useRef, useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 import { ArrowLeft, ArrowRight, ArrowUpRight, Bed, Bath, Square, MapPin } from 'lucide-react';
 import { TbBed, TbBath, TbRuler2 } from 'react-icons/tb';
-import { getOptimizedImageUrl } from '@/lib/utils';
+import { getOptimizedImageUrl, supabaseImageLoader } from '@/lib/utils';
 import { mockProperties, Property, mapDbToProperty, formatPropertyPrice } from '@/app/data/properties';
 import { FeaturedCardSkeleton } from '@/app/components/PropertyCardSkeleton';
 import { supabase } from '@/lib/supabase';
@@ -21,16 +22,17 @@ export default function FeaturedProperties() {
         const { data, error } = await supabase
           .from('properties')
           .select('*')
-          .eq('featured', true);
+          .eq('featured', true)
+          .limit(8);
         if (error) throw error;
         if (data && data.length > 0) {
           setProperties(data.map(mapDbToProperty));
         } else {
-          setProperties(mockProperties.filter(p => p.featured));
+          setProperties(mockProperties.filter(p => p.featured).slice(0, 8));
         }
       } catch (err) {
         console.warn("Error loading featured properties from Supabase. Falling back to local mocks:", err);
-        setProperties(mockProperties.filter(p => p.featured));
+        setProperties(mockProperties.filter(p => p.featured).slice(0, 8));
       } finally {
         setLoading(false);
       }
@@ -119,7 +121,7 @@ export default function FeaturedProperties() {
               ))}
             </>
           ) : (
-            properties.map((property) => {
+            properties.map((property, index) => {
               const formattedPrice = formatPropertyPrice(property.price, property.moneda);
 
               return (
@@ -133,17 +135,16 @@ export default function FeaturedProperties() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: '-50px' }}
                     transition={{ duration: 0.5 }}
-                    className="w-full bg-white border border-slate-200/60 rounded-[32px] overflow-hidden flex flex-col group transition-all duration-300 h-full shadow-none"
+                    className="w-full bg-white border border-slate-200 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.08)] hover:shadow-[0_20px_50px_-10px_rgba(0,0,0,0.12)] hover:-translate-y-1 rounded-[32px] overflow-hidden flex flex-col group transition-all duration-300 h-full"
                   >
                     {/* Image Container */}
                     <div className="relative aspect-[16/10] w-full overflow-hidden bg-slate-100">
                       {/* Floating Action Overlay on Hover */}
                       <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20 flex items-center justify-center">
                         <div 
-                          className="bg-yellow-400 text-slate-955 font-light text-[12px] tracking-wider w-20 h-20 rounded-full flex flex-col items-center justify-center text-center p-2 transform scale-90 group-hover:scale-100 transition-all duration-300"
+                          className="bg-yellow-400 text-slate-955 font-bold text-sm px-6 py-2.5 rounded-full flex items-center justify-center text-center transform scale-90 group-hover:scale-100 transition-all duration-300 shadow-xl"
                         >
-                          <span>Ver</span>
-                          <span>detalle</span>
+                          <span className="whitespace-nowrap">Ver detalle</span>
                         </div>
                       </div>
 
@@ -160,11 +161,13 @@ export default function FeaturedProperties() {
                         {formattedPrice}
                       </div>
 
-                      <img
-                        src={getOptimizedImageUrl(property.image || '/images/placeholder.webp', 600)}
+                      <Image
+                        src={getOptimizedImageUrl(property.image || '/images/placeholder.webp', 500)}
                         alt={property.title}
-                        className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out"
-                        loading="lazy"
+                        fill
+                        sizes="(max-width: 768px) 85vw, (max-width: 1024px) 75vw, 25vw"
+                        className="object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out"
+                        priority={index < 4}
                         onError={(e) => {
                           e.currentTarget.style.display = 'none';
                         }}

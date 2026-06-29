@@ -3,14 +3,16 @@
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ShieldCheck } from 'lucide-react';
+import Image from 'next/image';
 import { Property, formatPropertyPrice } from '@/app/data/properties';
-import { getOptimizedImageUrl } from '@/lib/utils';
+import { getOptimizedImageUrl, supabaseImageLoader } from '@/lib/utils';
 
 interface PropertyCardProps {
   property: Property;
+  priority?: boolean;
 }
 
-export default function PropertyCard({ property }: PropertyCardProps) {
+export default function PropertyCard({ property, priority = false }: PropertyCardProps) {
   // Format price nicely
   const formattedPrice = formatPropertyPrice(property.price, property.moneda);
 
@@ -53,11 +55,13 @@ export default function PropertyCard({ property }: PropertyCardProps) {
 
           {/* Property Image */}
           <div className="relative w-full h-full transform group-hover:scale-105 transition-transform duration-500 ease-out bg-slate-100">
-            <img
-              src={getOptimizedImageUrl(property.image || '/images/placeholder.webp', 600)}
+            <Image
+              src={getOptimizedImageUrl(property.image || '/images/placeholder.webp', 500)}
               alt={property.title}
-              className="w-full h-full object-cover relative z-10"
-              loading="lazy"
+              fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              className="object-cover relative z-10"
+              priority={priority}
               onError={(e) => {
                 e.currentTarget.style.display = 'none';
               }}

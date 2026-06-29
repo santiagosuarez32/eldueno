@@ -102,104 +102,88 @@ export default function ContactoPage() {
     <>
       <Navbar />
       
-      {/* 1. HERO SECTION (Dark Blue Theme with Background Image) */}
-      <section 
-        className="text-white pt-28 pb-14 relative overflow-hidden bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: "url('/images/contacto-hero.webp')" }}
-      >
-        {/* Dark overlay for readability */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/65 to-black/35" />
-        
-        <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="max-w-2xl space-y-4">
-            <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight leading-[1.1] text-white">
-              Contactános
+      {/* 1. HERO TYPOGRAPHY HEADER */}
+      <section className="pt-24 pb-6 sm:pt-28 sm:pb-8 bg-white">
+        <div className="max-w-6xl mx-auto px-8 lg:px-12">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="max-w-4xl"
+          >
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-slate-950 leading-[1.1] mb-3">
+              Hablemos de tu <span className="text-[#ffe600]">próxima propiedad.</span>
             </h1>
-            <p className="text-slate-300 text-sm sm:text-base leading-relaxed max-w-xl">
-              Para consultas generales, publicaciones de propiedades o asesoramiento especializado para comprar y vender sin intermediarios, por favor completá tus datos a continuación.
+            <p className="text-slate-600 text-sm sm:text-base leading-relaxed max-w-2xl">
+              Nuestro equipo está listo para asesorarte de manera personalizada y directa. Completá el formulario o contactanos por cualquiera de nuestros canales oficiales.
             </p>
-            
-            <div className="flex flex-wrap items-center gap-x-4 gap-y-2 pt-2 text-[11px] font-medium text-slate-400">
-              <span className="flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" /> Respuesta en menos de 24hs
-              </span>
-              <span className="w-1 h-1 rounded-full bg-slate-600" />
-              <span>Trato 100% Directo</span>
-            </div>
-          </div>
+          </motion.div>
         </div>
       </section>
 
-      {/* 2. FORM & INFO SECTION (Light Theme) */}
-      <section className="bg-white py-16 sm:py-24 text-slate-900">
-        <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
+      {/* 2. CONTACT INFO & FORM */}
+      <section className="bg-white pb-24 text-slate-900">
+        <div className="max-w-6xl mx-auto px-8 lg:px-12">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start">
             
-            {/* Left Column: Direct Communication details */}
-            <div className="lg:col-span-5 space-y-8">
-              <div className="space-y-4">
-                <span className="text-[13px] sm:text-[14px] font-bold text-slate-800 block">Comunicate</span>
-                <h2 className="text-3xl sm:text-4.5xl font-bold tracking-tight text-slate-950 leading-tight">
-                  Escribinos y hablemos de tu próxima propiedad
-                </h2>
-                <p className="text-slate-500 text-sm sm:text-base leading-relaxed">
-                  En El Dueño Vende estamos listos para asesorarte. Atendemos cada consulta de forma personalizada para brindarte soluciones ágiles, información clara y el acompañamiento profesional que necesitás para tomar las mejores decisiones seguras.
-                </p>
-              </div>
+            {/* Left Column: Bold Yellow Info Card */}
+            <div className="order-2 lg:order-1 lg:col-span-5">
+              <div className="bg-[#ffe600] rounded-[32px] p-8 sm:p-10 flex flex-col relative overflow-hidden shadow-sm">
+                {/* Decorative background element */}
+                <div className="absolute -top-24 -right-24 w-72 h-72 bg-yellow-300/50 rounded-full blur-3xl" />
+                
+                <h3 className="text-xl font-bold text-slate-950 mb-1 relative z-10">Información de Contacto</h3>
+                <p className="text-slate-900/80 mb-6 relative z-10 text-xs font-medium">Respuesta en menos de 24 horas hábiles.</p>
+                
+                <div className="space-y-4 relative z-10 flex-grow">
+                  <div className="flex gap-4 items-start group">
+                    <div className="w-10 h-10 rounded-full bg-slate-950 flex items-center justify-center text-[#ffe600] shrink-0 group-hover:scale-110 transition-transform duration-300">
+                      <Phone className="w-4 h-4" />
+                    </div>
+                    <div className="pt-0.5">
+                      <p className="text-xs font-bold text-slate-950 tracking-wide mb-0.5">WhatsApp / Teléfono</p>
+                      <a href="https://wa.me/50688888888" className="text-base font-bold text-slate-950 hover:opacity-70 transition-opacity">+506 8888-8888</a>
+                    </div>
+                  </div>
+                  
+                  <div className="flex gap-4 items-start group">
+                    <div className="w-10 h-10 rounded-full bg-slate-950 flex items-center justify-center text-[#ffe600] shrink-0 group-hover:scale-110 transition-transform duration-300">
+                      <Mail className="w-4 h-4" />
+                    </div>
+                    <div className="pt-0.5">
+                      <p className="text-xs font-bold text-slate-950 tracking-wide mb-0.5">Correo electrónico</p>
+                      <a href="mailto:info@elduenovende.com" className="text-base font-bold text-slate-950 hover:opacity-70 transition-opacity">info@elduenovende.com</a>
+                    </div>
+                  </div>
 
-              {/* Physical Contact Details */}
-              <div className="space-y-5 border-y border-slate-100 py-8">
-                <div className="flex gap-4 items-center">
-                  <img src="/contact/1.webp" className="w-8 h-8 object-contain flex-shrink-0" alt="Teléfono" />
-                  <div>
-                    <p className="text-[13px] sm:text-[14px] font-bold text-slate-800">Teléfono / WhatsApp</p>
-                    <p className="text-[11px] sm:text-[12px] font-medium text-slate-700 hover:text-emerald-700 transition-colors mt-0.5">
-                      <a href="https://wa.me/50688888888" target="_blank" rel="noopener noreferrer">+506 8888-8888</a>
-                    </p>
+                  <div className="flex gap-4 items-start group">
+                    <div className="w-10 h-10 rounded-full bg-slate-950 flex items-center justify-center text-[#ffe600] shrink-0 group-hover:scale-110 transition-transform duration-300">
+                      <MapPin className="w-4 h-4" />
+                    </div>
+                    <div className="pt-0.5">
+                      <p className="text-xs font-bold text-slate-950 tracking-wide mb-0.5">Ubicación física</p>
+                      <p className="text-base font-bold text-slate-950">Belén, Heredia<br/>Costa Rica</p>
+                    </div>
                   </div>
                 </div>
 
-                <div className="flex gap-4 items-center">
-                  <img src="/contact/email.webp" className="w-8 h-8 object-contain flex-shrink-0" alt="Correo electrónico" />
-                  <div>
-                    <p className="text-[13px] sm:text-[14px] font-bold text-slate-800">Correo electrónico</p>
-                    <p className="text-[11px] sm:text-[12px] font-medium text-slate-700 hover:text-emerald-700 transition-colors mt-0.5">
-                      <a href="mailto:info@elduenovende.com">info@elduenovende.com</a>
-                    </p>
+                <div className="mt-12 relative z-10">
+                  <p className="text-sm font-bold text-slate-950 tracking-wide mb-4">Nuestras redes</p>
+                  <div className="flex gap-3">
+                    <a href="#" className="w-12 h-12 rounded-full bg-slate-950 text-[#ffe600] flex items-center justify-center hover:scale-110 transition-transform duration-300">
+                      <FaFacebookF className="w-5 h-5" />
+                    </a>
+                    <a href="#" className="w-12 h-12 rounded-full bg-slate-950 text-[#ffe600] flex items-center justify-center hover:scale-110 transition-transform duration-300">
+                      <FaInstagram className="w-5 h-5" />
+                    </a>
                   </div>
-                </div>
-
-                <div className="flex gap-4 items-center">
-                  <img src="/icons-filters/ubication.png" className="w-8 h-8 object-contain flex-shrink-0" alt="Ubicación" />
-                  <div>
-                    <p className="text-[13px] sm:text-[14px] font-bold text-slate-800">Dirección física</p>
-                    <p className="text-[11px] sm:text-[12px] font-medium text-slate-700 mt-0.5">
-                      Belén, Heredia Province, Costa Rica
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Social Media Link Section */}
-              <div className="flex items-center space-x-4">
-                <span className="text-[13px] sm:text-[14px] font-bold text-slate-800">Seguinos:</span>
-                <div className="flex items-center space-x-2">
-                  <a href="#" className="w-9 h-9 rounded-full border border-slate-200 flex items-center justify-center text-slate-500 hover:text-slate-950 hover:border-slate-450 hover:bg-slate-50 transition-all duration-300">
-                    <FaFacebookF className="h-4 w-4" />
-                  </a>
-                  <a href="#" className="w-9 h-9 rounded-full border border-slate-200 flex items-center justify-center text-slate-500 hover:text-slate-950 hover:border-slate-450 hover:bg-slate-50 transition-all duration-300">
-                    <FaInstagram className="h-4 w-4" />
-                  </a>
-                  <a href="#" className="w-9 h-9 rounded-full border border-slate-200 flex items-center justify-center text-slate-500 hover:text-slate-950 hover:border-slate-450 hover:bg-slate-50 transition-all duration-300">
-                    <FaTwitter className="h-4 w-4" />
-                  </a>
                 </div>
               </div>
             </div>
 
-            {/* Right Column: Custom High-Fidelity Form */}
-            <div className="lg:col-span-7">
-              <div className="bg-white rounded-3xl border border-slate-100 p-5 sm:p-8 shadow-xl shadow-slate-100/50">
+            {/* Right Column: Clean Minimalist Form */}
+            <div className="order-1 lg:order-2 lg:col-span-7 flex justify-start lg:pl-12">
+              <div className="bg-white py-2 sm:py-4 lg:py-6 w-full max-w-xl">
                 <AnimatePresence mode="wait">
                   {status === 'success' ? (
                     <motion.div 
@@ -207,33 +191,33 @@ export default function ContactoPage() {
                       initial={{ opacity: 0, scale: 0.95 }}
                       animate={{ opacity: 1, scale: 1 }}
                       exit={{ opacity: 0, scale: 0.95 }}
-                      className="py-12 flex flex-col items-center justify-center text-center space-y-5"
+                      className="py-12 flex flex-col items-center justify-center text-center space-y-5 h-full"
                     >
-                      <div className="h-16 w-16 rounded-full bg-[#ffe600]/10 text-slate-950 flex items-center justify-center border border-[#ffe600]/30 shadow-md">
-                        <Check className="h-8 w-8 stroke-[2.5]" />
+                      <div className="h-20 w-20 rounded-full bg-[#ffe600] text-slate-950 flex items-center justify-center shadow-lg shadow-[#ffe600]/30">
+                        <Check className="h-10 w-10 stroke-[3]" />
                       </div>
-                      <div className="space-y-2">
-                        <h3 className="text-2xl font-extrabold text-slate-950">¡Mensaje Enviado con Éxito!</h3>
-                        <p className="text-slate-500 text-sm max-w-sm leading-relaxed mx-auto">
-                          Tu consulta ha sido procesada de manera directa. Un miembro de nuestro equipo se pondrá en contacto con vos en las próximas horas.
+                      <div className="space-y-3 pt-4">
+                        <h3 className="text-3xl font-extrabold text-slate-950">¡Mensaje Enviado!</h3>
+                        <p className="text-slate-500 text-base max-w-sm leading-relaxed mx-auto">
+                          Hemos recibido tu consulta exitosamente. Un asesor se comunicará contigo lo antes posible.
                         </p>
                       </div>
                       <button 
                         onClick={() => setStatus('idle')}
-                        className="mt-4 px-6 py-2.5 rounded-full bg-slate-950 text-white font-bold text-xs hover:bg-slate-900 transition-colors cursor-pointer uppercase tracking-wider"
+                        className="mt-6 px-8 py-3 rounded-full bg-slate-950 text-white font-bold text-sm hover:bg-slate-800 transition-colors cursor-pointer uppercase tracking-wider shadow-md"
                       >
-                        Enviar otro mensaje
+                        Enviar nuevo mensaje
                       </button>
                     </motion.div>
                   ) : (
                     <motion.form 
                       key="form"
                       onSubmit={handleSubmit} 
-                      className="space-y-5"
+                      className="space-y-4"
                     >
                       {/* Full Name */}
-                      <div className="space-y-1.5">
-                        <label className="text-[13px] sm:text-[14px] font-bold text-slate-800 block">Nombre completo*</label>
+                      <div className="space-y-2">
+                        <label className="text-sm font-bold text-slate-950 block">Nombre completo*</label>
                         <input 
                           type="text" 
                           name="name"
@@ -241,15 +225,15 @@ export default function ContactoPage() {
                           value={formData.name}
                           onChange={handleChange}
                           placeholder="Ej. Juan Pérez"
-                          className="w-full rounded-2xl bg-slate-50 border border-slate-200 focus:border-[#ffe600] focus:bg-white focus:outline-none px-4 py-2.5 text-slate-900 text-sm transition-all duration-200 placeholder:text-slate-400 font-medium shadow-sm"
+                          className="w-full rounded-[16px] bg-slate-50 border border-slate-200 focus:border-[#ffe600] focus:ring-4 focus:ring-[#ffe600]/20 focus:bg-white outline-none px-4 py-3 text-slate-900 text-sm transition-all duration-300 placeholder:text-slate-400 font-medium"
                         />
                       </div>
 
                       {/* Grid for Email and Phone */}
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                         {/* Email Address */}
-                        <div className="space-y-1.5">
-                          <label className="text-[13px] sm:text-[14px] font-bold text-slate-800 block">Correo electrónico*</label>
+                        <div className="space-y-2">
+                          <label className="text-sm font-bold text-slate-950 block">Correo electrónico*</label>
                           <input 
                             type="email" 
                             name="email"
@@ -257,13 +241,13 @@ export default function ContactoPage() {
                             value={formData.email}
                             onChange={handleChange}
                             placeholder="ejemplo@correo.com"
-                            className="w-full rounded-2xl bg-slate-50 border border-slate-200 focus:border-[#ffe600] focus:bg-white focus:outline-none px-4 py-2.5 text-slate-900 text-sm transition-all duration-200 placeholder:text-slate-400 font-medium shadow-sm"
+                            className="w-full rounded-[16px] bg-slate-50 border border-slate-200 focus:border-[#ffe600] focus:ring-4 focus:ring-[#ffe600]/20 focus:bg-white outline-none px-4 py-3 text-slate-900 text-sm transition-all duration-300 placeholder:text-slate-400 font-medium"
                           />
                         </div>
 
                         {/* Phone Number */}
-                        <div className="space-y-1.5">
-                          <label className="text-[13px] sm:text-[14px] font-bold text-slate-800 block">Teléfono (WhatsApp)*</label>
+                        <div className="space-y-2">
+                          <label className="text-sm font-bold text-slate-950 block">Teléfono (WhatsApp)*</label>
                           <input 
                             type="tel" 
                             name="phone"
@@ -271,20 +255,20 @@ export default function ContactoPage() {
                             value={formData.phone}
                             onChange={handleChange}
                             placeholder="Ej. +506 8888-8888"
-                            className="w-full rounded-2xl bg-slate-50 border border-slate-200 focus:border-[#ffe600] focus:bg-white focus:outline-none px-4 py-2.5 text-slate-900 text-sm transition-all duration-200 placeholder:text-slate-400 font-medium shadow-sm"
+                            className="w-full rounded-[16px] bg-slate-50 border border-slate-200 focus:border-[#ffe600] focus:ring-4 focus:ring-[#ffe600]/20 focus:bg-white outline-none px-4 py-3 text-slate-900 text-sm transition-all duration-300 placeholder:text-slate-400 font-medium"
                           />
                         </div>
                       </div>
 
                       {/* Services interested in dropdown */}
-                      <div className="space-y-1.5">
-                        <label className="text-[13px] sm:text-[14px] font-bold text-slate-800 block">¿En qué servicio estás interesado?*</label>
+                      <div className="space-y-2">
+                        <label className="text-sm font-bold text-slate-950 block">¿En qué servicio estás interesado?*</label>
                         <div className="relative">
                           <select 
                             name="service"
                             value={formData.service}
                             onChange={handleChange}
-                            className="w-full rounded-2xl bg-slate-50 border border-slate-200 focus:border-[#ffe600] focus:bg-white focus:outline-none px-4 py-2.5 text-slate-900 text-sm transition-all duration-200 cursor-pointer appearance-none font-medium shadow-sm pr-10"
+                            className="w-full rounded-[16px] bg-slate-50 border border-slate-200 focus:border-[#ffe600] focus:ring-4 focus:ring-[#ffe600]/20 focus:bg-white outline-none px-4 py-3 text-slate-900 text-sm transition-all duration-300 cursor-pointer appearance-none font-medium pr-12"
                           >
                             <option value="Comprar una propiedad">Comprar una propiedad</option>
                             <option value="Vender mi propiedad">Vender mi propiedad</option>
@@ -292,9 +276,8 @@ export default function ContactoPage() {
                             <option value="Alquilar propiedad">Alquilar propiedad</option>
                             <option value="Otras consultas">Otras consultas</option>
                           </select>
-                          {/* Chevron Icon */}
-                          <div className="pointer-events-none absolute inset-y-0 right-4 flex items-center text-slate-450">
-                            <svg className="h-4 w-4 fill-current" viewBox="0 0 20 20">
+                          <div className="pointer-events-none absolute inset-y-0 right-5 flex items-center text-slate-400">
+                            <svg className="h-5 w-5 fill-current" viewBox="0 0 20 20">
                               <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
                             </svg>
                           </div>
@@ -302,21 +285,21 @@ export default function ContactoPage() {
                       </div>
 
                       {/* Message / Describe */}
-                      <div className="space-y-1.5">
-                        <label className="text-[13px] sm:text-[14px] font-bold text-slate-800 block">Detalle de tu consulta*</label>
+                      <div className="space-y-2">
+                        <label className="text-sm font-bold text-slate-950 block">Detalle de tu consulta*</label>
                         <textarea 
                           name="message"
                           required
-                          rows={3}
+                          rows={4}
                           value={formData.message}
                           onChange={handleChange}
                           placeholder="Contanos detalladamente en qué podemos ayudarte..."
-                          className="w-full rounded-2xl bg-slate-50 border border-slate-200 focus:border-[#ffe600] focus:bg-white focus:outline-none px-4 py-2.5 text-slate-900 text-sm transition-all duration-200 resize-none placeholder:text-slate-400 font-medium shadow-sm"
+                          className="w-full rounded-[16px] bg-slate-50 border border-slate-200 focus:border-[#ffe600] focus:ring-4 focus:ring-[#ffe600]/20 focus:bg-white outline-none px-4 py-3 text-slate-900 text-sm transition-all duration-300 resize-none placeholder:text-slate-400 font-medium"
                         />
                       </div>
 
                       {/* Terms Acceptance Checkbox */}
-                      <div className="flex items-start gap-3 pt-1">
+                      <div className="flex items-start gap-3 pt-2">
                         <input 
                           type="checkbox" 
                           id="agree"
@@ -324,9 +307,9 @@ export default function ContactoPage() {
                           required
                           checked={formData.agree}
                           onChange={handleChange}
-                          className="mt-1 w-4 h-4 rounded text-slate-950 focus:ring-slate-950 border-slate-350 cursor-pointer accent-slate-950"
+                          className="mt-1.5 w-4 h-4 rounded text-[#ffe600] focus:ring-[#ffe600] border-slate-300 cursor-pointer"
                         />
-                        <label htmlFor="agree" className="text-xs text-slate-500 select-none leading-relaxed font-medium">
+                        <label htmlFor="agree" className="text-sm text-slate-500 select-none leading-relaxed font-medium">
                           Al hacer clic en enviar, acepto el procesamiento de mis datos personales de acuerdo con las políticas de privacidad.
                         </label>
                       </div>
@@ -335,17 +318,17 @@ export default function ContactoPage() {
                       <button
                         type="submit"
                         disabled={status === 'submitting'}
-                        className="w-full sm:w-auto relative flex items-center justify-center gap-2 rounded-xl bg-slate-950 px-8 py-3 text-xs font-bold text-white uppercase tracking-wider hover:bg-slate-900 active:scale-[0.98] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer shadow-lg shadow-slate-950/15"
+                        className="w-full sm:w-auto relative flex items-center justify-center gap-3 rounded-full bg-slate-950 px-10 py-4 text-sm font-bold text-white uppercase tracking-wider hover:bg-slate-800 active:scale-[0.98] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-xl shadow-slate-950/20 mt-4 group"
                       >
                         {status === 'submitting' ? (
                           <>
-                            <Loader2 className="h-4 w-4 animate-spin" />
-                            <span>Enviando...</span>
+                            <Loader2 className="h-5 w-5 animate-spin text-[#ffe600]" />
+                            <span>Enviando Mensaje...</span>
                           </>
                         ) : (
                           <>
                             <span>Enviar Consulta</span>
-                            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                            <ArrowRight className="h-5 w-5 text-[#ffe600] transition-transform group-hover:translate-x-1" />
                           </>
                         )}
                       </button>

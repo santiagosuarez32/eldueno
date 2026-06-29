@@ -23,7 +23,7 @@ export default function PartnersCarousel() {
     const handleResize = () => {
       let show = 5;
       if (window.innerWidth < 640) {
-        show = 2;
+        show = 1;
       } else if (window.innerWidth < 1024) {
         show = 3;
       }
@@ -125,11 +125,11 @@ export default function PartnersCarousel() {
                   className="shrink-0 px-1.5 sm:px-4 flex items-center justify-center"
                   style={{ width: `${100 / itemsToShow}%` }}
                 >
-                  <div className="h-32 sm:h-44 w-full flex items-center justify-center">
+                  <div className="h-40 sm:h-44 w-full flex items-center justify-center">
                     <img
                       src={partner.logo}
                       alt={partner.name}
-                      className="max-h-24 sm:max-h-32 max-w-full object-contain filter grayscale-0 hover:grayscale opacity-100 hover:opacity-50 transition-all duration-300"
+                      className="max-h-32 sm:max-h-32 max-w-[85%] sm:max-w-full object-contain filter grayscale-0 hover:grayscale opacity-100 hover:opacity-50 transition-all duration-300"
                     />
                   </div>
                 </div>

@@ -63,7 +63,7 @@ export default function Navbar() {
   const [mobileAccordion, setMobileAccordion] = useState<string | null>(null);
   const pathname = usePathname();
 
-  const isLightPage = pathname.startsWith('/propiedades') || pathname.startsWith('/blog') || pathname.startsWith('/admin') || pathname === '/login' || pathname.startsWith('/arquitectura') || pathname.startsWith('/prestamos');
+  const isLightPage = pathname.startsWith('/propiedades') || pathname.startsWith('/blog') || pathname.startsWith('/admin') || pathname === '/login' || pathname.startsWith('/arquitectura') || pathname.startsWith('/prestamos') || pathname.startsWith('/contacto');
 
   useEffect(() => {
     const handleScroll = () => {

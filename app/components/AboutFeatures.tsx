@@ -21,13 +21,13 @@ export default function AboutFeatures() {
   return (
     <section className="bg-white text-slate-900 relative overflow-hidden flex flex-col lg:flex-row">
         
-        {/* Left: Image (50% width, full height) */}
+        {/* Left: Image (smaller width, full height) */}
         <motion.div
           initial={{ opacity: 0, x: -30 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true, margin: '-50px' }}
           transition={{ duration: 0.8 }}
-          className="w-full lg:w-1/2 flex"
+          className="w-full lg:w-5/12 flex"
         >
           <img 
             src="/about.png" 
@@ -42,7 +42,7 @@ export default function AboutFeatures() {
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true, margin: '-50px' }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="w-full lg:w-1/2 py-16 lg:py-24 px-6 sm:px-12 lg:px-16 xl:px-24 flex flex-col justify-center gap-10 sm:gap-12"
+          className="w-full lg:w-7/12 py-16 lg:py-24 px-6 sm:px-12 lg:px-16 xl:px-24 flex flex-col justify-center gap-10 sm:gap-12"
         >
             {features.map((feature, index) => (
               <div key={index} className="space-y-3">

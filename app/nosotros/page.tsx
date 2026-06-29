@@ -85,17 +85,18 @@ export default function NosotrosPage() {
               alt="Luxury minimalist interior architecture with tall arches"
               className="w-full h-full object-cover object-center"
             />
-            {/* Dark gradient mapping (Dribbble dark look) */}
+            {/* Left-aligned dark gradient to match Dribbble design */}
             <div 
               className="absolute inset-0 pointer-events-none"
               style={{
-                background: 'radial-gradient(circle at center, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.55) 60%, rgba(0, 0, 0, 0.75) 100%)'
+                background: 'linear-gradient(to right, rgba(15, 15, 15, 0.95) 0%, rgba(15, 15, 15, 0.7) 40%, rgba(15, 15, 15, 0) 100%)'
               }}
             />
+            {/* Subtle bottom gradient for text legibility */}
             <div 
               className="absolute inset-0 pointer-events-none"
               style={{
-                background: 'linear-gradient(to top, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.4) 40%, rgba(0, 0, 0, 0.08) 100%)'
+                background: 'linear-gradient(to top, rgba(15, 15, 15, 0.6) 0%, transparent 30%)'
               }}
             />
           </div>
@@ -109,17 +110,16 @@ export default function NosotrosPage() {
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: 0.1 }}
-                  className="text-4xl sm:text-6xl lg:text-7.5xl font-bold tracking-tight text-white leading-[1.05]"
+                  className="text-4xl sm:text-5xl lg:text-7xl font-semibold tracking-tight text-white leading-[1.1]"
                 >
-                  “ De Sueño <br />
-                  <span className="text-emerald-400">a Dueño “</span>
+                  De Sueño a Dueño.
                 </motion.h1>
 
                 <motion.p
                   initial={{ opacity: 0, y: 25 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: 0.2 }}
-                  className="text-slate-300 text-base sm:text-xl max-w-2xl leading-relaxed"
+                  className="text-slate-300 text-base sm:text-lg max-w-xl leading-relaxed"
                 >
                   En El Dueño Vende, le acompañamos durante todo el proceso de compra, venta o alquiler de su propiedad, brindándole asesoría profesional, transparencia y seguridad en cada etapa.
                 </motion.p>
@@ -130,7 +130,7 @@ export default function NosotrosPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.3 }}
-                className="flex flex-wrap items-center gap-4 pt-4"
+                className="flex flex-wrap items-center gap-4 pt-2"
               >
                 <Link href="/propiedades">
                   <FlowButton text="Explorar Propiedades" variant="primary" />
@@ -165,14 +165,14 @@ export default function NosotrosPage() {
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: idx * 0.1 }}
-                  className="bg-slate-50/50 border border-slate-100 rounded-2xl p-6 hover:bg-slate-50 hover:border-slate-200 transition-all duration-300 flex flex-col space-y-3 shadow-sm"
+                  className="bg-[#ffe600] rounded-2xl p-6 hover:bg-[#e6cf00] transition-all duration-300 flex flex-col space-y-3 shadow-sm"
                 >
-                  <div className="text-emerald-600 flex items-baseline gap-0.5">
+                  <div className="text-black flex items-baseline gap-0.5">
                     <AnimatedCounter value={stat.value} prefix={stat.prefix} suffix={stat.suffix} />
                   </div>
                   <div className="space-y-1">
-                    <h4 className="text-base sm:text-lg font-bold text-slate-900 leading-snug">{stat.label}</h4>
-                    <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">{stat.desc}</p>
+                    <h4 className="text-base sm:text-lg font-bold text-black leading-snug">{stat.label}</h4>
+                    <p className="text-xs sm:text-sm text-slate-900 leading-relaxed">{stat.desc}</p>
                   </div>
                 </motion.div>
               ))}
@@ -279,7 +279,7 @@ export default function NosotrosPage() {
 
       </main>
 
-      <Footer />
+      <Footer showCTA={false} />
     </>
   );
 }

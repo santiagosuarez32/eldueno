@@ -19,34 +19,40 @@ export default function ArquitecturaPage() {
 
   const services = [
     {
-      number: "01",
+      number: "1",
       title: "Construcción desde cero",
-      description: "Materializamos tus proyectos de vivienda, comercio u oficinas desde los cimientos con rigurosos estándares de calidad y eficiencia."
+      description: "Materializamos tus proyectos de vivienda, comercio u oficinas desde los cimientos con rigurosos estándares de calidad y eficiencia.",
+      image: "/services/arquitectura.webp"
     },
     {
-      number: "02",
+      number: "2",
       title: "Remodelación",
-      description: "Transformamos y revalorizamos tus espacios actuales mediante diseños modernos, funcionales y optimización de la distribución."
+      description: "Transformamos y revalorizamos tus espacios actuales mediante diseños modernos, funcionales y optimización de la distribución.",
+      image: "https://images.unsplash.com/photo-1505691938895-1758d7feb511?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
     },
     {
-      number: "03",
+      number: "3",
       title: "Diseño",
-      description: "Modelado 3D, arquitectura conceptual y desarrollo integral de planos a la medida de tus necesidades y gustos estéticos."
+      description: "Modelado 3D, arquitectura conceptual y desarrollo integral de planos a la medida de tus necesidades y gustos estéticos.",
+      image: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
     },
     {
-      number: "04",
+      number: "4",
       title: "Tramitología",
-      description: "Gestión ágil de permisos municipales, visados de planos, cartas de agua y todos los requisitos legales para iniciar tu obra sin demoras."
+      description: "Gestión ágil de permisos municipales, visados de planos, cartas de agua y todos los requisitos legales para iniciar tu obra sin demoras.",
+      image: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
     },
     {
-      number: "05",
+      number: "5",
       title: "Inspección de sitio",
-      description: "Evaluaciones técnicas del estado actual de terrenos o estructuras previas a compras, remodelaciones o etapas constructivas."
+      description: "Evaluaciones técnicas del estado actual de terrenos o estructuras previas a compras, remodelaciones o etapas constructivas.",
+      image: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
     },
     {
-      number: "06",
+      number: "6",
       title: "Dirección de Obra",
-      description: "Supervisión profesional en sitio para garantizar el cumplimiento de los planos, presupuestos fijados y tiempos de entrega."
+      description: "Supervisión profesional en sitio para garantizar el cumplimiento de los planos, presupuestos fijados y tiempos de entrega.",
+      image: "https://images.unsplash.com/photo-1621905252507-b35492cc74b4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
     }
   ];
 
@@ -105,81 +111,71 @@ export default function ArquitecturaPage() {
           </div>
         </section>
 
-        {/* SERVICES SECTION - Bento Grid style matching the reference image */}
-        <section className="py-24 bg-slate-50/30">
-          <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
-              
-              {/* Left Side: Large Image Card */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-50px" }}
-                transition={{ duration: 0.5, delay: 0.1 }}
-                className="lg:col-span-4 relative rounded-[24px] overflow-hidden min-h-[350px] lg:min-h-[600px] shadow-[0_2px_8px_rgba(0,0,0,0.015)] border border-slate-200/60 group bg-slate-100"
-              >
-                <img
-                  src="/services/arquitectura.webp"
-                  alt="Diseño y planificación arquitectónica"
-                  className="w-full h-full object-cover object-center group-hover:scale-102 transition-transform duration-700"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/20 via-transparent to-transparent pointer-events-none" />
-              </motion.div>
+        {/* SERVICES SECTION - Redesigned Centered Grid */}
+        <section className="py-24 bg-white relative">
+          <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
+            
+            {/* Top Section: Title & Description */}
+            <div className="text-center max-w-3xl mx-auto space-y-6 mb-16">
+              <h2 className="text-3xl sm:text-4xl lg:text-[46px] font-bold tracking-tight text-slate-900 leading-[1.1]">
+                Nuestros servicios
+              </h2>
+              <p className="text-slate-600 text-base lg:text-lg leading-relaxed font-normal">
+                Aseguramos la máxima calidad y legalidad en cada fase de la obra, desde la valoración del terreno hasta la entrega llave en mano.
+              </p>
+              <div className="pt-4">
+                <Link
+                  href="/contacto?servicio=arquitectura"
+                  className="inline-flex items-center justify-center px-8 h-12 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-full transition-all duration-300 text-sm shadow-sm hover:shadow-md"
+                >
+                  Iniciar Consulta
+                </Link>
+              </div>
+            </div>
 
-              {/* Right Side: Content card containing Title, Paragraph, Button and all 6 Cards */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-50px" }}
-                transition={{ duration: 0.5, delay: 0.2 }}
-                className="lg:col-span-8 bg-white border border-slate-200/60 rounded-[24px] p-6 sm:p-10 lg:p-12 flex flex-col justify-between gap-10 shadow-[0_2px_8px_rgba(0,0,0,0.015)]"
-              >
-                {/* Title & Description */}
-                <div className="space-y-5">
-                  <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-                    <div className="space-y-3 max-w-xl">
-                      <h2 className="text-3xl sm:text-4xl lg:text-[42px] font-bold tracking-tight text-slate-900 leading-[1.1]">
-                        Nuestros servicios
-                      </h2>
-                      <p className="text-slate-500 text-sm sm:text-base leading-relaxed font-normal">
-                        Aseguramos la máxima calidad y legalidad en cada fase de la obra, desde la valoración del terreno hasta la entrega llave en mano.
-                      </p>
-                    </div>
-                    <div className="flex-shrink-0">
-                      <Link
-                        href="/contacto?servicio=arquitectura"
-                        className="inline-flex items-center justify-center px-6 h-12 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-full transition-all duration-200 text-sm shadow-sm hover:shadow"
-                      >
-                        Iniciar Consulta
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Grid of all 6 cards inside */}
-                {/* List of all 6 cards stacked vertically in a single column */}
-                <div className="grid grid-cols-1 gap-4 pt-8 border-t border-slate-100">
-                  {services.map((service, index) => (
-                    <div
-                      key={index}
-                      className="group p-5 rounded-2xl bg-slate-50 border border-slate-200/60 shadow-[0_2px_8px_rgba(0,0,0,0.005)] hover:border-emerald-500/20 hover:bg-white hover:shadow-[0_4px_16px_rgba(0,0,0,0.02)] transition-all duration-300 flex items-start gap-5"
+            {/* Distinct Service Sections */}
+            <div className="space-y-24 lg:space-y-32 mt-20 max-w-6xl mx-auto">
+              {services.map((service, index) => {
+                const isEven = index % 2 === 0;
+                return (
+                  <div key={index} className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+                    <motion.div
+                      initial={{ opacity: 0, x: isEven ? -30 : 30 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true, margin: "-50px" }}
+                      transition={{ duration: 0.6 }}
+                      className={`space-y-6 ${isEven ? 'order-2 lg:order-1' : 'order-2 lg:order-2'}`}
                     >
-                      <div className="text-xs font-semibold text-slate-400 tracking-widest font-mono pt-1">
+                      <div className="w-12 h-12 bg-[#ffe600] rounded-full flex items-center justify-center font-bold text-xl text-slate-900 shadow-sm">
                         {service.number}
                       </div>
-                      <div className="space-y-1">
-                        <h4 className="font-bold text-slate-900 text-sm sm:text-base group-hover:text-emerald-600 transition-colors duration-200">
-                          {service.title}
-                        </h4>
-                        <p className="text-slate-500 text-xs sm:text-sm leading-relaxed font-normal">
-                          {service.description}
-                        </p>
+                      <h3 className="text-3xl sm:text-4xl font-bold text-slate-900 leading-tight tracking-tight">
+                        {service.title}
+                      </h3>
+                      <p className="text-slate-600 text-lg leading-relaxed">
+                        {service.description}
+                      </p>
+                    </motion.div>
+                    <motion.div
+                      initial={{ opacity: 0, x: isEven ? 30 : -30 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true, margin: "-50px" }}
+                      transition={{ duration: 0.6 }}
+                      className={`${isEven ? 'order-1 lg:order-2' : 'order-1 lg:order-1'}`}
+                    >
+                      <div className="relative aspect-[4/3] rounded-[32px] overflow-hidden shadow-xl bg-slate-100">
+                        <img 
+                          src={service.image} 
+                          alt={service.title} 
+                          className="w-full h-full object-cover" 
+                        />
                       </div>
-                    </div>
-                  ))}
-                </div>
-              </motion.div>
+                    </motion.div>
+                  </div>
+                );
+              })}
             </div>
+
           </div>
         </section>
 
