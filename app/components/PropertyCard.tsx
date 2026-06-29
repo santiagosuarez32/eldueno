@@ -24,17 +24,23 @@ export default function PropertyCard({ property, priority = false }: PropertyCar
 
   useGSAP(() => {
     if (cardRef.current) {
-      gsap.from(cardRef.current, {
-        scrollTrigger: {
-          trigger: cardRef.current,
-          start: "top bottom-=50px",
-          once: true
-        },
-        opacity: 0,
-        y: 20,
-        duration: 0.35,
-        ease: "power2.out"
-      });
+      setTimeout(() => {
+        ScrollTrigger.refresh();
+        gsap.fromTo(cardRef.current, 
+          { opacity: 0, y: 20 },
+          {
+            scrollTrigger: {
+              trigger: cardRef.current,
+              start: "top bottom-=50px",
+              once: true
+            },
+            opacity: 1,
+            y: 0,
+            duration: 0.35,
+            ease: "power2.out"
+          }
+        );
+      }, 50);
     }
   }, { scope: cardRef });
   // Format price nicely

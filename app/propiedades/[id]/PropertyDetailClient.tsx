@@ -18,6 +18,7 @@ import { FaWhatsapp } from 'react-icons/fa';
 import LightboxGallery from '@/app/components/LightboxGallery';
 import Image from 'next/image';
 import { getOptimizedImageUrl, supabaseImageLoader } from '@/lib/utils';
+import ReactDOM from 'react-dom';
 
 interface PropertyDetailClientProps {
   property: Property;
@@ -34,6 +35,15 @@ export default function PropertyDetailClient({ property, relatedProperties }: Pr
       document.body.classList.add('bg-slate-950', 'text-slate-100');
     };
   }, []);
+
+  // Preload gallery images to prevent delay when opening lightbox or navigating
+  useEffect(() => {
+    if (property.gallery && property.gallery.length > 0) {
+      property.gallery.slice(0, 5).forEach((url) => {
+        ReactDOM.preload(getOptimizedImageUrl(url, 1200), { as: 'image' });
+      });
+    }
+  }, [property.gallery]);
 
   // Gallery State
   const [activeImage, setActiveImage] = useState(0);

@@ -25,17 +25,26 @@ export default function FeaturedProperties() {
 
   useGSAP(() => {
     if (loading) return;
-    gsap.from(".featured-card", {
-      scrollTrigger: {
-        trigger: ".featured-grid",
-        start: "top bottom-=50px",
-        once: true
-      },
-      opacity: 0,
-      y: 30,
-      duration: 0.5,
-      stagger: 0.1
-    });
+    
+    // Give DOM a tick to paint the new cards before animating
+    setTimeout(() => {
+      ScrollTrigger.refresh();
+      gsap.fromTo(".featured-card", 
+        { opacity: 0, y: 30 },
+        {
+          scrollTrigger: {
+            trigger: ".featured-grid",
+            start: "top bottom-=50px",
+            once: true
+          },
+          opacity: 1,
+          y: 0,
+          duration: 0.5,
+          stagger: 0.1,
+          ease: "power2.out"
+        }
+      );
+    }, 50);
   }, { scope: sectionRef, dependencies: [loading] });
 
   useEffect(() => {

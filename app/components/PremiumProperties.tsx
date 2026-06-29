@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowRight, ArrowLeft } from 'lucide-react';
 import Image from 'next/image';
@@ -9,6 +10,7 @@ import { getOptimizedImageUrl, supabaseImageLoader } from '@/lib/utils';
 import { supabase } from '@/lib/supabase';
 
 export default function PremiumProperties() {
+  const router = useRouter();
   const [properties, setProperties] = useState<Property[]>([]);
   const [activeIndex, setActiveIndex] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -245,7 +247,13 @@ export default function PremiumProperties() {
                   {/* DESKTOP CARD (Original code wrapped to hide on mobile) */}
                   <div
                     onMouseEnter={() => setActiveIndex(idx)}
-                    onClick={() => setActiveIndex(idx)}
+                    onClick={() => {
+                      if (isActive) {
+                        router.push(`/propiedades/${property.id}`);
+                      } else {
+                        setActiveIndex(idx);
+                      }
+                    }}
                     className={`hidden lg:flex relative transition-all duration-500 ease-out cursor-pointer flex-col justify-between flex-shrink-0 h-[420px] ${
                       isActive 
                         ? 'w-[480px] bg-white border border-slate-100/80 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.08)] p-3.5 rounded-[32px]' 
