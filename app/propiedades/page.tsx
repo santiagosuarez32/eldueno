@@ -2,6 +2,8 @@ import { supabase } from '@/lib/supabase';
 import { mockProperties, mapDbToProperty } from '@/app/data/properties';
 import CatalogClient from '@/app/components/CatalogClient';
 
+export const revalidate = 60; // ISR cache every 60 seconds
+
 export default async function PropertiesPage() {
   let initialProperties = mockProperties;
   

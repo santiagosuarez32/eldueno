@@ -11,6 +11,8 @@ interface PropertyDetailPageProps {
   params: Promise<{ id: string }>;
 }
 
+export const revalidate = 60; // ISR cache every 60 seconds
+
 export async function generateMetadata({
   params,
 }: PropertyDetailPageProps): Promise<Metadata> {

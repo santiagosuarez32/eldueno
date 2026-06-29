@@ -10,6 +10,8 @@ import FAQ from '@/app/components/FAQ';
 import PartnersCarousel from '@/app/components/PartnersCarousel';
 import Footer from '@/app/components/Footer';
 
+export const revalidate = 60; // ISR cache every 60 seconds
+
 export default function Home() {
   return (
     <>
