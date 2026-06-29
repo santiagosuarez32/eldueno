@@ -1,7 +1,13 @@
 'use client';
 
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useRef } from 'react';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+}
 import { ChevronDown } from 'lucide-react';
 import Link from 'next/link';
 
@@ -45,18 +51,41 @@ export default function FAQ() {
     setOpenId(openId === id ? null : id);
   };
 
+  const container = useRef<HTMLElement>(null);
+
+  useGSAP(() => {
+    gsap.from(".faq-head", {
+      scrollTrigger: {
+        trigger: ".faq-head",
+        start: "top bottom-=50px",
+        once: true
+      },
+      opacity: 0,
+      y: 30,
+      duration: 0.6
+    });
+
+    gsap.from(".faq-list", {
+      scrollTrigger: {
+        trigger: ".faq-list",
+        start: "top bottom-=50px",
+        once: true
+      },
+      opacity: 0,
+      y: 30,
+      duration: 0.6,
+      delay: 0.2
+    });
+  }, { scope: container });
+
   return (
-    <section className="bg-white pt-20 pb-10 md:pt-32 md:pb-12">
+    <section ref={container} className="bg-white pt-20 pb-10 md:pt-32 md:pb-12">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid gap-10 md:grid-cols-5 md:gap-16">
           
           {/* Left: Title */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-50px' }}
-            transition={{ duration: 0.6 }}
-            className="md:col-span-2"
+          <div
+            className="faq-head md:col-span-2"
           >
             <h2 className="text-4xl font-bold text-slate-950 tracking-tight">
               Preguntas Frecuentes
@@ -73,15 +102,11 @@ export default function FAQ() {
                 equipo
               </Link>
             </p>
-          </motion.div>
+          </div>
 
           {/* Right: Accordion */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-50px' }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="md:col-span-3"
+          <div
+            className="faq-list md:col-span-3"
           >
             <div className="divide-y divide-slate-200 border-t border-b border-slate-200">
               {faqs.map((faq) => (
@@ -98,25 +123,21 @@ export default function FAQ() {
                     />
                   </button>
 
-                  <AnimatePresence initial={false}>
-                    {openId === faq.id && (
-                      <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: 'auto', opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.3, ease: 'easeInOut' }}
-                        className="overflow-hidden"
-                      >
-                        <p className="text-slate-500 text-base leading-relaxed pb-6">
-                          {faq.answer}
-                        </p>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
+                  <div
+                    className={`grid transition-all duration-300 ease-in-out ${
+                      openId === faq.id ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
+                    }`}
+                  >
+                    <div className="overflow-hidden">
+                      <p className="text-slate-500 text-base leading-relaxed pb-6">
+                        {faq.answer}
+                      </p>
+                    </div>
+                  </div>
                 </div>
               ))}
             </div>
-          </motion.div>
+          </div>
 
           {/* Mobile support link */}
           <p className="text-slate-500 mt-6 md:hidden col-span-full">

@@ -2,7 +2,13 @@
 
 import { useRef, useState, useEffect } from 'react';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+}
 import Image from 'next/image';
 import { ArrowLeft, ArrowRight, ArrowUpRight, Bed, Bath, Square, MapPin } from 'lucide-react';
 import { TbBed, TbBath, TbRuler2 } from 'react-icons/tb';
@@ -12,9 +18,25 @@ import { FeaturedCardSkeleton } from '@/app/components/PropertyCardSkeleton';
 import { supabase } from '@/lib/supabase';
 
 export default function FeaturedProperties() {
+  const sectionRef = useRef<HTMLElement>(null);
   const carouselRef = useRef<HTMLDivElement>(null);
   const [properties, setProperties] = useState<Property[]>([]);
   const [loading, setLoading] = useState(true);
+
+  useGSAP(() => {
+    if (loading) return;
+    gsap.from(".featured-card", {
+      scrollTrigger: {
+        trigger: ".featured-grid",
+        start: "top bottom-=50px",
+        once: true
+      },
+      opacity: 0,
+      y: 30,
+      duration: 0.5,
+      stagger: 0.1
+    });
+  }, { scope: sectionRef, dependencies: [loading] });
 
   useEffect(() => {
     async function load() {
@@ -56,7 +78,7 @@ export default function FeaturedProperties() {
   };
 
   return (
-    <section className="bg-white py-24 text-slate-900 relative overflow-hidden">
+    <section ref={sectionRef} className="bg-white py-24 text-slate-900 relative overflow-hidden">
       <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Header Section */}
@@ -106,7 +128,7 @@ export default function FeaturedProperties() {
         {/* Carousel Container */}
         <div 
           ref={carouselRef}
-          className="flex gap-4 lg:gap-5 overflow-x-auto pb-8 snap-x snap-mandatory scroll-smooth hide-scrollbar w-screen -mx-4 sm:-mx-6 lg:w-full lg:mx-0 px-4"
+          className="featured-grid flex gap-4 lg:gap-5 overflow-x-auto pb-8 snap-x snap-mandatory scroll-smooth hide-scrollbar w-screen -mx-4 sm:-mx-6 lg:w-full lg:mx-0 px-4"
           style={{
             scrollbarWidth: 'none',
             msOverflowStyle: 'none',
@@ -130,12 +152,8 @@ export default function FeaturedProperties() {
                   href={`/propiedades/${property.id}`}
                   className="w-[85vw] sm:w-[75vw] shrink-0 snap-center lg:w-[calc(25%-15px)] lg:shrink-0 lg:snap-start block cursor-pointer"
                 >
-                  <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: '-50px' }}
-                    transition={{ duration: 0.5 }}
-                    className="w-full bg-white border border-slate-200 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.08)] hover:shadow-[0_20px_50px_-10px_rgba(0,0,0,0.12)] hover:-translate-y-1 rounded-[32px] overflow-hidden flex flex-col group transition-all duration-300 h-full"
+                  <div
+                    className="featured-card w-full bg-white border border-slate-200 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.08)] hover:shadow-[0_20px_50px_-10px_rgba(0,0,0,0.12)] hover:-translate-y-1 rounded-[32px] overflow-hidden flex flex-col group transition-all duration-300 h-full"
                   >
                     {/* Image Container */}
                     <div className="relative aspect-[16/10] w-full overflow-hidden bg-slate-100">
@@ -190,19 +208,19 @@ export default function FeaturedProperties() {
 
                       {/* Property Specs */}
                       <div className="flex items-center gap-5 sm:gap-6 text-xs text-slate-600 font-medium pt-3 border-t border-slate-100 mt-auto">
-                        {property.beds != null && (
+                        {Boolean(property.beds) && Number(property.beds) > 0 && (
                           <div className="flex items-center gap-1.5">
                             <img src="/icons-property/dormitorios.png" className="h-4.5 w-4.5 object-contain flex-shrink-0" alt="" />
                             <span className="font-semibold text-slate-700">{property.beds} Dorms</span>
                           </div>
                         )}
-                        {property.baths != null && (
+                        {Boolean(property.baths) && Number(property.baths) > 0 && (
                           <div className="flex items-center gap-1.5">
                             <img src="/icons-property/baños.png" className="h-4.5 w-4.5 object-contain flex-shrink-0" alt="" />
                             <span className="font-semibold text-slate-700">{property.baths} Baños</span>
                           </div>
                         )}
-                        {property.area != null && (
+                        {Boolean(property.area) && Number(property.area) > 0 && (
                           <div className="flex items-center gap-1.5">
                             <img src="/icons-property/m2.png" className="h-4.5 w-4.5 object-contain flex-shrink-0" alt="" />
                             <span className="font-semibold text-slate-700">{property.area} m²</span>
@@ -211,7 +229,7 @@ export default function FeaturedProperties() {
                       </div>
 
                     </div>
-                  </motion.div>
+                  </div>
                 </Link>
               );
             })

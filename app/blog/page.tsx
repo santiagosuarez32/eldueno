@@ -1,11 +1,12 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Navbar from '@/app/components/Navbar';
 import Footer from '@/app/components/Footer';
 import Link from 'next/link';
-import { Search, ArrowUpRight } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { Search, ArrowUpRight, ArrowLeft, ArrowRight } from 'lucide-react';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
 import { mockBlogPosts, mapDbToBlogPost, BlogPost } from '@/app/data/blog';
 import { supabase } from '@/lib/supabase';
 
@@ -38,11 +39,40 @@ export default function BlogPage() {
     post.category.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const containerRef = useRef<HTMLElement>(null);
+  const carouselRef = useRef<HTMLDivElement>(null);
+
+  useGSAP(() => {
+    if (filteredPosts.length > 0) {
+      gsap.from(".blog-card", {
+        opacity: 0,
+        y: 20,
+        duration: 0.4,
+        stagger: 0.1
+      });
+    }
+  }, { scope: containerRef, dependencies: [filteredPosts] });
+
+  const scroll = (direction: 'left' | 'right') => {
+    if (carouselRef.current) {
+      const { scrollLeft } = carouselRef.current;
+      const firstChild = carouselRef.current.firstElementChild as HTMLElement;
+      // standard width of card + gap, approximately 400px, but we can measure first child
+      const cardWidth = firstChild ? firstChild.offsetWidth + 20 : 400; 
+      const offset = direction === 'left' ? -cardWidth : cardWidth;
+      
+      carouselRef.current.scrollTo({
+        left: scrollLeft + offset,
+        behavior: 'smooth',
+      });
+    }
+  };
+
   return (
     <>
       <Navbar />
 
-      <main className="flex-grow pt-28 pb-24 bg-slate-950 text-white">
+      <main ref={containerRef} className="flex-grow pt-28 pb-24 bg-slate-950 text-white overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           
           {/* Header Section */}
@@ -56,32 +86,61 @@ export default function BlogPage() {
               </p>
             </div>
 
-            {/* Keyword Search */}
-            <div className="w-full md:w-80">
-              <div className="relative rounded-2xl shadow-sm">
-                <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
-                  <Search className="h-4 w-4 text-slate-500" />
+            {/* Keyword Search & Arrows */}
+            <div className="w-full md:w-auto flex flex-col sm:flex-row items-center gap-4">
+              <div className="w-full sm:w-80">
+                <div className="relative rounded-2xl shadow-sm">
+                  <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
+                    <Search className="h-4 w-4 text-slate-500" />
+                  </div>
+                  <input
+                    type="text"
+                    placeholder="Buscar artículos..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="block w-full rounded-2xl bg-slate-900/60 border border-slate-800 focus:border-emerald-500 focus:outline-none pl-11 pr-4 py-3 text-white text-sm"
+                  />
                 </div>
-                <input
-                  type="text"
-                  placeholder="Buscar artículos..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="block w-full rounded-2xl bg-slate-900/60 border border-slate-800 focus:border-emerald-500 focus:outline-none pl-11 pr-4 py-3 text-white text-sm"
-                />
               </div>
+
+              {/* Carousel Arrows */}
+              {filteredPosts.length > 0 && (
+                <div className="flex items-center gap-3 self-end sm:self-auto shrink-0">
+                  <button
+                    onClick={() => scroll('left')}
+                    className="h-12 w-12 rounded-full border border-slate-800 bg-slate-900/60 text-white hover:bg-slate-800 flex items-center justify-center transition-all duration-200 active:scale-95 shadow-sm"
+                    aria-label="Anterior"
+                  >
+                    <ArrowLeft className="h-5 w-5" />
+                  </button>
+                  <button
+                    onClick={() => scroll('right')}
+                    className="h-12 w-12 rounded-full bg-emerald-500 text-slate-950 hover:bg-emerald-400 flex items-center justify-center transition-all duration-200 active:scale-95 shadow-md"
+                    aria-label="Siguiente"
+                  >
+                    <ArrowRight className="h-5 w-5" />
+                  </button>
+                </div>
+              )}
             </div>
           </div>
 
-          {/* Cards Grid */}
+          {/* Cards Carousel */}
           {filteredPosts.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div 
+              ref={carouselRef}
+              className="flex gap-5 overflow-x-auto pb-8 snap-x snap-mandatory scroll-smooth hide-scrollbar w-screen -mx-4 sm:-mx-6 lg:w-full lg:mx-0 px-4"
+              style={{
+                scrollbarWidth: 'none',
+                msOverflowStyle: 'none',
+                WebkitMaskImage: 'linear-gradient(to right, transparent, black 40px, black calc(100% - 40px), transparent)',
+                maskImage: 'linear-gradient(to right, transparent, black 40px, black calc(100% - 40px), transparent)'
+              }}
+            >
               {filteredPosts.map((post, idx) => (
-                <motion.div
+                <div
                   key={post.slug}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, delay: idx * 0.1 }}
+                  className="blog-card snap-center shrink-0 w-[85vw] sm:w-[400px]"
                 >
                   <Link
                     href={`/blog/${post.slug}`}
@@ -123,7 +182,7 @@ export default function BlogPage() {
                       </div>
                     </div>
                   </Link>
-                </motion.div>
+                </div>
               ))}
             </div>
           ) : (

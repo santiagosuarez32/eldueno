@@ -1,65 +1,56 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
-import { motion, useInView } from 'framer-motion';
+import { useState, useRef } from 'react';
 import Link from 'next/link';
 import { ArrowUpRight, ArrowLeft, ArrowRight } from 'lucide-react';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-interface AnimatedCounterProps {
-  value: number;
-  duration?: number;
-  prefix?: string;
-  suffix?: string;
-}
-
-function AnimatedCounter({ value, duration = 2, prefix = '', suffix = '' }: AnimatedCounterProps) {
-  const [count, setCount] = useState(0);
-  const ref = useRef<HTMLSpanElement>(null);
-  const isInView = useInView(ref, { once: true, margin: '-50px' });
-
-  useEffect(() => {
-    if (!isInView) return;
-
-    let start = 0;
-    const end = value;
-    const totalDuration = duration * 1000;
-    const startTime = performance.now();
-    let animationFrameId: number;
-
-    const updateCount = (currentTime: number) => {
-      const elapsed = currentTime - startTime;
-      const progress = Math.min(elapsed / totalDuration, 1);
-      
-      // Easing out cubic for premium smooth feel
-      const easeOutCubic = 1 - Math.pow(1 - progress, 3);
-      
-      setCount(Math.floor(easeOutCubic * (end - start) + start));
-
-      if (progress < 1) {
-        animationFrameId = requestAnimationFrame(updateCount);
-      }
-    };
-
-    animationFrameId = requestAnimationFrame(updateCount);
-
-    return () => {
-      if (animationFrameId) {
-        cancelAnimationFrame(animationFrameId);
-      }
-    };
-  }, [value, duration, isInView]);
-
-  return (
-    <span ref={ref} className="inline-block tabular-nums">
-      {prefix}
-      {count}
-      {suffix}
-    </span>
-  );
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
 }
 
 export default function StatsSection() {
+  const container = useRef<HTMLElement>(null);
   const carouselRef = useRef<HTMLDivElement>(null);
+
+  useGSAP(() => {
+    gsap.from(".stats-head", {
+      scrollTrigger: {
+        trigger: ".stats-head",
+        start: "top bottom-=50px",
+        once: true
+      },
+      opacity: 0,
+      y: 30,
+      duration: 0.6
+    });
+
+    gsap.from(".stats-desc", {
+      scrollTrigger: {
+        trigger: ".stats-desc",
+        start: "top bottom-=50px",
+        once: true
+      },
+      opacity: 0,
+      y: 30,
+      duration: 0.6,
+      delay: 0.2
+    });
+
+    gsap.from(".stats-grid", {
+      scrollTrigger: {
+        trigger: ".stats-grid",
+        start: "top bottom-=50px",
+        once: true
+      },
+      opacity: 0,
+      y: 40,
+      duration: 0.8,
+      delay: 0.4
+    });
+  }, { scope: container });
 
   const scroll = (direction: 'left' | 'right') => {
     if (carouselRef.current) {
@@ -111,30 +102,23 @@ export default function StatsSection() {
   ];
 
   return (
-    <section className="bg-white py-24 text-slate-900 relative overflow-hidden">
+    <section ref={container} className="bg-white py-24 text-slate-900 relative overflow-hidden">
       <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Top Text Section */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-24 mb-16 items-start">
           {/* Left: Heading */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-50px' }}
-            transition={{ duration: 0.6 }}
+          <div
+            className="stats-head"
           >
             <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-slate-950 tracking-tight leading-[1.1]">
               Recursos y Guías útiles
             </h2>
-          </motion.div>
+          </div>
  
           {/* Right: Description & Arrows */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-50px' }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="flex flex-col md:flex-row md:items-end justify-between gap-6"
+          <div
+            className="stats-desc flex flex-col md:flex-row md:items-end justify-between gap-6"
           >
             <p className="text-slate-600 text-lg sm:text-xl leading-relaxed max-w-lg">
               Información de valor, guías prácticas y tendencias del mercado inmobiliario. Consejos prácticos de expertos para comprar, vender o alquilar propiedades de forma directa, segura.
@@ -157,17 +141,13 @@ export default function StatsSection() {
                 <ArrowRight className="h-5 w-5" />
               </button>
             </div>
-          </motion.div>
+          </div>
         </div>
  
         {/* Bottom Cards Grid / Carousel */}
-        <motion.div
+        <div
           ref={carouselRef}
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-50px' }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-          className="flex lg:grid gap-0 lg:gap-6 overflow-x-auto lg:overflow-x-visible pb-8 lg:pb-0 snap-x snap-mandatory scroll-smooth hide-scrollbar w-screen -mx-4 sm:-mx-6 lg:w-full lg:mx-0 px-4 lg:px-0 lg:grid-cols-4"
+          className="stats-grid flex lg:grid gap-0 lg:gap-6 overflow-x-auto lg:overflow-x-visible pb-8 lg:pb-0 snap-x snap-mandatory scroll-smooth hide-scrollbar w-screen -mx-4 sm:-mx-6 lg:w-full lg:mx-0 px-4 lg:px-0 lg:grid-cols-4"
           style={{
             scrollbarWidth: 'none',
             msOverflowStyle: 'none',
@@ -216,7 +196,7 @@ export default function StatsSection() {
               </div>
             </Link>
           ))}
-        </motion.div>
+        </div>
 
       </div>
     </section>

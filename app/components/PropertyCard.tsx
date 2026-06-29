@@ -1,7 +1,14 @@
 'use client';
 
 import Link from 'next/link';
-import { motion } from 'framer-motion';
+import { useRef } from 'react';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+}
 import { ShieldCheck } from 'lucide-react';
 import Image from 'next/image';
 import { Property, formatPropertyPrice } from '@/app/data/properties';
@@ -13,6 +20,23 @@ interface PropertyCardProps {
 }
 
 export default function PropertyCard({ property, priority = false }: PropertyCardProps) {
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  useGSAP(() => {
+    if (cardRef.current) {
+      gsap.from(cardRef.current, {
+        scrollTrigger: {
+          trigger: cardRef.current,
+          start: "top bottom-=50px",
+          once: true
+        },
+        opacity: 0,
+        y: 20,
+        duration: 0.35,
+        ease: "power2.out"
+      });
+    }
+  }, { scope: cardRef });
   // Format price nicely
   const formattedPrice = formatPropertyPrice(property.price, property.moneda);
 
@@ -28,13 +52,9 @@ export default function PropertyCard({ property, priority = false }: PropertyCar
 
   return (
     <Link href={`/propiedades/${property.id}`} className="block h-full cursor-pointer">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: '-50px' }}
-        whileHover={{ y: -6 }}
-        transition={{ duration: 0.35, ease: 'easeOut' }}
-        className="bg-white rounded-3xl overflow-hidden border border-slate-200/60 flex flex-col group h-full shadow-md hover:shadow-xl hover:border-slate-300/80 transition-all duration-300"
+      <div
+        ref={cardRef}
+        className="bg-white rounded-3xl overflow-hidden border border-slate-200/60 flex flex-col group h-full shadow-md hover:shadow-xl hover:border-slate-300/80 transition-all duration-300 hover:-translate-y-1.5"
       >
         {/* Image Container */}
         <div className="relative aspect-video w-full overflow-hidden bg-slate-100">
@@ -93,46 +113,60 @@ export default function PropertyCard({ property, priority = false }: PropertyCar
           </p>
 
           {/* Property Specs */}
-          <div className="grid grid-cols-3 gap-2 py-4 border-t border-slate-100 text-slate-650 text-xs">
+          <div className="flex items-center justify-center gap-4 sm:gap-6 py-4 border-t border-slate-100 text-slate-650 text-xs">
             {property.type === 'terreno' ? (
-              <div className="col-span-3 flex items-center justify-center gap-2">
-                <img src="/icons-property/m2.png" className="h-4.5 w-4.5 object-contain" alt="" />
-                <span className="font-semibold text-slate-700">Terreno de {property.landArea || property.area} m²</span>
-              </div>
+              (property.landArea || property.area) ? (
+                <div className="flex items-center justify-center gap-2">
+                  <img src="/icons-property/m2.png" className="h-4.5 w-4.5 object-contain" alt="" />
+                  <span className="font-semibold text-slate-700">Terreno de {property.landArea || property.area} m²</span>
+                </div>
+              ) : null
             ) : property.type === 'comercial' ? (
               <>
-                <div className="flex flex-col items-center justify-center gap-1 text-center">
-                  <img src="/icons-property/dormitorios.png" className="h-4.5 w-4.5 object-contain" alt="" />
-                  <span className="font-semibold text-slate-700">{property.aposentos} Apos.</span>
-                </div>
-                <div className="flex flex-col items-center justify-center gap-1 text-center border-l border-r border-slate-150">
-                  <img src="/icons-property/cochera.png" className="h-4.5 w-4.5 object-contain" alt="" />
-                  <span className="font-semibold text-slate-700">{property.parkingSpaces} Estac.</span>
-                </div>
-                <div className="flex flex-col items-center justify-center gap-1 text-center">
-                  <img src="/icons-property/m2.png" className="h-4.5 w-4.5 object-contain" alt="" />
-                  <span className="font-semibold text-slate-700">{property.area} m²</span>
-                </div>
+                {Boolean(property.aposentos) && Number(property.aposentos) > 0 && (
+                  <div className="flex flex-col items-center justify-center gap-1 text-center relative after:content-[''] after:absolute after:-right-[10px] sm:after:-right-[15px] after:h-8 after:w-[1px] after:bg-slate-200 last:after:hidden">
+                    <img src="/icons-property/dormitorios.png" className="h-4.5 w-4.5 object-contain" alt="" />
+                    <span className="font-semibold text-slate-700">{property.aposentos} Apos.</span>
+                  </div>
+                )}
+                {Boolean(property.parkingSpaces) && Number(property.parkingSpaces) > 0 && (
+                  <div className="flex flex-col items-center justify-center gap-1 text-center relative after:content-[''] after:absolute after:-right-[10px] sm:after:-right-[15px] after:h-8 after:w-[1px] after:bg-slate-200 last:after:hidden">
+                    <img src="/icons-property/cochera.png" className="h-4.5 w-4.5 object-contain" alt="" />
+                    <span className="font-semibold text-slate-700">{property.parkingSpaces} Estac.</span>
+                  </div>
+                )}
+                {Boolean(property.area) && Number(property.area) > 0 && (
+                  <div className="flex flex-col items-center justify-center gap-1 text-center relative after:content-[''] after:absolute after:-right-[10px] sm:after:-right-[15px] after:h-8 after:w-[1px] after:bg-slate-200 last:after:hidden">
+                    <img src="/icons-property/m2.png" className="h-4.5 w-4.5 object-contain" alt="" />
+                    <span className="font-semibold text-slate-700">{property.area} m²</span>
+                  </div>
+                )}
               </>
             ) : (
               <>
-                <div className="flex flex-col items-center justify-center gap-1 text-center">
-                  <img src="/icons-property/dormitorios.png" className="h-4.5 w-4.5 object-contain" alt="" />
-                  <span className="font-semibold text-slate-700">{property.beds} Dorms</span>
-                </div>
-                <div className="flex flex-col items-center justify-center gap-1 text-center border-l border-r border-slate-150">
-                  <img src="/icons-property/baños.png" className="h-4.5 w-4.5 object-contain" alt="" />
-                  <span className="font-semibold text-slate-700">{property.baths} Baños</span>
-                </div>
-                <div className="flex flex-col items-center justify-center gap-1 text-center">
-                  <img src="/icons-property/m2.png" className="h-4.5 w-4.5 object-contain" alt="" />
-                  <span className="font-semibold text-slate-700">{(property.constructionArea || property.area)} m²</span>
-                </div>
+                {Boolean(property.beds) && Number(property.beds) > 0 && (
+                  <div className="flex flex-col items-center justify-center gap-1 text-center relative after:content-[''] after:absolute after:-right-[10px] sm:after:-right-[15px] after:h-8 after:w-[1px] after:bg-slate-200 last:after:hidden">
+                    <img src="/icons-property/dormitorios.png" className="h-4.5 w-4.5 object-contain" alt="" />
+                    <span className="font-semibold text-slate-700">{property.beds} Dorms</span>
+                  </div>
+                )}
+                {Boolean(property.baths) && Number(property.baths) > 0 && (
+                  <div className="flex flex-col items-center justify-center gap-1 text-center relative after:content-[''] after:absolute after:-right-[10px] sm:after:-right-[15px] after:h-8 after:w-[1px] after:bg-slate-200 last:after:hidden">
+                    <img src="/icons-property/baños.png" className="h-4.5 w-4.5 object-contain" alt="" />
+                    <span className="font-semibold text-slate-700">{property.baths} Baños</span>
+                  </div>
+                )}
+                {Boolean(property.constructionArea || property.area) && Number(property.constructionArea || property.area) > 0 && (
+                  <div className="flex flex-col items-center justify-center gap-1 text-center relative after:content-[''] after:absolute after:-right-[10px] sm:after:-right-[15px] after:h-8 after:w-[1px] after:bg-slate-200 last:after:hidden">
+                    <img src="/icons-property/m2.png" className="h-4.5 w-4.5 object-contain" alt="" />
+                    <span className="font-semibold text-slate-700">{(property.constructionArea || property.area)} m²</span>
+                  </div>
+                )}
               </>
             )}
           </div>
         </div>
-      </motion.div>
+      </div>
     </Link>
   );
 }

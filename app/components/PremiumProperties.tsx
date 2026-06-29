@@ -164,14 +164,28 @@ export default function PremiumProperties() {
                   {/* MOBILE CARD (Matches FeaturedProperties) */}
                   <Link
                     href={`/propiedades/${property.id}`}
-                    className="block lg:hidden w-[85vw] sm:w-[75vw] h-[400px] sm:h-[420px]"
+                    className="block lg:hidden w-[85vw] sm:w-[75vw] h-auto cursor-pointer"
                   >
-                    <div className="w-full bg-white border border-slate-200 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.08)] rounded-[32px] overflow-hidden flex flex-col group transition-all duration-300 h-full">
+                    <div className="w-full bg-white border border-slate-200 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.08)] hover:shadow-[0_20px_50px_-10px_rgba(0,0,0,0.12)] hover:-translate-y-1 rounded-[32px] overflow-hidden flex flex-col group transition-all duration-300 h-full">
                       {/* Image Container */}
                       <div className="relative aspect-[16/10] w-full overflow-hidden bg-slate-100">
+                        {/* Floating Action Overlay on Hover */}
+                        <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20 flex items-center justify-center">
+                          <div 
+                            className="bg-yellow-400 text-slate-955 font-bold text-sm px-6 py-2.5 rounded-full flex items-center justify-center text-center transform scale-90 group-hover:scale-100 transition-all duration-300 shadow-xl"
+                          >
+                            <span className="whitespace-nowrap">Ver detalle</span>
+                          </div>
+                        </div>
+
                         {/* Tags */}
                         <div className="absolute top-4 left-4 z-10 bg-yellow-400 text-slate-955 text-[10px] font-bold px-2.5 py-1 rounded-full tracking-wider shadow-md">
                           Premium
+                        </div>
+                        <div className="absolute top-4 right-4 z-10">
+                          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-900/80 backdrop-blur-sm border border-slate-700/50 text-slate-300 text-[10px] font-semibold">
+                            Costa Rica
+                          </span>
                         </div>
                         <div className="absolute bottom-4 right-4 z-10 bg-slate-950 text-white font-bold px-4 py-2 rounded-2xl shadow-md text-sm">
                           {formatPropertyPrice(property.price, property.moneda)}
@@ -183,34 +197,43 @@ export default function PremiumProperties() {
                           sizes="(max-width: 768px) 85vw, (max-width: 1024px) 75vw, 25vw"
                           className="object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out"
                           priority={idx < 2}
+                          onError={(e) => {
+                            e.currentTarget.style.display = 'none';
+                          }}
                         />
                       </div>
                       
                       {/* Content Section */}
-                      <div className="px-5 pt-4 pb-4 sm:px-6 sm:pt-5 sm:pb-5 flex flex-col flex-grow bg-white">
-                        <div className="flex items-center text-[11px] sm:text-xs text-slate-500 mb-1.5 gap-1.5 font-medium">
-                          <img src="/icons-filters/ubication.png" className="h-3.5 w-3.5 object-contain shrink-0" alt="" />
-                          <span className="truncate">{property.neighborhood}, {property.location}</span>
+                      <div className="px-6 pt-5 pb-5 sm:px-8 sm:pt-5 sm:pb-5 flex flex-col flex-grow bg-white">
+                        
+                        {/* Location */}
+                        <div className="flex items-center text-xs text-slate-500 mb-2 gap-1.5 font-medium">
+                          <img src="/icons-filters/ubication.png" className="h-4 w-4 object-contain shrink-0" alt="" />
+                          <span>{property.neighborhood}, {property.location}</span>
                         </div>
-                        <h3 className="text-sm sm:text-base font-bold text-slate-950 line-clamp-1 mb-3">
+
+                        {/* Title */}
+                        <h3 className="text-base sm:text-lg font-bold text-slate-950 group-hover:text-emerald-500 transition-colors line-clamp-1 leading-snug mb-4">
                           {property.title}
                         </h3>
-                        <div className="flex items-center gap-4 text-[10px] sm:text-xs text-slate-600 font-medium pt-2.5 border-t border-slate-100 mt-auto">
-                          {property.beds != null && (
-                            <div className="flex items-center gap-1">
-                              <img src="/icons-property/dormitorios.png" className="h-4 w-4 object-contain flex-shrink-0" alt="" />
+
+                        {/* Property Specs */}
+                        <div className="flex items-center gap-5 sm:gap-6 text-xs text-slate-600 font-medium pt-3 border-t border-slate-100 mt-auto">
+                          {Boolean(property.beds) && Number(property.beds) > 0 && (
+                            <div className="flex items-center gap-1.5">
+                              <img src="/icons-property/dormitorios.png" className="h-4.5 w-4.5 object-contain flex-shrink-0" alt="" />
                               <span className="font-semibold text-slate-700">{property.beds} Dorms</span>
                             </div>
                           )}
-                          {property.baths != null && (
-                            <div className="flex items-center gap-1">
-                              <img src="/icons-property/baños.png" className="h-4 w-4 object-contain flex-shrink-0" alt="" />
+                          {Boolean(property.baths) && Number(property.baths) > 0 && (
+                            <div className="flex items-center gap-1.5">
+                              <img src="/icons-property/baños.png" className="h-4.5 w-4.5 object-contain flex-shrink-0" alt="" />
                               <span className="font-semibold text-slate-700">{property.baths} Baños</span>
                             </div>
                           )}
-                          {property.area != null && (
-                            <div className="flex items-center gap-1">
-                              <img src="/icons-property/m2.png" className="h-4 w-4 object-contain flex-shrink-0" alt="" />
+                          {Boolean(property.area) && Number(property.area) > 0 && (
+                            <div className="flex items-center gap-1.5">
+                              <img src="/icons-property/m2.png" className="h-4.5 w-4.5 object-contain flex-shrink-0" alt="" />
                               <span className="font-semibold text-slate-700">{property.area} m²</span>
                             </div>
                           )}
@@ -304,19 +327,19 @@ export default function PremiumProperties() {
                     {/* Specs and Action Link */}
                     <div className="flex items-center justify-between pt-3 border-t border-slate-100 mt-2">
                       <div className="flex items-center gap-3 text-[11px] font-semibold text-slate-655">
-                        {(property.beds ?? 0) > 0 && (
+                        {Boolean(property.beds) && Number(property.beds) > 0 && (
                           <span className="flex items-center gap-1">
                             <img src="/icons-property/dormitorios.png" className="h-3.5 w-3.5 object-contain" alt="" />
                             {property.beds} Dorms
                           </span>
                         )}
-                        {(property.baths ?? 0) > 0 && (
+                        {Boolean(property.baths) && Number(property.baths) > 0 && (
                           <span className="flex items-center gap-1">
                             <img src="/icons-property/baños.png" className="h-3.5 w-3.5 object-contain" alt="" />
                             {property.baths} Baños
                           </span>
                         )}
-                        {(property.area ?? 0) > 0 && (
+                        {Boolean(property.area) && Number(property.area) > 0 && (
                           <span className="flex items-center gap-1">
                             <img src="/icons-property/m2.png" className="h-3.5 w-3.5 object-contain" alt="" />
                             {property.area} m²

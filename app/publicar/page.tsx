@@ -1,9 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import Navbar from '@/app/components/Navbar';
 import Footer from '@/app/components/Footer';
-import { motion, AnimatePresence } from 'framer-motion';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
 import { Check, ArrowLeft, ArrowRight, Building, MapPin, DollarSign, Image, User, CheckCircle, UploadCloud } from 'lucide-react';
 
 export default function PublishPage() {
@@ -54,6 +55,24 @@ export default function PublishPage() {
     { number: 2, name: 'Precio y Fotos' },
     { number: 3, name: 'Contacto' },
   ];
+
+  const wizardRef = useRef<HTMLDivElement>(null);
+
+  useGSAP(() => {
+    if (wizardRef.current) {
+      if (isSubmitted) {
+        gsap.fromTo(".wizard-success", 
+          { opacity: 0, scale: 0.95 },
+          { opacity: 1, scale: 1, duration: 0.3, ease: "power2.out" }
+        );
+      } else {
+        gsap.fromTo(".wizard-step", 
+          { opacity: 0, x: 20 },
+          { opacity: 1, x: 0, duration: 0.3, ease: "power2.out" }
+        );
+      }
+    }
+  }, { scope: wizardRef, dependencies: [step, isSubmitted] });
 
   return (
     <>
@@ -113,15 +132,11 @@ export default function PublishPage() {
           )}
 
           {/* Wizard Card */}
-          <div className="glass-panel rounded-3xl border border-slate-800/80 p-6 sm:p-10 shadow-2xl relative overflow-hidden">
-            <AnimatePresence mode="wait">
+          <div ref={wizardRef} className="glass-panel rounded-3xl border border-slate-800/80 p-6 sm:p-10 shadow-2xl relative overflow-hidden">
               {isSubmitted ? (
                 /* Success View */
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0 }}
-                  className="text-center py-8 space-y-6 flex flex-col items-center"
+                <div
+                  className="wizard-success text-center py-8 space-y-6 flex flex-col items-center"
                 >
                   <div className="h-16 w-16 rounded-full bg-emerald-500/10 border-2 border-emerald-500 flex items-center justify-center text-emerald-400">
                     <CheckCircle className="h-10 w-10" />
@@ -190,17 +205,14 @@ export default function PublishPage() {
                       Ir al Catálogo
                     </a>
                   </div>
-                </motion.div>
+                  </div>
+                </div>
               ) : (
                 /* Form Steps */
-                <motion.form
+                <form
                   key={step}
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -20 }}
-                  transition={{ duration: 0.3 }}
                   onSubmit={handleNext}
-                  className="space-y-6"
+                  className="wizard-step space-y-6"
                 >
                   {/* STEP 1: Basic Info */}
                   {step === 1 && (
@@ -466,9 +478,8 @@ export default function PublishPage() {
                       {step < 3 && <ArrowRight className="h-4 w-4" />}
                     </button>
                   </div>
-                </motion.form>
+                </form>
               )}
-            </AnimatePresence>
           </div>
 
         </div>

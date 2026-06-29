@@ -1,7 +1,13 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { motion, useInView } from 'framer-motion';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+}
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import Navbar from '@/app/components/Navbar';
@@ -20,39 +26,25 @@ interface AnimatedCounterProps {
 function AnimatedCounter({ value, duration = 2, prefix = '', suffix = '' }: AnimatedCounterProps) {
   const [count, setCount] = useState(0);
   const ref = useRef<HTMLSpanElement>(null);
-  const isInView = useInView(ref, { once: true, margin: '-50px' });
 
-  useEffect(() => {
-    if (!isInView) return;
-
-    let start = 0;
-    const end = value;
-    const totalDuration = duration * 1000;
-    const startTime = performance.now();
-    let animationFrameId: number;
-
-    const updateCount = (currentTime: number) => {
-      const elapsed = currentTime - startTime;
-      const progress = Math.min(elapsed / totalDuration, 1);
-      
-      // Easing out cubic for premium smooth feel
-      const easeOutCubic = 1 - Math.pow(1 - progress, 3);
-      
-      setCount(Math.floor(easeOutCubic * (end - start) + start));
-
-      if (progress < 1) {
-        animationFrameId = requestAnimationFrame(updateCount);
-      }
-    };
-
-    animationFrameId = requestAnimationFrame(updateCount);
-
-    return () => {
-      if (animationFrameId) {
-        cancelAnimationFrame(animationFrameId);
-      }
-    };
-  }, [value, duration, isInView]);
+  useGSAP(() => {
+    if (ref.current) {
+      ScrollTrigger.create({
+        trigger: ref.current,
+        start: "top bottom-=50px",
+        once: true,
+        onEnter: () => {
+          let obj = { val: 0 };
+          gsap.to(obj, {
+            val: value,
+            duration: duration,
+            ease: "power3.out",
+            onUpdate: () => setCount(Math.floor(obj.val))
+          });
+        }
+      });
+    }
+  }, { scope: ref });
 
   return (
     <span ref={ref} className="inline-block tabular-nums font-extrabold text-4xl sm:text-5xl lg:text-6xl">
@@ -71,10 +63,90 @@ export default function NosotrosPage() {
     { value: 100, prefix: '', suffix: '%', label: 'Listados verificados', desc: 'Validamos detalladamente cada publicación para garantizar la veracidad de los datos.' }
   ];
 
+  const mainRef = useRef<HTMLElement>(null);
+
+  useGSAP(() => {
+    gsap.from(".hero-title", {
+      opacity: 0,
+      y: 30,
+      duration: 0.8,
+      delay: 0.1
+    });
+    gsap.from(".hero-desc", {
+      opacity: 0,
+      y: 25,
+      duration: 0.8,
+      delay: 0.2
+    });
+    gsap.from(".hero-actions", {
+      opacity: 0,
+      y: 20,
+      duration: 0.8,
+      delay: 0.3
+    });
+
+    gsap.from(".stat-card", {
+      scrollTrigger: {
+        trigger: "#stats",
+        start: "top bottom-=50px",
+        once: true
+      },
+      opacity: 0,
+      scale: 0.95,
+      duration: 0.6,
+      stagger: 0.1
+    });
+
+    gsap.from(".hist-img-main", {
+      scrollTrigger: {
+        trigger: ".hist-img-main",
+        start: "top bottom-=50px",
+        once: true
+      },
+      opacity: 0,
+      y: 30,
+      duration: 0.8
+    });
+
+    gsap.from(".hist-img-sub1", {
+      scrollTrigger: {
+        trigger: ".hist-img-sub1",
+        start: "top bottom-=50px",
+        once: true
+      },
+      opacity: 0,
+      scale: 0.95,
+      duration: 0.6
+    });
+
+    gsap.from(".hist-img-sub2", {
+      scrollTrigger: {
+        trigger: ".hist-img-sub2",
+        start: "top bottom-=50px",
+        once: true
+      },
+      opacity: 0,
+      scale: 0.95,
+      duration: 0.6,
+      delay: 0.15
+    });
+
+    gsap.from(".hist-headline", {
+      scrollTrigger: {
+        trigger: ".hist-headline",
+        start: "top bottom-=50px",
+        once: true
+      },
+      opacity: 0,
+      y: 20,
+      duration: 0.8
+    });
+  }, { scope: mainRef });
+
   return (
     <>
       <Navbar />
-      <main className="flex-grow bg-slate-950 text-slate-100">
+      <main ref={mainRef} className="flex-grow bg-slate-950 text-slate-100">
         
         {/* HERO SECTION - Ref. Dribbble "Poperty" style */}
         <section className="relative h-screen flex items-end pb-16 sm:pb-24 overflow-hidden bg-slate-950">
@@ -106,31 +178,22 @@ export default function NosotrosPage() {
             <div className="max-w-4xl space-y-6">
 
               <div className="space-y-4">
-                <motion.h1
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8, delay: 0.1 }}
-                  className="text-4xl sm:text-5xl lg:text-7xl font-semibold tracking-tight text-white leading-[1.1]"
+                <h1
+                  className="hero-title text-4xl sm:text-5xl lg:text-7xl font-semibold tracking-tight text-white leading-[1.1]"
                 >
                   De Sueño a Dueño.
-                </motion.h1>
+                </h1>
 
-                <motion.p
-                  initial={{ opacity: 0, y: 25 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8, delay: 0.2 }}
-                  className="text-slate-300 text-base sm:text-lg max-w-xl leading-relaxed"
+                <p
+                  className="hero-desc text-slate-300 text-base sm:text-lg max-w-xl leading-relaxed"
                 >
                   En El Dueño Vende, le acompañamos durante todo el proceso de compra, venta o alquiler de su propiedad, brindándole asesoría profesional, transparencia y seguridad en cada etapa.
-                </motion.p>
+                </p>
               </div>
 
               {/* Action and Scroll Button */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.3 }}
-                className="flex flex-wrap items-center gap-4 pt-2"
+              <div
+                className="hero-actions flex flex-wrap items-center gap-4 pt-2"
               >
                 <Link href="/propiedades">
                   <FlowButton text="Explorar Propiedades" variant="primary" />
@@ -141,7 +204,7 @@ export default function NosotrosPage() {
                     <ArrowRight className="h-4 w-4 rotate-90" />
                   </button>
                 </a>
-              </motion.div>
+              </div>
             </div>
           </div>
         </section>
@@ -159,13 +222,9 @@ export default function NosotrosPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {stats.map((stat, idx) => (
-                <motion.div
+                <div
                   key={idx}
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: idx * 0.1 }}
-                  className="bg-[#ffe600] rounded-2xl p-6 hover:bg-[#e6cf00] transition-all duration-300 flex flex-col space-y-3 shadow-sm"
+                  className="stat-card bg-[#ffe600] rounded-2xl p-6 hover:bg-[#e6cf00] transition-all duration-300 flex flex-col space-y-3 shadow-sm"
                 >
                   <div className="text-black flex items-baseline gap-0.5">
                     <AnimatedCounter value={stat.value} prefix={stat.prefix} suffix={stat.suffix} />
@@ -174,7 +233,7 @@ export default function NosotrosPage() {
                     <h4 className="text-base sm:text-lg font-bold text-black leading-snug">{stat.label}</h4>
                     <p className="text-xs sm:text-sm text-slate-900 leading-relaxed">{stat.desc}</p>
                   </div>
-                </motion.div>
+                </div>
               ))}
             </div>
           </div>
@@ -193,51 +252,39 @@ export default function NosotrosPage() {
                   y resultados
                 </h2>
                 
-                <motion.div 
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.8 }}
-                  className="rounded-[32px] overflow-hidden shadow-xl h-[360px] sm:h-[460px] w-full bg-slate-100"
+                <div 
+                  className="hist-img-main rounded-[32px] overflow-hidden shadow-xl h-[360px] sm:h-[460px] w-full bg-slate-100"
                 >
                   <img
                     src="/images/about-living-room.webp"
                     alt="Interior de sala de estar moderna"
                     className="w-full h-full object-cover"
                   />
-                </motion.div>
+                </div>
               </div>
 
               {/* Right Column (7/12 width) */}
               <div className="lg:col-span-7 flex flex-col space-y-12 lg:pt-8">
                 {/* Two side-by-side images */}
                 <div className="grid grid-cols-2 gap-6">
-                  <motion.div 
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.6 }}
-                    className="rounded-[32px] overflow-hidden shadow-md h-[170px] sm:h-[220px] w-full bg-slate-100"
+                  <div 
+                    className="hist-img-sub1 rounded-[32px] overflow-hidden shadow-md h-[170px] sm:h-[220px] w-full bg-slate-100"
                   >
                     <img
                       src="/images/about-villa-concrete.webp"
                       alt="Exterior de casa de hormigón moderna"
                       className="w-full h-full object-cover"
                     />
-                  </motion.div>
-                  <motion.div 
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.6, delay: 0.15 }}
-                    className="rounded-[32px] overflow-hidden shadow-md h-[170px] sm:h-[220px] w-full bg-slate-100"
+                  </div>
+                  <div 
+                    className="hist-img-sub2 rounded-[32px] overflow-hidden shadow-md h-[170px] sm:h-[220px] w-full bg-slate-100"
                   >
                     <img
                       src="/images/about-villa-balcony.webp"
                       alt="Apartamento moderno con balcón y árboles"
                       className="w-full h-full object-cover"
                     />
-                  </motion.div>
+                  </div>
                 </div>
 
                 {/* About Us Title and 2 Column Description */}
@@ -254,12 +301,8 @@ export default function NosotrosPage() {
                 </div>
 
                 {/* Highlight Headline */}
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.8 }}
-                  className="pt-6 border-t border-slate-100"
+                <div
+                  className="hist-headline pt-6 border-t border-slate-100"
                 >
                   <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-950 tracking-tight leading-tight mb-3">
                     Más de tres décadas asesorando con transparencia, agilidad y resultados.
@@ -267,7 +310,7 @@ export default function NosotrosPage() {
                   <p className="text-slate-500 text-base sm:text-lg">
                     Experiencia real, soluciones integrales y un acompañamiento que genera confianza.
                   </p>
-                </motion.div>
+                </div>
               </div>
 
             </div>

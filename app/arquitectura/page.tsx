@@ -1,8 +1,14 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+}
 import Navbar from '@/app/components/Navbar';
 import Footer from '@/app/components/Footer';
 
@@ -56,10 +62,63 @@ export default function ArquitecturaPage() {
     }
   ];
 
+  ];
+
+  const container = useRef<HTMLElement>(null);
+  
+  useGSAP(() => {
+    gsap.from(".hero-title", {
+      opacity: 0,
+      y: 30,
+      duration: 0.8,
+      delay: 0.1
+    });
+
+    gsap.from(".hero-subtitle", {
+      opacity: 0,
+      y: 25,
+      duration: 0.8,
+      delay: 0.2
+    });
+
+    const sections = gsap.utils.toArray<HTMLElement>('.service-section');
+    sections.forEach((section) => {
+      const isEven = section.dataset.iseven === "true";
+      const content = section.querySelector('.service-content');
+      const img = section.querySelector('.service-img');
+
+      if (content) {
+        gsap.from(content, {
+          scrollTrigger: {
+            trigger: section,
+            start: "top bottom-=50px",
+            once: true
+          },
+          opacity: 0,
+          x: isEven ? -30 : 30,
+          duration: 0.6
+        });
+      }
+
+      if (img) {
+        gsap.from(img, {
+          scrollTrigger: {
+            trigger: section,
+            start: "top bottom-=50px",
+            once: true
+          },
+          opacity: 0,
+          x: isEven ? 30 : -30,
+          duration: 0.6
+        });
+      }
+    });
+  }, { scope: container });
+
   return (
     <>
       <Navbar />
-      <main className="flex-grow bg-white text-slate-900">
+      <main ref={container} className="flex-grow bg-white text-slate-900">
         
         {/* HERO SECTION - Dark premium style matching "Nosotros" */}
         <section className="relative h-[70vh] min-h-[500px] flex items-end pb-16 sm:pb-24 overflow-hidden bg-slate-950">
@@ -89,20 +148,14 @@ export default function ArquitecturaPage() {
           <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
             <div className="max-w-4xl space-y-6">
               <div className="space-y-4">
-                <motion.h1
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8, delay: 0.1 }}
-                  className="text-4xl sm:text-6xl font-bold tracking-tight text-white leading-[1.05]"
+                <h1
+                  className="hero-title text-4xl sm:text-6xl font-bold tracking-tight text-white leading-[1.05]"
                 >
                   Servicios de Arquitectura
-                </motion.h1>
+                </h1>
 
-                <motion.p
-                  initial={{ opacity: 0, y: 25 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8, delay: 0.2 }}
-                  className="text-slate-350 text-base sm:text-lg max-w-3xl leading-relaxed"
+                <p
+                  className="hero-subtitle text-slate-350 text-base sm:text-lg max-w-3xl leading-relaxed"
                 >
                   Ofrecemos servicios de arquitectura enfocados en el diseño, planificación y remodelación de espacios residenciales, comerciales e industriales. Brindamos asesoría personalizada y elaboración de planos, creando soluciones funcionales, estéticas y adaptadas a cada necesidad. Nuestro objetivo es optimizar cada espacio, garantizando calidad, eficiencia y mayor valor para su propiedad.
                 </motion.p>
@@ -138,13 +191,9 @@ export default function ArquitecturaPage() {
               {services.map((service, index) => {
                 const isEven = index % 2 === 0;
                 return (
-                  <div key={index} className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-                    <motion.div
-                      initial={{ opacity: 0, x: isEven ? -30 : 30 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      viewport={{ once: true, margin: "-50px" }}
-                      transition={{ duration: 0.6 }}
-                      className={`space-y-6 ${isEven ? 'order-2 lg:order-1' : 'order-2 lg:order-2'}`}
+                  <div key={index} data-iseven={isEven.toString()} className="service-section grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+                    <div
+                      className={`service-content space-y-6 ${isEven ? 'order-2 lg:order-1' : 'order-2 lg:order-2'}`}
                     >
                       <div className="w-12 h-12 bg-[#ffe600] rounded-full flex items-center justify-center font-bold text-xl text-slate-900 shadow-sm">
                         {service.number}
@@ -155,13 +204,9 @@ export default function ArquitecturaPage() {
                       <p className="text-slate-600 text-lg leading-relaxed">
                         {service.description}
                       </p>
-                    </motion.div>
-                    <motion.div
-                      initial={{ opacity: 0, x: isEven ? 30 : -30 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      viewport={{ once: true, margin: "-50px" }}
-                      transition={{ duration: 0.6 }}
-                      className={`${isEven ? 'order-1 lg:order-2' : 'order-1 lg:order-1'}`}
+                    </div>
+                    <div
+                      className={`service-img ${isEven ? 'order-1 lg:order-2' : 'order-1 lg:order-1'}`}
                     >
                       <div className="relative aspect-[4/3] rounded-[32px] overflow-hidden shadow-xl bg-slate-100">
                         <img 
@@ -170,7 +215,7 @@ export default function ArquitecturaPage() {
                           className="w-full h-full object-cover" 
                         />
                       </div>
-                    </motion.div>
+                    </div>
                   </div>
                 );
               })}

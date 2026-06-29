@@ -1,8 +1,9 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { motion, AnimatePresence } from 'framer-motion';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
 import {
   ArrowLeft,
   MapPin,
@@ -261,25 +262,20 @@ export default function PropertyDetailClient({ property, relatedProperties }: Pr
                   <Share className="h-4.5 w-4.5" />
                 </button>
                 {/* Share Toast */}
-                <AnimatePresence>
-                  {showShareToast && (
-                    <motion.div
-                      initial={{ opacity: 0, scale: 0.9, y: 10 }}
-                      animate={{ opacity: 1, scale: 1, y: 0 }}
-                      exit={{ opacity: 0, scale: 0.9, y: 10 }}
-                      className="absolute right-0 bottom-full mb-2 bg-slate-900 border border-slate-800 px-3 py-1.5 rounded-xl text-xs font-semibold text-emerald-400 whitespace-nowrap shadow-xl flex items-center gap-1 z-30"
-                    >
-                      <CheckCircle className="h-3.5 w-3.5" />
-                      ¡Enlace copiado!
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                <div
+                  className={`absolute right-0 bottom-full mb-2 bg-slate-900 border border-slate-800 px-3 py-1.5 rounded-xl text-xs font-semibold text-emerald-400 whitespace-nowrap shadow-xl flex items-center gap-1 z-30 transition-all duration-300 origin-bottom-right ${
+                    showShareToast ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-90 translate-y-2 pointer-events-none'
+                  }`}
+                >
+                  <CheckCircle className="h-3.5 w-3.5" />
+                  ¡Enlace copiado!
+                </div>
               </div>
             </div>
           </div>
 
           {/* Right Stacked Photos (Right side, takes 4/12 grid-cols) */}
-          <div className="col-span-1 md:col-span-4 flex flex-row md:flex-col gap-4 h-auto md:h-[500px]">
+          <div className="col-span-1 md:col-span-4 flex flex-col gap-4 h-auto md:h-[500px]">
             
             {/* Top Right Photo */}
             <div 
@@ -599,17 +595,15 @@ export default function PropertyDetailClient({ property, relatedProperties }: Pr
       </div>
 
       {/* FULLSCREEN LIGHTBOX MODAL with Zoom + Pan */}
-      <AnimatePresence>
-        {isLightboxOpen && (
-          <LightboxGallery
-            gallery={property.gallery}
-            title={property.title}
-            activeIndex={activeImage}
-            onClose={() => setIsLightboxOpen(false)}
-            onChangeIndex={(idx) => setActiveImage(idx)}
-          />
-        )}
-      </AnimatePresence>
+      {isLightboxOpen && (
+        <LightboxGallery
+          gallery={property.gallery}
+          title={property.title}
+          activeIndex={activeImage}
+          onClose={() => setIsLightboxOpen(false)}
+          onChangeIndex={(idx) => setActiveImage(idx)}
+        />
+      )}
     </main>
   );
 }

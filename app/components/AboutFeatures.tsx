@@ -1,6 +1,13 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { useRef } from 'react';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 export default function AboutFeatures() {
   const features = [
@@ -18,31 +25,50 @@ export default function AboutFeatures() {
     }
   ];
 
+  const container = useRef<HTMLElement>(null);
+
+  useGSAP(() => {
+    gsap.from(".about-feat-img", {
+      scrollTrigger: {
+        trigger: ".about-feat-img",
+        start: "top bottom-=50px",
+        once: true
+      },
+      opacity: 0,
+      x: -30,
+      duration: 0.8
+    });
+
+    gsap.from(".about-feat-content", {
+      scrollTrigger: {
+        trigger: ".about-feat-content",
+        start: "top bottom-=50px",
+        once: true
+      },
+      opacity: 0,
+      x: 30,
+      duration: 0.8,
+      delay: 0.2
+    });
+  }, { scope: container });
+
   return (
-    <section className="bg-white text-slate-900 relative overflow-hidden flex flex-col lg:flex-row">
+    <section ref={container} className="bg-white text-slate-900 relative overflow-hidden flex flex-col lg:flex-row">
         
         {/* Left: Image (smaller width, full height) */}
-        <motion.div
-          initial={{ opacity: 0, x: -30 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true, margin: '-50px' }}
-          transition={{ duration: 0.8 }}
-          className="w-full lg:w-5/12 flex"
+        <div
+          className="about-feat-img w-full lg:w-5/12 flex"
         >
           <img 
             src="/about.png" 
             alt="Sobre nosotros" 
             className="w-full h-[300px] sm:h-[400px] lg:h-auto object-cover rounded-b-[32px] lg:rounded-r-[32px] lg:rounded-bl-none"
           />
-        </motion.div>
+        </div>
 
         {/* Right: Features List */}
-        <motion.div
-          initial={{ opacity: 0, x: 30 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true, margin: '-50px' }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="w-full lg:w-7/12 py-16 lg:py-24 px-6 sm:px-12 lg:px-16 xl:px-24 flex flex-col justify-center gap-10 sm:gap-12"
+        <div
+          className="about-feat-content w-full lg:w-7/12 py-16 lg:py-24 px-6 sm:px-12 lg:px-16 xl:px-24 flex flex-col justify-center gap-10 sm:gap-12"
         >
             {features.map((feature, index) => (
               <div key={index} className="space-y-3">
@@ -54,7 +80,7 @@ export default function AboutFeatures() {
                 </p>
               </div>
             ))}
-          </motion.div>
+          </div>
     </section>
   );
 }

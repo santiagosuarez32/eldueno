@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
-import { motion } from 'framer-motion';
+import { useState, useRef } from 'react';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
 import { DollarSign, Percent, TrendingDown, Coins, HelpCircle } from 'lucide-react';
 
 export default function Calculator() {
@@ -34,6 +35,21 @@ export default function Calculator() {
       return "🏢 Financiar la seña o el anticipo de una segunda propiedad de inversión.";
     }
   };
+
+  const calcRef = useRef<HTMLDivElement>(null);
+
+  useGSAP(() => {
+    if (calcRef.current) {
+      gsap.fromTo(".calc-val", 
+        { scale: 0.95, opacity: 0.5 },
+        { scale: 1, opacity: 1, duration: 0.2, ease: "power1.out" }
+      );
+      gsap.fromTo(".calc-text",
+        { opacity: 0, y: 5 },
+        { opacity: 1, y: 0, duration: 0.3, ease: "power1.out" }
+      );
+    }
+  }, { scope: calcRef, dependencies: [savings] });
 
   return (
     <section className="py-24 bg-slate-900/40 relative">
@@ -114,7 +130,7 @@ export default function Calculator() {
           </div>
 
           {/* Results Summary Card */}
-          <div className="lg:col-span-5 bg-gradient-to-br from-emerald-500/10 via-slate-900 to-slate-950 border border-emerald-500/25 p-6 sm:p-8 rounded-3xl flex flex-col justify-between shadow-2xl relative overflow-hidden">
+          <div ref={calcRef} className="lg:col-span-5 bg-gradient-to-br from-emerald-500/10 via-slate-900 to-slate-950 border border-emerald-500/25 p-6 sm:p-8 rounded-3xl flex flex-col justify-between shadow-2xl relative overflow-hidden">
             {/* Visual shine effect */}
             <div className="absolute -top-1/2 -right-1/2 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
 
@@ -125,15 +141,11 @@ export default function Calculator() {
               </div>
               
               <div className="space-y-1">
-                <motion.div
-                  key={savings}
-                  initial={{ scale: 0.95, opacity: 0.5 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  transition={{ duration: 0.2 }}
-                  className="text-4xl sm:text-5xl font-extrabold text-white tracking-tight text-gradient-emerald"
+                <div
+                  className="calc-val text-4xl sm:text-5xl font-extrabold text-white tracking-tight text-gradient-emerald"
                 >
                   {formatUSD(savings)}
-                </motion.div>
+                </div>
                 <p className="text-xs font-medium text-slate-400">
                   Dinero libre que conservás al vender directo.
                 </p>
@@ -144,15 +156,11 @@ export default function Calculator() {
               <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">
                 ¿Qué podés hacer con este dinero?
               </p>
-              <motion.p
-                key={savings}
-                initial={{ opacity: 0, y: 5 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3 }}
-                className="text-slate-200 text-sm font-semibold leading-relaxed"
+              <p
+                className="calc-text text-slate-200 text-sm font-semibold leading-relaxed"
               >
                 {getEquivalence(savings)}
-              </motion.p>
+              </p>
             </div>
 
             <div className="mt-8">

@@ -1,7 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useEffect, useRef } from 'react';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
 import Navbar from '@/app/components/Navbar';
 import Footer from '@/app/components/Footer';
 import { 
@@ -96,20 +97,36 @@ export default function ContactoPage() {
         agree: false
       });
     }, 1800);
+    }, 1800);
   };
 
+  const container = useRef<HTMLDivElement>(null);
+
+  useGSAP(() => {
+    gsap.from(".hero-text", {
+      opacity: 0,
+      y: 30,
+      duration: 0.8
+    });
+  }, { scope: container });
+
+  useGSAP(() => {
+    if (status === 'success') {
+      gsap.from(".success-state", { opacity: 0, scale: 0.95, duration: 0.4 });
+    } else {
+      gsap.from(".form-state", { opacity: 0, scale: 0.95, duration: 0.4 });
+    }
+  }, { scope: container, dependencies: [status] });
+
   return (
-    <>
+    <div ref={container}>
       <Navbar />
       
       {/* 1. HERO TYPOGRAPHY HEADER */}
       <section className="pt-24 pb-6 sm:pt-28 sm:pb-8 bg-white">
-        <div className="max-w-6xl mx-auto px-8 lg:px-12">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="max-w-4xl"
+        <div className="max-w-6xl mx-auto px-12">
+          <div
+            className="hero-text max-w-4xl"
           >
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-slate-950 leading-[1.1] mb-3">
               Hablemos de tu <span className="text-[#ffe600]">próxima propiedad.</span>
@@ -117,13 +134,13 @@ export default function ContactoPage() {
             <p className="text-slate-600 text-sm sm:text-base leading-relaxed max-w-2xl">
               Nuestro equipo está listo para asesorarte de manera personalizada y directa. Completá el formulario o contactanos por cualquiera de nuestros canales oficiales.
             </p>
-          </motion.div>
+          </div>
         </div>
       </section>
 
       {/* 2. CONTACT INFO & FORM */}
       <section className="bg-white pb-24 text-slate-900">
-        <div className="max-w-6xl mx-auto px-8 lg:px-12">
+        <div className="max-w-6xl mx-auto px-12">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start">
             
             {/* Left Column: Bold Yellow Info Card */}
@@ -141,7 +158,7 @@ export default function ContactoPage() {
                       <Phone className="w-4 h-4" />
                     </div>
                     <div className="pt-0.5">
-                      <p className="text-xs font-bold text-slate-950 tracking-wide mb-0.5">WhatsApp / Teléfono</p>
+                      <p className="text-sm font-extrabold text-black mb-0.5">WhatsApp / Teléfono</p>
                       <a href="https://wa.me/50688888888" className="text-base font-bold text-slate-950 hover:opacity-70 transition-opacity">+506 8888-8888</a>
                     </div>
                   </div>
@@ -151,7 +168,7 @@ export default function ContactoPage() {
                       <Mail className="w-4 h-4" />
                     </div>
                     <div className="pt-0.5">
-                      <p className="text-xs font-bold text-slate-950 tracking-wide mb-0.5">Correo electrónico</p>
+                      <p className="text-sm font-extrabold text-black mb-0.5">Correo electrónico</p>
                       <a href="mailto:info@elduenovende.com" className="text-base font-bold text-slate-950 hover:opacity-70 transition-opacity">info@elduenovende.com</a>
                     </div>
                   </div>
@@ -161,14 +178,14 @@ export default function ContactoPage() {
                       <MapPin className="w-4 h-4" />
                     </div>
                     <div className="pt-0.5">
-                      <p className="text-xs font-bold text-slate-950 tracking-wide mb-0.5">Ubicación física</p>
+                      <p className="text-sm font-extrabold text-black mb-0.5">Ubicación física</p>
                       <p className="text-base font-bold text-slate-950">Belén, Heredia<br/>Costa Rica</p>
                     </div>
                   </div>
                 </div>
 
                 <div className="mt-12 relative z-10">
-                  <p className="text-sm font-bold text-slate-950 tracking-wide mb-4">Nuestras redes</p>
+                  <p className="text-sm font-extrabold text-black mb-4">Nuestras redes</p>
                   <div className="flex gap-3">
                     <a href="#" className="w-12 h-12 rounded-full bg-slate-950 text-[#ffe600] flex items-center justify-center hover:scale-110 transition-transform duration-300">
                       <FaFacebookF className="w-5 h-5" />
@@ -184,14 +201,9 @@ export default function ContactoPage() {
             {/* Right Column: Clean Minimalist Form */}
             <div className="order-1 lg:order-2 lg:col-span-7 flex justify-start lg:pl-12">
               <div className="bg-white py-2 sm:py-4 lg:py-6 w-full max-w-xl">
-                <AnimatePresence mode="wait">
                   {status === 'success' ? (
-                    <motion.div 
-                      key="success"
-                      initial={{ opacity: 0, scale: 0.95 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0, scale: 0.95 }}
-                      className="py-12 flex flex-col items-center justify-center text-center space-y-5 h-full"
+                    <div 
+                      className="success-state py-12 flex flex-col items-center justify-center text-center space-y-5 h-full"
                     >
                       <div className="h-20 w-20 rounded-full bg-[#ffe600] text-slate-950 flex items-center justify-center shadow-lg shadow-[#ffe600]/30">
                         <Check className="h-10 w-10 stroke-[3]" />
@@ -208,12 +220,11 @@ export default function ContactoPage() {
                       >
                         Enviar nuevo mensaje
                       </button>
-                    </motion.div>
+                    </div>
                   ) : (
-                    <motion.form 
-                      key="form"
+                    <form 
                       onSubmit={handleSubmit} 
-                      className="space-y-4"
+                      className="form-state space-y-4"
                     >
                       {/* Full Name */}
                       <div className="space-y-2">
@@ -333,9 +344,8 @@ export default function ContactoPage() {
                         )}
                       </button>
 
-                    </motion.form>
+                    </form>
                   )}
-                </AnimatePresence>
               </div>
             </div>
 
@@ -345,6 +355,6 @@ export default function ContactoPage() {
 
 
       <Footer />
-    </>
+    </div>
   );
 }

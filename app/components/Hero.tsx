@@ -1,8 +1,7 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { Search, MapPin, Building2, TreePine, X, Users, Award } from 'lucide-react';
 import { FlowButton } from './FlowButton';
@@ -10,6 +9,8 @@ import { mockProperties, Property, mapDbToProperty } from '@/app/data/properties
 import PropertyCard from './PropertyCard';
 import { supabase } from '@/lib/supabase';
 import { useLenis } from 'lenis/react';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
 
 // Helper to remove accents / diacritics for search normalization
 const normalizeString = (str: string): string => {
@@ -27,8 +28,38 @@ export default function Hero() {
   const [showResults, setShowResults] = useState(false);
   const [searchResults, setSearchResults] = useState<Property[]>([]);
   const [isOpenModal, setIsOpenModal] = useState(false);
+  const [isClosingModal, setIsClosingModal] = useState(false);
   const [properties, setProperties] = useState<Property[]>([]);
   const lenis = useLenis();
+  const container = useRef<HTMLElement>(null);
+  const modalRef = useRef<HTMLDivElement>(null);
+
+  useGSAP(() => {
+    // Initial hero animations
+    gsap.from(".hero-badge", { opacity: 0, y: -15, duration: 0.6 });
+    gsap.from(".hero-title", { opacity: 0, y: 20, duration: 0.8, delay: 0.1 });
+    gsap.from(".hero-desc", { opacity: 0, y: 20, duration: 0.8, delay: 0.2 });
+    gsap.from(".hero-buttons", { opacity: 0, y: 15, duration: 0.8, delay: 0.3 });
+    gsap.from(".hero-search", { opacity: 0, y: 25, duration: 0.8, delay: 0.3 });
+    gsap.from(".hero-stats", { opacity: 0, duration: 0.5, delay: 0.5 });
+  }, { scope: container });
+
+  useGSAP(() => {
+    if (isOpenModal && modalRef.current) {
+      gsap.fromTo(modalRef.current, { opacity: 0 }, { opacity: 1, duration: 0.3 });
+      gsap.fromTo(".modal-content", { y: -25, scale: 0.96 }, { y: 0, scale: 1, duration: 0.4, ease: "back.out(1.2)" });
+    }
+  }, [isOpenModal]);
+
+  const handleCloseModal = () => {
+    if (!modalRef.current) return;
+    setIsClosingModal(true);
+    gsap.to(".modal-content", { y: -25, scale: 0.96, duration: 0.3, ease: "power2.in" });
+    gsap.to(modalRef.current, { opacity: 0, duration: 0.3, onComplete: () => {
+      setIsOpenModal(false);
+      setIsClosingModal(false);
+    } });
+  };
 
   // Fetch properties from Supabase on mount
   useEffect(() => {
@@ -52,13 +83,13 @@ export default function Hero() {
   // Esc key listener to close search modal
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        setIsOpenModal(false);
+      if (e.key === 'Escape' && isOpenModal) {
+        handleCloseModal();
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, []);
+  }, [isOpenModal]);
 
   // Prevent body scroll when search modal is open
   useEffect(() => {
@@ -167,7 +198,7 @@ export default function Hero() {
   };
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center pt-28 pb-20 overflow-hidden bg-slate-950">
+    <section ref={container} className="relative min-h-screen flex items-center justify-center pt-28 pb-20 overflow-hidden bg-slate-950">
       {/* Background Image with Centered Easing Overlay */}
       <div className="absolute inset-0 z-0">
         <img
@@ -195,43 +226,31 @@ export default function Hero() {
         
         {/* Top Centered: Title & Subtitle */}
         <div className="text-center max-w-3xl space-y-4 sm:space-y-5 mb-6 sm:mb-8 flex flex-col items-center">
-          <motion.div
-            initial={{ opacity: 0, y: -15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-900/80 backdrop-blur-sm border border-slate-700/50 text-slate-300 text-xs font-semibold"
+          <div
+            className="hero-badge inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-900/80 backdrop-blur-sm border border-slate-700/50 text-slate-300 text-xs font-semibold"
           >
             <MapPin className="h-3.5 w-3.5 text-emerald-400 flex-shrink-0" />
             El Dueño Vende * Costa Rica
-          </motion.div>
+          </div>
 
           <div className="space-y-3 sm:space-y-4">
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.1 }}
-              className="text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-white leading-[1.05] font-sans"
+            <h1
+              className="hero-title text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-white leading-[1.05] font-sans"
             >
               Encontrá el hogar <br />
               <span className="text-emerald-400">de tus sueños</span>
-            </motion.h1>
+            </h1>
 
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="text-slate-200 text-sm sm:text-lg max-w-2xl leading-normal mx-auto"
+            <p
+              className="hero-desc text-slate-200 text-sm sm:text-lg max-w-2xl leading-normal mx-auto"
             >
               Empresa costarricense con más de 35 años de trayectoria, especializada en la Compra, Venta, Alquiler, Arquitectura y Préstamos hipotecarios en el Gran Área Metropolitana.
-            </motion.p>
+            </p>
           </div>
 
           {/* Actions Buttons (single line on mobile) */}
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-            className="flex flex-row items-center justify-center gap-2 sm:gap-4 pt-2 w-full"
+          <div
+            className="hero-buttons flex flex-row items-center justify-center gap-2 sm:gap-4 pt-2 w-full"
           >
             <Link href="/propiedades" className="flex-shrink-0">
               <FlowButton text="Ver Propiedades" variant="primary" />
@@ -239,15 +258,12 @@ export default function Hero() {
             <Link href="/contacto" className="flex-shrink-0">
               <FlowButton text="Contactar Asesor" variant="secondary" />
             </Link>
-          </motion.div>
+          </div>
         </div>
 
         {/* Bottom Centered: Wide Single Search Input */}
-        <motion.div
-          initial={{ opacity: 0, y: 25 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.3 }}
-          className="w-full max-w-[88%] sm:max-w-xl md:max-w-2xl mx-auto"
+        <div
+          className="hero-search w-full max-w-[88%] sm:max-w-xl md:max-w-2xl mx-auto"
         >
           <div 
             onClick={() => {
@@ -295,24 +311,17 @@ export default function Hero() {
           </div>
 
           {/* Search Overlay Modal */}
-          <AnimatePresence>
-            {isOpenModal && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                data-lenis-prevent
-                className="fixed inset-0 z-[100] bg-slate-950/85 backdrop-blur-md flex items-start justify-center pt-24 md:pt-32 px-4 overflow-y-auto"
-                onClick={() => setIsOpenModal(false)}
+          {(isOpenModal || isClosingModal) && (
+            <div
+              ref={modalRef}
+              data-lenis-prevent
+              className="fixed inset-0 z-[100] bg-slate-950/85 backdrop-blur-md flex items-start justify-center pt-24 md:pt-32 px-4 overflow-y-auto"
+              onClick={handleCloseModal}
+            >
+              <div
+                className="modal-content w-full max-w-6xl xl:max-w-7xl bg-white rounded-[32px] shadow-2xl p-6 sm:p-8 flex flex-col relative text-left"
+                onClick={(e) => e.stopPropagation()}
               >
-                <motion.div
-                  initial={{ y: -25, scale: 0.96 }}
-                  animate={{ y: 0, scale: 1 }}
-                  exit={{ y: -25, scale: 0.96 }}
-                  transition={{ type: 'spring', damping: 25, stiffness: 350 }}
-                  className="w-full max-w-6xl xl:max-w-7xl bg-white rounded-[32px] shadow-2xl p-6 sm:p-8 flex flex-col relative text-left"
-                  onClick={(e) => e.stopPropagation()}
-                >
                   {/* Modal Search Form */}
                   <div className="flex items-center gap-3 bg-slate-50 border border-slate-200 rounded-full p-2 pl-5 pr-3 shadow-inner mb-6">
                     <Search className="h-5 w-5 text-slate-400 shrink-0" />
@@ -338,7 +347,7 @@ export default function Hero() {
                     )}
                     <button
                       type="button"
-                      onClick={() => setIsOpenModal(false)}
+                      onClick={handleCloseModal}
                       className="bg-slate-950 text-white font-bold px-5 py-2.5 rounded-full text-xs hover:bg-slate-900 transition-all cursor-pointer shrink-0"
                     >
                       Cerrar
@@ -412,17 +421,13 @@ export default function Hero() {
                       </>
                     )}
                   </div>
-                </motion.div>
-              </motion.div>
+                </div>
+              </div>
             )}
-          </AnimatePresence>
 
           {/* Statistics / Badges row */}
-          <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5 }}
-            className="mt-6 flex flex-wrap items-center justify-center gap-3 text-xs"
+          <div 
+            className="hero-stats mt-6 flex flex-wrap items-center justify-center gap-3 text-xs"
           >
             <span className="flex items-center gap-1.5 bg-slate-900/60 backdrop-blur-sm border border-slate-800 px-3 py-1.5 rounded-full text-slate-300">
               <Building2 className="h-3.5 w-3.5 text-emerald-400 flex-shrink-0" />
@@ -439,8 +444,8 @@ export default function Hero() {
               <span className="font-extrabold text-white">35+</span>
               <span className="font-normal text-slate-300">de Experiencia</span>
             </span>
-          </motion.div>
-        </motion.div>
+          </div>
+        </div>
 
       </div>
     </section>

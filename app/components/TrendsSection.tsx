@@ -1,7 +1,14 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { useRef } from 'react';
 import { MapPin, TrendingUp } from 'lucide-react';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 export default function TrendsSection() {
   const zones = [
@@ -35,28 +42,61 @@ export default function TrendsSection() {
     }
   ];
 
+  const container = useRef<HTMLElement>(null);
+
+  useGSAP(() => {
+    gsap.from(".trend-head", {
+      scrollTrigger: {
+        trigger: ".trend-head",
+        start: "top bottom-=50px",
+        once: true
+      },
+      opacity: 0,
+      y: 30,
+      duration: 0.6
+    });
+
+    gsap.from(".trend-desc", {
+      scrollTrigger: {
+        trigger: ".trend-desc",
+        start: "top bottom-=50px",
+        once: true
+      },
+      opacity: 0,
+      y: 30,
+      duration: 0.6,
+      delay: 0.2
+    });
+
+    gsap.from(".zone-card", {
+      scrollTrigger: {
+        trigger: ".zone-grid",
+        start: "top bottom-=50px",
+        once: true
+      },
+      opacity: 0,
+      y: 30,
+      duration: 0.6,
+      stagger: 0.1
+    });
+  }, { scope: container });
+
   return (
-    <section className="bg-white pb-24 pt-12">
+    <section ref={container} className="bg-white pb-24 pt-12">
       <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Article Header */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-24 mb-16 items-start">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+          <div
+            className="trend-head"
           >
             <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-slate-950 tracking-tight leading-[1.1]">
               Zonas con mayor crecimiento y retorno en Costa Rica
             </h2>
-          </motion.div>
+          </div>
           
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-            className="flex flex-col justify-center space-y-6 lg:pt-2"
+          <div
+            className="trend-desc flex flex-col justify-center space-y-6 lg:pt-2"
           >
             <p className="text-slate-600 text-lg sm:text-xl leading-relaxed">
               Costa Rica se consolida como uno de los destinos más atractivos para la inversión en bienes raíces, tanto para residentes locales como para inversores extranjeros y nómadas digitales. La combinación de calidad de vida, seguridad y desarrollo de infraestructura ha impulsado el dinamismo de mercados clave. Analizamos los distritos y zonas con mayor proyección de revalorización en el país:
@@ -70,19 +110,15 @@ export default function TrendsSection() {
               <span className="hidden sm:inline">•</span>
               <span className="flex items-center gap-1"><TrendingUp size={16}/> 4 min de lectura</span>
             </div>
-          </motion.div>
+          </div>
         </div>
 
         {/* Zones Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+        <div className="zone-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
           {zones.map((zone, idx) => (
-            <motion.div
+            <div
               key={idx}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.1 * idx }}
-              className="flex flex-col group cursor-default"
+              className="zone-card flex flex-col group cursor-default"
             >
               <div className="w-full bg-transparent flex flex-col transition-all duration-300 h-full">
                 {/* Image Container */}
@@ -113,7 +149,7 @@ export default function TrendsSection() {
                   </p>
                 </div>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
 

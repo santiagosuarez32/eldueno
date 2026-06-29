@@ -7,7 +7,9 @@ import Footer from '@/app/components/Footer';
 import PropertyCard from '@/app/components/PropertyCard';
 import { Property, CURRENCY_CONFIG } from '@/app/data/properties';
 import { Search, RotateCcw } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useRef } from 'react';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
 
 function CatalogContent({ initialProperties }: { initialProperties: Property[] }) {
   const searchParams = useSearchParams();
@@ -85,6 +87,17 @@ function CatalogContent({ initialProperties }: { initialProperties: Property[] }
     window.location.href = `${pathname || '/propiedades'}?${params.toString()}`;
   };
 
+  const gridRef = useRef<HTMLDivElement>(null);
+
+  useGSAP(() => {
+    if (gridRef.current && filteredProperties.length > 0) {
+      gsap.fromTo(gridRef.current.children, 
+        { opacity: 0, y: 15, scale: 0.98 },
+        { opacity: 1, y: 0, scale: 1, duration: 0.4, stagger: 0.05, ease: "power2.out" }
+      );
+    }
+  }, [paginatedProperties, filteredProperties.length]);
+
   return (
     <>
       <Navbar />
@@ -156,22 +169,22 @@ function CatalogContent({ initialProperties }: { initialProperties: Property[] }
                 <span>Mostrando <strong className="text-slate-950">{filteredProperties.length}</strong> propiedades</span>
                 <span>Filtro en tiempo real</span>
               </div>
-              <AnimatePresence mode="popLayout">
+              <div ref={gridRef}>
                 {filteredProperties.length > 0 ? (
-                  <motion.div layout className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                     {paginatedProperties.map((property, index) => (
-                      <motion.div key={property.id} layout initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} transition={{ duration: 0.3 }}>
+                      <div key={property.id}>
                         <PropertyCard property={property} priority={index < 4} />
-                      </motion.div>
+                      </div>
                     ))}
-                  </motion.div>
+                  </div>
                 ) : (
-                  <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-slate-50 border border-slate-200/60 text-center py-20 px-4 rounded-3xl space-y-4 shadow-sm">
+                  <div className="bg-slate-50 border border-slate-200/60 text-center py-20 px-4 rounded-3xl space-y-4 shadow-sm">
                     <p className="text-slate-950 text-lg font-semibold">No encontramos propiedades con estos filtros</p>
                     <button onClick={resetFilters} className="bg-white border border-slate-200 text-slate-800 font-bold px-6 py-2.5 rounded-2xl text-xs hover:border-emerald-500/30 hover:text-emerald-600 transition-colors shadow-sm cursor-pointer">Restablecer Filtros</button>
-                  </motion.div>
+                  </div>
                 )}
-              </AnimatePresence>
+              </div>
               {totalPages > 1 && (
                 <div className="flex justify-center items-center gap-2 pt-8 pb-4">
                   <button onClick={() => handlePageChange(Math.max(1, currentPage - 1))} disabled={currentPage === 1} className="px-4 py-2 rounded-xl border border-slate-200 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-emerald-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">Anterior</button>

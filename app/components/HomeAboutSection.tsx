@@ -1,23 +1,50 @@
 'use client';
 
-import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { ArrowRight, ShieldCheck, TrendingUp, Award } from 'lucide-react';
+import { useRef } from 'react';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 export default function HomeAboutSection() {
+  const container = useRef<HTMLElement>(null);
+
+  useGSAP(() => {
+    gsap.from(".about-img", {
+      scrollTrigger: {
+        trigger: ".about-img",
+        start: "top 85%",
+        once: true
+      },
+      opacity: 0,
+      x: -30,
+      duration: 0.8
+    });
+    
+    gsap.from(".about-content", {
+      scrollTrigger: {
+        trigger: ".about-content",
+        start: "top 85%",
+        once: true
+      },
+      opacity: 0,
+      x: 30,
+      duration: 0.8
+    });
+  }, { scope: container });
+
   return (
-    <section className="py-24 bg-white relative overflow-hidden">
+    <section ref={container} className="py-24 bg-white relative overflow-hidden">
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           
           {/* Left Column: Image */}
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.8 }}
-            className="relative"
-          >
+          <div className="about-img relative">
             <div className="aspect-[4/3] rounded-[32px] overflow-hidden shadow-lg border border-slate-100">
               <img
                 src="/images/about-hero.webp"
@@ -32,16 +59,10 @@ export default function HomeAboutSection() {
                 Años asesorando con transparencia, agilidad y resultados.
               </p>
             </div>
-          </motion.div>
+          </div>
 
           {/* Right Column: Text content & Features */}
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.8 }}
-            className="space-y-10"
-          >
+          <div className="about-content space-y-10">
             <div className="space-y-4">
               <h2 className="text-3xl sm:text-4xl lg:text-[42px] font-bold tracking-tight text-slate-900 leading-[1.1]">
                 Somos una empresa con historia y resultados
@@ -104,7 +125,7 @@ export default function HomeAboutSection() {
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </Link>
             </div>
-          </motion.div>
+          </div>
 
         </div>
       </div>

@@ -1,14 +1,9 @@
 'use client';
 
-import { motion } from 'framer-motion';
-
 export default function PropertyCardSkeleton() {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.35, ease: 'easeOut' }}
-      className="bg-white rounded-3xl overflow-hidden border border-slate-200/60 flex flex-col h-full shadow-md"
+    <div
+      className="bg-white rounded-3xl overflow-hidden border border-slate-200/60 flex flex-col h-full shadow-md animate-pulse"
     >
       {/* Image Skeleton */}
       <div className="relative aspect-video w-full overflow-hidden bg-slate-100">
@@ -49,7 +44,7 @@ export default function PropertyCardSkeleton() {
           ))}
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }
 

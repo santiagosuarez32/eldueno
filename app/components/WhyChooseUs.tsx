@@ -1,7 +1,13 @@
 'use client';
 
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useRef } from 'react';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+}
 import Link from 'next/link';
 import { Plus, Minus, ArrowUpRight } from 'lucide-react';
 
@@ -55,46 +61,84 @@ export default function WhyChooseUs() {
     }
   ];
 
+  const container = useRef<HTMLElement>(null);
+
+  useGSAP(() => {
+    gsap.from(".why-head", {
+      scrollTrigger: {
+        trigger: ".why-head",
+        start: "top bottom-=50px",
+        once: true
+      },
+      opacity: 0,
+      y: 30,
+      duration: 0.6
+    });
+
+    gsap.from(".why-desc", {
+      scrollTrigger: {
+        trigger: ".why-desc",
+        start: "top bottom-=50px",
+        once: true
+      },
+      opacity: 0,
+      y: 30,
+      duration: 0.6,
+      delay: 0.2
+    });
+
+    gsap.from(".why-list", {
+      scrollTrigger: {
+        trigger: ".why-list",
+        start: "top bottom-=50px",
+        once: true
+      },
+      opacity: 0,
+      x: -30,
+      duration: 0.8
+    });
+
+    gsap.from(".why-img", {
+      scrollTrigger: {
+        trigger: ".why-img",
+        start: "top bottom-=50px",
+        once: true
+      },
+      opacity: 0,
+      x: 30,
+      duration: 0.8
+    });
+  }, { scope: container });
+
   return (
-    <section id="servicios" className="bg-white py-12 text-slate-900 relative overflow-hidden">
+    <section id="servicios" ref={container} className="bg-white py-12 text-slate-900 relative overflow-hidden">
       <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Top Section Header */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-24 mb-8 items-start">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-50px' }}
-            transition={{ duration: 0.6 }}
+          <div
+            className="why-head"
           >
             <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-slate-950 tracking-tight leading-[1.1]">
               Nuestros servicios
             </h2>
-          </motion.div>
+          </div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-50px' }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="flex flex-col justify-center space-y-6 lg:pt-8"
+          <div
+            className="why-desc flex flex-col justify-center space-y-6 lg:pt-8"
           >
             <p className="text-slate-600 text-lg sm:text-xl leading-relaxed">
               Hacemos realidad tus proyectos inmobiliarios. Desde la compra o venta de propiedades hasta el diseño y financiamiento personalizado, te brindamos el respaldo que necesitas para avanzar con seguridad.
             </p>
-          </motion.div>
+          </div>
         </div>
 
         {/* Bottom Accordion & Image */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-start">
           
           {/* Left: Accordion List */}
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: '-50px' }}
-            transition={{ duration: 0.8 }}
-            className="lg:col-span-6 divide-y divide-slate-100"
+          <div
+            className="why-list lg:col-span-6 divide-y divide-slate-100"
           >
             {features.map((feature, idx) => {
               const isOpen = activeIndex === idx;
@@ -110,74 +154,65 @@ export default function WhyChooseUs() {
                     <span>{feature.title}</span>
                   </button>
 
-                  <AnimatePresence initial={false}>
-                    {isOpen && (
-                      <motion.div
-                        key="content"
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: 'auto', opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.3, ease: 'easeInOut' }}
-                        className="overflow-hidden"
-                      >
-                        <div className="pl-0 sm:pl-14 pt-4 pb-2 space-y-6">
-                          <p className="text-slate-500 text-base sm:text-lg leading-relaxed">
-                            {feature.description}
-                          </p>
-                          
-                          {/* Dynamic Counters Row */}
-                          <div className="grid grid-cols-2 gap-4">
-                            {feature.counters.map((counter, cIdx) => {
-                              const isCheck = counter.value === 'CHECK';
-                              return (
-                                <div key={cIdx} className="bg-slate-50 rounded-2xl p-4 border border-slate-100 text-left h-full flex flex-col justify-center">
-                                  {isCheck ? (
-                                    <div className="flex items-center gap-2">
-                                      <svg className="h-5 w-5 text-emerald-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{ strokeWidth: 4 }}>
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                                      </svg>
-                                      <span className="block text-sm font-bold text-slate-950 leading-snug">{counter.label}</span>
-                                    </div>
-                                  ) : (
-                                    <>
-                                      <span className="block text-2xl sm:text-3xl font-extrabold text-slate-950">{counter.value}</span>
-                                      <span className="block text-xs text-slate-500 font-normal mt-1">{counter.label}</span>
-                                    </>
-                                  )}
-                                </div>
-                              );
-                            })}
-                          </div>
-
-                          {/* Premium Sliding Button */}
-                          <div className="pt-2">
-                            <Link href={feature.link}>
-                              <button className="relative text-sm font-semibold rounded-full h-12 p-1 ps-6 pr-14 group transition-all duration-500 hover:ps-14 hover:pr-6 w-fit overflow-hidden cursor-pointer flex items-center justify-center bg-emerald-500 text-slate-950 shadow-md hover:shadow-lg hover:-translate-y-0.5">
-                                <span className="relative z-10 transition-all duration-500">
-                                  {feature.buttonText}
-                                </span>
-                                <div className="absolute right-1 w-10 h-10 bg-slate-950 text-white rounded-full flex items-center justify-center transition-all duration-500 group-hover:right-[calc(100%-44px)] group-hover:rotate-45">
-                                  <ArrowUpRight size={16} />
-                                </div>
-                              </button>
-                            </Link>
-                          </div>
+                  <div
+                    className={`grid transition-all duration-300 ease-in-out ${
+                      isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
+                    }`}
+                  >
+                    <div className="overflow-hidden">
+                      <div className="pl-0 sm:pl-14 pt-4 pb-2 space-y-6">
+                        <p className="text-slate-500 text-base sm:text-lg leading-relaxed">
+                          {feature.description}
+                        </p>
+                        
+                        {/* Dynamic Counters Row */}
+                        <div className="grid grid-cols-2 gap-4">
+                          {feature.counters.map((counter, cIdx) => {
+                            const isCheck = counter.value === 'CHECK';
+                            return (
+                              <div key={cIdx} className="bg-slate-50 rounded-2xl p-4 border border-slate-100 text-left h-full flex flex-col justify-center">
+                                {isCheck ? (
+                                  <div className="flex items-center gap-2">
+                                    <svg className="h-5 w-5 text-emerald-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{ strokeWidth: 4 }}>
+                                      <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                                    </svg>
+                                    <span className="block text-sm font-bold text-slate-950 leading-snug">{counter.label}</span>
+                                  </div>
+                                ) : (
+                                  <>
+                                    <span className="block text-2xl sm:text-3xl font-extrabold text-slate-950">{counter.value}</span>
+                                    <span className="block text-xs text-slate-500 font-normal mt-1">{counter.label}</span>
+                                  </>
+                                )}
+                              </div>
+                            );
+                          })}
                         </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
+
+                        {/* Premium Sliding Button */}
+                        <div className="pt-2">
+                          <Link href={feature.link}>
+                            <button className="relative text-sm font-semibold rounded-full h-12 p-1 ps-6 pr-14 group transition-all duration-500 hover:ps-14 hover:pr-6 w-fit overflow-hidden cursor-pointer flex items-center justify-center bg-emerald-500 text-slate-950 shadow-md hover:shadow-lg hover:-translate-y-0.5">
+                              <span className="relative z-10 transition-all duration-500">
+                                {feature.buttonText}
+                              </span>
+                              <div className="absolute right-1 w-10 h-10 bg-slate-950 text-white rounded-full flex items-center justify-center transition-all duration-500 group-hover:right-[calc(100%-44px)] group-hover:rotate-45">
+                                <ArrowUpRight size={16} />
+                              </div>
+                            </button>
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               );
             })}
-          </motion.div>
+          </div>
 
           {/* Right: Modern Image Display */}
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: '-50px' }}
-            transition={{ duration: 0.8 }}
-            className="lg:col-span-6 relative h-[180px] sm:h-[250px] lg:h-auto lg:aspect-video rounded-[32px] overflow-hidden shadow-md bg-slate-100"
+          <div
+            className="why-img lg:col-span-6 relative h-[180px] sm:h-[250px] lg:h-auto lg:aspect-video rounded-[32px] overflow-hidden shadow-md bg-slate-100"
           >
             {features.map((feature, idx) => (
               <img
@@ -190,7 +225,7 @@ export default function WhyChooseUs() {
               />
             ))}
             <div className="absolute inset-0 bg-black/5 pointer-events-none z-20"></div>
-          </motion.div>
+          </div>
 
         </div>
       </div>

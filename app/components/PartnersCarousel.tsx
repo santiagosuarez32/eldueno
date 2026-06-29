@@ -1,7 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { useState, useEffect, useRef } from 'react';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const partners = [
@@ -18,6 +19,22 @@ export default function PartnersCarousel() {
   const [xOffset, setXOffset] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [itemsToShow, setItemsToShow] = useState(5);
+  const trackRef = useRef<HTMLDivElement>(null);
+
+  useGSAP(() => {
+    if (trackRef.current) {
+      gsap.to(trackRef.current, {
+        x: `${xOffset * (100 / itemsToShow)}%`,
+        duration: isTransitioning ? 0.6 : 0,
+        ease: "power3.inOut",
+        onComplete: () => {
+          if (isTransitioning) {
+            handleTransitionEnd();
+          }
+        }
+      });
+    }
+  }, [xOffset, isTransitioning, itemsToShow]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -113,11 +130,9 @@ export default function PartnersCarousel() {
             <div className="absolute left-0 top-0 bottom-0 w-6 sm:w-20 bg-gradient-to-r from-white via-white/80 to-transparent z-10 pointer-events-none" />
             <div className="absolute right-0 top-0 bottom-0 w-6 sm:w-20 bg-gradient-to-l from-white via-white/80 to-transparent z-10 pointer-events-none" />
 
-            <motion.div
+            <div
+              ref={trackRef}
               className="flex items-center"
-              animate={{ x: `${xOffset * (100 / itemsToShow)}%` }}
-              transition={isTransitioning ? { ease: [0.25, 1, 0.5, 1], duration: 0.6 } : { duration: 0 }}
-              onAnimationComplete={handleTransitionEnd}
             >
               {list.map((partner) => (
                 <div 
@@ -134,7 +149,7 @@ export default function PartnersCarousel() {
                   </div>
                 </div>
               ))}
-            </motion.div>
+            </div>
           </div>
 
           {/* Right Arrow */}

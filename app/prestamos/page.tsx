@@ -1,8 +1,14 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+}
 import Navbar from '@/app/components/Navbar';
 import Footer from '@/app/components/Footer';
 
@@ -17,10 +23,61 @@ export default function PrestamosPage() {
     };
   }, []);
 
+  const container = useRef<HTMLElement>(null);
+  
+  useGSAP(() => {
+    gsap.from(".hero-title", {
+      opacity: 0,
+      y: 30,
+      duration: 0.8,
+      delay: 0.1
+    });
+
+    gsap.from(".hero-subtitle", {
+      opacity: 0,
+      y: 25,
+      duration: 0.8,
+      delay: 0.2
+    });
+
+    const sections = gsap.utils.toArray<HTMLElement>('.service-section');
+    sections.forEach((section) => {
+      const left = section.querySelector('.service-left');
+      const right = section.querySelector('.service-right');
+
+      if (left) {
+        gsap.from(left, {
+          scrollTrigger: {
+            trigger: section,
+            start: "top bottom-=50px",
+            once: true
+          },
+          opacity: 0,
+          x: -30,
+          duration: 0.6
+        });
+      }
+
+      if (right) {
+        gsap.from(right, {
+          scrollTrigger: {
+            trigger: section,
+            start: "top bottom-=50px",
+            once: true
+          },
+          opacity: 0,
+          x: 30,
+          duration: 0.6
+        });
+      }
+    });
+
+  }, { scope: container });
+
   return (
     <>
       <Navbar />
-      <main className="flex-grow bg-white text-slate-900">
+      <main ref={container} className="flex-grow bg-white text-slate-900">
         
         {/* HERO SECTION - Dark premium style matching "Nosotros" */}
         <section className="relative h-[70vh] min-h-[500px] flex items-end pb-16 sm:pb-24 overflow-hidden bg-slate-950">
@@ -50,23 +107,17 @@ export default function PrestamosPage() {
           <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
             <div className="max-w-4xl space-y-6">
               <div className="space-y-4">
-                <motion.h1
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8, delay: 0.1 }}
-                  className="text-4xl sm:text-6xl font-bold tracking-tight text-white leading-[1.05]"
+                <h1
+                  className="hero-title text-4xl sm:text-6xl font-bold tracking-tight text-white leading-[1.05]"
                 >
                   Tipos de Financiamiento
-                </motion.h1>
+                </h1>
 
-                <motion.p
-                  initial={{ opacity: 0, y: 25 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8, delay: 0.2 }}
-                  className="text-slate-350 text-base sm:text-lg max-w-3xl leading-relaxed"
+                <p
+                  className="hero-subtitle text-slate-350 text-base sm:text-lg max-w-3xl leading-relaxed"
                 >
                   Nuestro equipo analiza cada caso de forma individual para ofrecer soluciones adaptadas a sus necesidades, facilitando el acceso a las mejores condiciones y soluciones de financiamiento.
-                </motion.p>
+                </p>
               </div>
             </div>
           </div>
@@ -98,13 +149,9 @@ export default function PrestamosPage() {
             <div className="space-y-24 lg:space-y-32 mt-20 max-w-6xl mx-auto">
               
               {/* Section 1 */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-                <motion.div
-                  initial={{ opacity: 0, x: -30 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true, margin: "-50px" }}
-                  transition={{ duration: 0.6 }}
-                  className="order-2 lg:order-1 space-y-6"
+              <div className="service-section grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+                <div
+                  className="service-left order-2 lg:order-1 space-y-6"
                 >
                   <div className="w-12 h-12 bg-[#ffe600] rounded-full flex items-center justify-center font-bold text-xl text-slate-900 shadow-sm">
                     1
@@ -115,13 +162,9 @@ export default function PrestamosPage() {
                   <p className="text-slate-600 text-lg leading-relaxed">
                     Evaluamos distintas alternativas con Bancos públicos como privados, ayudando a identificar la opción más conveniente en términos de cuotas, plazos y condiciones. Acompañamos al cliente desde la solicitud hasta la aprobación del crédito, garantizando un proceso claro, ágil y seguro.
                   </p>
-                </motion.div>
-                <motion.div
-                  initial={{ opacity: 0, x: 30 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true, margin: "-50px" }}
-                  transition={{ duration: 0.6 }}
-                  className="order-1 lg:order-2"
+                </div>
+                <div
+                  className="service-right order-1 lg:order-2"
                 >
                   <div className="relative aspect-[4/3] rounded-[32px] overflow-hidden shadow-xl bg-slate-100">
                     <img 
@@ -130,17 +173,13 @@ export default function PrestamosPage() {
                       className="w-full h-full object-cover" 
                     />
                   </div>
-                </motion.div>
+                </div>
               </div>
 
               {/* Section 2 */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-                <motion.div
-                  initial={{ opacity: 0, x: -30 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true, margin: "-50px" }}
-                  transition={{ duration: 0.6 }}
-                  className="order-1 lg:order-1"
+              <div className="service-section grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+                <div
+                  className="service-left order-1 lg:order-1"
                 >
                   <div className="relative aspect-[4/3] rounded-[32px] overflow-hidden shadow-xl bg-slate-100">
                     <img 
@@ -149,13 +188,9 @@ export default function PrestamosPage() {
                       className="w-full h-full object-cover" 
                     />
                   </div>
-                </motion.div>
-                <motion.div
-                  initial={{ opacity: 0, x: 30 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true, margin: "-50px" }}
-                  transition={{ duration: 0.6 }}
-                  className="order-2 lg:order-2 space-y-6"
+                </div>
+                <div
+                  className="service-right order-2 lg:order-2 space-y-6"
                 >
                   <div className="w-12 h-12 bg-[#ffe600] rounded-full flex items-center justify-center font-bold text-xl text-slate-900 shadow-sm">
                     2
@@ -186,17 +221,13 @@ export default function PrestamosPage() {
                       <span className="font-bold text-2xl text-slate-900">50%</span>
                     </div>
                   </div>
-                </motion.div>
+                </div>
               </div>
 
               {/* Section 3 */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-                <motion.div
-                  initial={{ opacity: 0, x: -30 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true, margin: "-50px" }}
-                  transition={{ duration: 0.6 }}
-                  className="order-2 lg:order-1 space-y-6"
+              <div className="service-section grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+                <div
+                  className="service-left order-2 lg:order-1 space-y-6"
                 >
                   <div className="w-12 h-12 bg-[#ffe600] rounded-full flex items-center justify-center font-bold text-xl text-slate-900 shadow-sm">
                     3
@@ -227,13 +258,9 @@ export default function PrestamosPage() {
                       <span className="font-bold text-2xl text-slate-900">50%</span>
                     </div>
                   </div>
-                </motion.div>
-                <motion.div
-                  initial={{ opacity: 0, x: 30 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true, margin: "-50px" }}
-                  transition={{ duration: 0.6 }}
-                  className="order-1 lg:order-2"
+                </div>
+                <div
+                  className="service-right order-1 lg:order-2"
                 >
                   <div className="relative aspect-[4/3] rounded-[32px] overflow-hidden shadow-xl bg-slate-100">
                     <img 
@@ -242,7 +269,7 @@ export default function PrestamosPage() {
                       className="w-full h-full object-cover" 
                     />
                   </div>
-                </motion.div>
+                </div>
               </div>
 
             </div>
