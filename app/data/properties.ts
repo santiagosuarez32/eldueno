@@ -265,11 +265,11 @@ export const mockProperties: Property[] = [
 
 export function mapDbToProperty(dbProp: any): Property {
   // Support both English (database) and Spanish (alternative mappings)
-  const title = dbProp.title || dbProp.titulo || "";
-  const description = dbProp.description || "";
+  const title = String(dbProp.title || dbProp.titulo || "");
+  const description = String(dbProp.description || "");
   const price = Number(dbProp.price || dbProp.precio || 0);
-  const location = dbProp.location || dbProp.ubicacion || "Costa Rica";
-  const neighborhood = dbProp.neighborhood || dbProp.location || dbProp.ubicacion || "";
+  const location = String(dbProp.location || dbProp.ubicacion || "Costa Rica");
+  const neighborhood = String(dbProp.neighborhood || dbProp.location || dbProp.ubicacion || "");
   const beds = dbProp.beds || dbProp.dormitorios || undefined;
   const baths = dbProp.baths || dbProp.banos || undefined;
   const area = Number(dbProp.area || dbProp.metros_cubiertos || 0);
@@ -281,7 +281,7 @@ export function mapDbToProperty(dbProp: any): Property {
   const gallery = dbProp.gallery || dbProp.fotos || [];
   const image = dbProp.image || dbProp.imagen || gallery[0] || "/placeholder-property.jpg";
   
-  const type = (dbProp.type || dbProp.tipo || "casa").toLowerCase();
+  const type = String(dbProp.type || dbProp.tipo || "casa").toLowerCase();
   const featured = dbProp.featured !== undefined ? Boolean(dbProp.featured) : Boolean(dbProp.published);
 
   // Extract owner info and check for extra fields inside it

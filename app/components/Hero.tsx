@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Search, MapPin, Building2, TreePine, X, Users, Award } from 'lucide-react';
@@ -13,9 +14,9 @@ import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 
 // Helper to remove accents / diacritics for search normalization
-const normalizeString = (str: string): string => {
+const normalizeString = (str: any): string => {
   if (!str) return '';
-  return str
+  return String(str)
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')
     .toLowerCase();
@@ -30,7 +31,13 @@ export default function Hero() {
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [isClosingModal, setIsClosingModal] = useState(false);
   const [properties, setProperties] = useState<Property[]>([]);
+  const [mounted, setMounted] = useState(false);
   const lenis = useLenis();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const container = useRef<HTMLElement>(null);
   const modalRef = useRef<HTMLDivElement>(null);
 
@@ -311,7 +318,7 @@ export default function Hero() {
           </div>
 
           {/* Search Overlay Modal */}
-          {(isOpenModal || isClosingModal) && (
+          {mounted && (isOpenModal || isClosingModal) && createPortal(
             <div
               ref={modalRef}
               data-lenis-prevent
@@ -422,7 +429,8 @@ export default function Hero() {
                     )}
                   </div>
                 </div>
-              </div>
+              </div>,
+              document.body
             )}
 
           {/* Statistics / Badges row */}
