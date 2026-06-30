@@ -24,7 +24,7 @@ export default function PrestamosPage() {
   }, []);
 
   const container = useRef<HTMLElement>(null);
-  
+
   useGSAP(() => {
     gsap.from(".hero-title", {
       opacity: 0,
@@ -78,7 +78,7 @@ export default function PrestamosPage() {
     <>
       <Navbar />
       <main ref={container} className="flex-grow bg-white text-slate-900">
-        
+
         {/* HERO SECTION - Dark premium style matching "Nosotros" */}
         <section className="relative h-[70vh] min-h-[500px] flex items-end pb-16 sm:pb-24 overflow-hidden bg-slate-950">
           {/* Background image & overlays */}
@@ -89,13 +89,13 @@ export default function PrestamosPage() {
               className="w-full h-full object-cover object-center"
             />
             {/* Dark gradient mapping */}
-            <div 
+            <div
               className="absolute inset-0 pointer-events-none"
               style={{
                 background: 'radial-gradient(circle at center, rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, 0.5) 60%, rgba(0, 0, 0, 0.75) 100%)'
               }}
             />
-            <div 
+            <div
               className="absolute inset-0 pointer-events-none"
               style={{
                 background: 'linear-gradient(to top, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.4) 40%, rgba(0, 0, 0, 0.08) 100%)'
@@ -110,7 +110,7 @@ export default function PrestamosPage() {
                 <h1
                   className="hero-title text-4xl sm:text-6xl font-bold tracking-tight text-white leading-[1.05]"
                 >
-                  Tipos de Financiamiento
+                  Tipos de Financiamientos
                 </h1>
 
                 <p
@@ -126,7 +126,7 @@ export default function PrestamosPage() {
         {/* LOAN OPTIONS SECTION - Redesigned Centered Grid */}
         <section className="py-24 bg-white relative">
           <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
-            
+
             {/* Top Section: Title & Description */}
             <div className="text-center max-w-3xl mx-auto space-y-6 mb-16">
               <h2 className="text-3xl sm:text-4xl lg:text-[46px] font-bold tracking-tight text-slate-900 leading-[1.1]">
@@ -147,7 +147,7 @@ export default function PrestamosPage() {
 
             {/* 3 Distinct Service Sections */}
             <div className="space-y-24 lg:space-y-32 mt-20 max-w-6xl mx-auto">
-              
+
               {/* Section 1 */}
               <div className="service-section grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
                 <div
@@ -167,10 +167,10 @@ export default function PrestamosPage() {
                   className="service-right order-1 lg:order-2"
                 >
                   <div className="relative aspect-[4/3] rounded-[32px] overflow-hidden shadow-xl bg-slate-100">
-                    <img 
-                      src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" 
-                      alt="Compra de propiedades" 
-                      className="w-full h-full object-cover" 
+                    <img
+                      src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
+                      alt="Compra de propiedades"
+                      className="w-full h-full object-cover"
                     />
                   </div>
                 </div>
@@ -182,10 +182,10 @@ export default function PrestamosPage() {
                   className="service-left order-1 lg:order-1"
                 >
                   <div className="relative aspect-[4/3] rounded-[32px] overflow-hidden shadow-xl bg-slate-100">
-                    <img 
-                      src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" 
-                      alt="Garantía inmobiliaria" 
-                      className="w-full h-full object-cover" 
+                    <img
+                      src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
+                      alt="Garantía inmobiliaria"
+                      className="w-full h-full object-cover"
                     />
                   </div>
                 </div>
@@ -201,7 +201,7 @@ export default function PrestamosPage() {
                   <p className="text-slate-600 text-lg leading-relaxed">
                     El Dueño Vende también ofrece préstamos privados, con requisitos accesibles y pre-aprobación en 24 horas, sobre propiedades dentro del Gran Área Metropolitana.
                   </p>
-                  
+
                   {/* Metrics details */}
                   <div className="grid grid-cols-2 gap-6 pt-6 border-t border-slate-200 mt-6">
                     <div>
@@ -238,7 +238,7 @@ export default function PrestamosPage() {
                   <p className="text-slate-600 text-lg leading-relaxed">
                     Ofrecemos el servicio de unificación de deudas como una solución financiera que permite consolidar múltiples obligaciones en un solo pago mensual. Este proceso facilita la organización de las finanzas personales, reduce la carga administrativa y brinda mayor control sobre el presupuesto. Nuestro objetivo es ayudarle a mejorar su liquidez y estabilidad financiera mediante condiciones más ordenadas y accesibles, adaptadas a su situación económica.
                   </p>
-                  
+
                   {/* Metrics details */}
                   <div className="grid grid-cols-2 gap-6 pt-6 border-t border-slate-200 mt-6">
                     <div>
@@ -263,10 +263,10 @@ export default function PrestamosPage() {
                   className="service-right order-1 lg:order-2"
                 >
                   <div className="relative aspect-[4/3] rounded-[32px] overflow-hidden shadow-xl bg-slate-100">
-                    <img 
-                      src="https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" 
-                      alt="Reunificación de Deudas" 
-                      className="w-full h-full object-cover" 
+                    <img
+                      src="https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
+                      alt="Reunificación de Deudas"
+                      className="w-full h-full object-cover"
                     />
                   </div>
                 </div>
