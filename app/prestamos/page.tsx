@@ -110,7 +110,7 @@ export default function PrestamosPage() {
                 <h1
                   className="hero-title text-4xl sm:text-6xl font-bold tracking-tight text-white leading-[1.05]"
                 >
-                  Tipos de Financiamiento
+                  Tipos de Financiamientos
                 </h1>
 
                 <p
