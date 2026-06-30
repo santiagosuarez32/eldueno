@@ -7,12 +7,12 @@ import Link from 'next/link';
 import { Search, ArrowUpRight, ArrowLeft, ArrowRight } from 'lucide-react';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
-import { mockBlogPosts, mapDbToBlogPost, BlogPost } from '@/app/data/blog';
+import { mapDbToBlogPost, BlogPost } from '@/app/data/blog';
 import { supabase } from '@/lib/supabase';
 
 export default function BlogPage() {
   const [searchTerm, setSearchTerm] = useState('');
-  const [posts, setPosts] = useState<BlogPost[]>(mockBlogPosts);
+  const [posts, setPosts] = useState<BlogPost[]>([]);
 
   useEffect(() => {
     const fetchPosts = async () => {

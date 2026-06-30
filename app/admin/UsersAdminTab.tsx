@@ -11,6 +11,7 @@ export default function UsersAdminTab({ setToast }: { setToast: any }) {
   const [users, setUsers] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
+  const [roleModal, setRoleModal] = useState<{ user: any, newRole: UserRole } | null>(null);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -52,17 +53,18 @@ export default function UsersAdminTab({ setToast }: { setToast: any }) {
     setSaving(false);
   };
 
-  const handleToggleRole = async (user: any) => {
-    const nextRole: UserRole = user.role === "admin" ? "editor" : "admin";
-    if (!confirm(`¿Estás seguro de cambiar el rol de ${user.email} a ${nextRole === "admin" ? "Administrador Total" : "Editor"}?`)) return;
-    
-    const res = await updateUserRoleAction(user.id, nextRole);
+  const confirmRoleChange = async () => {
+    if (!roleModal) return;
+    setSaving(true);
+    const res = await updateUserRoleAction(roleModal.user.id, roleModal.newRole);
     if (res.success) {
-      setToast({ type: "ok", msg: "Rol actualizado." });
+      setToast({ type: "ok", msg: "Rol actualizado correctamente." });
+      setRoleModal(null);
       await fetchUsers();
     } else {
       setToast({ type: "err", msg: res.error });
     }
+    setSaving(false);
   };
 
   const handleDelete = async (user: any) => {
@@ -139,7 +141,7 @@ export default function UsersAdminTab({ setToast }: { setToast: any }) {
                   </span>
                   {u.email !== "elduenovende@mail.com" && (
                     <>
-                      <button onClick={() => handleToggleRole(u)} className="px-3 py-1 rounded bg-slate-100 text-slate-700 text-xs font-bold hover:bg-slate-200">
+                      <button onClick={() => setRoleModal({ user: u, newRole: u.role === "admin" ? "editor" : "admin" })} className="px-3 py-1 rounded bg-slate-100 text-slate-700 text-xs font-bold hover:bg-slate-200">
                         Cambiar rol
                       </button>
                       <button onClick={() => handleDelete(u)} className="px-3 py-1 rounded bg-red-100 text-red-700 text-xs font-bold hover:bg-red-200">
@@ -153,6 +155,63 @@ export default function UsersAdminTab({ setToast }: { setToast: any }) {
           </ul>
         )}
       </div>
+
+      {roleModal && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/50 backdrop-blur-sm px-4">
+          <div className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-2xl">
+            <h3 className="mb-2 text-lg font-bold text-slate-900">Cambiar Rol de Usuario</h3>
+            <p className="mb-4 text-sm font-medium text-slate-500">Seleccioná el nuevo rol para <strong className="text-slate-700">{roleModal.user.email}</strong>.</p>
+            
+            <div className="space-y-3 mb-6">
+              <label className={cx("flex items-center gap-3 p-3 border rounded-xl cursor-pointer transition-colors", roleModal.newRole === "editor" ? "border-blue-500 bg-blue-50" : "border-slate-200 hover:bg-slate-50")}>
+                <input 
+                  type="radio" 
+                  name="role" 
+                  value="editor" 
+                  checked={roleModal.newRole === "editor"} 
+                  onChange={() => setRoleModal({ ...roleModal, newRole: "editor" })} 
+                  className="w-4 h-4 text-blue-600 focus:ring-blue-500"
+                />
+                <div>
+                  <div className="font-bold text-sm text-slate-900">Editor</div>
+                  <div className="text-[11px] leading-tight mt-0.5 text-slate-500 font-medium">Puede crear y editar contenido, pero no puede administrar usuarios.</div>
+                </div>
+              </label>
+
+              <label className={cx("flex items-center gap-3 p-3 border rounded-xl cursor-pointer transition-colors", roleModal.newRole === "admin" ? "border-purple-500 bg-purple-50" : "border-slate-200 hover:bg-slate-50")}>
+                <input 
+                  type="radio" 
+                  name="role" 
+                  value="admin" 
+                  checked={roleModal.newRole === "admin"} 
+                  onChange={() => setRoleModal({ ...roleModal, newRole: "admin" })} 
+                  className="w-4 h-4 text-purple-600 focus:ring-purple-500"
+                />
+                <div>
+                  <div className="font-bold text-sm text-slate-900">Administrador Total</div>
+                  <div className="text-[11px] leading-tight mt-0.5 text-slate-500 font-medium">Control absoluto sobre todo el sistema, incluyendo respaldos y cuentas.</div>
+                </div>
+              </label>
+            </div>
+
+            <div className="flex items-center gap-3 justify-end">
+              <button 
+                onClick={() => setRoleModal(null)} 
+                className="px-4 py-2 rounded-xl text-sm font-bold text-slate-600 hover:bg-slate-100 transition-colors"
+              >
+                Cancelar
+              </button>
+              <button 
+                onClick={() => confirmRoleChange()} 
+                disabled={saving}
+                className="px-4 py-2 rounded-xl bg-[#ffe600] text-sm font-bold text-slate-900 hover:bg-[#ffff33] transition-colors disabled:opacity-50"
+              >
+                {saving ? "Guardando..." : "Confirmar"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

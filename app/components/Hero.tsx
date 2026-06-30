@@ -70,11 +70,11 @@ export default function Hero() {
         if (data && data.length > 0) {
           setProperties(data.map(mapDbToProperty));
         } else {
-          setProperties(mockProperties);
+          setProperties([]);
         }
       } catch (err) {
-        console.warn("Error loading properties for search in Hero. Falling back to local mocks:", err);
-        setProperties(mockProperties);
+        console.warn("Error loading properties for search in Hero:", err);
+        setProperties([]);
       }
     }
     load();

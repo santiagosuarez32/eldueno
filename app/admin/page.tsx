@@ -21,6 +21,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import BlogsAdminTab from "./BlogsAdminTab";
 import UsersAdminTab from "./UsersAdminTab";
+import { LayoutDashboard, Star, Archive, FileText, Sparkles, Users, ExternalLink } from "lucide-react";
 
 const BRAND_COLOR = "#ffe600";
 const BRAND_HOVER = "#ffff33";
@@ -52,6 +53,7 @@ type Property = {
   vendido?: boolean | null;
   alquilado?: boolean | null;
   premium?: boolean | null;
+  bestChoice?: boolean | null;
   age?: number | null;
   created_at?: string | null;
 };
@@ -80,6 +82,7 @@ type FormState = {
   vendido: boolean;
   alquilado: boolean;
   premium: boolean;
+  bestChoice: boolean;
   age: number | null;
   created_at: string;
   storageFolder: string;
@@ -132,6 +135,7 @@ function mapDbToAdminProperty(dbProp: any): Property {
     vendido: dbProp.vendido !== undefined ? Boolean(dbProp.vendido) : Boolean(owner.vendido),
     alquilado: dbProp.alquilado !== undefined ? Boolean(dbProp.alquilado) : Boolean(owner.alquilado),
     premium: dbProp.premium !== undefined ? Boolean(dbProp.premium) : Boolean(owner.premium),
+    bestChoice: dbProp.bestChoice !== undefined ? Boolean(dbProp.bestChoice) : Boolean(owner.bestChoice),
     age: dbProp.age !== undefined && dbProp.age !== null ? toInt(dbProp.age) : null,
     created_at: dbProp.created_at || null
   };
@@ -167,7 +171,8 @@ function AdminDashboardContent() {
   const [toast, setToast] = useState<{ type: "ok" | "err"; msg: string } | null>(null);
 
   // Backup system state
-  const [tab, setTab] = useState<"properties" | "premium" | "backups" | "blogs" | "users">("properties");
+  const [tab, setTab] = useState<"properties" | "premium" | "bestChoice" | "backups" | "blogs" | "users">("properties");
+  const [selectionFilter, setSelectionFilter] = useState<"marked" | "all">("marked");
   const [backups, setBackups] = useState<BackupItem[]>([]);
   const [loadingBackups, setLoadingBackups] = useState(false);
   const [confirmRestore, setConfirmRestore] = useState<BackupItem | null>(null);
@@ -368,6 +373,7 @@ function AdminDashboardContent() {
       vendido: false,
       alquilado: false,
       premium: false,
+      bestChoice: false,
       age: null,
       created_at: new Date().toISOString().split("T")[0],
       storageFolder: folder,
@@ -400,6 +406,7 @@ function AdminDashboardContent() {
       vendido: Boolean(p.vendido),
       alquilado: Boolean(p.alquilado),
       premium: Boolean(p.premium),
+      bestChoice: Boolean(p.bestChoice),
       age: p.age !== undefined && p.age !== null ? toInt(p.age) : null,
       created_at: p.created_at ? new Date(p.created_at).toISOString().split("T")[0] : new Date().toISOString().split("T")[0],
       storageFolder: String(p.id || crypto.randomUUID()),
@@ -489,6 +496,30 @@ function AdminDashboardContent() {
     } catch (err) {
       console.error(err);
       setToast({ type: "err", msg: "No se pudo actualizar el estado premium." });
+    }
+  };
+
+  const toggleBestChoice = async (p: Property) => {
+    await triggerAutoBackup(`Antes de cambiar estado mejor elección de "${p.titulo}"`);
+    const next = !p.bestChoice;
+    try {
+      const { data: existing } = await supabase.from("properties").select("owner").eq("id", p.id).single();
+      const currentOwner = existing?.owner || {};
+      const nextOwner = {
+        name: "Maldonado Leonides",
+        phone: "+506 8888-8888",
+        whatsappUrl: "https://wa.me/50688888888",
+        ...currentOwner,
+        bestChoice: next
+      };
+      const { error } = await supabase.from("properties").update({ owner: nextOwner }).eq("id", p.id);
+      if (error) throw error;
+      setToast({ type: "ok", msg: next ? "Marcada como mejor elección" : "Quitada de mejor elección" });
+      await revalidateProperties();
+      await fetchData();
+    } catch (err) {
+      console.error(err);
+      setToast({ type: "err", msg: "No se pudo actualizar el estado mejor elección." });
     }
   };
 
@@ -631,6 +662,7 @@ function AdminDashboardContent() {
         vendido: Boolean(f.vendido),
         alquilado: Boolean(f.alquilado),
         premium: Boolean(f.premium),
+        bestChoice: Boolean(f.bestChoice),
         plantas: toInt(f.plantas),
         cocina: f.cocina && f.cocina !== "" ? String(f.cocina) : null,
         oficina: f.oficina && f.oficina !== "" ? String(f.oficina) : null,
@@ -665,7 +697,11 @@ function AdminDashboardContent() {
   const filtered = useMemo(() => {
     let result = rows;
     if (tab === "premium") {
-      result = result.filter(p => p.premium);
+      if (selectionFilter === "marked") result = result.filter(p => p.premium);
+      result = [...result].sort((a, b) => (b.premium ? 1 : 0) - (a.premium ? 1 : 0));
+    } else if (tab === "bestChoice") {
+      if (selectionFilter === "marked") result = result.filter(p => p.bestChoice);
+      result = [...result].sort((a, b) => (b.bestChoice ? 1 : 0) - (a.bestChoice ? 1 : 0));
     }
     if (!search.trim()) return result;
     const q = search.toLowerCase();
@@ -730,69 +766,97 @@ function AdminDashboardContent() {
                 type="button"
                 onClick={() => setTab("properties")}
                 className={cx(
-                  "flex w-full items-center justify-between rounded-lg px-3 py-2 text-sm font-semibold transition cursor-pointer",
+                  "flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-sm font-semibold transition cursor-pointer",
                   tab === "properties"
                     ? "text-neutral-900 bg-slate-100"
-                    : "text-neutral-700 hover:bg-neutral-50"
+                    : "text-neutral-600 hover:bg-neutral-50"
                 )}
               >
-                Resumen <span className="text-xs text-neutral-400 font-semibold">Propiedades</span>
+                <LayoutDashboard className={cx("h-4 w-4 shrink-0", tab === "properties" ? "text-neutral-900" : "text-neutral-400")} />
+                <span className="flex-1 text-left">Resumen</span>
+                <span className="text-xs text-neutral-400 font-semibold text-right">Propiedades</span>
               </button>
               <button
                 type="button"
                 onClick={() => setTab("premium")}
                 className={cx(
-                  "flex w-full items-center justify-between rounded-lg px-3 py-2 text-sm font-semibold transition cursor-pointer",
+                  "flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-sm font-semibold transition cursor-pointer",
                   tab === "premium"
                     ? "text-neutral-900 bg-slate-100"
-                    : "text-neutral-700 hover:bg-neutral-50"
+                    : "text-neutral-600 hover:bg-neutral-50"
                 )}
               >
-                Destacadas <span className="text-xs text-neutral-400 font-semibold">Premium</span>
+                <Star className={cx("h-4 w-4 shrink-0", tab === "premium" ? "text-amber-500 fill-amber-500" : "text-neutral-400")} />
+                <span className="flex-1 text-left">Propiedades Premium</span>
+                <span className="text-xs text-neutral-400 font-semibold text-right">Premium</span>
               </button>
               {role !== "editor" && (
                 <button
                   type="button"
                   onClick={() => setTab("backups")}
                   className={cx(
-                    "flex w-full items-center justify-between rounded-lg px-3 py-2 text-sm font-semibold transition cursor-pointer",
+                    "flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-sm font-semibold transition cursor-pointer",
                     tab === "backups"
                       ? "text-neutral-900 bg-slate-100"
-                      : "text-neutral-750 hover:bg-neutral-50"
+                      : "text-neutral-600 hover:bg-neutral-50"
                   )}
                 >
-                  Copias de seguridad <span className="text-xs text-neutral-400 font-semibold">Backups</span>
+                  <Archive className={cx("h-4 w-4 shrink-0", tab === "backups" ? "text-neutral-900" : "text-neutral-400")} />
+                  <span className="flex-1 text-left">Copias de seguridad</span>
+                  <span className="text-xs text-neutral-400 font-semibold text-right">Backups</span>
                 </button>
               )}
               <button
                 type="button"
                 onClick={() => setTab("blogs")}
                 className={cx(
-                  "flex w-full items-center justify-between rounded-lg px-3 py-2 text-sm font-semibold transition cursor-pointer",
+                  "flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-sm font-semibold transition cursor-pointer",
                   tab === "blogs"
                     ? "text-neutral-900 bg-slate-100"
-                    : "text-neutral-750 hover:bg-neutral-50"
+                    : "text-neutral-600 hover:bg-neutral-50"
                 )}
               >
-                Artículos <span className="text-xs text-neutral-400 font-semibold">Blogs</span>
+                <FileText className={cx("h-4 w-4 shrink-0", tab === "blogs" ? "text-neutral-900" : "text-neutral-400")} />
+                <span className="flex-1 text-left">Artículos</span>
+                <span className="text-xs text-neutral-400 font-semibold text-right">Blogs</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setTab("bestChoice")}
+                className={cx(
+                  "flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-sm font-semibold transition cursor-pointer",
+                  tab === "bestChoice"
+                    ? "text-neutral-900 bg-slate-100"
+                    : "text-neutral-600 hover:bg-neutral-50"
+                )}
+              >
+                <Sparkles className={cx("h-4 w-4 shrink-0", tab === "bestChoice" ? "text-indigo-500 fill-indigo-500" : "text-neutral-400")} />
+                <span className="flex-1 text-left">Mejor Selección</span>
+                <span className="text-xs text-neutral-400 font-semibold text-right">Selección</span>
               </button>
               {role !== "editor" && (
                 <button
                   type="button"
                   onClick={() => setTab("users")}
                   className={cx(
-                    "flex w-full items-center justify-between rounded-lg px-3 py-2 text-sm font-semibold transition cursor-pointer",
+                    "flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-sm font-semibold transition cursor-pointer",
                     tab === "users"
                       ? "text-neutral-900 bg-slate-100"
-                      : "text-neutral-750 hover:bg-neutral-50"
+                      : "text-neutral-600 hover:bg-neutral-50"
                   )}
                 >
-                  Usuarios y Roles <span className="text-xs text-neutral-400 font-semibold">Cuentas</span>
+                  <Users className={cx("h-4 w-4 shrink-0", tab === "users" ? "text-neutral-900" : "text-neutral-400")} />
+                  <span className="flex-1 text-left">Usuarios y Roles</span>
+                  <span className="text-xs text-neutral-400 font-semibold text-right">Cuentas</span>
                 </button>
               )}
-              <Link href="/propiedades" className="flex items-center justify-between rounded-lg px-3 py-2 text-sm font-semibold text-neutral-700 hover:bg-neutral-50">
-                Ver propiedades <span className="text-xs text-neutral-400">Catálogo</span>
-              </Link>
+              <div className="pt-2">
+                <Link href="/propiedades" className="flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-sm font-semibold text-neutral-600 hover:bg-neutral-50 transition cursor-pointer">
+                  <ExternalLink className="h-4 w-4 shrink-0 text-neutral-400" />
+                  <span className="flex-1 text-left">Ver propiedades</span>
+                  <span className="text-xs text-neutral-400 font-semibold text-right">Catálogo</span>
+                </Link>
+              </div>
             </nav>
           </aside>
 
@@ -802,18 +866,31 @@ function AdminDashboardContent() {
               <UsersAdminTab setToast={setToast} />
             ) : tab === "blogs" ? (
               <BlogsAdminTab setToast={setToast} triggerAutoBackup={triggerAutoBackup} userRole={role} />
-            ) : tab === "properties" || tab === "premium" ? (
+            ) : tab === "properties" || tab === "premium" || tab === "bestChoice" ? (
               <>
                 {/* Métricas */}
-                <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-                  <MetricCard title="Propiedades" value={total} />
-                  <MetricCard title="Publicadas" value={published} accent />
-                  <MetricCard title="Borradores" value={draft} />
-                </div>
+                {tab === "properties" && (
+                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                    <MetricCard title="Propiedades" value={total} />
+                    <MetricCard title="Publicadas" value={published} accent />
+                    <MetricCard title="Borradores" value={draft} />
+                  </div>
+                )}
+                
+                {tab === "premium" && (
+                  <div className="bg-yellow-50 border border-yellow-200 p-4 rounded-2xl mb-4 text-yellow-900 text-sm font-medium">
+                    Acá podés seleccionar qué propiedades aparecerán en el carrusel de <strong>Propiedades Premium</strong>. Buscá la propiedad y activá el botón "Premium".
+                  </div>
+                )}
 
-                {/* Acciones */}
-                <div className="flex flex-col items-stretch gap-3 sm:flex-row sm:items-center sm:justify-between">
-                  <div className="relative w-full sm:w-80">
+                {tab === "bestChoice" && (
+                  <div className="bg-indigo-50 border border-indigo-200 p-4 rounded-2xl mb-4 text-indigo-900 text-sm font-medium">
+                    Acá podés seleccionar qué propiedades aparecerán en la sección <strong>Nuestra Mejor Elección</strong>. Buscá la propiedad y activá el botón "M. Elección".
+                  </div>
+                )}
+
+                <div className="flex flex-col items-stretch gap-3 sm:flex-row sm:items-center sm:justify-between mb-4">
+                  <div className="relative flex-grow sm:max-w-md">
                     <input
                       value={search}
                       onChange={(e) => setSearch(e.target.value)}
@@ -830,15 +907,31 @@ function AdminDashboardContent() {
                     )}
                   </div>
 
-                  <button
-                    onClick={newItem}
-                    className="rounded-full px-5 py-2.5 font-bold text-slate-950 transition-colors cursor-pointer text-sm"
-                    style={{ backgroundColor: BRAND_COLOR }}
-                    onMouseEnter={(e) => ((e.currentTarget as HTMLButtonElement).style.backgroundColor = BRAND_HOVER)}
-                    onMouseLeave={(e) => ((e.currentTarget as HTMLButtonElement).style.backgroundColor = BRAND_COLOR)}
-                  >
-                    + Nueva propiedad
-                  </button>
+                  {(tab === "premium" || tab === "bestChoice") && (
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-semibold text-slate-600">Ver:</span>
+                      <select
+                        value={selectionFilter}
+                        onChange={(e) => setSelectionFilter(e.target.value as "marked" | "all")}
+                        className="rounded-full border border-slate-200 bg-white py-2 px-4 text-sm font-semibold text-slate-700 outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all cursor-pointer"
+                      >
+                        <option value="marked">{tab === "premium" ? "Marcadas como Premium" : "Marcadas como Mejor Selección"}</option>
+                        <option value="all">Todas las propiedades</option>
+                      </select>
+                    </div>
+                  )}
+
+                  {tab === "properties" && (
+                    <button
+                      onClick={newItem}
+                      className="rounded-full px-5 py-2.5 font-bold text-slate-950 transition-colors cursor-pointer text-sm"
+                      style={{ backgroundColor: BRAND_COLOR }}
+                      onMouseEnter={(e) => ((e.currentTarget as HTMLButtonElement).style.backgroundColor = BRAND_HOVER)}
+                      onMouseLeave={(e) => ((e.currentTarget as HTMLButtonElement).style.backgroundColor = BRAND_COLOR)}
+                    >
+                      + Nueva propiedad
+                    </button>
+                  )}
                 </div>
 
                 {/* Lista */}
@@ -924,28 +1017,35 @@ function AdminDashboardContent() {
                               </div>
 
                               <div className="min-w-0 grow">
-                                <div className="flex flex-wrap items-center gap-2">
-                                  <Link href={`/propiedades/${p.id}`} className="truncate font-bold text-slate-900 hover:underline text-sm sm:text-base" title={p.titulo}>
+                                <div className="mb-1">
+                                  <Link href={`/propiedades/${p.id}`} className="truncate block font-bold text-slate-900 hover:underline text-sm sm:text-base" title={p.titulo}>
                                     {p.titulo}
                                   </Link>
+                                </div>
+                                <div className="flex flex-wrap items-center gap-1.5">
                                   {badge}
                                   {p.vendido && !p.alquilado && (
-                                    <span className="rounded-full bg-black px-2.5 py-0.5 text-[10px] font-bold text-white uppercase tracking-wider">
+                                    <span className="rounded-full bg-red-600 px-2 py-0.5 text-[10px] font-bold text-white uppercase tracking-wider shadow-sm">
                                       Vendido
                                     </span>
                                   )}
                                   {p.alquilado && (
-                                    <span className="rounded-full bg-black px-2.5 py-0.5 text-[10px] font-bold text-white uppercase tracking-wider">
+                                    <span className="rounded-full bg-blue-600 px-2 py-0.5 text-[10px] font-bold text-white uppercase tracking-wider shadow-sm">
                                       Alquilado
                                     </span>
                                   )}
                                   {p.premium && (
-                                    <span className="rounded-full bg-yellow-400 px-2.5 py-0.5 text-[10px] font-bold text-slate-900 uppercase tracking-wider">
+                                    <span className="rounded-full bg-yellow-400 px-2 py-0.5 text-[10px] font-bold text-slate-900 uppercase tracking-wider shadow-sm">
                                       Premium
                                     </span>
                                   )}
+                                  {p.bestChoice && (
+                                    <span className="rounded-full bg-indigo-500 px-2 py-0.5 text-[10px] font-bold text-white uppercase tracking-wider shadow-sm">
+                                      M. Elección
+                                    </span>
+                                  )}
                                 </div>
-                                <p className="truncate text-xs text-slate-500 font-semibold mt-0.5">
+                                <p className="truncate text-xs text-slate-500 font-semibold mt-1.5">
                                   {p.tipo ?? "—"} — {p.ubicacion ?? "—"}
                                 </p>
                               </div>
@@ -967,72 +1067,91 @@ function AdminDashboardContent() {
                                 </div>
                               </div>
 
-                              <div className="flex flex-nowrap items-center gap-1.5 shrink-0">
-                                <button
-                                  onClick={() => togglePublish(p)}
-                                  className={cx(
-                                    "rounded-full px-2.5 py-1 text-xs font-bold border transition cursor-pointer",
-                                    p.published
-                                      ? "text-green-700 bg-green-50 border-green-200 hover:bg-green-100"
-                                      : "text-amber-700 bg-amber-50 border-amber-200 hover:bg-amber-100"
-                                  )}
-                                  title={p.published ? "Pasar a borrador" : "Publicar"}
-                                >
-                                  {p.published ? "Ocultar" : "Publicar"}
-                                </button>
+                              <div className="flex flex-wrap justify-end items-center gap-1.5 shrink-0 sm:max-w-[340px]">
+                                {tab === "properties" && (
+                                  <>
+                                    <button
+                                      onClick={() => togglePublish(p)}
+                                      className={cx(
+                                        "rounded-full px-2.5 py-1 text-xs font-bold border transition cursor-pointer",
+                                        p.published
+                                          ? "text-green-700 bg-green-50 border-green-200 hover:bg-green-100"
+                                          : "text-amber-700 bg-amber-50 border-amber-200 hover:bg-amber-100"
+                                      )}
+                                      title={p.published ? "Pasar a borrador" : "Publicar"}
+                                    >
+                                      {p.published ? "Ocultar" : "Publicar"}
+                                    </button>
 
-                                <button
-                                  onClick={() => toggleVendido(p)}
-                                  className={cx(
-                                    "rounded-full px-2.5 py-1 text-xs font-bold border transition cursor-pointer",
-                                    p.vendido
-                                      ? "text-red-700 bg-red-50 border-red-200 hover:bg-red-100"
-                                      : "text-slate-700 border-slate-200 hover:bg-slate-100"
-                                  )}
-                                  title={p.vendido ? "Quitar vendido" : "Marcar vendido"}
-                                >
-                                  {p.vendido ? "Vendido ✓" : "Vender"}
-                                </button>
+                                    <button
+                                      onClick={() => toggleVendido(p)}
+                                      className={cx(
+                                        "rounded-full px-2.5 py-1 text-xs font-bold border transition cursor-pointer",
+                                        p.vendido
+                                          ? "text-red-700 bg-red-50 border-red-200 hover:bg-red-100"
+                                          : "text-slate-700 border-slate-200 hover:bg-slate-100"
+                                      )}
+                                      title={p.vendido ? "Quitar vendido" : "Marcar vendido"}
+                                    >
+                                      {p.vendido ? "Vendido ✓" : "Vender"}
+                                    </button>
 
-                                <button
-                                  onClick={() => toggleAlquilado(p)}
-                                  className={cx(
-                                    "rounded-full px-2.5 py-1 text-xs font-bold border transition cursor-pointer",
-                                    p.alquilado
-                                      ? "text-slate-700 bg-slate-50 border-slate-300 hover:bg-slate-100"
-                                      : "text-slate-700 border-slate-200 hover:bg-slate-100"
-                                  )}
-                                  title={p.alquilado ? "Quitar alquilado" : "Marcar alquilado"}
-                                >
-                                  {p.alquilado ? "Alquilado ✓" : "Alquilar"}
-                                </button>
+                                    <button
+                                      onClick={() => toggleAlquilado(p)}
+                                      className={cx(
+                                        "rounded-full px-2.5 py-1 text-xs font-bold border transition cursor-pointer",
+                                        p.alquilado
+                                          ? "text-slate-700 bg-slate-50 border-slate-300 hover:bg-slate-100"
+                                          : "text-slate-700 border-slate-200 hover:bg-slate-100"
+                                      )}
+                                      title={p.alquilado ? "Quitar alquilado" : "Marcar alquilado"}
+                                    >
+                                      {p.alquilado ? "Alquilado ✓" : "Alquilar"}
+                                    </button>
 
-                                <button
-                                  onClick={() => togglePremium(p)}
-                                  className={cx(
-                                    "rounded-full px-2.5 py-1 text-xs font-bold border transition cursor-pointer",
-                                    p.premium
-                                      ? "text-yellow-700 bg-yellow-50 border-yellow-300 hover:bg-yellow-100"
-                                      : "text-slate-700 border-slate-200 hover:bg-slate-100"
-                                  )}
-                                  title={p.premium ? "Quitar premium" : "Marcar premium"}
-                                >
-                                  {p.premium ? "Premium ★" : "Premium"}
-                                </button>
+                                    <button
+                                      onClick={() => editItem(p)}
+                                      className="rounded-full border border-slate-200 px-3 py-1 text-xs font-bold text-slate-700 hover:bg-slate-50 cursor-pointer"
+                                    >
+                                      Editar
+                                    </button>
 
-                                <button
-                                  onClick={() => editItem(p)}
-                                  className="rounded-full border border-slate-200 px-3 py-1 text-xs font-bold text-slate-700 hover:bg-slate-50 cursor-pointer"
-                                >
-                                  Editar
-                                </button>
+                                    {role !== "editor" && (
+                                      <button
+                                        onClick={() => setConfirmDel(p)}
+                                        className="rounded-full border border-red-200 px-3 py-1 text-xs font-bold text-red-700 hover:bg-red-50 cursor-pointer"
+                                      >
+                                        Borrar
+                                      </button>
+                                    )}
+                                  </>
+                                )}
 
-                                {role !== "editor" && (
+                                {tab === "premium" && (
                                   <button
-                                    onClick={() => setConfirmDel(p)}
-                                    className="rounded-full border border-red-200 px-3 py-1 text-xs font-bold text-red-700 hover:bg-red-50 cursor-pointer"
+                                    onClick={() => togglePremium(p)}
+                                    className={cx(
+                                      "rounded-full px-4 py-1.5 text-xs font-bold border transition cursor-pointer",
+                                      p.premium
+                                        ? "text-yellow-800 bg-yellow-100 border-yellow-400 hover:bg-yellow-200 shadow-sm"
+                                        : "text-slate-700 bg-white border-slate-300 hover:bg-slate-50 shadow-sm"
+                                    )}
                                   >
-                                    Borrar
+                                    {p.premium ? "Premium ★" : "Marcar Premium"}
+                                  </button>
+                                )}
+
+                                {tab === "bestChoice" && (
+                                  <button
+                                    onClick={() => toggleBestChoice(p)}
+                                    className={cx(
+                                      "rounded-full px-4 py-1.5 text-xs font-bold border transition cursor-pointer",
+                                      p.bestChoice
+                                        ? "text-indigo-800 bg-indigo-100 border-indigo-400 hover:bg-indigo-200 shadow-sm"
+                                        : "text-slate-700 bg-white border-slate-300 hover:bg-slate-50 shadow-sm"
+                                    )}
+                                  >
+                                    {p.bestChoice ? "Mejor Elección ✓" : "Marcar M. Elección"}
                                   </button>
                                 )}
                               </div>
@@ -1504,12 +1623,13 @@ function SideForm({
           />
 
           {/* Precio + switches */}
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-6">
             <Input type="number" label="Precio" value={String(form.precio ?? 0)} onChange={(v) => set("precio", v)} min="0" />
             <Toggle label="Publicado" checked={Boolean(form.published)} onChange={(v) => set("published", v)} />
             <Toggle label="Vendido" checked={Boolean(form.vendido)} onChange={(v) => set("vendido", v)} />
             <Toggle label="Alquilado" checked={Boolean(form.alquilado)} onChange={(v) => set("alquilado", v)} />
             <Toggle label="Premium" checked={Boolean(form.premium)} onChange={(v) => set("premium", v)} />
+            <Toggle label="Mejor Elección" checked={Boolean(form.bestChoice)} onChange={(v) => set("bestChoice", v)} />
           </div>
 
           {/* Antigüedad y Fecha de Publicación */}

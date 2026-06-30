@@ -253,6 +253,18 @@ export default function PropertyDetailClient({ property, relatedProperties }: Pr
             />
             <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors duration-300 pointer-events-none" />
             
+            {/* Sold/Rented Overlay */}
+            {(property.vendido || property.alquilado) && (
+              <div className="absolute inset-0 z-30 pointer-events-none overflow-hidden rounded-3xl">
+                {/* Banner Diagonal */}
+                <div className={`absolute top-10 -left-16 w-64 text-center py-2 font-black text-sm sm:text-base tracking-widest text-white transform -rotate-45 shadow-2xl ${property.vendido ? 'bg-red-600' : 'bg-blue-600'}`}>
+                  {property.vendido ? 'VENDIDA' : 'ALQUILADA'}
+                </div>
+                {/* Overlay Semitransparente */}
+                <div className="absolute inset-0 bg-slate-900/20 backdrop-blur-[1px]" />
+              </div>
+            )}
+            
             {/* Share and Metadata Floating Badges */}
             <div className="absolute top-4 right-4 z-20 flex items-center gap-2">
               <span className="bg-slate-900/80 backdrop-blur-md text-white text-xs font-medium px-3.5 py-1.5 rounded-full border border-slate-800/20 shadow-md">

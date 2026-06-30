@@ -52,18 +52,17 @@ export default function FeaturedProperties() {
       try {
         const { data, error } = await supabase
           .from('properties')
-          .select('*')
-          .eq('featured', true)
-          .limit(8);
+          .select('*');
         if (error) throw error;
         if (data && data.length > 0) {
-          setProperties(data.map(mapDbToProperty));
+          const featuredData = data.filter(d => d.owner?.bestChoice === true);
+          setProperties(featuredData.map(mapDbToProperty).slice(0, 8));
         } else {
-          setProperties(mockProperties.filter(p => p.featured).slice(0, 8));
+          setProperties([]);
         }
       } catch (err) {
-        console.warn("Error loading featured properties from Supabase. Falling back to local mocks:", err);
-        setProperties(mockProperties.filter(p => p.featured).slice(0, 8));
+        console.warn("Error loading featured properties from Supabase:", err);
+        setProperties([]);
       } finally {
         setLoading(false);
       }
@@ -174,6 +173,18 @@ export default function FeaturedProperties() {
                           <span className="whitespace-nowrap">Ver detalle</span>
                         </div>
                       </div>
+
+                      {/* Sold/Rented Overlay */}
+                      {(property.vendido || property.alquilado) && (
+                        <div className="absolute inset-0 z-30 pointer-events-none overflow-hidden">
+                          {/* Banner Diagonal */}
+                          <div className={`absolute top-6 -right-12 w-48 text-center py-1.5 font-black text-[10px] sm:text-xs tracking-widest text-white transform rotate-45 shadow-lg ${property.vendido ? 'bg-red-600' : 'bg-blue-600'}`}>
+                            {property.vendido ? 'VENDIDA' : 'ALQUILADA'}
+                          </div>
+                          {/* Overlay Semitransparente */}
+                          <div className="absolute inset-0 bg-slate-900/20 backdrop-blur-[1px]" />
+                        </div>
+                      )}
 
                       {/* Dueño Directo Badge */}
                       <div className="absolute top-4 right-4 z-10">

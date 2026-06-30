@@ -27,6 +27,7 @@ export interface Property {
     vendido?: boolean;
     alquilado?: boolean;
     premium?: boolean;
+    bestChoice?: boolean;
   };
   gallery: string[];
   views: number;
@@ -42,6 +43,7 @@ export interface Property {
   vendido?: boolean;
   alquilado?: boolean;
   premium?: boolean;
+  bestChoice?: boolean;
 }
 
 export const mockProperties: Property[] = [
@@ -287,6 +289,7 @@ export function mapDbToProperty(dbProp: any): Property {
   const vendido = dbProp.vendido !== undefined ? Boolean(dbProp.vendido) : (owner.vendido !== undefined ? Boolean(owner.vendido) : false);
   const alquilado = dbProp.alquilado !== undefined ? Boolean(dbProp.alquilado) : (owner.alquilado !== undefined ? Boolean(owner.alquilado) : false);
   const premium = dbProp.premium !== undefined ? Boolean(dbProp.premium) : (owner.premium !== undefined ? Boolean(owner.premium) : false);
+  const bestChoice = dbProp.bestChoice !== undefined ? Boolean(dbProp.bestChoice) : (owner.bestChoice !== undefined ? Boolean(owner.bestChoice) : false);
   const moneda = dbProp.moneda || owner.moneda || "CRC";
 
   return {
@@ -311,7 +314,9 @@ export function mapDbToProperty(dbProp: any): Property {
       whatsappUrl: owner.whatsappUrl || "https://wa.me/50688888888",
       moneda,
       vendido,
-      alquilado
+      alquilado,
+      premium,
+      bestChoice
     },
     gallery: gallery.length > 0 ? gallery : [image],
     views: dbProp.views || 0,
@@ -323,6 +328,7 @@ export function mapDbToProperty(dbProp: any): Property {
     vendido,
     alquilado,
     premium,
+    bestChoice,
     age: dbProp.age !== undefined && dbProp.age !== null ? Number(dbProp.age) : undefined,
     created_at: dbProp.created_at || undefined
   };

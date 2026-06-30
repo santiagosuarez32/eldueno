@@ -38,6 +38,20 @@ function CatalogContent({ initialProperties }: { initialProperties: Property[] }
   const itemsPerPage = 9;
   const properties = initialProperties;
 
+  const availableTypes = Array.from(new Set(properties.map(p => p.type).filter(Boolean)));
+  const typeLabels: Record<string, string> = {
+    casa: 'Casa',
+    departamento: 'Departamento',
+    terreno: 'Terreno',
+    comercial: 'Local / Edificación Comercial',
+    ph: 'PH',
+    loft: 'Loft'
+  };
+
+  const availableLocations = Array.from(
+    new Set(properties.map(p => p.neighborhood || p.location).filter(Boolean))
+  ).sort();
+
   useEffect(() => {
     if (initialType) setSelectedType(initialType);
     if (initialLocation) setSelectedLocation(initialLocation);
@@ -60,9 +74,9 @@ function CatalogContent({ initialProperties }: { initialProperties: Property[] }
   }, []);
 
   const filteredProperties = properties.filter((property) => {
-    const matchesSearch = searchTerm === '' || property.title.toLowerCase().includes(searchTerm.toLowerCase()) || property.description.toLowerCase().includes(searchTerm.toLowerCase()) || property.neighborhood.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch = searchTerm === '' || property.title.toLowerCase().includes(searchTerm.toLowerCase()) || property.description.toLowerCase().includes(searchTerm.toLowerCase()) || (property.neighborhood || '').toLowerCase().includes(searchTerm.toLowerCase());
     const matchesType = selectedType === '' || property.type === selectedType;
-    const matchesLocation = selectedLocation === '' || property.location.toLowerCase().includes(selectedLocation.toLowerCase()) || property.neighborhood.toLowerCase().includes(selectedLocation.toLowerCase());
+    const matchesLocation = selectedLocation === '' || (property.neighborhood || property.location) === selectedLocation;
     const matchesBeds = selectedBeds === 'all' || (property.beds && (selectedBeds === 4 ? property.beds >= 4 : property.beds === selectedBeds));
     const matchesPrice = property.price <= maxPrice;
     return matchesSearch && matchesType && matchesLocation && (property.type === 'terreno' ? true : matchesBeds) && matchesPrice;
@@ -124,24 +138,22 @@ function CatalogContent({ initialProperties }: { initialProperties: Property[] }
                 <label className="text-xs sm:text-[13px] font-medium text-slate-700 flex items-center gap-1.5"><img src="/icons-filters/property.png" className="h-4 w-4 object-contain" alt="" /> Tipo de propiedad</label>
                 <select value={selectedType} onChange={(e) => setSelectedType(e.target.value)} className="w-full bg-white border border-slate-200 focus:border-emerald-500 focus:outline-none rounded-2xl px-3 py-2.5 text-sm text-slate-900 shadow-sm cursor-pointer transition-colors">
                   <option value="">Todos los tipos</option>
-                  <option value="departamento">Departamento</option>
-                  <option value="casa">Casa</option>
-                  <option value="terreno">Terreno</option>
-                  <option value="comercial">Local / Edificación Comercial</option>
-                  <option value="ph">PH</option>
-                  <option value="loft">Loft</option>
+                  {availableTypes.map((type) => (
+                    <option key={type} value={type}>
+                      {typeLabels[type] || type}
+                    </option>
+                  ))}
                 </select>
               </div>
               <div className="space-y-2">
                 <label className="text-xs sm:text-[13px] font-medium text-slate-700 flex items-center gap-1.5"><img src="/icons-filters/ubication.png" className="h-4 w-4 object-contain" alt="" /> Barrio o zona</label>
                 <select value={selectedLocation} onChange={(e) => setSelectedLocation(e.target.value)} className="w-full bg-white border border-slate-200 focus:border-emerald-500 focus:outline-none rounded-2xl px-3 py-2.5 text-sm text-slate-900 shadow-sm cursor-pointer transition-colors">
                   <option value="">Cualquier zona</option>
-                  <option value="Escazú">Escazú (San José)</option>
-                  <option value="Santa Ana">Santa Ana (San José)</option>
-                  <option value="Barrio Amón">Barrio Amón (San José)</option>
-                  <option value="Tamarindo">Tamarindo (Guanacaste)</option>
-                  <option value="Cariari">Cariari (Heredia)</option>
-                  <option value="Tres Ríos">Tres Ríos (Cartago)</option>
+                  {availableLocations.map((loc) => (
+                    <option key={loc} value={loc}>
+                      {loc}
+                    </option>
+                  ))}
                 </select>
               </div>
               <div className="space-y-2">

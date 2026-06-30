@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { supabase } from "@/lib/supabase";
 import { BlogPost, mapDbToBlogPost } from "@/app/data/blog";
+import imageCompression from "browser-image-compression";
 
 function cx(...cn: Array<string | false | undefined>) {
   return cn.filter(Boolean).join(" ");
@@ -18,12 +19,57 @@ export default function BlogsAdminTab({ setToast, triggerAutoBackup, userRole }:
   const [search, setSearch] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [editing, setEditing] = useState<Partial<BlogPost> | null>(null);
+  const [uploadingImage, setUploadingImage] = useState(false);
+
+  async function onPickImage(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploadingImage(true);
+    
+    try {
+      const cleanName = slugName(file.name.replace(/\.[^/.]+$/, "")) + ".webp";
+      let fileToUpload: File | Blob = file;
+
+      if (file.type.startsWith("image/")) {
+        const options = {
+          maxSizeMB: 0.8,
+          maxWidthOrHeight: 1920,
+          useWebWorker: true,
+          fileType: "image/webp",
+          initialQuality: 0.85,
+        };
+        const compressedBlob = await imageCompression(file, options);
+        fileToUpload = new File([compressedBlob], cleanName, { type: "image/webp" });
+      }
+
+      const path = `blogs/${Date.now()}-${cleanName}`;
+      const { data: uploadData, error } = await supabase.storage
+        .from("property-images")
+        .upload(path, fileToUpload, {
+          cacheControl: "3600",
+          upsert: false,
+          contentType: "image/webp"
+        });
+      if (error) throw error;
+      
+      const { data: pub } = supabase.storage.from("property-images").getPublicUrl(uploadData?.path || path);
+      setEditing(prev => prev ? { ...prev, image: pub.publicUrl } : prev);
+      setToast({ type: "ok", msg: "Imagen subida correctamente." });
+    } catch (err: any) {
+      console.error("Error uploading image:", err);
+      setToast({ type: "err", msg: "Error al subir la imagen: " + (err.message || "Desconocido") });
+    } finally {
+      setUploadingImage(false);
+      e.target.value = "";
+    }
+  }
 
   const fetchData = async () => {
     setLoading(true);
     const { data, error } = await supabase.from("blogs").select("*").order("created_at", { ascending: false });
     if (error) {
-      setToast({ type: "err", msg: "Error al cargar los blogs." });
+      console.error("Error fetching blogs:", error);
+      setToast({ type: "err", msg: "Error al cargar los blogs: " + error.message });
     } else if (data) {
       setRows(data.map(mapDbToBlogPost));
     }
@@ -155,8 +201,19 @@ export default function BlogsAdminTab({ setToast, triggerAutoBackup, userRole }:
               <input required value={editing.author || ""} onChange={e => setEditing({...editing, author: e.target.value})} className="w-full rounded-lg border border-slate-300 p-2 text-sm" />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">URL Imagen</label>
-              <input required value={editing.image || ""} onChange={e => setEditing({...editing, image: e.target.value})} className="w-full rounded-lg border border-slate-300 p-2 text-sm" />
+              <label className="block text-xs font-semibold text-slate-700 mb-1">Imagen (URL o Subir)</label>
+              <div className="flex gap-2">
+                <input required value={editing.image || ""} onChange={e => setEditing({...editing, image: e.target.value})} className="w-full rounded-lg border border-slate-300 p-2 text-sm" placeholder="https://..." />
+                <label className="cursor-pointer bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-lg px-3 py-2 text-sm font-semibold text-slate-700 flex items-center justify-center whitespace-nowrap">
+                  {uploadingImage ? "Subiendo..." : "Subir Local"}
+                  <input type="file" accept="image/*" className="hidden" disabled={uploadingImage} onChange={onPickImage} />
+                </label>
+              </div>
+              {editing.image && (
+                <div className="mt-2 w-full h-32 rounded-lg overflow-hidden border border-slate-200 bg-slate-50">
+                  <img src={editing.image} alt="Preview" className="w-full h-full object-cover" />
+                </div>
+              )}
             </div>
             <div>
               <label className="block text-xs font-semibold text-slate-700 mb-1">Tiempo de lectura</label>

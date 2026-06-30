@@ -24,19 +24,16 @@ export default function PremiumProperties() {
           
         if (error) throw error;
         if (data && data.length > 0) {
-          // Shuffle and pick 8 random properties
-          const shuffled = data.sort(() => 0.5 - Math.random());
+          const premiumData = data.filter(d => d.owner?.premium === true);
+          const shuffled = premiumData.sort(() => 0.5 - Math.random());
           const random8 = shuffled.slice(0, 8).map(mapDbToProperty);
           setProperties(random8);
         } else {
-          // Fallback to local mocks if none found or while setting up
-          const shuffledMocks = [...mockProperties].sort(() => 0.5 - Math.random());
-          setProperties(shuffledMocks.slice(0, 8));
+          setProperties([]);
         }
       } catch (err) {
-        console.warn("Error loading premium properties from Supabase. Falling back to local mocks:", err);
-        const shuffledMocks = [...mockProperties].sort(() => 0.5 - Math.random());
-        setProperties(shuffledMocks.slice(0, 8));
+        console.warn("Error loading premium properties from Supabase:", err);
+        setProperties([]);
       } finally {
         setLoading(false);
       }
@@ -180,6 +177,18 @@ export default function PremiumProperties() {
                           </div>
                         </div>
 
+                        {/* Sold/Rented Overlay */}
+                        {(property.vendido || property.alquilado) && (
+                          <div className="absolute inset-0 z-30 pointer-events-none overflow-hidden">
+                            {/* Banner Diagonal */}
+                            <div className={`absolute top-6 -right-12 w-48 text-center py-1.5 font-black text-[10px] sm:text-xs tracking-widest text-white transform rotate-45 shadow-lg ${property.vendido ? 'bg-red-600' : 'bg-blue-600'}`}>
+                              {property.vendido ? 'VENDIDA' : 'ALQUILADA'}
+                            </div>
+                            {/* Overlay Semitransparente */}
+                            <div className="absolute inset-0 bg-slate-900/20 backdrop-blur-[1px]" />
+                          </div>
+                        )}
+
                         {/* Tags */}
                         <div className="absolute top-4 left-4 z-10 bg-yellow-400 text-slate-955 text-[10px] font-bold px-2.5 py-1 rounded-full tracking-wider shadow-md">
                           Premium
@@ -276,6 +285,18 @@ export default function PremiumProperties() {
                     <div className={`absolute inset-0 bg-gradient-to-t from-slate-950/95 via-slate-950/45 to-transparent transition-opacity duration-500 ${
                       isActive ? 'opacity-0 pointer-events-none' : 'opacity-100'
                     }`} />
+
+                    {/* Sold/Rented Overlay */}
+                    {(property.vendido || property.alquilado) && (
+                      <div className="absolute inset-0 z-30 pointer-events-none overflow-hidden">
+                        {/* Banner Diagonal */}
+                        <div className={`absolute top-6 -right-12 w-48 text-center py-1.5 font-black text-[10px] sm:text-xs tracking-widest text-white transform rotate-45 shadow-lg ${property.vendido ? 'bg-red-600' : 'bg-blue-600'}`}>
+                          {property.vendido ? 'VENDIDA' : 'ALQUILADA'}
+                        </div>
+                        {/* Overlay Semitransparente */}
+                        <div className="absolute inset-0 bg-slate-900/20 backdrop-blur-[1px]" />
+                      </div>
+                    )}
 
                     {/* Badges in the top-left, matching main properties catalog card badges */}
                     <div className={`absolute top-3 left-3 z-20 flex flex-row items-center gap-1.5 max-w-[calc(100%-24px)] min-w-0 transition-opacity duration-500 ${

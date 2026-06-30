@@ -66,6 +66,18 @@ export default function PropertyCard({ property, priority = false }: PropertyCar
         <div className="relative aspect-video w-full overflow-hidden bg-slate-100">
           <div className="absolute inset-0 bg-slate-955/5 group-hover:bg-transparent transition-colors duration-300 z-10" />
           
+          {/* Sold/Rented Overlay */}
+          {(property.vendido || property.alquilado) && (
+            <div className="absolute inset-0 z-30 pointer-events-none overflow-hidden">
+              {/* Banner Diagonal */}
+              <div className={`absolute top-6 -right-12 w-48 text-center py-1.5 font-black text-[10px] sm:text-xs tracking-widest text-white transform rotate-45 shadow-lg ${property.vendido ? 'bg-red-600' : 'bg-blue-600'}`}>
+                {property.vendido ? 'VENDIDA' : 'ALQUILADA'}
+              </div>
+              {/* Overlay Semitransparente */}
+              <div className="absolute inset-0 bg-slate-900/20 backdrop-blur-[1px]" />
+            </div>
+          )}
+          
           {/* Badges */}
           <div className="absolute top-3 left-3 z-20 flex flex-row items-center gap-1.5 max-w-[calc(100%-24px)] min-w-0">
             {/* Property Type Badge */}

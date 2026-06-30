@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { ArrowUpRight, ArrowLeft, ArrowRight } from 'lucide-react';
 import gsap from 'gsap';
@@ -11,9 +11,33 @@ if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
 }
 
+import { supabase } from '@/lib/supabase';
+import { BlogPost, mapDbToBlogPost } from '@/app/data/blog';
+
 export default function StatsSection() {
   const container = useRef<HTMLElement>(null);
   const carouselRef = useRef<HTMLDivElement>(null);
+  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
+
+  useEffect(() => {
+    async function loadBlogs() {
+      try {
+        const { data, error } = await supabase
+          .from('blogs')
+          .select('*')
+          .eq('published', true)
+          .order('created_at', { ascending: false })
+          .limit(4);
+        
+        if (data && data.length > 0) {
+          setBlogPosts(data.map(mapDbToBlogPost));
+        }
+      } catch (err) {
+        console.warn("Error loading blogs for StatsSection:", err);
+      }
+    }
+    loadBlogs();
+  }, []);
 
   useGSAP(() => {
     gsap.from(".stats-head", {
@@ -66,40 +90,7 @@ export default function StatsSection() {
     }
   };
 
-  const blogPosts = [
-    {
-      slug: 'como-vender-sin-comisiones',
-      category: 'Guía Práctica',
-      date: '12 de Junio, 2026',
-      title: 'Cómo vender tu propiedad sin comisiones inmobiliarias',
-      excerpt: 'Descubrí los pasos clave para publicar, promocionar y negociar tu inmueble de forma directa y segura ahorrando miles de dólares.',
-      image: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
-    },
-    {
-      slug: 'documentos-compra-directa',
-      category: 'Legal',
-      date: '8 de Junio, 2026',
-      title: 'Documentos necesarios para comprar directo al dueño',
-      excerpt: 'Todo lo que necesitás saber sobre boletos de compraventa, escrituras y trámites legales para operar de forma transparente y protegida.',
-      image: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
-    },
-    {
-      slug: 'zonas-crecimiento-costa-rica',
-      category: 'Tendencias',
-      date: '3 de Junio, 2026',
-      title: 'Zonas con mayor crecimiento y retorno en Costa Rica',
-      excerpt: 'Analizamos los barrios y distritos que están experimentando el mayor auge inmobiliario, ideales para invertir o mudarte.',
-      image: 'https://images.unsplash.com/photo-1542838132-92c53300491e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
-    },
-    {
-      slug: 'consejos-negociacion-directa',
-      category: 'Negociación',
-      date: '1 de Junio, 2026',
-      title: 'Consejos para negociar el precio cara a cara con el dueño',
-      excerpt: 'Aprendé las mejores técnicas para pactar el valor de tu futura casa de forma transparente, logrando un acuerdo justo para ambas partes.',
-      image: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
-    }
-  ];
+
 
   return (
     <section ref={container} className="bg-white py-24 text-slate-900 relative overflow-hidden">
