@@ -232,11 +232,11 @@ export default function Hero() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full flex flex-col items-center">
         
         {/* Top Centered: Title & Subtitle */}
-        <div className="text-center max-w-3xl space-y-4 sm:space-y-5 mb-6 sm:mb-8 flex flex-col items-center">
+        <div className="text-center max-w-4xl space-y-4 sm:space-y-5 mb-6 sm:mb-8 flex flex-col items-center">
           <div
-            className="hero-badge inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-900/80 backdrop-blur-sm border border-slate-700/50 text-slate-300 text-xs font-semibold"
+            className="hero-badge inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-900/80 backdrop-blur-sm border border-slate-700/50 text-slate-300 text-sm sm:text-base font-semibold"
           >
-            <MapPin className="h-3.5 w-3.5 text-emerald-400 flex-shrink-0" />
+            <MapPin className="h-4 w-4 text-[#FFFF33] flex-shrink-0" />
             El Dueño Vende * Costa Rica
           </div>
 
@@ -244,12 +244,12 @@ export default function Hero() {
             <h1
               className="hero-title text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-white leading-[1.05] font-sans"
             >
-              Encontrá el hogar <br />
-              <span className="text-emerald-400">de tus sueños</span>
+              La propiedad que buscas <br />
+              <span className="text-[#FFFF33]">está aquí</span>
             </h1>
 
             <p
-              className="hero-desc text-slate-200 text-sm sm:text-lg max-w-2xl leading-normal mx-auto"
+              className="hero-desc text-slate-200 text-sm sm:text-lg max-w-3xl leading-normal mx-auto"
             >
               Empresa costarricense con más de 35 años de trayectoria, especializada en la Compra, Venta, Alquiler, Arquitectura y Préstamos hipotecarios en el Gran Área Metropolitana.
             </p>
@@ -257,20 +257,20 @@ export default function Hero() {
 
           {/* Actions Buttons (single line on mobile) */}
           <div
-            className="hero-buttons flex flex-row items-center justify-center gap-2 sm:gap-4 pt-2 w-full"
+            className="hero-buttons flex flex-row items-center justify-center gap-3 sm:gap-6 pt-2 pb-1 w-full"
           >
             <Link href="/propiedades" className="flex-shrink-0">
-              <FlowButton text="Ver Propiedades" variant="primary" />
+              <FlowButton text="Ver Propiedades" variant="primary" className="text-sm sm:text-base py-2.5 px-6 sm:px-8 sm:py-3" />
             </Link>
             <Link href="/contacto" className="flex-shrink-0">
-              <FlowButton text="Contactar Asesor" variant="secondary" />
+              <FlowButton text="Contactar Asesor" variant="secondary" className="text-sm sm:text-base py-2.5 px-6 sm:px-8 sm:py-3" />
             </Link>
           </div>
         </div>
 
         {/* Bottom Centered: Wide Single Search Input */}
         <div
-          className="hero-search w-full max-w-[88%] sm:max-w-xl md:max-w-2xl mx-auto"
+          className="hero-search w-full max-w-[95%] sm:max-w-2xl md:max-w-3xl lg:max-w-4xl mx-auto mt-6 mb-4 sm:mt-8 sm:mb-6"
         >
           <div 
             onClick={() => {
@@ -304,13 +304,13 @@ export default function Hero() {
                 type="text"
                 readOnly
                 value={searchValue}
-                placeholder="Escribe ubicación, tipo de propiedad, distrito..."
+                placeholder="Escribe ubicación, tipo de propiedad, precio..."
                 className="w-full bg-transparent border-0 p-0 text-slate-900 text-xs sm:text-sm md:text-base font-semibold placeholder-slate-400 focus:ring-0 focus:outline-none cursor-pointer truncate"
               />
             </div>
             <button
               type="button"
-              className="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold p-2.5 sm:px-6 sm:py-2.5 rounded-full flex items-center justify-center gap-1.5 transition-all duration-300 shadow-md hover:shadow-lg hover:shadow-emerald-500/20 active:scale-95 shrink-0 mr-0.5 cursor-pointer"
+              className="bg-[#FFFF33] hover:bg-[#e6e600] text-slate-950 font-bold p-2.5 sm:px-6 sm:py-2.5 rounded-full flex items-center justify-center gap-1.5 transition-all duration-300 shadow-md hover:shadow-lg hover:shadow-[#FFFF33]/20 active:scale-95 shrink-0 mr-0.5 cursor-pointer"
             >
               <Search className="h-4 w-4" />
               <span className="hidden sm:inline text-xs sm:text-sm">Buscar</span>
@@ -337,7 +337,7 @@ export default function Hero() {
                       autoFocus
                       value={searchValue}
                       onChange={handleInputChange}
-                      placeholder="Escribe ubicación, tipo de propiedad, distrito..."
+                      placeholder="Escribe ubicación, tipo de propiedad, precio..."
                       className="flex-grow bg-transparent border-0 p-0 text-slate-900 text-sm sm:text-base font-semibold placeholder-slate-450 focus:ring-0 focus:outline-none"
                     />
                     {searchValue && (
@@ -384,8 +384,8 @@ export default function Hero() {
                         {searchValue.trim() === '' ? (
                           <div className="py-12 text-center text-slate-400 space-y-5">
                             <p className="text-xs font-medium text-slate-500 font-medium">Escribe tu búsqueda para empezar o selecciona un tag rápido:</p>
-                            <div className="flex flex-wrap justify-center gap-2 max-w-md mx-auto">
-                              {['San José', 'Santa Ana', 'Escazú', 'Casa', 'Terreno', 'Comercial'].map((tag) => (
+                            <div className="flex flex-wrap justify-center gap-2 max-w-lg mx-auto">
+                              {['San José', 'Alajuela', 'Cartago', 'Heredia', 'Guanacaste', 'Puntarenas', 'Limón'].map((tag) => (
                                 <button
                                   key={tag}
                                   type="button"
@@ -435,20 +435,20 @@ export default function Hero() {
 
           {/* Statistics / Badges row */}
           <div 
-            className="hero-stats mt-6 flex flex-wrap items-center justify-center gap-3 text-xs"
+            className="hero-stats mt-4 flex flex-wrap items-center justify-center gap-3 sm:gap-6 text-sm sm:text-base"
           >
-            <span className="flex items-center gap-1.5 bg-slate-900/60 backdrop-blur-sm border border-slate-800 px-3 py-1.5 rounded-full text-slate-300">
-              <Building2 className="h-3.5 w-3.5 text-emerald-400 flex-shrink-0" />
+            <span className="flex items-center gap-1.5 bg-slate-900/60 backdrop-blur-sm border border-slate-800 px-4 py-2 rounded-full text-slate-300">
+              <Building2 className="h-4 w-4 text-[#FFFF33] flex-shrink-0" />
               <span className="font-extrabold text-white">1,500+</span>
               <span className="font-normal text-slate-300">Propiedades vendidas</span>
             </span>
-            <span className="flex items-center gap-1.5 bg-slate-900/60 backdrop-blur-sm border border-slate-800 px-3 py-1.5 rounded-full text-slate-300">
-              <Users className="h-3.5 w-3.5 text-emerald-400 flex-shrink-0" />
+            <span className="flex items-center gap-1.5 bg-slate-900/60 backdrop-blur-sm border border-slate-800 px-4 py-2 rounded-full text-slate-300">
+              <Users className="h-4 w-4 text-[#FFFF33] flex-shrink-0" />
               <span className="font-extrabold text-white">3,000+</span>
               <span className="font-normal text-slate-300">Clientes Satisfechos</span>
             </span>
-            <span className="flex items-center gap-1.5 bg-slate-900/60 backdrop-blur-sm border border-slate-800 px-3 py-1.5 rounded-full text-slate-300">
-              <Award className="h-3.5 w-3.5 text-emerald-400 flex-shrink-0" />
+            <span className="flex items-center gap-1.5 bg-slate-900/60 backdrop-blur-sm border border-slate-800 px-4 py-2 rounded-full text-slate-300">
+              <Award className="h-4 w-4 text-[#FFFF33] flex-shrink-0" />
               <span className="font-extrabold text-white">35+</span>
               <span className="font-normal text-slate-300">de Experiencia</span>
             </span>

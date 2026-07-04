@@ -48,9 +48,15 @@ function CatalogContent({ initialProperties }: { initialProperties: Property[] }
     loft: 'Loft'
   };
 
-  const availableLocations = Array.from(
-    new Set(properties.map(p => p.neighborhood || p.location).filter(Boolean))
-  ).sort();
+  const availableLocations = [
+    'San José',
+    'Alajuela',
+    'Cartago',
+    'Heredia',
+    'Guanacaste',
+    'Puntarenas',
+    'Limón'
+  ];
 
   useEffect(() => {
     if (initialType) setSelectedType(initialType);
@@ -76,7 +82,7 @@ function CatalogContent({ initialProperties }: { initialProperties: Property[] }
   const filteredProperties = properties.filter((property) => {
     const matchesSearch = searchTerm === '' || property.title.toLowerCase().includes(searchTerm.toLowerCase()) || property.description.toLowerCase().includes(searchTerm.toLowerCase()) || (property.neighborhood || '').toLowerCase().includes(searchTerm.toLowerCase());
     const matchesType = selectedType === '' || property.type === selectedType;
-    const matchesLocation = selectedLocation === '' || (property.neighborhood || property.location) === selectedLocation;
+    const matchesLocation = selectedLocation === '' || (property.location || '').toLowerCase().includes(selectedLocation.toLowerCase());
     const matchesBeds = selectedBeds === 'all' || (property.beds && (selectedBeds === 4 ? property.beds >= 4 : property.beds === selectedBeds));
     const matchesPrice = property.price <= maxPrice;
     return matchesSearch && matchesType && matchesLocation && (property.type === 'terreno' ? true : matchesBeds) && matchesPrice;
@@ -146,9 +152,9 @@ function CatalogContent({ initialProperties }: { initialProperties: Property[] }
                 </select>
               </div>
               <div className="space-y-2">
-                <label className="text-xs sm:text-[13px] font-medium text-slate-700 flex items-center gap-1.5"><img src="/icons-filters/ubication.png" className="h-4 w-4 object-contain" alt="" /> Barrio o zona</label>
+                <label className="text-xs sm:text-[13px] font-medium text-slate-700 flex items-center gap-1.5"><img src="/icons-filters/ubication.png" className="h-4 w-4 object-contain" alt="" /> Provincia</label>
                 <select value={selectedLocation} onChange={(e) => setSelectedLocation(e.target.value)} className="w-full bg-white border border-slate-200 focus:border-emerald-500 focus:outline-none rounded-2xl px-3 py-2.5 text-sm text-slate-900 shadow-sm cursor-pointer transition-colors">
-                  <option value="">Cualquier zona</option>
+                  <option value="">Cualquier provincia</option>
                   {availableLocations.map((loc) => (
                     <option key={loc} value={loc}>
                       {loc}

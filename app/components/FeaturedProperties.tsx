@@ -93,10 +93,10 @@ export default function FeaturedProperties() {
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
           <div className="space-y-4 max-w-xl">
             <h2 className="text-3xl sm:text-5xl font-bold text-slate-950 tracking-tight leading-none">
-              Nuestra Mejor <span className="underline decoration-emerald-500 decoration-[3px] underline-offset-[5px]">Selección</span>
+              Propiedades <span className="underline decoration-emerald-500 decoration-[3px] underline-offset-[5px]">Destacadas</span>
             </h2>
-            <p className="text-slate-500 text-sm sm:text-base leading-snug">
-              Inversiones inteligentes seguras y hogares excepcionales pensados para cada estilo de vida.
+            <p className="text-slate-500 text-lg sm:text-2xl leading-snug">
+              Inversiones seguras y hogares excepcionales pensados para cada estilo de vida.
             </p>
             
             {/* View Listings Button */}
@@ -186,13 +186,7 @@ export default function FeaturedProperties() {
                         </div>
                       )}
 
-                      {/* Dueño Directo Badge */}
-                      <div className="absolute top-4 right-4 z-10">
-                        <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-900/80 backdrop-blur-sm border border-slate-700/50 text-slate-300 text-[10px] font-semibold">
-                          <MapPin className="h-3 w-3 text-white flex-shrink-0" />
-                          Costa Rica
-                        </span>
-                      </div>
+
 
                       {/* Price Tag Overlay (like catalog cards) */}
                       <div className="absolute bottom-4 right-4 z-10 bg-slate-950 text-white font-bold px-4 py-2 rounded-2xl shadow-md text-sm">
@@ -228,23 +222,34 @@ export default function FeaturedProperties() {
 
                       {/* Property Specs */}
                       <div className="flex items-center gap-5 sm:gap-6 text-xs text-slate-600 font-medium pt-3 border-t border-slate-100 mt-auto">
-                        {Boolean(property.beds) && Number(property.beds) > 0 && (
-                          <div className="flex items-center gap-1.5">
-                            <img src="/icons-property/dormitorios.png" className="h-4.5 w-4.5 object-contain flex-shrink-0" alt="" />
-                            <span className="font-semibold text-slate-700">{property.beds} Dorms</span>
-                          </div>
-                        )}
-                        {Boolean(property.baths) && Number(property.baths) > 0 && (
-                          <div className="flex items-center gap-1.5">
-                            <img src="/icons-property/baños.png" className="h-4.5 w-4.5 object-contain flex-shrink-0" alt="" />
-                            <span className="font-semibold text-slate-700">{property.baths} Baños</span>
-                          </div>
-                        )}
-                        {Boolean(property.area) && Number(property.area) > 0 && (
-                          <div className="flex items-center gap-1.5">
-                            <img src="/icons-property/m2.png" className="h-4.5 w-4.5 object-contain flex-shrink-0" alt="" />
-                            <span className="font-semibold text-slate-700">{property.area} m²</span>
-                          </div>
+                        {property.type === 'terreno' ? (
+                          (property.landArea || property.area) ? (
+                            <div className="flex items-center gap-1.5">
+                              <img src="/icons-property/m2.png" className="h-4.5 w-4.5 object-contain flex-shrink-0" alt="" />
+                              <span className="font-semibold text-slate-700">Terreno de {property.landArea || property.area} m²</span>
+                            </div>
+                          ) : null
+                        ) : (
+                          <>
+                            {Number(property.beds) > 0 ? (
+                              <div className="flex items-center gap-1.5">
+                                <img src="/icons-property/dormitorios.png" className="h-4.5 w-4.5 object-contain flex-shrink-0" alt="" />
+                                <span className="font-semibold text-slate-700">{property.beds} Dorms</span>
+                              </div>
+                            ) : null}
+                            {Number(property.baths) > 0 ? (
+                              <div className="flex items-center gap-1.5">
+                                <img src="/icons-property/baños.png" className="h-4.5 w-4.5 object-contain flex-shrink-0" alt="" />
+                                <span className="font-semibold text-slate-700">{property.baths} Baños</span>
+                              </div>
+                            ) : null}
+                            {Number(property.area) > 0 ? (
+                              <div className="flex items-center gap-1.5">
+                                <img src="/icons-property/m2.png" className="h-4.5 w-4.5 object-contain flex-shrink-0" alt="" />
+                                <span className="font-semibold text-slate-700">{property.area} m²</span>
+                              </div>
+                            ) : null}
+                          </>
                         )}
                       </div>
 

@@ -552,7 +552,7 @@ export default function PropertyDetailClient({ property, relatedProperties }: Pr
         {/* Recommended Properties list */}
         <div className="space-y-6 mt-16 pt-2">
           <h3 className="text-lg font-bold text-slate-900">
-            Inmuebles Sugeridos
+            Propiedades Similares a tu búsqueda
           </h3>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -585,24 +585,24 @@ export default function PropertyDetailClient({ property, relatedProperties }: Pr
                   
                   {/* Property Specs Row */}
                   <div className="flex items-center gap-3 text-[11px] font-semibold text-slate-500 pt-2 border-t border-slate-100">
-                    {relProp.beds && (
+                    {Number(relProp.beds) > 0 ? (
                       <span className="flex items-center gap-1">
                         <img src="/icons-property/dormitorios.png" className="h-3.5 w-3.5 object-contain" alt="" />
                         {relProp.beds} Dorms
                       </span>
-                    )}
-                    {relProp.baths && (
+                    ) : null}
+                    {Number(relProp.baths) > 0 ? (
                       <span className="flex items-center gap-1">
                         <img src="/icons-property/baños.png" className="h-3.5 w-3.5 object-contain" alt="" />
                         {relProp.baths} Baños
                       </span>
-                    )}
-                    {relProp.area && (
+                    ) : null}
+                    {Number(relProp.area) > 0 ? (
                       <span className="flex items-center gap-1">
                         <img src="/icons-property/m2.png" className="h-3.5 w-3.5 object-contain" alt="" />
                         {relProp.area} m²
                       </span>
-                    )}
+                    ) : null}
                   </div>
                   
                   <p className="text-sm font-extrabold text-slate-900 pt-1">

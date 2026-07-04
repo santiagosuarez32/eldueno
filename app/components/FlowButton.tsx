@@ -20,11 +20,11 @@ export function FlowButton({ text = "Modern Button", variant = "primary", classN
 
   if (variant === 'primary') {
     // Bright Yellow brand button
-    borderClass = "border-[#ffe600]/40 hover:border-transparent";
-    textClass = "text-[#ffe600]";
-    bgCircleClass = "bg-[#ffe600]";
+    borderClass = "border-[#FFFF33]/40 hover:border-transparent";
+    textClass = "text-[#FFFF33]";
+    bgCircleClass = "bg-[#FFFF33]";
     hoverTextClass = "hover:text-slate-950";
-    arrowStroke = "stroke-[#ffe600]";
+    arrowStroke = "stroke-[#FFFF33]";
     arrowHoverStroke = "group-hover:stroke-slate-950";
   } else if (variant === 'secondary') {
     // Clean White/Border button
@@ -47,10 +47,10 @@ export function FlowButton({ text = "Modern Button", variant = "primary", classN
     borderClass = "border-slate-950/20 hover:border-transparent";
     textClass = "text-slate-950";
     bgCircleClass = "bg-slate-950";
-    hoverTextClass = "hover:text-[#ffe600]";
+    hoverTextClass = "hover:text-[#FFFF33]";
     arrowStroke = "stroke-slate-950";
-    arrowHoverStroke = "group-hover:stroke-[#ffe600]";
-    defaultBgClass = "bg-[#ffe600]";
+    arrowHoverStroke = "group-hover:stroke-[#FFFF33]";
+    defaultBgClass = "bg-[#FFFF33]";
   }
 
   return (

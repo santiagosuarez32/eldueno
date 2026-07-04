@@ -123,7 +123,7 @@ export default function ArquitecturaPage() {
           {/* Background image & overlays */}
           <div className="absolute inset-0 z-0">
             <img
-              src="/about.png"
+              src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80"
               alt="Premium architectural design"
               className="w-full h-full object-cover object-center"
             />
@@ -155,7 +155,7 @@ export default function ArquitecturaPage() {
                 <p
                   className="hero-subtitle text-slate-350 text-base sm:text-lg max-w-3xl leading-relaxed"
                 >
-                  Ofrecemos servicios de arquitectura enfocados en el diseño, planificación y remodelación de espacios residenciales, comerciales e industriales. Brindamos asesoría personalizada y elaboración de planos, creando soluciones funcionales, estéticas y adaptadas a cada necesidad. Nuestro objetivo es optimizar cada espacio, garantizando calidad, eficiencia y mayor valor para su propiedad.
+                  Ofrecemos servicios de arquitectura enfocados en el diseño, planificación y construcción de espacios residenciales, comerciales e industriales. Brindamos asesoría personalizada y elaboración de planos, creando soluciones funcionales, estéticas y adaptadas a cada necesidad. Nuestro objetivo es optimizar cada espacio, garantizando calidad, eficiencia y mayor valor para su propiedad.
                 </p>
               </div>
             </div>

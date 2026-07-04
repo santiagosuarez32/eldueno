@@ -41,6 +41,11 @@ const faqs = [
     id: 'item-6',
     question: '¿Qué es la reunificación de deudas?',
     answer: 'Es un proceso que permite consolidar varias obligaciones financieras en una sola cuota, facilitando su administración y mejorando su flujo de caja.'
+  },
+  {
+    id: 'item-7',
+    question: '¿Puedo comprar una propiedad por medio del bono-crédito??',
+    answer: 'Sí, Si no has recibido anteriormente el bono, no has tenido propiedades registralmente a nombre tuyo, si cuentas con un núcleo familiar, y eres sujeto a crédito, tu y tu familia serian los candidatos ideales.'
   }
 ];
 

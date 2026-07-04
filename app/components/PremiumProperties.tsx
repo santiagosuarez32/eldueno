@@ -86,7 +86,7 @@ export default function PremiumProperties() {
 
 
   return (
-    <section className="bg-gradient-to-br from-[#ffe600] via-[#ffcc00] to-[#ffaa00] py-12 text-slate-900 overflow-hidden rounded-[40px] mx-4 sm:mx-6 lg:mx-8 my-12 shadow-2xl">
+    <section className="bg-[#FFFF33] py-12 text-slate-900 overflow-hidden rounded-[40px] mx-4 sm:mx-6 lg:mx-8 my-12 shadow-2xl">
       <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
@@ -168,10 +168,9 @@ export default function PremiumProperties() {
                     <div className="w-full bg-white border border-slate-200 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.08)] hover:shadow-[0_20px_50px_-10px_rgba(0,0,0,0.12)] hover:-translate-y-1 rounded-[32px] overflow-hidden flex flex-col group transition-all duration-300 h-full">
                       {/* Image Container */}
                       <div className="relative aspect-[16/10] w-full overflow-hidden bg-slate-100">
-                        {/* Floating Action Overlay on Hover */}
                         <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20 flex items-center justify-center">
                           <div 
-                            className="bg-yellow-400 text-slate-955 font-bold text-sm px-6 py-2.5 rounded-full flex items-center justify-center text-center transform scale-90 group-hover:scale-100 transition-all duration-300 shadow-xl"
+                            className="bg-[#FFFF33] text-slate-955 font-bold text-sm px-6 py-2.5 rounded-full flex items-center justify-center text-center transform scale-90 group-hover:scale-100 transition-all duration-300 shadow-xl"
                           >
                             <span className="whitespace-nowrap">Ver detalle</span>
                           </div>
@@ -190,7 +189,7 @@ export default function PremiumProperties() {
                         )}
 
                         {/* Tags */}
-                        <div className="absolute top-4 left-4 z-10 bg-yellow-400 text-slate-955 text-[10px] font-bold px-2.5 py-1 rounded-full tracking-wider shadow-md">
+                        <div className="absolute top-4 left-4 z-10 bg-[#FFFF33] text-slate-955 text-[10px] font-bold px-2.5 py-1 rounded-full tracking-wider shadow-md">
                           Premium
                         </div>
                         <div className="absolute top-4 right-4 z-10">
@@ -314,7 +313,7 @@ export default function PremiumProperties() {
                     </div>
 
                     {/* Premium Tag on Top Right */}
-                    <div className={`absolute top-3 right-3 z-20 bg-yellow-400 text-slate-955 text-[10px] font-bold px-2.5 py-1 rounded-full tracking-wider shadow-md transition-opacity duration-500 ${
+                    <div className={`absolute top-3 right-3 z-20 bg-[#FFFF33] text-slate-955 text-[10px] font-bold px-2.5 py-1 rounded-full tracking-wider shadow-md transition-opacity duration-500 ${
                       isActive ? 'opacity-100' : 'opacity-0 pointer-events-none'
                     }`}>
                       Premium
@@ -378,7 +377,7 @@ export default function PremiumProperties() {
 
                       <Link
                         href={`/propiedades/${property.id}`}
-                        className="inline-flex items-center gap-1 text-[11px] font-extrabold text-amber-600 hover:text-amber-700 transition-colors"
+                        className="inline-flex items-center gap-1 text-[11px] font-extrabold text-[#cccc00] hover:text-[#b3b300] transition-colors"
                       >
                         Ver detalle
                         <ArrowRight className="h-3.5 w-3.5" />

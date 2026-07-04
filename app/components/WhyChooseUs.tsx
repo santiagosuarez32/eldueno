@@ -10,17 +10,18 @@ if (typeof window !== 'undefined') {
 }
 import Link from 'next/link';
 import { Plus, Minus, ArrowUpRight } from 'lucide-react';
+import { FiPhone } from 'react-icons/fi';
 
 export default function WhyChooseUs() {
   const [activeIndex, setActiveIndex] = useState(0);
 
   const features = [
     {
-      title: 'Servicios de Correduría',
+      title: 'Venta de propiedades',
       description: 'Vende tu propiedad con el respaldo de expertos en bienes raíces.',
-      link: '/contacto?servicio=correduria',
+      link: '/publicar',
       buttonText: 'Más información',
-      image: '/services/correduria.webp',
+      image: '/services/venta-propiedades.webp',
       counters: [
         { value: '1500+', label: 'Transacciones' },
         { value: '0%', label: 'de avalúo' }
@@ -29,34 +30,34 @@ export default function WhyChooseUs() {
     {
       title: 'Compra de propiedades',
       description: 'Le acompañamos en cada paso hacia la compra de la propiedad que se ajuste a su presupuesto y necesidades.',
-      link: '/contacto?servicio=compra',
+      link: '/propiedades',
       buttonText: 'Más información',
-      image: '/services/venta-propiedades.webp',
+      image: '/services/correduria.webp',
       counters: [
-        { value: '3,000+', label: 'Clientes Satisfechos' },
+        { value: '3200+', label: 'Clientes Satisfechos' },
         { value: 'CHECK', label: 'Asesoría personalizada' }
       ]
     },
     {
       title: 'Préstamos hipotecarios',
-      description: 'Accedé a financiamiento y opciones de crédito hipotecario adaptadas a tus necesidades para adquirir tu propiedad rápidamente.',
+      description: 'Accede a financiamiento y opciones de crédito hipotecario adaptadas a tus necesidades para adquirir tu propiedad rápidamente.',
       link: '/prestamos',
       buttonText: 'Consultar Préstamo',
       image: '/services/creditos.webp',
       counters: [
-        { value: '95%', label: 'Tasa de Aprobación' },
-        { value: '24 hs', label: 'Pre-aprobación' }
+        { value: '90%', label: 'Financiamiento bancario' },
+        { value: '24 hrs', label: 'Pre-aprobación' }
       ]
     },
     {
       title: 'Servicios de arquitectura',
-      description: 'Dale vida a tus ideas. Consultá por remodelaciones, diseño arquitectónico, planos y asesoría técnica profesional.',
+      description: 'Dale vida a tus ideas. Consultá por remodelaciones, diseño arquitectónico, planos y dirección de obra profesional.',
       link: '/arquitectura',
       buttonText: 'Solicitar Asesoría',
       image: '/services/arquitectura.webp',
       counters: [
         { value: '150+', label: 'Proyectos Entregados' },
-        { value: 'CHECK', label: 'Diseño personalizado' }
+        { value: '15.802', label: 'M2 construidos' }
       ]
     }
   ];
@@ -161,7 +162,7 @@ export default function WhyChooseUs() {
                   >
                     <div className="overflow-hidden">
                       <div className="pl-0 sm:pl-14 pt-4 pb-2 space-y-6">
-                        <p className="text-slate-500 text-base sm:text-lg leading-relaxed">
+                        <p className="text-slate-500 text-xl sm:text-2xl leading-relaxed">
                           {feature.description}
                         </p>
                         
@@ -192,12 +193,12 @@ export default function WhyChooseUs() {
                         {/* Premium Sliding Button */}
                         <div className="pt-2">
                           <Link href={feature.link}>
-                            <button className="relative text-sm font-semibold rounded-full h-12 p-1 ps-6 pr-14 group transition-all duration-500 hover:ps-14 hover:pr-6 w-fit overflow-hidden cursor-pointer flex items-center justify-center bg-emerald-500 text-slate-950 shadow-md hover:shadow-lg hover:-translate-y-0.5">
+                            <button className="relative text-sm font-semibold rounded-full h-12 p-1 ps-6 pr-14 group transition-all duration-500 hover:ps-14 hover:pr-6 w-fit overflow-hidden cursor-pointer flex items-center justify-center bg-[#ffe600] text-slate-950 shadow-md hover:shadow-lg hover:-translate-y-0.5">
                               <span className="relative z-10 transition-all duration-500">
                                 {feature.buttonText}
                               </span>
-                              <div className="absolute right-1 w-10 h-10 bg-slate-950 text-white rounded-full flex items-center justify-center transition-all duration-500 group-hover:right-[calc(100%-44px)] group-hover:rotate-45">
-                                <ArrowUpRight size={16} />
+                              <div className="absolute right-1 w-10 h-10 bg-slate-950 text-white rounded-full flex items-center justify-center transition-all duration-500 group-hover:right-[calc(100%-44px)]">
+                                <FiPhone size={18} />
                               </div>
                             </button>
                           </Link>

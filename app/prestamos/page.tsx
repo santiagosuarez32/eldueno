@@ -159,9 +159,19 @@ export default function PrestamosPage() {
                   <h3 className="text-3xl sm:text-4xl font-bold text-slate-900 leading-tight tracking-tight">
                     Préstamos para compra de propiedades
                   </h3>
-                  <p className="text-slate-600 text-lg leading-relaxed">
+                  <p className="text-slate-600 text-xl leading-relaxed">
                     Evaluamos distintas alternativas con Bancos públicos como privados, ayudando a identificar la opción más conveniente en términos de cuotas, plazos y condiciones. Acompañamos al cliente desde la solicitud hasta la aprobación del crédito, garantizando un proceso claro, ágil y seguro.
                   </p>
+                  <ul className="space-y-4 pt-2">
+                    <li className="flex items-center gap-3">
+                      <img src="/prestamos-hipotecarios/gestion-bonocredito.png" alt="Icono Bono-Credito" className="w-10 h-10 object-contain flex-shrink-0" />
+                      <span className="font-bold text-slate-900 text-lg">Gestión de Bono-Credito</span>
+                    </li>
+                    <li className="flex items-center gap-3">
+                      <img src="/prestamos-hipotecarios/financiamiento.png" alt="Icono Financiamiento" className="w-10 h-10 object-contain flex-shrink-0" />
+                      <span className="font-bold text-slate-900 text-lg">Gestión de Financiamiento - Compra de Vivienda normal</span>
+                    </li>
+                  </ul>
                 </div>
                 <div
                   className="service-right order-1 lg:order-2"
@@ -198,8 +208,8 @@ export default function PrestamosPage() {
                   <h3 className="text-3xl sm:text-4xl font-bold text-slate-900 leading-tight tracking-tight">
                     Préstamos sobre garantía inmobiliaria
                   </h3>
-                  <p className="text-slate-600 text-lg leading-relaxed">
-                    El Dueño Vende también ofrece préstamos privados, con requisitos accesibles y pre-aprobación en 24 horas, sobre propiedades dentro del Gran Área Metropolitana.
+                  <p className="text-slate-600 text-xl leading-relaxed">
+                    El Dueño Vende también ofrece préstamos privados, con requisitos accesibles y pre-aprobación en 24 horas, sobre propiedades dentro del Gran Área Metropolitana. <span className="text-slate-950 font-bold underline decoration-[#ffe600] decoration-[3px] underline-offset-[4px]">Préstamos en colones y dólares</span>
                   </p>
 
                   {/* Metrics details */}
@@ -235,8 +245,8 @@ export default function PrestamosPage() {
                   <h3 className="text-3xl sm:text-4xl font-bold text-slate-900 leading-tight tracking-tight">
                     Reunificación de Deudas
                   </h3>
-                  <p className="text-slate-600 text-lg leading-relaxed">
-                    Ofrecemos el servicio de unificación de deudas como una solución financiera que permite consolidar múltiples obligaciones en un solo pago mensual. Este proceso facilita la organización de las finanzas personales, reduce la carga administrativa y brinda mayor control sobre el presupuesto. Nuestro objetivo es ayudarle a mejorar su liquidez y estabilidad financiera mediante condiciones más ordenadas y accesibles, adaptadas a su situación económica.
+                  <p className="text-slate-600 text-xl leading-relaxed">
+                    Ofrecemos el servicio de unificación de deudas con garantía hipotecaria dentro del Gran Área Metropolitana, como una solución financiera que permite consolidar múltiples obligaciones en un solo pago mensual. Este proceso facilita la organización de las finanzas personales, reduce la carga administrativa y brinda mayor control sobre el presupuesto. Nuestro objetivo es ayudarle a mejorar su liquidez y estabilidad financiera mediante condiciones más ordenadas y accesibles, adaptadas a su situación económica.
                   </p>
 
                   {/* Metrics details */}

@@ -47,7 +47,7 @@ export default function HomeAboutSection() {
           <div className="about-img relative">
             <div className="aspect-[4/3] rounded-[32px] overflow-hidden shadow-lg border border-slate-100">
               <img
-                src="/images/about-hero.webp"
+                src="/about.png"
                 alt="El Dueño Vende - Asesoría Inmobiliaria"
                 className="w-full h-full object-cover object-center"
               />
@@ -67,8 +67,8 @@ export default function HomeAboutSection() {
               <h2 className="text-3xl sm:text-4xl lg:text-[42px] font-bold tracking-tight text-slate-900 leading-[1.1]">
                 Somos una empresa con historia y resultados
               </h2>
-              <p className="text-slate-600 text-base leading-relaxed pt-2">
-                El Dueño Vende es una compañía especializada en bienes raíces. Brindamos la mejor asesoría en compra, venta y renta de propiedades dentro del área metropolitana, junto a excelentes oportunidades de inversión y soluciones de crédito.
+              <p className="text-slate-600 text-xl leading-relaxed pt-2">
+                <span className="font-bold underline decoration-[#ffe600] decoration-4 underline-offset-4">El Dueño Vende</span> es una compañía especializada en bienes raíces. Brindamos la mejor asesoría en compra, venta y alquiler de propiedades dentro del área metropolitana, junto a excelentes oportunidades de inversión y soluciones de crédito.
               </p>
             </div>
 
@@ -76,39 +76,66 @@ export default function HomeAboutSection() {
             <div className="space-y-6 pt-2">
               
               {/* Feature 1 */}
-              <div className="flex gap-4">
+              <div className="flex gap-5">
                 <div className="flex-shrink-0 mt-1">
-                  <img src="/icons-about/confianza.png" alt="Asesoría y Seguridad" className="w-10 h-10 object-contain" />
+                  <div className="w-12 h-12 bg-[#ffe600]" style={{
+                    WebkitMaskImage: 'url(/icons-about/confianza.png)',
+                    maskImage: 'url(/icons-about/confianza.png)',
+                    WebkitMaskSize: 'contain',
+                    maskSize: 'contain',
+                    WebkitMaskRepeat: 'no-repeat',
+                    maskRepeat: 'no-repeat',
+                    WebkitMaskPosition: 'center',
+                    maskPosition: 'center'
+                  }} />
                 </div>
                 <div>
-                  <h4 className="text-lg font-bold text-slate-900 mb-1">Asesoría y Seguridad</h4>
-                  <p className="text-slate-600 text-sm leading-relaxed">
+                  <h4 className="text-xl font-bold text-slate-900 mb-1">Asesoría y Seguridad</h4>
+                  <p className="text-slate-600 text-lg leading-relaxed">
                     Le acompañamos durante todo el proceso de compra, venta o alquiler de su propiedad, brindándole asesoría profesional, transparencia y seguridad en cada etapa.
                   </p>
                 </div>
               </div>
 
               {/* Feature 2 */}
-              <div className="flex gap-4">
+              <div className="flex gap-5">
                 <div className="flex-shrink-0 mt-1">
-                  <img src="/icons-about/ubication.png" alt="Trayectoria y Confianza" className="w-10 h-10 object-contain" />
+                  <div className="w-12 h-12 bg-[#ffe600]" style={{
+                    WebkitMaskImage: 'url(/icons-about/ubication.png)',
+                    maskImage: 'url(/icons-about/ubication.png)',
+                    WebkitMaskSize: 'contain',
+                    maskSize: 'contain',
+                    WebkitMaskRepeat: 'no-repeat',
+                    maskRepeat: 'no-repeat',
+                    WebkitMaskPosition: 'center',
+                    maskPosition: 'center'
+                  }} />
                 </div>
                 <div>
-                  <h4 className="text-lg font-bold text-slate-900 mb-1">Trayectoria y Confianza</h4>
-                  <p className="text-slate-600 text-sm leading-relaxed">
+                  <h4 className="text-xl font-bold text-slate-900 mb-1">Trayectoria y Confianza</h4>
+                  <p className="text-slate-600 text-lg leading-relaxed">
                     Con más de 35 años de experiencia nos desenvolvemos con agilidad en el mercado de bienes raíces; cientos de personas y empresas que han confiado sus inversiones nos respaldan.
                   </p>
                 </div>
               </div>
 
               {/* Feature 3 */}
-              <div className="flex gap-4">
+              <div className="flex gap-5">
                 <div className="flex-shrink-0 mt-1">
-                  <img src="/icons-about/inversion.png" alt="Oportunidades de Inversión" className="w-10 h-10 object-contain" />
+                  <div className="w-12 h-12 bg-[#ffe600]" style={{
+                    WebkitMaskImage: 'url(/icons-about/inversion.png)',
+                    maskImage: 'url(/icons-about/inversion.png)',
+                    WebkitMaskSize: 'contain',
+                    maskSize: 'contain',
+                    WebkitMaskRepeat: 'no-repeat',
+                    maskRepeat: 'no-repeat',
+                    WebkitMaskPosition: 'center',
+                    maskPosition: 'center'
+                  }} />
                 </div>
                 <div>
-                  <h4 className="text-lg font-bold text-slate-900 mb-1">Oportunidades de Inversión</h4>
-                  <p className="text-slate-600 text-sm leading-relaxed">
+                  <h4 className="text-xl font-bold text-slate-900 mb-1">Oportunidades de Inversión</h4>
+                  <p className="text-slate-600 text-lg leading-relaxed">
                     Además de la asesoría en compra y venta, brindamos excelentes oportunidades de inversión y soluciones de crédito adaptadas a las necesidades de cada cliente.
                   </p>
                 </div>

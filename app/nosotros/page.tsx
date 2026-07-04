@@ -85,17 +85,20 @@ export default function NosotrosPage() {
       delay: 0.3
     });
 
-    gsap.from(".stat-card", {
-      scrollTrigger: {
-        trigger: "#stats",
-        start: "top bottom-=50px",
-        once: true
-      },
-      opacity: 0,
-      scale: 0.95,
-      duration: 0.6,
-      stagger: 0.1
-    });
+    gsap.fromTo(".stat-card", 
+      { opacity: 0, scale: 0.95 },
+      {
+        scrollTrigger: {
+          trigger: "#stats",
+          start: "top bottom-=50px",
+          once: true
+        },
+        opacity: 1,
+        scale: 1,
+        duration: 0.6,
+        stagger: 0.1
+      }
+    );
 
     gsap.from(".hist-img-main", {
       scrollTrigger: {
@@ -153,7 +156,7 @@ export default function NosotrosPage() {
           {/* Background image & overlays */}
           <div className="absolute inset-0 z-0">
             <img
-              src="/images/about-hero.webp"
+              src="https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80"
               alt="Luxury minimalist interior architecture with tall arches"
               className="w-full h-full object-cover object-center"
             />
@@ -185,7 +188,7 @@ export default function NosotrosPage() {
                 </h1>
 
                 <p
-                  className="hero-desc text-slate-300 text-base sm:text-lg max-w-xl leading-relaxed"
+                  className="hero-desc text-slate-300 text-lg sm:text-xl lg:text-2xl max-w-2xl leading-relaxed"
                 >
                   En El Dueño Vende, le acompañamos durante todo el proceso de compra, venta o alquiler de su propiedad, brindándole asesoría profesional, transparencia y seguridad en cada etapa.
                 </p>
@@ -216,7 +219,7 @@ export default function NosotrosPage() {
             <div className="text-center max-w-3xl mx-auto space-y-4 mb-14">
               <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-slate-950">Nuestra trayectoria marca la diferencia</h2>
               <p className="text-slate-500 text-base sm:text-lg">
-                El Dueño Vende, se distingue por su sólida presencia en el mercado inmobiliario y por la confianza que ha construido a lo largo de los años. Nos caracterizamos por brindar un servicio transparente, responsable y orientado a resultados.
+                El Dueño Vende, se distingue por su sólida presencia en el mercado inmobiliario costarricense y por la confianza que ha construido a lo largo de los años. Nos caracterizamos por brindar un servicio transparente, responsable y orientado a resultados.
               </p>
             </div>
 

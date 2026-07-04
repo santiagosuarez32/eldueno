@@ -112,7 +112,7 @@ export default function StatsSection() {
             className="stats-desc flex flex-col md:flex-row md:items-end justify-between gap-6"
           >
             <p className="text-slate-600 text-lg sm:text-xl leading-relaxed max-w-lg">
-              Información de valor, guías prácticas y tendencias del mercado inmobiliario. Consejos prácticos de expertos para comprar, vender o alquilar propiedades de forma directa, segura.
+              Información de valor, guías prácticas y tendencias del mercado inmobiliario. Consejos prácticos de expertos para comprar, vender o alquilar propiedades de forma segura.
             </p>
 
             {/* Carousel Arrows (Mobile/Tablet only) */}
