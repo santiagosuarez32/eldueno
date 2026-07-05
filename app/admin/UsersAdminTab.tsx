@@ -102,7 +102,7 @@ export default function UsersAdminTab({ setToast }: { setToast: any }) {
               <option value="admin">Administrador Total (Acceso completo)</option>
             </select>
           </div>
-          <button type="submit" disabled={saving} className="w-full rounded-lg bg-[#ffe600] py-3 text-sm font-bold text-slate-900 transition hover:bg-[#ffff33] disabled:opacity-50 mt-4">
+          <button type="submit" disabled={saving} className="w-full rounded-lg bg-[#FFFF33] py-3 text-sm font-bold text-slate-900 transition hover:bg-[#ffff33] disabled:opacity-50 mt-4">
             {saving ? "Creando..." : "Crear Usuario"}
           </button>
         </form>
@@ -116,7 +116,7 @@ export default function UsersAdminTab({ setToast }: { setToast: any }) {
         <h2 className="text-xl font-extrabold text-slate-900">Gestión de Usuarios</h2>
         <button
           onClick={() => setShowForm(true)}
-          className="rounded-full bg-[#ffe600] px-5 py-2 font-bold text-slate-950 transition hover:bg-[#ffff33] text-sm"
+          className="rounded-full bg-[#FFFF33] px-5 py-2 font-bold text-slate-950 transition hover:bg-[#ffff33] text-sm"
         >
           + Nuevo Usuario
         </button>
@@ -204,7 +204,7 @@ export default function UsersAdminTab({ setToast }: { setToast: any }) {
               <button 
                 onClick={() => confirmRoleChange()} 
                 disabled={saving}
-                className="px-4 py-2 rounded-xl bg-[#ffe600] text-sm font-bold text-slate-900 hover:bg-[#ffff33] transition-colors disabled:opacity-50"
+                className="px-4 py-2 rounded-xl bg-[#FFFF33] text-sm font-bold text-slate-900 hover:bg-[#ffff33] transition-colors disabled:opacity-50"
               >
                 {saving ? "Guardando..." : "Confirmar"}
               </button>

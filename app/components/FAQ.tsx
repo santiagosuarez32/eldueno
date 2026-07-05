@@ -44,7 +44,7 @@ const faqs = [
   },
   {
     id: 'item-7',
-    question: '¿Puedo comprar una propiedad por medio del bono-crédito??',
+    question: '¿Puedo comprar una propiedad por medio del bono-crédito?',
     answer: 'Sí, Si no has recibido anteriormente el bono, no has tenido propiedades registralmente a nombre tuyo, si cuentas con un núcleo familiar, y eres sujeto a crédito, tu y tu familia serian los candidatos ideales.'
   }
 ];
@@ -87,7 +87,7 @@ export default function FAQ() {
     <section ref={container} className="bg-white pt-20 pb-10 md:pt-32 md:pb-12">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid gap-10 md:grid-cols-5 md:gap-16">
-          
+
           {/* Left: Title */}
           <div
             className="faq-head md:col-span-2"
@@ -102,7 +102,7 @@ export default function FAQ() {
               ¿No encontrás lo que buscás? Contactá a nuestro{' '}
               <Link
                 href="/contacto"
-                className="text-black font-bold underline decoration-[#ffe600] decoration-[3px] underline-offset-4 hover:text-black transition-colors"
+                className="text-black font-bold underline decoration-[#FFFF33] decoration-[3px] underline-offset-4 hover:text-black transition-colors"
               >
                 equipo
               </Link>
@@ -122,16 +122,14 @@ export default function FAQ() {
                   >
                     {faq.question}
                     <ChevronDown
-                      className={`h-4 w-4 shrink-0 text-slate-500 transition-transform duration-200 ${
-                        openId === faq.id ? 'rotate-180' : ''
-                      }`}
+                      className={`h-4 w-4 shrink-0 text-slate-500 transition-transform duration-200 ${openId === faq.id ? 'rotate-180' : ''
+                        }`}
                     />
                   </button>
 
                   <div
-                    className={`grid transition-all duration-300 ease-in-out ${
-                      openId === faq.id ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
-                    }`}
+                    className={`grid transition-all duration-300 ease-in-out ${openId === faq.id ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
+                      }`}
                   >
                     <div className="overflow-hidden">
                       <p className="text-slate-500 text-base leading-relaxed pb-6">
@@ -149,7 +147,7 @@ export default function FAQ() {
             ¿No encontrás lo que buscás? Contactá a nuestro{' '}
             <Link
               href="/contacto"
-              className="text-black font-bold underline decoration-[#ffe600] decoration-[3px] underline-offset-4 hover:text-black transition-colors"
+              className="text-black font-bold underline decoration-[#FFFF33] decoration-[3px] underline-offset-4 hover:text-black transition-colors"
             >
               equipo
             </Link>

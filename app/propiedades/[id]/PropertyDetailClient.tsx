@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
+import Script from 'next/script';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import {
@@ -11,7 +12,8 @@ import {
   Share,
   CheckCircle,
   Film,
-  Send
+  ChevronLeft,
+  ChevronRight
 } from 'lucide-react';
 import { Property, formatPropertyPrice } from '@/app/data/properties';
 import { FaWhatsapp } from 'react-icons/fa';
@@ -47,35 +49,43 @@ export default function PropertyDetailClient({ property, relatedProperties }: Pr
 
   // Gallery State
   const [activeImage, setActiveImage] = useState(0);
+  const [mobileImageIndex, setMobileImageIndex] = useState(0);
   const [isSaved, setIsSaved] = useState(false);
   const [showShareToast, setShowShareToast] = useState(false);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
 
+  const handleNextMobile = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setMobileImageIndex((prev) => (prev + 1) % (property.gallery?.length || 1));
+  };
+
+  const getEmbedUrl = (url?: string) => {
+    if (!url) return undefined;
+    try {
+      if (url.includes('youtu.be/')) {
+        const id = url.split('youtu.be/')[1].split('?')[0];
+        return `https://www.youtube.com/embed/${id}`;
+      }
+      if (url.includes('youtube.com/watch')) {
+        const urlObj = new URL(url);
+        const id = urlObj.searchParams.get('v');
+        if (id) return `https://www.youtube.com/embed/${id}`;
+      }
+    } catch (e) {
+      console.warn("Error parsing video URL", e);
+    }
+    return url;
+  };
+
+  const handlePrevMobile = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setMobileImageIndex((prev) => (prev - 1 + (property.gallery?.length || 1)) % (property.gallery?.length || 1));
+  };
+
   // Description Read More State
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
 
-  // Solicitar Información Form State
-  const [formName, setFormName] = useState('');
-  const [formEmail, setFormEmail] = useState('');
-  const [formPhone, setFormPhone] = useState('');
-  const [formMessage, setFormMessage] = useState(
-    `Me interesa la propiedad ${property.title} en ${property.neighborhood}, ${property.location}. Por favor contáctenme.`
-  );
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitSuccess, setSubmitSuccess] = useState(false);
-
-  const handleFormSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setSubmitSuccess(true);
-      setFormName('');
-      setFormEmail('');
-      setFormPhone('');
-    }, 1200);
-  };
-
+  // Form logic uses the CRM iframe
 
 
   // Commission Savings (4%)
@@ -201,39 +211,132 @@ export default function PropertyDetailClient({ property, relatedProperties }: Pr
         <div className="mb-8 flex flex-col md:flex-row md:items-end md:justify-between gap-6">
           <div className="space-y-3">
             <div className="flex flex-wrap items-center gap-2.5">
-              <span className="bg-slate-100 text-slate-500 text-xs font-medium px-3 py-1.5 rounded-full border border-slate-200 shadow-sm">
-                {property.type === 'departamento'
-                  ? 'Departamento'
-                  : property.type === 'casa'
-                  ? 'Casa'
-                  : property.type === 'ph'
-                  ? 'PH'
-                  : 'Loft'}
-              </span>
-              <span className="bg-slate-50 text-slate-500 text-xs font-medium px-3 py-1.5 rounded-full border border-slate-200 flex items-center gap-1">
-                <MapPin className="h-3.5 w-3.5 text-slate-500" />
+              <span className="bg-slate-50 text-slate-500 text-sm sm:text-base font-medium px-3 py-1.5 rounded-full border border-slate-200 flex items-center gap-1">
+                <MapPin className="h-4 w-4 text-slate-500" />
                 {property.neighborhood}, {property.location}
               </span>
             </div>
             
-            <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-slate-900 leading-tight">
+            <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-slate-950 leading-tight">
               {property.title}
             </h1>
         
           </div>
 
           <div className="flex flex-col items-start md:items-end gap-1.5 shrink-0">
-            <div className="text-slate-500 text-xs font-medium">Precio publicado</div>
-            <div className="flex items-center gap-3">
-              <span className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+            <div className="text-slate-500 text-xs font-medium w-full text-left md:text-right">Precio publicado</div>
+            <div className="flex flex-col items-start md:items-end">
+              {((property.precio_original && property.precio_original > property.price) || 
+                ((property.estado === 'rebajada' || property.estado === 'remate') && !property.precio_original)) ? (
+                <span className="text-red-500 line-through text-lg sm:text-xl font-bold mb-0.5">
+                  {formatPropertyPrice(property.precio_original && property.precio_original > property.price ? property.precio_original : property.price * 1.15, property.moneda)}
+                </span>
+              ) : null}
+              <span className="text-3xl sm:text-4xl font-bold text-slate-950 tracking-tight leading-tight">
                 {formatPropertyPrice(property.price, property.moneda)}
               </span>
+              {property.precio_usd && (
+                <span className="text-sm text-slate-500 font-semibold mt-0.5">
+                  US$ {property.precio_usd.toLocaleString('es-AR')}
+                </span>
+              )}
+              {property.moneda === 'USD' && (
+                <span className="text-xs text-slate-500 font-medium mt-1">
+                  (precio fijado en dólares)
+                </span>
+              )}
             </div>
           </div>
         </div>
 
-        {/* Gallery Bento Grid (Matching Reference Screenshot Layout) */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-4 w-full mb-10">
+        {/* Mobile Gallery (Carousel) */}
+        <div className="md:hidden w-full relative aspect-[4/3] sm:aspect-video mb-8 rounded-3xl overflow-hidden bg-slate-100 shadow-sm border border-slate-200/40">
+          {/* Main Image */}
+          <div 
+            className="w-full h-full relative cursor-zoom-in"
+            onClick={() => {
+              setActiveImage(mobileImageIndex);
+              setIsLightboxOpen(true);
+            }}
+          >
+            <Image
+              src={getOptimizedImageUrl(property.gallery?.[mobileImageIndex] || property.image, 800)}
+              alt={`${property.title} - Imagen ${mobileImageIndex + 1}`}
+              fill
+              sizes="100vw"
+              className="object-cover"
+              priority
+            />
+            <div className="absolute inset-0 bg-black/5 pointer-events-none" />
+            
+            {/* Sold/Rented Overlay */}
+            {(property.vendido || property.alquilado) && (
+              <div className="absolute inset-0 z-30 pointer-events-none overflow-hidden rounded-3xl">
+                <div className={`absolute top-8 -left-16 w-64 text-center py-2 font-black text-sm tracking-widest text-white transform -rotate-45 shadow-2xl ${property.vendido ? 'bg-red-600' : 'bg-blue-600'}`}>
+                  {property.vendido ? 'VENDIDA' : 'ALQUILADA'}
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Navigation Arrows */}
+          {property.gallery && property.gallery.length > 1 && (
+            <>
+              <button
+                onClick={handlePrevMobile}
+                className="absolute left-3 top-1/2 -translate-y-1/2 p-2 rounded-full bg-white/80 backdrop-blur-md text-slate-800 shadow-md border border-slate-200 z-20 hover:bg-white transition-colors"
+                aria-label="Imagen anterior"
+              >
+                <ChevronLeft className="h-5 w-5" />
+              </button>
+              <button
+                onClick={handleNextMobile}
+                className="absolute right-3 top-1/2 -translate-y-1/2 p-2 rounded-full bg-white/80 backdrop-blur-md text-slate-800 shadow-md border border-slate-200 z-20 hover:bg-white transition-colors"
+                aria-label="Siguiente imagen"
+              >
+                <ChevronRight className="h-5 w-5" />
+              </button>
+            </>
+          )}
+
+          {/* Pagination Dots */}
+          {property.gallery && property.gallery.length > 1 && (
+            <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-1.5 z-20 px-4 overflow-hidden">
+              <div className="flex justify-center gap-1.5 flex-wrap max-h-6 overflow-hidden">
+                {property.gallery.map((_, idx) => (
+                  <div
+                    key={idx}
+                    className={`h-1.5 rounded-full transition-all duration-300 ${
+                      idx === mobileImageIndex ? 'w-4 bg-white' : 'w-1.5 bg-white/60'
+                    }`}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Top floating badges (Share & Date) */}
+          <div className="absolute top-4 right-4 z-20 flex items-center gap-2">
+            <span className="bg-slate-900/80 backdrop-blur-md text-white text-[10px] font-medium px-2.5 py-1 rounded-full border border-slate-800/20 shadow-md">
+              Publicado: {formattedDate || '—'}{property.age !== undefined && property.age !== null ? ` • ${property.age === 0 ? 'A estrenar' : `${property.age} años`}` : ''}
+            </span>
+            <div className="relative">
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleShare();
+                }}
+                className="p-2 rounded-full bg-white/95 backdrop-blur-md border border-slate-200 text-slate-700 hover:text-slate-900 shadow-md cursor-pointer"
+                aria-label="Compartir propiedad"
+              >
+                <Share className="h-4 w-4" />
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Desktop Gallery Bento Grid (Matching Reference Screenshot Layout) */}
+        <div className="hidden md:grid grid-cols-12 gap-4 w-full mb-10">
           
           {/* Main Photo (Left side, takes 8/12 grid-cols) */}
           <div 
@@ -260,8 +363,6 @@ export default function PropertyDetailClient({ property, relatedProperties }: Pr
                 <div className={`absolute top-10 -left-16 w-64 text-center py-2 font-black text-sm sm:text-base tracking-widest text-white transform -rotate-45 shadow-2xl ${property.vendido ? 'bg-red-600' : 'bg-blue-600'}`}>
                   {property.vendido ? 'VENDIDA' : 'ALQUILADA'}
                 </div>
-                {/* Overlay Semitransparente */}
-                <div className="absolute inset-0 bg-slate-900/20 backdrop-blur-[1px]" />
               </div>
             )}
             
@@ -403,127 +504,94 @@ export default function PropertyDetailClient({ property, relatedProperties }: Pr
             </div>
 
             {/* Property Video (YouTube Embed) */}
-            <div id="video-section" className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-100 shadow-sm space-y-6 scroll-mt-24">
-              <div className="flex items-center justify-between border-b border-slate-100 pb-4">
-                <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2">
-                  <Film className="h-5 w-5 text-slate-700" />
-                  Video de la Propiedad
-                </h3>
-                <span className="text-xs text-slate-500 font-medium">
-                  {property.neighborhood}, Costa Rica
-                </span>
-              </div>
+            {property.hasVideo && (
+              <div id="video-section" className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-100 shadow-sm space-y-6 scroll-mt-24">
+                <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+                  <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2">
+                    <Film className="h-5 w-5 text-slate-700" />
+                    Video de la Propiedad
+                  </h3>
+                  <span className="text-xs text-slate-500 font-medium">
+                    {property.neighborhood}, Costa Rica
+                  </span>
+                </div>
 
-              {/* YouTube Iframe container */}
-              <div className="w-full aspect-video rounded-2xl overflow-hidden bg-slate-100 relative shadow-inner border border-slate-200">
-                <iframe
-                  className="w-full h-full absolute inset-0 border-0"
-                  src={property.videoUrl || "https://www.youtube.com/embed/Pj15bLqT40A"}
-                  title="Video de la propiedad"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  allowFullScreen
-                ></iframe>
+                {/* YouTube Iframe container */}
+                <div className="w-full aspect-video rounded-2xl overflow-hidden bg-slate-100 relative shadow-inner border border-slate-200">
+                  <iframe
+                    className="w-full h-full absolute inset-0 border-0"
+                    src={getEmbedUrl(property.videoUrl) || "https://www.youtube.com/embed/Pj15bLqT40A"}
+                    title="Video de la propiedad"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowFullScreen
+                  ></iframe>
+                </div>
               </div>
-            </div>
+            )}
           </div>
 
           {/* RIGHT COLUMN: Solicitar Información Form, Owner Box, and Related Properties */}
           <div className="lg:col-span-4 space-y-8">
             
-            {/* Solicitar Información Form */}
-            <form onSubmit={handleFormSubmit} className="bg-white border border-slate-100 rounded-3xl p-6 sm:p-8 space-y-5 shadow-sm">
+            {/* Solicitar Información Form (CRM Embed) */}
+            <div className="bg-white border border-slate-100 rounded-3xl p-6 sm:p-8 space-y-5 shadow-sm">
               <h3 className="text-xl font-bold text-slate-900 leading-tight">
                 Solicitar Información
               </h3>
+              <div className="w-full min-h-[674px]">
+                <iframe
+                  src="https://crm.elduenovende.com/widget/form/gnolY2xzWsk8vN2HW0Lc"
+                  style={{ width: '100%', height: '100%', border: 'none', borderRadius: '8px' }}
+                  id="inline-gnolY2xzWsk8vN2HW0Lc" 
+                  data-layout="{'id':'INLINE'}"
+                  data-trigger-type="alwaysShow"
+                  data-trigger-value=""
+                  data-activation-type="alwaysActivated"
+                  data-activation-value=""
+                  data-deactivation-type="neverDeactivate"
+                  data-deactivation-value=""
+                  data-form-name="Consultas"
+                  data-height="674"
+                  data-layout-iframe-id="inline-gnolY2xzWsk8vN2HW0Lc"
+                  data-form-id="gnolY2xzWsk8vN2HW0Lc"
+                  title="Consultas"
+                >
+                </iframe>
+                <Script id="crm-url-params" strategy="afterInteractive">
+                  {`
+                    (function () {
+                        const url = new URL(window.location.href);
 
-              {submitSuccess ? (
-                <div className="bg-emerald-50 border border-emerald-200/60 p-5 rounded-2xl text-emerald-800 text-sm font-semibold text-center space-y-1 animate-fadeIn">
-                  <div>¡Consulta enviada con éxito!</div>
-                  <div className="text-xs font-normal text-emerald-600">El dueño se pondrá en contacto pronto.</div>
-                </div>
-              ) : (
-                <>
-                  {/* Nombre */}
-                  <div className="space-y-1.5">
-                    <label className="block text-sm font-semibold text-slate-800">
-                      Nombre <span className="text-orange-500">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      placeholder="Tu nombre"
-                      value={formName}
-                      onChange={(e) => setFormName(e.target.value)}
-                      className="w-full bg-[#fbf9f6] border border-[#e8e4db] focus:border-yellow-400 focus:ring-1 focus:ring-yellow-450/20 text-slate-900 rounded-xl px-4 py-3 text-sm outline-none transition-all duration-200 placeholder:text-slate-400"
-                    />
-                  </div>
+                        // Asignamos la variable exacta de la propiedad
+                        const propertyTitle = ${JSON.stringify(property.title)};
 
-                  {/* Email & Tel side-by-side */}
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-1.5">
-                      <label className="block text-sm font-semibold text-slate-800">
-                        Email <span className="text-orange-500">*</span>
-                      </label>
-                      <input
-                        type="email"
-                        required
-                        placeholder="tu@email.com"
-                        value={formEmail}
-                        onChange={(e) => setFormEmail(e.target.value)}
-                        className="w-full bg-[#fbf9f6] border border-[#e8e4db] focus:border-yellow-400 focus:ring-1 focus:ring-yellow-450/20 text-slate-900 rounded-xl px-4 py-3 text-sm outline-none transition-all duration-200 placeholder:text-slate-400"
-                      />
-                    </div>
-                    <div className="space-y-1.5">
-                      <label className="block text-sm font-semibold text-slate-800">
-                        Tel <span className="text-slate-500 font-normal">(opc.)</span>
-                      </label>
-                      <input
-                        type="tel"
-                        placeholder="8888-8888"
-                        value={formPhone}
-                        onChange={(e) => setFormPhone(e.target.value)}
-                        className="w-full bg-[#fbf9f6] border border-[#e8e4db] focus:border-yellow-400 focus:ring-1 focus:ring-yellow-450/20 text-slate-900 rounded-xl px-4 py-3 text-sm outline-none transition-all duration-200 placeholder:text-slate-400"
-                      />
-                    </div>
-                  </div>
+                        let changed = false;
+                        if (url.searchParams.get("nombre_de_propiedad") !== propertyTitle) {
+                            url.searchParams.set("nombre_de_propiedad", propertyTitle);
+                            changed = true;
+                        }
 
-                  {/* Mensaje */}
-                  <div className="space-y-1.5">
-                    <label className="block text-sm font-semibold text-slate-800">
-                      Mensaje <span className="text-orange-500">*</span>
-                    </label>
-                    <textarea
-                      required
-                      rows={4}
-                      value={formMessage}
-                      onChange={(e) => setFormMessage(e.target.value)}
-                      className="w-full bg-[#fbf9f6] border border-[#e8e4db] focus:border-yellow-400 focus:ring-1 focus:ring-yellow-450/20 text-slate-900 rounded-xl px-4 py-3 text-sm outline-none transition-all duration-200 resize-none placeholder:text-slate-400 leading-relaxed"
-                    />
-                  </div>
+                        if (!url.searchParams.has("url_de_propiedad")) {
+                            url.searchParams.set("url_de_propiedad", window.location.href.split('?')[0]);
+                            changed = true;
+                        }
 
-                  {/* Enviar Consulta Button */}
-                  <button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="w-full bg-yellow-400 hover:bg-yellow-500 disabled:bg-slate-200 text-slate-950 font-bold py-3.5 px-6 rounded-2xl transition-all duration-200 flex items-center justify-center gap-2 group hover:-translate-y-0.5 text-sm cursor-pointer shadow-md shadow-yellow-405/10"
-                  >
-                    <Send className="h-4 w-4 text-slate-950 shrink-0 group-hover:translate-x-0.5 transition-transform" />
-                    {isSubmitting ? 'Enviando...' : 'Enviar Consulta'}
-                  </button>
-                </>
-              )}
-            </form>
+                        if (changed) {
+                            window.history.replaceState(null, '', url.toString());
+                        }
+                    })();
+                  `}
+                </Script>
+                <Script src="https://crm.elduenovende.com/js/form_embed.js" strategy="lazyOnload" />
+              </div>
+            </div>
 
             {/* Owner contact box */}
             <div className="bg-white border border-slate-100 rounded-3xl p-6 sm:p-8 space-y-6 shadow-sm relative overflow-hidden">
               <div className="absolute top-0 right-0 w-24 h-24 bg-slate-50 rounded-full blur-2xl pointer-events-none" />
 
               <div className="space-y-5">
-                <p className="text-slate-600 text-xs sm:text-sm leading-relaxed font-normal">
-                  Al contactar a este propietario directo, no pagás honorarios a inmobiliarias. Coordiná visitas físicas, solicitá planos de catastro o evacuá dudas técnicas directamente.
-                </p>
-
-                 <div className="space-y-3">
+                 <div className="space-y-3 mt-2">
                   <a
                     href={property.owner.whatsappUrl}
                     target="_blank"
@@ -535,11 +603,11 @@ export default function PropertyDetailClient({ property, relatedProperties }: Pr
                   </a>
 
                   <a
-                    href={`tel:${property.owner.phone}`}
+                    href="tel:+50622806665"
                     className="w-full bg-slate-50 border border-slate-200 hover:bg-slate-100 text-slate-800 font-bold py-3.5 px-6 rounded-2xl transition-all duration-200 flex items-center justify-center gap-2 text-sm cursor-pointer"
                   >
                     <Phone className="h-4 w-4 text-slate-500" />
-                    Llamar al {property.owner.phone}
+                    Llamar al +50622806665
                   </a>
                 </div>
               </div>

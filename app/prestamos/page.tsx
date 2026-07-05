@@ -5,6 +5,7 @@ import Link from 'next/link';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import Script from 'next/script';
 
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
@@ -84,8 +85,8 @@ export default function PrestamosPage() {
           {/* Background image & overlays */}
           <div className="absolute inset-0 z-0">
             <img
-              src="/images/about-villa-balcony.webp"
-              alt="Luxury minimalist balcony"
+              src="/images/prestamos_hero.png"
+              alt="Tipos de Financiamiento"
               className="w-full h-full object-cover object-center"
             />
             {/* Dark gradient mapping */}
@@ -110,7 +111,7 @@ export default function PrestamosPage() {
                 <h1
                   className="hero-title text-4xl sm:text-6xl font-bold tracking-tight text-white leading-[1.05]"
                 >
-                  Tipos de Financiamientos
+                  Tipos de Financiamiento
                 </h1>
 
                 <p
@@ -136,12 +137,14 @@ export default function PrestamosPage() {
                 Conozca los tipos de financiamiento y soluciones de crédito diseñados para ayudarle a alcanzar sus metas inmobiliarias con total claridad y seguridad.
               </p>
               <div className="pt-4">
-                <Link
-                  href="/contacto?servicio=prestamos"
-                  className="inline-flex items-center justify-center px-8 h-12 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-full transition-all duration-300 text-sm shadow-sm hover:shadow-md"
+                <button
+                  onClick={() => {
+                    document.getElementById('formulario-prestamo')?.scrollIntoView({ behavior: 'smooth' });
+                  }}
+                  className="inline-flex items-center justify-center px-10 h-14 bg-[#FFFF33] hover:bg-yellow-400 text-slate-950 font-extrabold rounded-full transition-all duration-300 text-base shadow-md hover:shadow-lg hover:-translate-y-0.5 cursor-pointer"
                 >
-                  Iniciar Consulta
-                </Link>
+                  Consultar Préstamos
+                </button>
               </div>
             </div>
 
@@ -153,7 +156,7 @@ export default function PrestamosPage() {
                 <div
                   className="service-left order-2 lg:order-1 space-y-6"
                 >
-                  <div className="w-12 h-12 bg-[#ffe600] rounded-full flex items-center justify-center font-bold text-xl text-slate-900 shadow-sm">
+                  <div className="w-12 h-12 bg-[#FFFF33] rounded-full flex items-center justify-center font-bold text-xl text-slate-900 shadow-sm">
                     1
                   </div>
                   <h3 className="text-3xl sm:text-4xl font-bold text-slate-900 leading-tight tracking-tight">
@@ -202,14 +205,14 @@ export default function PrestamosPage() {
                 <div
                   className="service-right order-2 lg:order-2 space-y-6"
                 >
-                  <div className="w-12 h-12 bg-[#ffe600] rounded-full flex items-center justify-center font-bold text-xl text-slate-900 shadow-sm">
+                  <div className="w-12 h-12 bg-[#FFFF33] rounded-full flex items-center justify-center font-bold text-xl text-slate-900 shadow-sm">
                     2
                   </div>
                   <h3 className="text-3xl sm:text-4xl font-bold text-slate-900 leading-tight tracking-tight">
                     Préstamos sobre garantía inmobiliaria
                   </h3>
                   <p className="text-slate-600 text-xl leading-relaxed">
-                    El Dueño Vende también ofrece préstamos privados, con requisitos accesibles y pre-aprobación en 24 horas, sobre propiedades dentro del Gran Área Metropolitana. <span className="text-slate-950 font-bold underline decoration-[#ffe600] decoration-[3px] underline-offset-[4px]">Préstamos en colones y dólares</span>
+                    El Dueño Vende también ofrece préstamos privados, con requisitos accesibles y pre-aprobación en 24 horas, sobre propiedades dentro del Gran Área Metropolitana. <span className="text-slate-950 font-bold underline decoration-[#FFFF33] decoration-[3px] underline-offset-[4px]">Préstamos en colones y dólares</span>
                   </p>
 
                   {/* Metrics details */}
@@ -239,7 +242,7 @@ export default function PrestamosPage() {
                 <div
                   className="service-left order-2 lg:order-1 space-y-6"
                 >
-                  <div className="w-12 h-12 bg-[#ffe600] rounded-full flex items-center justify-center font-bold text-xl text-slate-900 shadow-sm">
+                  <div className="w-12 h-12 bg-[#FFFF33] rounded-full flex items-center justify-center font-bold text-xl text-slate-900 shadow-sm">
                     3
                   </div>
                   <h3 className="text-3xl sm:text-4xl font-bold text-slate-900 leading-tight tracking-tight">
@@ -281,8 +284,83 @@ export default function PrestamosPage() {
                   </div>
                 </div>
               </div>
-
             </div>
+          </div>
+        </section>
+
+        {/* CRM Form Section - Full Viewport Width */}
+        <section id="formulario-prestamo" className="w-full bg-slate-950 scroll-mt-24 mt-20 lg:mt-32">
+          <div className="flex flex-col lg:flex-row w-full">
+            {/* Left Side (Santiago's area) */}
+            <div className="w-full lg:w-1/2 p-8 lg:p-12 xl:p-16 flex flex-col justify-center text-left relative overflow-hidden">
+              {/* Background Image */}
+              <img
+                src="/techo.png"
+                alt="Fondo Techo"
+                className="absolute inset-0 w-full h-full object-contain opacity-40 mix-blend-luminosity z-0 pointer-events-none"
+              />
+              {/* Dark Overlay */}
+              <div className="absolute inset-0 bg-slate-950/70 z-0 pointer-events-none" />
+
+              {/* Decorative element */}
+              <div className="absolute top-0 right-0 w-64 h-64 bg-yellow-400/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none z-0" />
+              
+              <div className="max-w-xl ml-auto mr-0 lg:mr-8 xl:mr-12 relative z-10">
+                <span className="inline-flex items-center justify-center px-4 py-1.5 bg-[#FFFF33] text-slate-950 text-base font-bold rounded-full mb-6 w-max">
+                  Asesoría experta • Respaldo real
+                </span>
+                <h3 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-[1.1] mb-6 tracking-tight">
+                  Reciba asesoría personalizada
+                </h3>
+                <p className="text-slate-200 text-xl lg:text-2xl leading-relaxed mb-10">
+                  Déjenos sus datos y nuestro equipo se comunicará con usted a la brevedad para brindarle un acompañamiento integral durante todo el proceso.
+                </p>
+                <ul className="space-y-6 mb-8">
+                  <li className="flex items-start gap-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-[#FFFF33] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    <span className="text-white font-medium text-lg lg:text-xl">Respuesta rápida, sin compromiso.</span>
+                  </li>
+                  <li className="flex items-start gap-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-[#FFFF33] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    <span className="text-white font-medium text-lg lg:text-xl">Acompañamiento experto en cada paso.</span>
+                  </li>
+                  <li className="flex items-start gap-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-[#FFFF33] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    <span className="text-white font-medium text-lg lg:text-xl">Total confidencialidad y seguridad.</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            {/* Right Side (CRM Form) */}
+            <div className="w-full lg:w-1/2 bg-white p-6 sm:p-8 lg:p-12 relative z-20 rounded-t-[40px] lg:rounded-t-none lg:rounded-l-[40px] shadow-[-10px_0_30px_rgba(0,0,0,0.1)] flex flex-col justify-center">
+              <div className="w-full max-w-lg mx-auto lg:ml-8 xl:ml-12">
+                  <h3 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 mb-8 text-center">
+                    Interés en Préstamo
+                  </h3>
+                  <div className="w-full min-h-[1077px]">
+                    <iframe
+                      src="https://crm.elduenovende.com/widget/form/S6iHSWHXhpO9XeNZHIIW"
+                      style={{ width: '100%', height: '100%', border: 'none', borderRadius: '8px' }}
+                      id="inline-S6iHSWHXhpO9XeNZHIIW" 
+                      data-layout="{'id':'INLINE'}"
+                      data-trigger-type="alwaysShow"
+                      data-trigger-value=""
+                      data-activation-type="alwaysActivated"
+                      data-activation-value=""
+                      data-deactivation-type="neverDeactivate"
+                      data-deactivation-value=""
+                      data-form-name="Interés en préstamo"
+                      data-height="1077"
+                      data-layout-iframe-id="inline-S6iHSWHXhpO9XeNZHIIW"
+                      data-form-id="S6iHSWHXhpO9XeNZHIIW"
+                      title="Interés en préstamo"
+                    >
+                    </iframe>
+                    <Script src="https://crm.elduenovende.com/js/form_embed.js" strategy="lazyOnload" />
+                  </div>
+                </div>
+              </div>
           </div>
         </section>
 

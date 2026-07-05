@@ -23,7 +23,7 @@ import BlogsAdminTab from "./BlogsAdminTab";
 import UsersAdminTab from "./UsersAdminTab";
 import { LayoutDashboard, Star, Archive, FileText, Sparkles, Users, ExternalLink } from "lucide-react";
 
-const BRAND_COLOR = "#ffe600";
+const BRAND_COLOR = "#FFFF33";
 const BRAND_HOVER = "#ffff33";
 const STORAGE_BUCKET = "property-images";
 
@@ -52,10 +52,16 @@ type Property = {
   published: boolean | null;
   vendido?: boolean | null;
   alquilado?: boolean | null;
+  reservado?: boolean | null;
   premium?: boolean | null;
   bestChoice?: boolean | null;
+  estado?: string | null;
+  precio_original?: number | string | null;
+  precio_usd?: number | string | null;
   age?: number | null;
   created_at?: string | null;
+  hasVideo: boolean | null;
+  videoUrl: string | null;
 };
 
 type FormState = {
@@ -81,11 +87,17 @@ type FormState = {
   published: boolean;
   vendido: boolean;
   alquilado: boolean;
+  reservado: boolean;
   premium: boolean;
   bestChoice: boolean;
+  estado: string;
+  precio_original: number | string | null;
+  precio_usd: number | string | null;
   age: number | null;
   created_at: string;
   storageFolder: string;
+  hasVideo: boolean;
+  videoUrl: string;
 };
 
 /* ===================== Helpers / UI ===================== */
@@ -134,10 +146,16 @@ function mapDbToAdminProperty(dbProp: any): Property {
     published: dbProp.featured !== undefined ? Boolean(dbProp.featured) : Boolean(dbProp.published),
     vendido: dbProp.vendido !== undefined ? Boolean(dbProp.vendido) : Boolean(owner.vendido),
     alquilado: dbProp.alquilado !== undefined ? Boolean(dbProp.alquilado) : Boolean(owner.alquilado),
+    reservado: dbProp.reservado !== undefined ? Boolean(dbProp.reservado) : Boolean(owner.reservado),
     premium: dbProp.premium !== undefined ? Boolean(dbProp.premium) : Boolean(owner.premium),
     bestChoice: dbProp.bestChoice !== undefined ? Boolean(dbProp.bestChoice) : Boolean(owner.bestChoice),
+    estado: dbProp.estado || owner.estado || (Boolean(dbProp.vendido || owner.vendido) ? 'vendida' : (Boolean(dbProp.alquilado || owner.alquilado) ? 'alquilada' : 'disponible')),
+    precio_original: dbProp.precio_original || owner.precio_original || null,
+    precio_usd: dbProp.precio_usd || owner.precio_usd || null,
     age: dbProp.age !== undefined && dbProp.age !== null ? toInt(dbProp.age) : null,
-    created_at: dbProp.created_at || null
+    created_at: dbProp.created_at || null,
+    hasVideo: dbProp.hasVideo !== undefined ? Boolean(dbProp.hasVideo) : Boolean(owner.hasVideo),
+    videoUrl: dbProp.videoUrl || owner.videoUrl || ""
   };
 }
 
@@ -181,6 +199,8 @@ function AdminDashboardContent() {
   const [showManualBackupPrompt, setShowManualBackupPrompt] = useState(false);
   const [creatingBackup, setCreatingBackup] = useState(false);
   const [restoringBackup, setRestoringBackup] = useState(false);
+  const [backupsPage, setBackupsPage] = useState(1);
+  const BACKUPS_PER_PAGE = 8;
 
   const getAuthToken = async (): Promise<string | null> => {
     const { data } = await supabase.auth.getSession();
@@ -372,11 +392,17 @@ function AdminDashboardContent() {
       published: false,
       vendido: false,
       alquilado: false,
+      reservado: false,
       premium: false,
       bestChoice: false,
+      estado: "disponible",
+      precio_original: null,
+      precio_usd: null,
       age: null,
       created_at: new Date().toISOString().split("T")[0],
       storageFolder: folder,
+      hasVideo: false,
+      videoUrl: "",
     });
     setShowForm(true);
   };
@@ -405,11 +431,17 @@ function AdminDashboardContent() {
       published: Boolean(p.published),
       vendido: Boolean(p.vendido),
       alquilado: Boolean(p.alquilado),
+      reservado: Boolean(p.reservado),
       premium: Boolean(p.premium),
       bestChoice: Boolean(p.bestChoice),
+      estado: p.estado || "disponible",
+      precio_original: p.precio_original || null,
+      precio_usd: p.precio_usd || null,
       age: p.age !== undefined && p.age !== null ? toInt(p.age) : null,
       created_at: p.created_at ? new Date(p.created_at).toISOString().split("T")[0] : new Date().toISOString().split("T")[0],
       storageFolder: String(p.id || crypto.randomUUID()),
+      hasVideo: Boolean(p.hasVideo),
+      videoUrl: p.videoUrl || "",
     });
     setShowForm(true);
   };
@@ -472,6 +504,30 @@ function AdminDashboardContent() {
     } catch (err) {
       console.error(err);
       setToast({ type: "err", msg: "No se pudo actualizar el estado de alquiler." });
+    }
+  };
+
+  const toggleReservado = async (p: Property) => {
+    await triggerAutoBackup(`Antes de cambiar estado de reserva de "${p.titulo}"`);
+    const next = !p.reservado;
+    try {
+      const { data: existing } = await supabase.from("properties").select("owner").eq("id", p.id).single();
+      const currentOwner = existing?.owner || {};
+      const nextOwner = {
+        name: "Maldonado Leonides",
+        phone: "+506 8888-8888",
+        whatsappUrl: "https://wa.me/50688888888",
+        ...currentOwner,
+        reservado: next
+      };
+      const { error } = await supabase.from("properties").update({ owner: nextOwner }).eq("id", p.id);
+      if (error) throw error;
+      setToast({ type: "ok", msg: next ? "Marcada como reservada" : "Quitada la reserva" });
+      await revalidateProperties();
+      await fetchData();
+    } catch (err) {
+      console.error(err);
+      setToast({ type: "err", msg: "No se pudo actualizar el estado de reserva." });
     }
   };
 
@@ -661,12 +717,18 @@ function AdminDashboardContent() {
         moneda: (f.moneda || "USD").toUpperCase(),
         vendido: Boolean(f.vendido),
         alquilado: Boolean(f.alquilado),
+        reservado: Boolean(f.reservado),
         premium: Boolean(f.premium),
         bestChoice: Boolean(f.bestChoice),
+        estado: f.estado || "disponible",
+        precio_original: typeof f.precio_original === "string" ? Number(f.precio_original) : f.precio_original ?? 0,
+        precio_usd: typeof f.precio_usd === "string" ? Number(f.precio_usd) : f.precio_usd ?? null,
         plantas: toInt(f.plantas),
         cocina: f.cocina && f.cocina !== "" ? String(f.cocina) : null,
         oficina: f.oficina && f.oficina !== "" ? String(f.oficina) : null,
         pileta: f.pileta && f.pileta !== "" ? String(f.pileta) : null,
+        hasVideo: Boolean(f.hasVideo),
+        videoUrl: (f.videoUrl || "").trim() || null,
       }
     };
 
@@ -709,7 +771,7 @@ function AdminDashboardContent() {
       const base = `${p.titulo ?? ""} ${p.tipo ?? ""} ${p.ubicacion ?? ""}`.toLowerCase();
       return base.includes(q);
     });
-  }, [rows, search, tab]);
+  }, [rows, search, tab, selectionFilter]);
 
   if (checking) {
     return (
@@ -726,12 +788,12 @@ function AdminDashboardContent() {
       <main className="min-h-[calc(100vh-112px)] bg-neutral-50 pt-28 pb-16">
         {/* Header del Admin */}
         <header className="sticky top-0 z-10 border-b border-slate-200 bg-white/80 backdrop-blur">
-          <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+          <div className="mx-auto flex max-w-[1500px] items-center justify-between px-6 py-4">
             <div className="flex items-center gap-3">
               <img
                 src="/favicon.ico"
                 alt="El Dueño Vende"
-                className="h-9 w-9 object-contain"
+                className="h-9 w-9 object-contain drop-shadow-sm"
               />
               <div>
                 <h1 className="text-base font-extrabold leading-5 text-slate-900">Panel de administración</h1>
@@ -758,7 +820,7 @@ function AdminDashboardContent() {
         </header>
 
         {/* Contenido */}
-        <div className="mx-auto grid max-w-7xl grid-cols-1 gap-6 px-6 py-8 lg:grid-cols-12">
+        <div className="mx-auto grid max-w-[1500px] grid-cols-1 gap-6 px-6 py-8 lg:grid-cols-12">
           {/* Sidebar simple */}
           <aside className="lg:col-span-3">
             <nav className="rounded-2xl border border-slate-200 bg-white p-3 shadow-sm space-y-1">
@@ -773,7 +835,7 @@ function AdminDashboardContent() {
                 )}
               >
                 <LayoutDashboard className={cx("h-4 w-4 shrink-0", tab === "properties" ? "text-neutral-900" : "text-neutral-400")} />
-                <span className="flex-1 text-left">Resumen</span>
+                <span className="flex-1 text-left">Catálogo</span>
                 <span className="text-xs text-neutral-400 font-semibold text-right">Propiedades</span>
               </button>
               <button
@@ -786,39 +848,9 @@ function AdminDashboardContent() {
                     : "text-neutral-600 hover:bg-neutral-50"
                 )}
               >
-                <Star className={cx("h-4 w-4 shrink-0", tab === "premium" ? "text-amber-500 fill-amber-500" : "text-neutral-400")} />
+                <Star className={cx("h-4 w-4 shrink-0", tab === "premium" ? "text-[#FFFF33] fill-[#FFFF33]" : "text-neutral-400")} />
                 <span className="flex-1 text-left">Propiedades Premium</span>
                 <span className="text-xs text-neutral-400 font-semibold text-right">Premium</span>
-              </button>
-              {role !== "editor" && (
-                <button
-                  type="button"
-                  onClick={() => setTab("backups")}
-                  className={cx(
-                    "flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-sm font-semibold transition cursor-pointer",
-                    tab === "backups"
-                      ? "text-neutral-900 bg-slate-100"
-                      : "text-neutral-600 hover:bg-neutral-50"
-                  )}
-                >
-                  <Archive className={cx("h-4 w-4 shrink-0", tab === "backups" ? "text-neutral-900" : "text-neutral-400")} />
-                  <span className="flex-1 text-left">Copias de seguridad</span>
-                  <span className="text-xs text-neutral-400 font-semibold text-right">Backups</span>
-                </button>
-              )}
-              <button
-                type="button"
-                onClick={() => setTab("blogs")}
-                className={cx(
-                  "flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-sm font-semibold transition cursor-pointer",
-                  tab === "blogs"
-                    ? "text-neutral-900 bg-slate-100"
-                    : "text-neutral-600 hover:bg-neutral-50"
-                )}
-              >
-                <FileText className={cx("h-4 w-4 shrink-0", tab === "blogs" ? "text-neutral-900" : "text-neutral-400")} />
-                <span className="flex-1 text-left">Artículos</span>
-                <span className="text-xs text-neutral-400 font-semibold text-right">Blogs</span>
               </button>
               <button
                 type="button"
@@ -834,6 +866,20 @@ function AdminDashboardContent() {
                 <span className="flex-1 text-left">Mejor Selección</span>
                 <span className="text-xs text-neutral-400 font-semibold text-right">Selección</span>
               </button>
+              <button
+                type="button"
+                onClick={() => setTab("blogs")}
+                className={cx(
+                  "flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-sm font-semibold transition cursor-pointer",
+                  tab === "blogs"
+                    ? "text-neutral-900 bg-slate-100"
+                    : "text-neutral-600 hover:bg-neutral-50"
+                )}
+              >
+                <FileText className={cx("h-4 w-4 shrink-0", tab === "blogs" ? "text-neutral-900" : "text-neutral-400")} />
+                <span className="flex-1 text-left">Artículos</span>
+                <span className="text-xs text-neutral-400 font-semibold text-right">Blogs</span>
+              </button>
               {role !== "editor" && (
                 <button
                   type="button"
@@ -848,6 +894,22 @@ function AdminDashboardContent() {
                   <Users className={cx("h-4 w-4 shrink-0", tab === "users" ? "text-neutral-900" : "text-neutral-400")} />
                   <span className="flex-1 text-left">Usuarios y Roles</span>
                   <span className="text-xs text-neutral-400 font-semibold text-right">Cuentas</span>
+                </button>
+              )}
+              {role !== "editor" && (
+                <button
+                  type="button"
+                  onClick={() => setTab("backups")}
+                  className={cx(
+                    "flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-sm font-semibold transition cursor-pointer",
+                    tab === "backups"
+                      ? "text-neutral-900 bg-slate-100"
+                      : "text-neutral-600 hover:bg-neutral-50"
+                  )}
+                >
+                  <Archive className={cx("h-4 w-4 shrink-0", tab === "backups" ? "text-neutral-900" : "text-neutral-400")} />
+                  <span className="flex-1 text-left">Copias de seguridad</span>
+                  <span className="text-xs text-neutral-400 font-semibold text-right">Backups</span>
                 </button>
               )}
               <div className="pt-2">
@@ -895,7 +957,7 @@ function AdminDashboardContent() {
                       value={search}
                       onChange={(e) => setSearch(e.target.value)}
                       placeholder="Buscar por título, tipo o ubicación…"
-                      className="w-full rounded-full border border-slate-200 bg-white px-4 py-2.5 text-sm outline-none transition focus:border-[#ffe600] focus:ring-1 focus:ring-[#ffe600]/10 text-slate-900 placeholder:text-black placeholder:opacity-100"
+                      className="w-full rounded-full border border-slate-200 bg-white px-4 py-2.5 text-sm outline-none transition focus:border-[#FFFF33] focus:ring-1 focus:ring-[#FFFF33]/10 text-slate-900 placeholder:text-black placeholder:opacity-100"
                     />
                     {search && (
                       <button
@@ -994,7 +1056,7 @@ function AdminDashboardContent() {
                                 onChange={() => handleSelectRow(p.id)}
                                 className="h-4 w-4 rounded border-slate-350 text-emerald-600 focus:ring-emerald-500 cursor-pointer shrink-0 accent-emerald-500"
                               />
-                              <div className="relative h-14 w-20 overflow-hidden rounded-lg bg-neutral-100 flex-shrink-0 border border-slate-250">
+                              <div className="relative h-20 w-32 overflow-hidden rounded-lg bg-neutral-100 flex-shrink-0 border border-slate-250">
                                 <img
                                   src={thumb}
                                   alt={p.titulo}
@@ -1012,6 +1074,11 @@ function AdminDashboardContent() {
                                 {p.alquilado && (
                                   <span className="absolute left-0 top-0 rounded-br bg-black px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide text-white shadow">
                                     Alquilado
+                                  </span>
+                                )}
+                                {p.reservado && !p.vendido && !p.alquilado && (
+                                  <span className="absolute left-0 top-0 rounded-br bg-yellow-500 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide text-slate-900 shadow">
+                                    Reservado
                                   </span>
                                 )}
                               </div>
@@ -1032,6 +1099,11 @@ function AdminDashboardContent() {
                                   {p.alquilado && (
                                     <span className="rounded-full bg-blue-600 px-2 py-0.5 text-[10px] font-bold text-white uppercase tracking-wider shadow-sm">
                                       Alquilado
+                                    </span>
+                                  )}
+                                  {p.reservado && !p.vendido && !p.alquilado && (
+                                    <span className="rounded-full bg-yellow-500 px-2 py-0.5 text-[10px] font-bold text-slate-900 uppercase tracking-wider shadow-sm">
+                                      Reservado
                                     </span>
                                   )}
                                   {p.premium && (
@@ -1056,8 +1128,8 @@ function AdminDashboardContent() {
                                 <div
                                   className="text-sm sm:text-base font-extrabold"
                                   style={{
-                                    color: (p.vendido || p.alquilado) ? "#6b7280" : "#0f172a",
-                                    textDecoration: (p.vendido || p.alquilado) ? "line-through" : "none",
+                                    color: (p.vendido || p.alquilado || p.reservado) ? "#6b7280" : "#0f172a",
+                                    textDecoration: (p.vendido || p.alquilado || p.reservado) ? "line-through" : "none",
                                   }}
                                 >
                                   {money}
@@ -1067,7 +1139,7 @@ function AdminDashboardContent() {
                                 </div>
                               </div>
 
-                              <div className="flex flex-wrap justify-end items-center gap-1.5 shrink-0 sm:max-w-[340px]">
+                              <div className="flex flex-wrap justify-end items-center gap-1.5 shrink-0">
                                 {tab === "properties" && (
                                   <>
                                     <button
@@ -1107,6 +1179,19 @@ function AdminDashboardContent() {
                                       title={p.alquilado ? "Quitar alquilado" : "Marcar alquilado"}
                                     >
                                       {p.alquilado ? "Alquilado ✓" : "Alquilar"}
+                                    </button>
+
+                                    <button
+                                      onClick={() => toggleReservado(p)}
+                                      className={cx(
+                                        "rounded-full px-2.5 py-1 text-xs font-bold border transition cursor-pointer",
+                                        p.reservado
+                                          ? "text-yellow-700 bg-yellow-50 border-yellow-300 hover:bg-yellow-100"
+                                          : "text-slate-700 border-slate-200 hover:bg-slate-100"
+                                      )}
+                                      title={p.reservado ? "Quitar reservado" : "Marcar reservado"}
+                                    >
+                                      {p.reservado ? "Reservado ✓" : "Reservar"}
                                     </button>
 
                                     <button
@@ -1205,10 +1290,14 @@ function AdminDashboardContent() {
                       <p className="text-xs text-neutral-400 mt-1 font-semibold">Se crearán automáticamente cuando realices cambios en las propiedades.</p>
                     </div>
                   ) : (
-                    <ul className="divide-y divide-slate-100">
-                      {backups.map((b) => {
-                        const isAuto = b.type === "auto";
-                        return (
+                    <>
+                      <ul className="divide-y divide-slate-100">
+                      {(() => {
+                        const startIndex = (backupsPage - 1) * BACKUPS_PER_PAGE;
+                        const paginatedBackups = backups.slice(startIndex, startIndex + BACKUPS_PER_PAGE);
+                        return paginatedBackups.map((b) => {
+                          const isAuto = b.type === "auto";
+                          return (
                           <li key={b.name} className="flex flex-col sm:flex-row sm:items-center gap-4 px-5 py-4 hover:bg-neutral-50/50 transition-colors">
                             <div className="flex items-center gap-4 grow min-w-0">
                               <svg className="h-5 w-5 text-blue-600 shrink-0" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
@@ -1255,8 +1344,32 @@ function AdminDashboardContent() {
                             </div>
                           </li>
                         );
-                      })}
+                        });
+                      })()}
                     </ul>
+                    {(() => {
+                      const totalBackupPages = Math.ceil(backups.length / BACKUPS_PER_PAGE);
+                      if (totalBackupPages <= 1) return null;
+                      return (
+                        <div className="border-t border-slate-100 px-5 py-4 flex flex-wrap justify-center gap-1.5">
+                          {Array.from({ length: totalBackupPages }, (_, i) => i + 1).map((p) => (
+                            <button
+                              key={p}
+                              onClick={() => setBackupsPage(p)}
+                              className={cx(
+                                "h-8 w-8 rounded-full text-xs font-bold transition cursor-pointer flex items-center justify-center",
+                                backupsPage === p
+                                  ? "bg-[#FFFF33] text-slate-950 shadow-sm"
+                                  : "bg-neutral-100 text-neutral-600 hover:bg-neutral-200"
+                              )}
+                            >
+                              {p}
+                            </button>
+                          ))}
+                        </div>
+                      );
+                    })()}
+                    </>
                   )}
                 </div>
               </div>
@@ -1365,7 +1478,7 @@ function AdminDashboardContent() {
                   value={manualBackupDesc}
                   onChange={(e) => setManualBackupDesc(e.target.value)}
                   placeholder="Ej: Antes de cambiar precios masivamente"
-                  className="w-full rounded-lg border border-slate-350 bg-white px-3 py-2 text-slate-900 outline-none transition focus:ring-1 focus:ring-[#ffe600]/20 focus:border-[#ffe600] text-sm"
+                  className="w-full rounded-lg border border-slate-350 bg-white px-3 py-2 text-slate-900 outline-none transition focus:ring-1 focus:ring-[#FFFF33]/20 focus:border-[#FFFF33] text-sm"
                   autoFocus
                 />
               </div>
@@ -1450,7 +1563,7 @@ function TableSkeleton() {
     <ul className="divide-y divide-slate-100">
       {Array.from({ length: 6 }).map((_, i) => (
         <li key={i} className="flex items-center gap-4 px-5 py-4">
-          <div className="h-14 w-20 animate-pulse rounded-lg bg-neutral-100 border border-slate-200" />
+          <div className="h-20 w-32 animate-pulse rounded-lg bg-neutral-100 border border-slate-200" />
           <div className="min-w-0 grow space-y-2">
             <div className="h-4 w-2/3 animate-pulse rounded bg-neutral-200" />
             <div className="h-3 w-1/3 animate-pulse rounded bg-neutral-200" />
@@ -1584,7 +1697,7 @@ function SideForm({
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
       <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={onClose} />
       <div 
-        className="relative flex h-full max-h-[95vh] w-full max-w-3xl flex-col overflow-y-auto rounded-2xl bg-white p-6 shadow-2xl" 
+        className="relative flex h-full max-h-[95vh] w-full max-w-5xl flex-col overflow-y-auto rounded-2xl bg-white p-6 shadow-2xl" 
         data-lenis-prevent="true"
       >
         <div className="mb-4 flex items-center justify-between border-b pb-4">
@@ -1598,8 +1711,45 @@ function SideForm({
           {/* Básicos */}
           <div className="grid gap-4 sm:grid-cols-2">
             <Input label="Título" value={form.titulo} onChange={(v) => set("titulo", v)} required />
-            <Input label="Tipo" value={form.tipo} onChange={(v) => set("tipo", v)} placeholder="Casa, Departamento, Terreno..." required />
-            <Input label="Ubicación (Provincia / Cantón)" value={form.ubicacion} onChange={(v) => set("ubicacion", v)} placeholder="Ej: San José, Moravia" required />
+            <label className="block text-sm">
+              <span className="mb-1 block font-bold text-slate-700">Tipo *</span>
+              <select
+                value={form.tipo}
+                onChange={(e) => set("tipo", e.target.value)}
+                required
+                className="w-full rounded-lg border border-slate-350 bg-white px-3 py-2 text-slate-900 outline-none transition focus:ring-1 focus:ring-[#FFFF33]/20 focus:border-[#FFFF33] text-sm cursor-pointer"
+              >
+                <option value="" disabled>Seleccionar tipo...</option>
+                <option value="casa">Casa</option>
+                <option value="departamento">Departamento / Apartamento</option>
+                <option value="terreno">Terreno</option>
+                <option value="comercial">Local Comercial</option>
+                <option value="ph">PH</option>
+                <option value="loft">Loft</option>
+              </select>
+            </label>
+            <label className="block text-sm">
+              <span className="mb-1 block font-bold text-slate-700">Provincia (Ubicación) *</span>
+              <select
+                value={
+                  form.ubicacion 
+                    ? ["San José", "Alajuela", "Cartago", "Heredia", "Guanacaste", "Puntarenas", "Limón"].find(p => form.ubicacion.includes(p)) || ""
+                    : ""
+                }
+                onChange={(e) => set("ubicacion", e.target.value)}
+                required
+                className="w-full rounded-lg border border-slate-350 bg-white px-3 py-2 text-slate-900 outline-none transition focus:ring-1 focus:ring-[#FFFF33]/20 focus:border-[#FFFF33] text-sm cursor-pointer"
+              >
+                <option value="" disabled>Seleccionar provincia...</option>
+                <option value="San José">San José</option>
+                <option value="Alajuela">Alajuela</option>
+                <option value="Cartago">Cartago</option>
+                <option value="Heredia">Heredia</option>
+                <option value="Guanacaste">Guanacaste</option>
+                <option value="Puntarenas">Puntarenas</option>
+                <option value="Limón">Limón</option>
+              </select>
+            </label>
             <Input label="Barrio / Vecindario" value={form.neighborhood} onChange={(v) => set("neighborhood", v)} placeholder="Ej: San Vicente" required />
 
             <label className="block text-sm">
@@ -1607,7 +1757,7 @@ function SideForm({
               <select
                 value={(form.moneda || "USD").toUpperCase()}
                 onChange={(e) => set("moneda", e.target.value.toUpperCase())}
-                className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 outline-none transition focus:ring-1 focus:ring-[#ffe600]/20 focus:border-[#ffe600] cursor-pointer text-sm"
+                className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 outline-none transition focus:ring-1 focus:ring-[#FFFF33]/20 focus:border-[#FFFF33] cursor-pointer text-sm"
               >
                 <option value="USD">USD (Dólares)</option>
                 <option value="CRC">CRC (Colones)</option>
@@ -1622,12 +1772,54 @@ function SideForm({
             rows={5}
           />
 
-          {/* Precio + switches */}
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-6">
-            <Input type="number" label="Precio" value={String(form.precio ?? 0)} onChange={(v) => set("precio", v)} min="0" />
+          {/* Precio + Estado */}
+          <div className="grid gap-4 sm:grid-cols-4">
+            <FormattedNumberInput label="Precio Principal" value={form.precio} onChange={(v) => set("precio", v ? Number(v) : 0)} />
+            <FormattedNumberInput label="Precio Equivalente USD (opcional)" value={form.precio_usd !== null ? String(form.precio_usd) : ""} onChange={(v) => set("precio_usd", v ? Number(v) : null)} placeholder="Ej: 150000" />
+            <FormattedNumberInput label="Precio Original (Oferta)" value={form.precio_original !== null ? String(form.precio_original) : ""} onChange={(v) => set("precio_original", v ? Number(v) : null)} placeholder="Ej: 150000" />
+            <label className="block text-sm">
+              <span className="mb-1 block font-bold text-slate-750">Estado de la propiedad</span>
+              <select
+                value={form.estado || "disponible"}
+                onChange={(e) => set("estado", e.target.value)}
+                className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 outline-none transition focus:ring-1 focus:ring-[#FFFF33]/20 focus:border-[#FFFF33] cursor-pointer text-sm"
+              >
+                <option value="disponible">Disponible</option>
+                <option value="vendida">Vendida</option>
+                <option value="alquilada">Alquilada</option>
+                <option value="reservada">Reservada</option>
+                <option value="para remodelar">Para remodelar</option>
+                <option value="rebajada">Rebajada</option>
+                <option value="remate">Remate</option>
+              </select>
+            </label>
+          </div>
+
+          {/* Video de la Propiedad */}
+          <div className="space-y-4 rounded-xl border border-slate-200 bg-neutral-50 p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <h4 className="text-sm font-bold text-slate-900">Video de la propiedad</h4>
+                <p className="text-xs text-slate-500 mt-1 font-medium">Habilitá esta opción si la propiedad tiene un recorrido en video.</p>
+              </div>
+              <Toggle label="Incluir video" checked={Boolean(form.hasVideo)} onChange={(v) => set("hasVideo", v)} />
+            </div>
+            {form.hasVideo && (
+              <Input
+                label="URL de YouTube (opcional)"
+                value={form.videoUrl}
+                onChange={(v) => set("videoUrl", v)}
+                placeholder="https://www.youtube.com/embed/..."
+              />
+            )}
+          </div>
+
+          {/* Switches */}
+          <div className="grid gap-4 sm:grid-cols-3 lg:grid-cols-6">
             <Toggle label="Publicado" checked={Boolean(form.published)} onChange={(v) => set("published", v)} />
             <Toggle label="Vendido" checked={Boolean(form.vendido)} onChange={(v) => set("vendido", v)} />
             <Toggle label="Alquilado" checked={Boolean(form.alquilado)} onChange={(v) => set("alquilado", v)} />
+            <Toggle label="Reservado" checked={Boolean(form.reservado)} onChange={(v) => set("reservado", v)} />
             <Toggle label="Premium" checked={Boolean(form.premium)} onChange={(v) => set("premium", v)} />
             <Toggle label="Mejor Elección" checked={Boolean(form.bestChoice)} onChange={(v) => set("bestChoice", v)} />
           </div>
@@ -1657,7 +1849,7 @@ function SideForm({
                   }
                 }}
                 dateFormat="dd/MM/yyyy"
-                className="w-full rounded-lg border border-slate-350 bg-white px-3 py-2 text-slate-900 outline-none transition focus:ring-1 focus:ring-[#ffe600]/20 focus:border-[#ffe600] text-sm"
+                className="w-full rounded-lg border border-slate-350 bg-white px-3 py-2 text-slate-900 outline-none transition focus:ring-1 focus:ring-[#FFFF33]/20 focus:border-[#FFFF33] text-sm"
                 wrapperClassName="w-full"
               />
             </div>
@@ -1736,9 +1928,9 @@ function SideForm({
 
           {/* Detalles */}
           <div className="grid gap-4 sm:grid-cols-3">
-            <Input type="number" label="Dormitorios" value={form.dormitorios ?? ""} onChange={(v) => set("dormitorios", toInt(v))} min="0" />
-            <Input type="number" label="Baños" value={form.banos ?? ""} onChange={(v) => set("banos", toInt(v))} min="0" />
-            <Input type="number" label="Cochera" value={form.cochera ?? ""} onChange={(v) => set("cochera", toInt(v))} min="0" />
+            <Input type="number" label="Dormitorios" value={form.dormitorios ?? ""} onChange={(v) => set("dormitorios", toNumOrNull(v))} min="0" step="0.5" />
+            <Input type="number" label="Baños" value={form.banos ?? ""} onChange={(v) => set("banos", toNumOrNull(v))} min="0" step="0.5" />
+            <Input type="number" label="Cochera" value={form.cochera ?? ""} onChange={(v) => set("cochera", toNumOrNull(v))} min="0" step="0.5" />
           </div>
 
           <div className="grid gap-4 sm:grid-cols-3">
@@ -1784,6 +1976,7 @@ function Input({
   required,
   placeholder,
   min,
+  step,
 }: {
   label: string;
   value: string | number;
@@ -1792,6 +1985,7 @@ function Input({
   required?: boolean;
   placeholder?: string;
   min?: string;
+  step?: string;
 }) {
   return (
     <label className="block text-sm">
@@ -1805,8 +1999,53 @@ function Input({
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
         min={min}
+        step={step}
         required={required}
-        className="w-full rounded-lg border border-slate-350 bg-white px-3 py-2 text-slate-900 outline-none transition focus:ring-1 focus:ring-[#ffe600]/20 focus:border-[#ffe600] text-sm"
+        className="w-full rounded-lg border border-slate-350 bg-white px-3 py-2 text-slate-900 outline-none transition focus:ring-1 focus:ring-[#FFFF33]/20 focus:border-[#FFFF33] text-sm"
+      />
+    </label>
+  );
+}
+
+function FormattedNumberInput({
+  label,
+  value,
+  onChange,
+  required,
+  placeholder,
+}: {
+  label: string;
+  value: string | number;
+  onChange: (v: string) => void;
+  required?: boolean;
+  placeholder?: string;
+}) {
+  const displayValue = useMemo(() => {
+    if (value === "" || value === null || value === undefined) return "";
+    const num = Number(value);
+    if (isNaN(num)) return "";
+    return num.toLocaleString("es-AR"); // Usa puntos como separadores de miles
+  }, [value]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // Solo permitir números
+    const raw = e.target.value.replace(/\D/g, "");
+    onChange(raw);
+  };
+
+  return (
+    <label className="block text-sm">
+      <span className="mb-1 block font-bold text-slate-700">
+        {label}
+        {required ? " *" : ""}
+      </span>
+      <input
+        type="text"
+        value={displayValue}
+        onChange={handleChange}
+        placeholder={placeholder}
+        required={required}
+        className="w-full rounded-lg border border-slate-350 bg-white px-3 py-2 text-slate-900 outline-none transition focus:ring-1 focus:ring-[#FFFF33]/20 focus:border-[#FFFF33] text-sm"
       />
     </label>
   );
@@ -1830,7 +2069,7 @@ function TextArea({
         rows={rows}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full resize-y rounded-lg border border-slate-350 bg-white px-3 py-2 text-slate-900 outline-none transition focus:ring-1 focus:ring-[#ffe600]/20 focus:border-[#ffe600] text-sm"
+        className="w-full resize-y rounded-lg border border-slate-350 bg-white px-3 py-2 text-slate-900 outline-none transition focus:ring-1 focus:ring-[#FFFF33]/20 focus:border-[#FFFF33] text-sm"
       />
     </label>
   );
@@ -1874,7 +2113,7 @@ function SelectTextQuant({
       <select
         value={v}
         onChange={(e) => onChange(e.target.value || null)}
-        className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 outline-none transition focus:ring-1 focus:ring-[#ffe600]/20 focus:border-[#ffe600] cursor-pointer text-sm"
+        className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 outline-none transition focus:ring-1 focus:ring-[#FFFF33]/20 focus:border-[#FFFF33] cursor-pointer text-sm"
       >
         <option value="">—</option>
         <option value="true">Sí</option>

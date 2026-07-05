@@ -140,7 +140,7 @@ export default function TrendsSection() {
                     {zone.tag}
                   </div>
                   
-                  <h3 className="text-[22px] sm:text-[24px] font-bold text-slate-950 tracking-tight group-hover:text-amber-500 transition-colors leading-[1.3] mb-3">
+                  <h3 className="text-[22px] sm:text-[24px] font-bold text-slate-950 tracking-tight group-hover:text-[#FFFF33] transition-colors leading-[1.3] mb-3">
                     {zone.title}
                   </h3>
                   

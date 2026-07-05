@@ -15,6 +15,7 @@ import { TbBed, TbBath, TbRuler2 } from 'react-icons/tb';
 import { getOptimizedImageUrl, supabaseImageLoader } from '@/lib/utils';
 import { mockProperties, Property, mapDbToProperty, formatPropertyPrice } from '@/app/data/properties';
 import { FeaturedCardSkeleton } from '@/app/components/PropertyCardSkeleton';
+import PropertyCard from '@/app/components/PropertyCard';
 import { supabase } from '@/lib/supabase';
 
 export default function FeaturedProperties() {
@@ -52,7 +53,9 @@ export default function FeaturedProperties() {
       try {
         const { data, error } = await supabase
           .from('properties')
-          .select('*');
+          .select('*')
+          .eq('featured', true)
+          .order('created_at', { ascending: false });
         if (error) throw error;
         if (data && data.length > 0) {
           const featuredData = data.filter(d => d.owner?.bestChoice === true);
@@ -86,7 +89,7 @@ export default function FeaturedProperties() {
   };
 
   return (
-    <section ref={sectionRef} className="bg-white py-24 text-slate-900 relative overflow-hidden">
+    <section id="featured-properties" ref={sectionRef} className="bg-white py-24 text-slate-900 relative overflow-hidden">
       <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Header Section */}
@@ -101,7 +104,7 @@ export default function FeaturedProperties() {
             
             {/* View Listings Button */}
             <div className="pt-2">
-              <Link href="/propiedades">
+              <Link href="/propiedades" onClick={() => window.history.replaceState(null, '', '#featured-properties')}>
                 <button className="relative text-sm font-medium rounded-full h-12 p-1 ps-6 pe-14 group transition-all duration-500 hover:ps-14 hover:pe-6 w-fit overflow-hidden cursor-pointer flex items-center justify-center bg-emerald-500 text-slate-950 shadow-md hover:shadow-lg hover:-translate-y-0.5">
                   <span className="relative z-10 transition-all duration-500">
                     Ver Catálogo
@@ -152,110 +155,14 @@ export default function FeaturedProperties() {
             </>
           ) : (
             properties.map((property, index) => {
-              const formattedPrice = formatPropertyPrice(property.price, property.moneda);
-
               return (
-                <Link
+                <div
                   key={property.id}
-                  href={`/propiedades/${property.id}`}
-                  className="w-[85vw] sm:w-[75vw] shrink-0 snap-center lg:w-[calc(25%-15px)] lg:shrink-0 lg:snap-start block cursor-pointer"
+                  onClick={() => window.history.replaceState(null, '', '#featured-properties')}
+                  className="w-[85vw] sm:w-[75vw] shrink-0 snap-center lg:w-[calc(25%-15px)] lg:shrink-0 lg:snap-start block h-full featured-card"
                 >
-                  <div
-                    className="featured-card w-full bg-white border border-slate-200 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.08)] hover:shadow-[0_20px_50px_-10px_rgba(0,0,0,0.12)] hover:-translate-y-1 rounded-[32px] overflow-hidden flex flex-col group transition-all duration-300 h-full"
-                  >
-                    {/* Image Container */}
-                    <div className="relative aspect-[16/10] w-full overflow-hidden bg-slate-100">
-                      {/* Floating Action Overlay on Hover */}
-                      <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20 flex items-center justify-center">
-                        <div 
-                          className="bg-yellow-400 text-slate-955 font-bold text-sm px-6 py-2.5 rounded-full flex items-center justify-center text-center transform scale-90 group-hover:scale-100 transition-all duration-300 shadow-xl"
-                        >
-                          <span className="whitespace-nowrap">Ver detalle</span>
-                        </div>
-                      </div>
-
-                      {/* Sold/Rented Overlay */}
-                      {(property.vendido || property.alquilado) && (
-                        <div className="absolute inset-0 z-30 pointer-events-none overflow-hidden">
-                          {/* Banner Diagonal */}
-                          <div className={`absolute top-6 -right-12 w-48 text-center py-1.5 font-black text-[10px] sm:text-xs tracking-widest text-white transform rotate-45 shadow-lg ${property.vendido ? 'bg-red-600' : 'bg-blue-600'}`}>
-                            {property.vendido ? 'VENDIDA' : 'ALQUILADA'}
-                          </div>
-                          {/* Overlay Semitransparente */}
-                          <div className="absolute inset-0 bg-slate-900/20 backdrop-blur-[1px]" />
-                        </div>
-                      )}
-
-
-
-                      {/* Price Tag Overlay (like catalog cards) */}
-                      <div className="absolute bottom-4 right-4 z-10 bg-slate-950 text-white font-bold px-4 py-2 rounded-2xl shadow-md text-sm">
-                        {formattedPrice}
-                      </div>
-
-                      <Image
-                        src={getOptimizedImageUrl(property.image || '/images/placeholder.webp', 500)}
-                        alt={property.title}
-                        fill
-                        sizes="(max-width: 768px) 85vw, (max-width: 1024px) 75vw, 25vw"
-                        className="object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out"
-                        priority={index < 4}
-                        onError={(e) => {
-                          e.currentTarget.style.display = 'none';
-                        }}
-                      />
-                    </div>
-
-                    {/* Content Section */}
-                    <div className="px-6 pt-5 pb-5 sm:px-8 sm:pt-5 sm:pb-5 flex flex-col flex-grow bg-white">
-                      
-                      {/* Location */}
-                      <div className="flex items-center text-xs text-slate-500 mb-2 gap-1.5 font-medium">
-                        <img src="/icons-filters/ubication.png" className="h-4 w-4 object-contain shrink-0" alt="" />
-                        <span>{property.neighborhood}, {property.location}</span>
-                      </div>
-
-                      {/* Title */}
-                      <h3 className="text-base sm:text-lg font-bold text-slate-950 group-hover:text-emerald-500 transition-colors line-clamp-1 leading-snug mb-4">
-                        {property.title}
-                      </h3>
-
-                      {/* Property Specs */}
-                      <div className="flex items-center gap-5 sm:gap-6 text-xs text-slate-600 font-medium pt-3 border-t border-slate-100 mt-auto">
-                        {property.type === 'terreno' ? (
-                          (property.landArea || property.area) ? (
-                            <div className="flex items-center gap-1.5">
-                              <img src="/icons-property/m2.png" className="h-4.5 w-4.5 object-contain flex-shrink-0" alt="" />
-                              <span className="font-semibold text-slate-700">Terreno de {property.landArea || property.area} m²</span>
-                            </div>
-                          ) : null
-                        ) : (
-                          <>
-                            {Number(property.beds) > 0 ? (
-                              <div className="flex items-center gap-1.5">
-                                <img src="/icons-property/dormitorios.png" className="h-4.5 w-4.5 object-contain flex-shrink-0" alt="" />
-                                <span className="font-semibold text-slate-700">{property.beds} Dorms</span>
-                              </div>
-                            ) : null}
-                            {Number(property.baths) > 0 ? (
-                              <div className="flex items-center gap-1.5">
-                                <img src="/icons-property/baños.png" className="h-4.5 w-4.5 object-contain flex-shrink-0" alt="" />
-                                <span className="font-semibold text-slate-700">{property.baths} Baños</span>
-                              </div>
-                            ) : null}
-                            {Number(property.area) > 0 ? (
-                              <div className="flex items-center gap-1.5">
-                                <img src="/icons-property/m2.png" className="h-4.5 w-4.5 object-contain flex-shrink-0" alt="" />
-                                <span className="font-semibold text-slate-700">{property.area} m²</span>
-                              </div>
-                            ) : null}
-                          </>
-                        )}
-                      </div>
-
-                    </div>
-                  </div>
-                </Link>
+                  <PropertyCard property={property} priority={index < 4} />
+                </div>
               );
             })
           )}

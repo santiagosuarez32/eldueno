@@ -19,7 +19,7 @@ function MobileAccordion({ label, isOpen, onToggle, items, onNavigate }: MobileA
       <button
         onClick={onToggle}
         aria-expanded={isOpen}
-        className="flex w-full items-center justify-between rounded-lg px-3 py-3 text-base font-bold text-white transition-colors hover:bg-white/10 hover:text-[#ffe600]"
+        className="flex w-full items-center justify-between rounded-lg px-3 py-3 text-base font-bold text-white transition-colors hover:bg-white/10 hover:text-[#FFFF33]"
       >
         {label}
         <svg
@@ -44,7 +44,7 @@ function MobileAccordion({ label, isOpen, onToggle, items, onNavigate }: MobileA
                 key={`${item.href}-${index}`}
                 href={item.href}
                 onClick={onNavigate}
-                className="block rounded-md px-3 py-2.5 text-sm font-semibold text-white/80 transition-colors hover:bg-white/10 hover:text-[#ffe600]"
+                className="block rounded-md px-3 py-2.5 text-sm font-semibold text-white/80 transition-colors hover:bg-white/10 hover:text-[#FFFF33]"
               >
                 {item.label}
               </Link>
@@ -62,8 +62,7 @@ export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [mobileAccordion, setMobileAccordion] = useState<string | null>(null);
   const pathname = usePathname();
-
-  const isLightPage = pathname.startsWith('/propiedades') || pathname.startsWith('/blog') || pathname.startsWith('/admin') || pathname === '/login' || pathname.startsWith('/arquitectura') || pathname.startsWith('/prestamos') || pathname.startsWith('/contacto');
+  const isLightPage = pathname.startsWith('/propiedades') || pathname.startsWith('/blog') || pathname.startsWith('/admin') || pathname === '/login' || pathname.startsWith('/arquitectura') || pathname.startsWith('/prestamos') || pathname.startsWith('/contacto') || pathname.startsWith('/terminos') || pathname.startsWith('/privacidad') || pathname.startsWith('/compra-y-venta');
 
   useEffect(() => {
     const handleScroll = () => {
@@ -99,7 +98,7 @@ export default function Navbar() {
   const shouldShowScrolledState = scrolled || isLightPage;
 
   const serviciosList = [
-    { label: "Compra y Venta de Propiedades", href: "/propiedades" },
+    { label: "Compra y Venta de Propiedades", href: "/compra-y-venta" },
     { label: "Préstamos Hipotecarios", href: "/prestamos" },
     { label: "Servicios de Arquitectura", href: "/arquitectura" }
   ];
@@ -125,7 +124,7 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="flex items-center group">
+          <Link href="/" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="flex items-center group">
             <img
               src="/navbar.webp"
               alt="El Dueño Vende"
@@ -137,8 +136,9 @@ export default function Navbar() {
           <nav className="hidden md:flex items-center space-x-8">
             <Link
               href="/"
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
               className={`relative text-[17px] font-medium transition-colors duration-200 py-1.5 after:absolute after:bottom-[3px] after:left-0 after:h-[1.5px] after:w-full after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 after:origin-left ${
-                shouldShowScrolledState ? 'text-white hover:text-[#ffe600] after:bg-[#ffe600]' : 'text-slate-300 hover:text-[#ffe600] after:bg-[#ffe600]'
+                shouldShowScrolledState ? 'text-white hover:text-[#FFFF33] after:bg-[#FFFF33]' : 'text-slate-300 hover:text-[#FFFF33] after:bg-[#FFFF33]'
               }`}
             >
               Inicio
@@ -146,7 +146,7 @@ export default function Navbar() {
             <Link
               href="/nosotros"
               className={`relative text-[17px] font-medium transition-colors duration-200 py-1.5 after:absolute after:bottom-[3px] after:left-0 after:h-[1.5px] after:w-full after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 after:origin-left ${
-                shouldShowScrolledState ? 'text-white hover:text-[#ffe600] after:bg-[#ffe600]' : 'text-slate-300 hover:text-[#ffe600] after:bg-[#ffe600]'
+                shouldShowScrolledState ? 'text-white hover:text-[#FFFF33] after:bg-[#FFFF33]' : 'text-slate-300 hover:text-[#FFFF33] after:bg-[#FFFF33]'
               }`}
             >
               Nosotros
@@ -154,7 +154,7 @@ export default function Navbar() {
             <Link
               href="/propiedades"
               className={`relative text-[17px] font-medium transition-colors duration-200 py-1.5 after:absolute after:bottom-[3px] after:left-0 after:h-[1.5px] after:w-full after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 after:origin-left ${
-                shouldShowScrolledState ? 'text-white hover:text-[#ffe600] after:bg-[#ffe600]' : 'text-slate-300 hover:text-[#ffe600] after:bg-[#ffe600]'
+                shouldShowScrolledState ? 'text-white hover:text-[#FFFF33] after:bg-[#FFFF33]' : 'text-slate-300 hover:text-[#FFFF33] after:bg-[#FFFF33]'
               }`}
             >
               Propiedades
@@ -164,7 +164,7 @@ export default function Navbar() {
             <div className="relative group py-1.5">
               <button
                 className={`flex items-center gap-1 text-[17px] font-medium transition-colors duration-200 relative after:absolute after:bottom-0 after:left-0 after:h-[1.5px] after:w-full after:scale-x-0 group-hover:after:scale-x-100 after:transition-transform after:duration-300 after:origin-left ${
-                  shouldShowScrolledState ? 'text-white hover:text-[#ffe600] after:bg-[#ffe600]' : 'text-slate-300 hover:text-[#ffe600] after:bg-[#ffe600]'
+                  shouldShowScrolledState ? 'text-white hover:text-[#FFFF33] after:bg-[#FFFF33]' : 'text-slate-300 hover:text-[#FFFF33] after:bg-[#FFFF33]'
                 }`}
               >
                 <span>Servicios</span>
@@ -185,15 +185,15 @@ export default function Navbar() {
                 <div className="absolute -top-3 left-0 right-0 h-4 bg-transparent" />
                 
                 <Link
-                  href="/arquitectura"
+                  href="/compra-y-venta"
                   className="block px-5 py-3 hover:bg-slate-50 transition-colors"
                 >
-                  <div className="font-bold text-slate-900 text-sm hover:text-emerald-600 transition-colors">Servicios de Arquitectura</div>
-                  <div className="text-xs text-slate-500 font-normal mt-0.5">Diseño, planos y tramitología.</div>
+                  <div className="font-bold text-slate-900 text-sm hover:text-emerald-600 transition-colors">Compra y Venta de Propiedades</div>
+                  <div className="text-xs text-slate-500 font-normal mt-0.5">Encuentra o vende tu hogar ideal.</div>
                 </Link>
                 
                 <div className="border-t border-slate-100 my-1 mx-2" />
-                
+
                 <Link
                   href="/prestamos"
                   className="block px-5 py-3 hover:bg-slate-50 transition-colors"
@@ -201,13 +201,23 @@ export default function Navbar() {
                   <div className="font-bold text-slate-900 text-sm hover:text-emerald-600 transition-colors">Préstamos Hipotecarios</div>
                   <div className="text-xs text-slate-500 font-normal mt-0.5">Opciones de crédito a tu medida.</div>
                 </Link>
+
+                <div className="border-t border-slate-100 my-1 mx-2" />
+
+                <Link
+                  href="/arquitectura"
+                  className="block px-5 py-3 hover:bg-slate-50 transition-colors"
+                >
+                  <div className="font-bold text-slate-900 text-sm hover:text-emerald-600 transition-colors">Servicios de Arquitectura</div>
+                  <div className="text-xs text-slate-500 font-normal mt-0.5">Diseño, planos y tramitología.</div>
+                </Link>
               </div>
             </div>
 
             <Link
               href="/contacto"
               className={`relative text-[17px] font-medium transition-colors duration-200 py-1.5 after:absolute after:bottom-[3px] after:left-0 after:h-[1.5px] after:w-full after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 after:origin-left ${
-                shouldShowScrolledState ? 'text-white hover:text-[#ffe600] after:bg-[#ffe600]' : 'text-slate-300 hover:text-[#ffe600] after:bg-[#ffe600]'
+                shouldShowScrolledState ? 'text-white hover:text-[#FFFF33] after:bg-[#FFFF33]' : 'text-slate-300 hover:text-[#FFFF33] after:bg-[#FFFF33]'
               }`}
             >
               Contacto
@@ -219,7 +229,7 @@ export default function Navbar() {
             <Link
               href="/propiedades"
               className={`px-4 py-2 text-base font-medium transition-colors ${
-                shouldShowScrolledState ? 'text-white hover:text-[#ffe600]' : 'text-slate-300 hover:text-white'
+                shouldShowScrolledState ? 'text-white hover:text-[#FFFF33]' : 'text-slate-300 hover:text-white'
               }`}
             >
               Buscar Propiedades
@@ -283,7 +293,14 @@ export default function Navbar() {
       >
         {/* Drawer Header */}
         <div className="flex shrink-0 items-center border-b border-white/10 px-6 py-5">
-          <Link href="/" onClick={closeMobileMenu} className="inline-flex">
+          <Link 
+            href="/" 
+            onClick={() => {
+              setIsMobileMenuOpen(false);
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            className="inline-flex"
+          >
             <img src="/navbar.webp" alt="El Dueño Vende Logo" className="h-9 w-auto object-contain brightness-0 invert" />
           </Link>
         </div>
@@ -293,21 +310,21 @@ export default function Navbar() {
           <Link
             href="/"
             onClick={closeMobileMenu}
-            className="block rounded-lg px-3 py-3 text-base font-bold text-white transition-colors hover:bg-white/10 hover:text-[#ffe600]"
+            className="block rounded-lg px-3 py-3 text-base font-bold text-white transition-colors hover:bg-white/10 hover:text-[#FFFF33]"
           >
             Inicio
           </Link>
           <Link
             href="/nosotros"
             onClick={closeMobileMenu}
-            className="block rounded-lg px-3 py-3 text-base font-bold text-white transition-colors hover:bg-white/10 hover:text-[#ffe600]"
+            className="block rounded-lg px-3 py-3 text-base font-bold text-white transition-colors hover:bg-white/10 hover:text-[#FFFF33]"
           >
             Nosotros
           </Link>
           <Link
             href="/propiedades"
             onClick={closeMobileMenu}
-            className="block rounded-lg px-3 py-3 text-base font-bold text-white transition-colors hover:bg-white/10 hover:text-[#ffe600]"
+            className="block rounded-lg px-3 py-3 text-base font-bold text-white transition-colors hover:bg-white/10 hover:text-[#FFFF33]"
           >
             Propiedades
           </Link>
@@ -317,8 +334,9 @@ export default function Navbar() {
             isOpen={mobileAccordion === 'servicios'}
             onToggle={() => toggleAccordion('servicios')}
             items={[
-              { label: 'Servicios de Arquitectura', href: '/arquitectura' },
-              { label: 'Préstamos Hipotecarios', href: '/prestamos' }
+              { label: 'Compra y Venta de Propiedades', href: '/compra-y-venta' },
+              { label: 'Préstamos Hipotecarios', href: '/prestamos' },
+              { label: 'Servicios de Arquitectura', href: '/arquitectura' }
             ]}
             onNavigate={closeMobileMenu}
           />
@@ -326,7 +344,7 @@ export default function Navbar() {
           <Link
             href="/contacto"
             onClick={closeMobileMenu}
-            className="block rounded-lg px-3 py-3 text-base font-bold text-white transition-colors hover:bg-white/10 hover:text-[#ffe600]"
+            className="block rounded-lg px-3 py-3 text-base font-bold text-white transition-colors hover:bg-white/10 hover:text-[#FFFF33]"
           >
             Contacto
           </Link>
@@ -344,7 +362,7 @@ export default function Navbar() {
           <Link
             href="/contacto"
             onClick={closeMobileMenu}
-            className="block w-full rounded-2xl py-3.5 text-center text-sm font-bold text-slate-950 bg-[#ffe600] hover:bg-[#ffff33] transition-all duration-200 shadow-lg shadow-[#ffe600]/10"
+            className="block w-full rounded-2xl py-3.5 text-center text-sm font-bold text-slate-950 bg-[#FFFF33] hover:bg-[#ffff33] transition-all duration-200 shadow-lg shadow-[#FFFF33]/10"
           >
             Contáctenos
           </Link>

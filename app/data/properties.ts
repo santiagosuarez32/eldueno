@@ -44,6 +44,10 @@ export interface Property {
   alquilado?: boolean;
   premium?: boolean;
   bestChoice?: boolean;
+  estado?: 'vendida' | 'disponible' | 'para remodelar' | 'rebajada' | 'remate' | 'alquilada' | 'reservada';
+  precio_original?: number;
+  precio_usd?: number;
+  hasVideo?: boolean;
 }
 
 export const mockProperties: Property[] = [
@@ -291,6 +295,9 @@ export function mapDbToProperty(dbProp: any): Property {
   const premium = dbProp.premium !== undefined ? Boolean(dbProp.premium) : (owner.premium !== undefined ? Boolean(owner.premium) : false);
   const bestChoice = dbProp.bestChoice !== undefined ? Boolean(dbProp.bestChoice) : (owner.bestChoice !== undefined ? Boolean(owner.bestChoice) : false);
   const moneda = dbProp.moneda || owner.moneda || "CRC";
+  const estado = dbProp.estado || owner.estado || (vendido ? 'vendida' : (alquilado ? 'alquilada' : 'disponible'));
+  const precio_original = Number(dbProp.precio_original || owner.precio_original || 0);
+  const precio_usd = Number(dbProp.precio_usd || owner.precio_usd || 0);
 
   return {
     id: dbProp.id,
@@ -329,14 +336,19 @@ export function mapDbToProperty(dbProp: any): Property {
     alquilado,
     premium,
     bestChoice,
+    estado,
+    precio_original: precio_original > 0 ? precio_original : undefined,
+    precio_usd: precio_usd > 0 ? precio_usd : undefined,
     age: dbProp.age !== undefined && dbProp.age !== null ? Number(dbProp.age) : undefined,
-    created_at: dbProp.created_at || undefined
+    created_at: dbProp.created_at || undefined,
+    hasVideo: dbProp.hasVideo !== undefined ? Boolean(dbProp.hasVideo) : (owner.hasVideo !== undefined ? Boolean(owner.hasVideo) : false),
+    videoUrl: dbProp.videoUrl || owner.videoUrl || undefined
   };
 }
 
 export const CURRENCY_CONFIG = {
   // mode can be: 'always-colon' | 'always-dollar' | 'dynamic'
-  mode: 'always-colon' as 'always-colon' | 'always-dollar' | 'dynamic',
+  mode: 'dynamic' as 'always-colon' | 'always-dollar' | 'dynamic',
 };
 
 export function formatPropertyPrice(price: number, propertyMoneda?: string) {
@@ -356,9 +368,7 @@ export function formatPropertyPrice(price: number, propertyMoneda?: string) {
     targetLocale = isUSD ? 'en-US' : 'es-CR';
   }
 
-  return new Intl.NumberFormat(targetLocale, {
-    style: 'currency',
-    currency: targetCurrency,
-    maximumFractionDigits: 0,
-  }).format(price);
+  const symbol = targetCurrency === 'USD' ? 'US$ ' : '₡';
+  const numberStr = price.toLocaleString('de-DE', { maximumFractionDigits: 0 });
+  return `${symbol}${numberStr}`;
 }

@@ -165,10 +165,10 @@ export default function Calculator() {
 
             <div className="mt-8">
               <a
-                href="/publicar"
+                href="/contacto"
                 className="w-full text-center block bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold py-3.5 px-6 rounded-2xl transition-all duration-200 shadow-md shadow-emerald-500/20 hover:-translate-y-0.5 text-sm"
               >
-                Publicá tu Inmueble y Ahorrá
+                Consultanos para Publicar tu Inmueble y Ahorrá
               </a>
             </div>
           </div>

@@ -93,7 +93,7 @@ export default function StatsSection() {
 
 
   return (
-    <section ref={container} className="bg-white py-24 text-slate-900 relative overflow-hidden">
+    <section id="recursos-blog" ref={container} className="bg-white py-24 text-slate-900 relative overflow-hidden">
       <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Top Text Section */}
@@ -148,6 +148,7 @@ export default function StatsSection() {
             <Link
               key={idx}
               href={`/blog/${post.slug}`}
+              onClick={() => window.history.replaceState(null, '', '#recursos-blog')}
               className="w-[85vw] sm:w-[320px] lg:w-auto shrink-0 snap-center px-4 lg:shrink lg:snap-align-none lg:px-0 block cursor-pointer flex flex-col group"
             >
               <div className="w-full bg-white flex flex-col transition-all duration-300 h-full">
@@ -170,7 +171,7 @@ export default function StatsSection() {
                     {post.date}
                   </div>
                   
-                  <h3 className="text-[22px] sm:text-[24px] font-bold text-slate-950 tracking-tight group-hover:text-amber-500 transition-colors leading-[1.3] mb-3">
+                  <h3 className="text-[22px] sm:text-[24px] font-bold text-slate-950 tracking-tight group-hover:text-[#FFFF33] transition-colors leading-[1.3] mb-3">
                     {post.title}
                   </h3>
                   
@@ -179,9 +180,9 @@ export default function StatsSection() {
                   </p>
   
                   {/* Bottom link line */}
-                  <div className="mt-auto inline-flex items-center gap-2 text-[15px] font-normal text-slate-700 pb-1 border-b border-slate-300 w-fit group-hover:border-amber-500 group-hover:text-amber-500 transition-colors">
+                  <div className="mt-auto inline-flex items-center gap-2 text-[15px] font-normal text-slate-700 pb-1 border-b border-slate-300 w-fit group-hover:border-[#FFFF33] group-hover:text-[#FFFF33] transition-colors">
                     Consultar
-                    <ArrowUpRight size={14} className="text-slate-400 group-hover:text-amber-500" />
+                    <ArrowUpRight size={14} className="text-slate-400 group-hover:text-[#FFFF33]" />
                   </div>
                 </div>
               </div>

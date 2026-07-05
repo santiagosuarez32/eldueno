@@ -20,14 +20,15 @@ export default function PremiumProperties() {
       try {
         const { data, error } = await supabase
           .from('properties')
-          .select('*');
+          .select('*')
+          .eq('featured', true)
+          .order('created_at', { ascending: false });
           
         if (error) throw error;
         if (data && data.length > 0) {
           const premiumData = data.filter(d => d.owner?.premium === true);
-          const shuffled = premiumData.sort(() => 0.5 - Math.random());
-          const random8 = shuffled.slice(0, 8).map(mapDbToProperty);
-          setProperties(random8);
+          const recent8 = premiumData.slice(0, 8).map(mapDbToProperty);
+          setProperties(recent8);
         } else {
           setProperties([]);
         }
@@ -86,18 +87,23 @@ export default function PremiumProperties() {
 
 
   return (
-    <section className="bg-[#FFFF33] py-12 text-slate-900 overflow-hidden rounded-[40px] mx-4 sm:mx-6 lg:mx-8 my-12 shadow-2xl">
-      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="premium-properties" className="relative py-12 text-white overflow-hidden rounded-[40px] mx-4 sm:mx-6 lg:mx-8 my-12 shadow-2xl bg-gradient-to-br from-black via-black to-[#807300] border border-[#fbbf24]/20">
+      
+      {/* Background radial glows for extra depth */}
+      <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-[#fbbf24] opacity-[0.05] rounded-full blur-[100px] pointer-events-none transform translate-x-1/4 -translate-y-1/4" />
+      <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-[#FFFF33] opacity-[0.1] rounded-full blur-[80px] pointer-events-none transform -translate-x-1/4 translate-y-1/4" />
+      
+      <div className="relative z-10 max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-24 mb-8 items-start">
           <div>
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-slate-950 tracking-tight leading-[1.1]">
-              Propiedades premium
+            <h2 className="flex items-center gap-3 sm:gap-4 text-4xl sm:text-5xl lg:text-6xl font-bold text-white tracking-tight leading-[1.1]">
+              <span>Propiedades <span className="bg-gradient-to-r from-white to-[#FFFF33] text-transparent bg-clip-text">Premium</span></span>
             </h2>
           </div>
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 lg:pt-8">
-            <p className="text-slate-800 text-lg sm:text-xl leading-relaxed max-w-md">
+            <p className="text-slate-300 text-lg sm:text-xl leading-relaxed max-w-md">
               Una selección exclusiva de propiedades singulares, diseñadas para superar toda expectativa.
             </p>
             
@@ -105,14 +111,14 @@ export default function PremiumProperties() {
             <div className="flex items-center gap-3 shrink-0 self-start md:self-auto">
               <button
                 onClick={handlePrev}
-                className="h-12 w-12 rounded-full border border-slate-900 bg-transparent text-slate-900 hover:bg-slate-900 hover:text-white flex items-center justify-center transition-all duration-200 active:scale-95 cursor-pointer"
+                className="h-12 w-12 rounded-full border border-slate-700 bg-transparent text-slate-300 hover:bg-slate-800 hover:text-white flex items-center justify-center transition-all duration-200 active:scale-95 cursor-pointer"
                 aria-label="Anterior"
               >
                 <ArrowLeft className="h-5 w-5" />
               </button>
               <button
                 onClick={handleNext}
-                className="h-12 w-12 rounded-full bg-slate-950 text-white hover:bg-slate-800 flex items-center justify-center transition-all duration-200 active:scale-95 shadow-md cursor-pointer"
+                className="h-12 w-12 rounded-full bg-[#FFFF33] text-slate-950 hover:bg-[#e6cc00] flex items-center justify-center transition-all duration-200 active:scale-95 shadow-md cursor-pointer"
                 aria-label="Siguiente"
               >
                 <ArrowRight className="h-5 w-5" />
@@ -163,6 +169,7 @@ export default function PremiumProperties() {
                   {/* MOBILE CARD (Matches FeaturedProperties) */}
                   <Link
                     href={`/propiedades/${property.id}`}
+                    onClick={() => window.history.replaceState(null, '', '#premium-properties')}
                     className="block lg:hidden w-[85vw] sm:w-[75vw] h-auto cursor-pointer"
                   >
                     <div className="w-full bg-white border border-slate-200 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.08)] hover:shadow-[0_20px_50px_-10px_rgba(0,0,0,0.12)] hover:-translate-y-1 rounded-[32px] overflow-hidden flex flex-col group transition-all duration-300 h-full">
@@ -257,6 +264,7 @@ export default function PremiumProperties() {
                     onMouseEnter={() => setActiveIndex(idx)}
                     onClick={() => {
                       if (isActive) {
+                        window.history.replaceState(null, '', '#premium-properties');
                         router.push(`/propiedades/${property.id}`);
                       } else {
                         setActiveIndex(idx);
@@ -308,7 +316,7 @@ export default function PremiumProperties() {
                       {/* Location Badge */}
                       <span className="bg-white/95 backdrop-blur-sm text-slate-700 text-[9px] sm:text-[10px] font-medium px-2 py-0.5 rounded-full flex items-center gap-1 border border-slate-200/40 shadow-sm min-w-0">
                         <img src="/icons-filters/ubication.png" className="h-3 w-3 object-contain flex-shrink-0" alt="" />
-                        <span className="truncate text-slate-700">{property.neighborhood}</span>
+                        <span className="truncate text-slate-700">{property.location?.split(',')[0] || property.neighborhood}</span>
                       </span>
                     </div>
 
@@ -331,8 +339,8 @@ export default function PremiumProperties() {
                   <div className={`absolute bottom-6 left-6 right-6 z-10 transition-all duration-500 ease-out ${
                     isActive ? 'opacity-0 pointer-events-none translate-y-2' : 'opacity-100 translate-y-0'
                   }`}>
-                    <div className="text-amber-400 text-[10px] font-bold tracking-wider">
-                      {property.neighborhood}
+                    <div className="text-[#FFFF33] text-xs sm:text-sm font-bold tracking-wider">
+                      {property.location?.split(',')[0] || property.neighborhood}
                     </div>
                     <h3 className="text-white text-sm font-bold leading-snug line-clamp-2">
                       {property.title}
@@ -354,7 +362,7 @@ export default function PremiumProperties() {
 
                     {/* Specs and Action Link */}
                     <div className="flex items-center justify-between pt-3 border-t border-slate-100 mt-2">
-                      <div className="flex items-center gap-3 text-[11px] font-semibold text-slate-655">
+                      <div className="flex items-center gap-3 text-[11px] font-semibold text-slate-700">
                         {Boolean(property.beds) && Number(property.beds) > 0 && (
                           <span className="flex items-center gap-1">
                             <img src="/icons-property/dormitorios.png" className="h-3.5 w-3.5 object-contain" alt="" />
@@ -367,16 +375,17 @@ export default function PremiumProperties() {
                             {property.baths} Baños
                           </span>
                         )}
-                        {Boolean(property.area) && Number(property.area) > 0 && (
+                        {Boolean(property.area || property.landArea) && Number(property.area || property.landArea) > 0 && (
                           <span className="flex items-center gap-1">
                             <img src="/icons-property/m2.png" className="h-3.5 w-3.5 object-contain" alt="" />
-                            {property.area} m²
+                            {property.area || property.landArea} m²
                           </span>
                         )}
                       </div>
 
                       <Link
                         href={`/propiedades/${property.id}`}
+                        onClick={() => window.history.replaceState(null, '', '#premium-properties')}
                         className="inline-flex items-center gap-1 text-[11px] font-extrabold text-[#cccc00] hover:text-[#b3b300] transition-colors"
                       >
                         Ver detalle
@@ -394,9 +403,9 @@ export default function PremiumProperties() {
         {/* View All Button */}
         <div className="flex justify-center mt-4 pb-4">
           <Link href="/propiedades">
-            <button className="relative text-sm font-bold rounded-full h-14 px-8 group transition-all duration-500 hover:-translate-y-1 w-fit overflow-hidden cursor-pointer flex items-center justify-center bg-slate-950 text-white shadow-xl hover:shadow-2xl">
+            <button className="relative text-sm font-bold rounded-full h-14 px-8 group transition-all duration-500 hover:-translate-y-1 w-fit overflow-hidden cursor-pointer flex items-center justify-center bg-[#FFFF33] text-slate-950 shadow-xl hover:shadow-2xl">
               <span className="relative z-10 flex items-center gap-2">
-                Ver todas las propiedades
+                Quiero ver todas las propiedades
                 <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform duration-300" />
               </span>
             </button>

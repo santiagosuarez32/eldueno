@@ -7,6 +7,7 @@ import Footer from '@/app/components/Footer';
 import PropertyCard from '@/app/components/PropertyCard';
 import { Property, CURRENCY_CONFIG } from '@/app/data/properties';
 import { Search, RotateCcw } from 'lucide-react';
+import CustomSelect from '@/app/components/CustomSelect';
 import { useRef } from 'react';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
@@ -38,14 +39,15 @@ function CatalogContent({ initialProperties }: { initialProperties: Property[] }
   const itemsPerPage = 9;
   const properties = initialProperties;
 
-  const availableTypes = Array.from(new Set(properties.map(p => p.type).filter(Boolean)));
+  const availableTypes = ['casa', 'terreno', 'departamento', 'comercial', 'alquiler'];
   const typeLabels: Record<string, string> = {
     casa: 'Casa',
-    departamento: 'Departamento',
+    departamento: 'Apartamento',
     terreno: 'Terreno',
-    comercial: 'Local / Edificación Comercial',
+    comercial: 'Local/Edificio comercial',
     ph: 'PH',
-    loft: 'Loft'
+    loft: 'Loft',
+    alquiler: 'Alquiler'
   };
 
   const availableLocations = [
@@ -79,9 +81,32 @@ function CatalogContent({ initialProperties }: { initialProperties: Property[] }
     };
   }, []);
 
+  useEffect(() => {
+    const searchLower = searchTerm.trim().toLowerCase();
+    if (['terreno', 'terrenos', 'lote', 'lotes'].includes(searchLower)) {
+      setSelectedType('terreno');
+    } else if (['casa', 'casas'].includes(searchLower)) {
+      setSelectedType('casa');
+    } else if (['departamento', 'departamentos', 'apartamento', 'apartamentos'].includes(searchLower)) {
+      setSelectedType('departamento');
+    } else if (['comercial', 'local', 'locales', 'edificio'].includes(searchLower)) {
+      setSelectedType('comercial');
+    } else if (searchLower === 'alquiler') {
+      setSelectedType('alquiler');
+    }
+
+    if (typeof window !== 'undefined' && window.scrollY > 300) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [searchTerm]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, selectedType, selectedLocation, selectedBeds, maxPrice]);
+
   const filteredProperties = properties.filter((property) => {
     const matchesSearch = searchTerm === '' || property.title.toLowerCase().includes(searchTerm.toLowerCase()) || property.description.toLowerCase().includes(searchTerm.toLowerCase()) || (property.neighborhood || '').toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesType = selectedType === '' || property.type === selectedType;
+    const matchesType = selectedType === '' || (selectedType === 'alquiler' ? property.alquilado === true : property.type === selectedType);
     const matchesLocation = selectedLocation === '' || (property.location || '').toLowerCase().includes(selectedLocation.toLowerCase());
     const matchesBeds = selectedBeds === 'all' || (property.beds && (selectedBeds === 4 ? property.beds >= 4 : property.beds === selectedBeds));
     const matchesPrice = property.price <= maxPrice;
@@ -102,9 +127,8 @@ function CatalogContent({ initialProperties }: { initialProperties: Property[] }
   };
 
   const handlePageChange = (page: number) => {
-    const params = new URLSearchParams(searchParams.toString());
-    params.set('page', page.toString());
-    window.location.href = `${pathname || '/propiedades'}?${params.toString()}`;
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const gridRef = useRef<HTMLDivElement>(null);
@@ -125,7 +149,7 @@ function CatalogContent({ initialProperties }: { initialProperties: Property[] }
         <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-10 space-y-2">
             <h1 className="text-3xl sm:text-5xl font-bold text-slate-950 tracking-tight">Catálogo de Propiedades</h1>
-            <p className="text-slate-500 text-sm sm:text-base leading-relaxed">Propiedades directas publicadas por sus dueños. Ahorrá comisiones intermediarias.</p>
+            <p className="text-slate-500 text-sm sm:text-base leading-relaxed">Propiedades que se ajustan a tu presupuesto y necesidades</p>
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             <aside className="lg:col-span-3 bg-slate-50 border border-slate-200/60 rounded-3xl p-6 sm:p-8 space-y-6 lg:sticky lg:top-24 shadow-sm">
@@ -137,30 +161,32 @@ function CatalogContent({ initialProperties }: { initialProperties: Property[] }
                 <label className="text-xs sm:text-[13px] font-medium text-slate-700">Buscar por palabra clave</label>
                 <div className="relative rounded-2xl shadow-sm">
                   <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"><Search className="h-4 w-4 text-slate-400" /></div>
-                  <input type="text" placeholder="Ej. Terraza, Cochera, Belgrano..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="block w-full rounded-2xl bg-white border border-slate-200 focus:border-emerald-500 focus:outline-none pl-10 pr-4 py-2.5 text-slate-900 text-sm shadow-sm" />
+                  <input type="text" placeholder="Ej. cantón, estacionamiento, jardín" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="block w-full rounded-2xl bg-white border border-slate-200 focus:border-emerald-500 focus:outline-none pl-10 pr-4 py-2.5 text-slate-900 text-sm shadow-sm" />
                 </div>
               </div>
               <div className="space-y-2">
                 <label className="text-xs sm:text-[13px] font-medium text-slate-700 flex items-center gap-1.5"><img src="/icons-filters/property.png" className="h-4 w-4 object-contain" alt="" /> Tipo de propiedad</label>
-                <select value={selectedType} onChange={(e) => setSelectedType(e.target.value)} className="w-full bg-white border border-slate-200 focus:border-emerald-500 focus:outline-none rounded-2xl px-3 py-2.5 text-sm text-slate-900 shadow-sm cursor-pointer transition-colors">
-                  <option value="">Todos los tipos</option>
-                  {availableTypes.map((type) => (
-                    <option key={type} value={type}>
-                      {typeLabels[type] || type}
-                    </option>
-                  ))}
-                </select>
+                <CustomSelect
+                  value={selectedType}
+                  onChange={setSelectedType}
+                  placeholder="Todos los tipos"
+                  options={[
+                    { value: '', label: 'Todos los tipos' },
+                    ...availableTypes.map((t) => ({ value: t, label: typeLabels[t] || t })),
+                  ]}
+                />
               </div>
               <div className="space-y-2">
                 <label className="text-xs sm:text-[13px] font-medium text-slate-700 flex items-center gap-1.5"><img src="/icons-filters/ubication.png" className="h-4 w-4 object-contain" alt="" /> Provincia</label>
-                <select value={selectedLocation} onChange={(e) => setSelectedLocation(e.target.value)} className="w-full bg-white border border-slate-200 focus:border-emerald-500 focus:outline-none rounded-2xl px-3 py-2.5 text-sm text-slate-900 shadow-sm cursor-pointer transition-colors">
-                  <option value="">Cualquier provincia</option>
-                  {availableLocations.map((loc) => (
-                    <option key={loc} value={loc}>
-                      {loc}
-                    </option>
-                  ))}
-                </select>
+                <CustomSelect
+                  value={selectedLocation}
+                  onChange={setSelectedLocation}
+                  placeholder="Cualquier provincia"
+                  options={[
+                    { value: '', label: 'Cualquier provincia' },
+                    ...availableLocations.map((loc) => ({ value: loc, label: loc })),
+                  ]}
+                />
               </div>
               <div className="space-y-2">
                 <label className="text-xs sm:text-[13px] font-medium text-slate-700 flex items-center gap-1.5"><img src="/icons-filters/bedrooms.png" className="h-4 w-4 object-contain" alt="" /> Dormitorios</label>

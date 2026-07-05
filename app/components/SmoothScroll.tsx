@@ -9,10 +9,14 @@ export default function SmoothScroll({ children }: { children: ReactNode }) {
   const lenis = useLenis();
 
   useEffect(() => {
+    // Forzar el scroll nativo inmediatamente
+    window.scrollTo(0, 0);
+    
     if (lenis) {
-      lenis.scrollTo(0, { immediate: true });
-    } else {
-      window.scrollTo(0, 0);
+      // Usar requestAnimationFrame o timeout para asegurar que el DOM se haya actualizado
+      requestAnimationFrame(() => {
+        lenis.scrollTo(0, { immediate: true });
+      });
     }
   }, [pathname, lenis]);
 

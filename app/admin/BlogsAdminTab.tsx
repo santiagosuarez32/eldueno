@@ -232,7 +232,7 @@ export default function BlogsAdminTab({ setToast, triggerAutoBackup, userRole }:
             <input type="checkbox" id="published" checked={editing.published} onChange={e => setEditing({...editing, published: e.target.checked})} />
             <label htmlFor="published" className="text-sm font-semibold text-slate-700">Publicado</label>
           </div>
-          <button type="submit" className="w-full rounded-lg bg-[#ffe600] py-3 text-sm font-bold text-slate-900 transition hover:bg-[#ffff33]">Guardar Blog</button>
+          <button type="submit" className="w-full rounded-lg bg-[#FFFF33] py-3 text-sm font-bold text-slate-900 transition hover:bg-[#ffff33]">Guardar Blog</button>
         </form>
       </div>
     );
@@ -249,7 +249,7 @@ export default function BlogsAdminTab({ setToast, triggerAutoBackup, userRole }:
         />
         <button
           onClick={newItem}
-          className="rounded-full bg-[#ffe600] px-5 py-2 font-bold text-slate-950 transition hover:bg-[#ffff33] text-sm"
+          className="rounded-full bg-[#FFFF33] px-5 py-2 font-bold text-slate-950 transition hover:bg-[#ffff33] text-sm"
         >
           + Nuevo Blog
         </button>

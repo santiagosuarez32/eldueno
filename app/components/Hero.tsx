@@ -25,6 +25,8 @@ const normalizeString = (str: any): string => {
 export default function Hero() {
   const router = useRouter();
   const [searchValue, setSearchValue] = useState('');
+  const [selectedType, setSelectedType] = useState('');
+  const [selectedLocation, setSelectedLocation] = useState('');
   const [isSearching, setIsSearching] = useState(false);
   const [showResults, setShowResults] = useState(false);
   const [searchResults, setSearchResults] = useState<Property[]>([]);
@@ -126,16 +128,21 @@ export default function Hero() {
       const titleNorm = normalizeString(property.title);
       const locationNorm = normalizeString(property.location);
       const neighborhoodNorm = normalizeString(property.neighborhood);
-      const typeNorm = normalizeString(property.type);
       const descNorm = normalizeString(property.description);
 
-      return (
-        titleNorm.includes(queryNorm) ||
-        locationNorm.includes(queryNorm) ||
-        neighborhoodNorm.includes(queryNorm) ||
-        typeNorm.includes(queryNorm) ||
-        descNorm.includes(queryNorm)
-      );
+      const matchesSearch = queryNorm === '' || 
+        titleNorm.includes(queryNorm) || 
+        locationNorm.includes(queryNorm) || 
+        neighborhoodNorm.includes(queryNorm) || 
+        descNorm.includes(queryNorm);
+
+      const matchesType = selectedType === '' || 
+        (selectedType === 'alquiler' ? property.alquilado === true : property.type === selectedType);
+        
+      const matchesLocation = selectedLocation === '' || 
+        (property.location || '').toLowerCase().includes(selectedLocation.toLowerCase());
+
+      return matchesSearch && matchesType && matchesLocation;
     });
 
     setSearchResults(matches);
@@ -156,20 +163,36 @@ export default function Hero() {
 
     const query = val.toLowerCase().trim();
     const queryNorm = normalizeString(query);
+    
+    // Auto-detect type from typing, like in catalog
+    let newType = selectedType;
+    if (['terreno', 'terrenos', 'lote', 'lotes'].includes(query)) newType = 'terreno';
+    else if (['casa', 'casas'].includes(query)) newType = 'casa';
+    else if (['departamento', 'departamentos', 'apartamento', 'apartamentos'].includes(query)) newType = 'departamento';
+    else if (['comercial', 'local', 'locales', 'edificio'].includes(query)) newType = 'comercial';
+    else if (query === 'alquiler') newType = 'alquiler';
+    
+    if (newType !== selectedType) setSelectedType(newType);
+
     const matches = properties.filter((property) => {
       const titleNorm = normalizeString(property.title);
       const locationNorm = normalizeString(property.location);
       const neighborhoodNorm = normalizeString(property.neighborhood);
-      const typeNorm = normalizeString(property.type);
       const descNorm = normalizeString(property.description);
 
-      return (
-        titleNorm.includes(queryNorm) ||
-        locationNorm.includes(queryNorm) ||
-        neighborhoodNorm.includes(queryNorm) ||
-        typeNorm.includes(queryNorm) ||
-        descNorm.includes(queryNorm)
-      );
+      const matchesSearch = queryNorm === '' || 
+        titleNorm.includes(queryNorm) || 
+        locationNorm.includes(queryNorm) || 
+        neighborhoodNorm.includes(queryNorm) || 
+        descNorm.includes(queryNorm);
+
+      const matchesType = newType === '' || 
+        (newType === 'alquiler' ? property.alquilado === true : property.type === newType);
+        
+      const matchesLocation = selectedLocation === '' || 
+        (property.location || '').toLowerCase().includes(selectedLocation.toLowerCase());
+
+      return matchesSearch && matchesType && matchesLocation;
     });
 
     setSearchResults(matches);
@@ -181,22 +204,35 @@ export default function Hero() {
     setIsOpenModal(true);
 
     const queryNorm = normalizeString(tag);
+    
+    let newType = selectedType;
+    let newLocation = selectedLocation;
+    if (['San José', 'Alajuela', 'Cartago', 'Heredia', 'Guanacaste', 'Puntarenas', 'Limón'].includes(tag)) {
+      newLocation = tag;
+    }
+
     const matches = properties.filter((property) => {
       const titleNorm = normalizeString(property.title);
       const locationNorm = normalizeString(property.location);
       const neighborhoodNorm = normalizeString(property.neighborhood);
-      const typeNorm = normalizeString(property.type);
       const descNorm = normalizeString(property.description);
 
-      return (
-        titleNorm.includes(queryNorm) ||
-        locationNorm.includes(queryNorm) ||
-        neighborhoodNorm.includes(queryNorm) ||
-        typeNorm.includes(queryNorm) ||
-        descNorm.includes(queryNorm)
-      );
+      const matchesSearch = queryNorm === '' || 
+        titleNorm.includes(queryNorm) || 
+        locationNorm.includes(queryNorm) || 
+        neighborhoodNorm.includes(queryNorm) || 
+        descNorm.includes(queryNorm);
+
+      const matchesType = newType === '' || 
+        (newType === 'alquiler' ? property.alquilado === true : property.type === newType);
+        
+      const matchesLoc = newLocation === '' || 
+        (property.location || '').toLowerCase().includes(newLocation.toLowerCase());
+
+      return matchesSearch && matchesType && matchesLoc;
     });
 
+    if (newLocation !== selectedLocation) setSelectedLocation(newLocation);
     setSearchResults(matches);
 
     setTimeout(() => {
@@ -282,16 +318,21 @@ export default function Hero() {
                   const titleNorm = normalizeString(property.title);
                   const locationNorm = normalizeString(property.location);
                   const neighborhoodNorm = normalizeString(property.neighborhood);
-                  const typeNorm = normalizeString(property.type);
                   const descNorm = normalizeString(property.description);
 
-                  return (
-                    titleNorm.includes(queryNorm) ||
-                    locationNorm.includes(queryNorm) ||
-                    neighborhoodNorm.includes(queryNorm) ||
-                    typeNorm.includes(queryNorm) ||
-                    descNorm.includes(queryNorm)
-                  );
+                  const matchesSearch = queryNorm === '' || 
+                    titleNorm.includes(queryNorm) || 
+                    locationNorm.includes(queryNorm) || 
+                    neighborhoodNorm.includes(queryNorm) || 
+                    descNorm.includes(queryNorm);
+
+                  const matchesType = selectedType === '' || 
+                    (selectedType === 'alquiler' ? property.alquilado === true : property.type === selectedType);
+                    
+                  const matchesLoc = selectedLocation === '' || 
+                    (property.location || '').toLowerCase().includes(selectedLocation.toLowerCase());
+
+                  return matchesSearch && matchesType && matchesLoc;
                 });
                 setSearchResults(matches);
               }
@@ -361,6 +402,61 @@ export default function Hero() {
                     </button>
                   </div>
 
+                  {/* Filters Row */}
+                  <div className="flex flex-wrap gap-3 mb-6 px-2">
+                    <select 
+                      value={selectedType}
+                      onChange={(e) => {
+                        setSelectedType(e.target.value);
+                        // Trigger re-filter
+                        const queryNorm = normalizeString(searchValue);
+                        const newType = e.target.value;
+                        setSearchResults(properties.filter(p => {
+                          const tNorm = normalizeString(p.title);
+                          const lNorm = normalizeString(p.location);
+                          const dNorm = normalizeString(p.description);
+                          const searchMatch = queryNorm === '' || tNorm.includes(queryNorm) || lNorm.includes(queryNorm) || dNorm.includes(queryNorm);
+                          const typeMatch = newType === '' || (newType === 'alquiler' ? p.alquilado === true : p.type === newType);
+                          const locMatch = selectedLocation === '' || (p.location || '').toLowerCase().includes(selectedLocation.toLowerCase());
+                          return searchMatch && typeMatch && locMatch;
+                        }));
+                      }}
+                      className="bg-slate-50 border border-slate-200 text-slate-700 text-sm rounded-xl px-4 py-2 focus:outline-none focus:border-emerald-500 cursor-pointer"
+                    >
+                      <option value="" className="text-slate-900 bg-white font-medium">Cualquier Tipo</option>
+                      <option value="casa" className="text-slate-900 bg-white font-medium">Casa</option>
+                      <option value="departamento" className="text-slate-900 bg-white font-medium">Apartamento</option>
+                      <option value="terreno" className="text-slate-900 bg-white font-medium">Terreno</option>
+                      <option value="comercial" className="text-slate-900 bg-white font-medium">Local / Comercial</option>
+                      <option value="alquiler" className="text-slate-900 bg-white font-medium">Alquiler</option>
+                    </select>
+
+                    <select 
+                      value={selectedLocation}
+                      onChange={(e) => {
+                        setSelectedLocation(e.target.value);
+                        // Trigger re-filter
+                        const queryNorm = normalizeString(searchValue);
+                        const newLoc = e.target.value;
+                        setSearchResults(properties.filter(p => {
+                          const tNorm = normalizeString(p.title);
+                          const lNorm = normalizeString(p.location);
+                          const dNorm = normalizeString(p.description);
+                          const searchMatch = queryNorm === '' || tNorm.includes(queryNorm) || lNorm.includes(queryNorm) || dNorm.includes(queryNorm);
+                          const typeMatch = selectedType === '' || (selectedType === 'alquiler' ? p.alquilado === true : p.type === selectedType);
+                          const locMatch = newLoc === '' || (p.location || '').toLowerCase().includes(newLoc.toLowerCase());
+                          return searchMatch && typeMatch && locMatch;
+                        }));
+                      }}
+                      className="bg-slate-50 border border-slate-200 text-slate-700 text-sm rounded-xl px-4 py-2 focus:outline-none focus:border-emerald-500 cursor-pointer"
+                    >
+                      <option value="" className="text-slate-900 bg-white font-medium">Cualquier Provincia</option>
+                      {['San José', 'Alajuela', 'Cartago', 'Heredia', 'Guanacaste', 'Puntarenas', 'Limón'].map(loc => (
+                        <option key={loc} value={loc} className="text-slate-900 bg-white font-medium">{loc}</option>
+                      ))}
+                    </select>
+                  </div>
+
                   {/* Header */}
                   {searchValue.trim() !== '' && (
                     <div className="flex items-center justify-between pb-3 border-b border-slate-150 mb-4 px-2">
@@ -381,9 +477,9 @@ export default function Hero() {
                       </div>
                     ) : (
                       <>
-                        {searchValue.trim() === '' ? (
+                        {searchValue.trim() === '' && selectedType === '' && selectedLocation === '' ? (
                           <div className="py-12 text-center text-slate-400 space-y-5">
-                            <p className="text-xs font-medium text-slate-500 font-medium">Escribe tu búsqueda para empezar o selecciona un tag rápido:</p>
+                            <p className="text-xs font-medium text-slate-500 font-medium">Escribe tu búsqueda para empezar, selecciona un filtro o un tag rápido:</p>
                             <div className="flex flex-wrap justify-center gap-2 max-w-lg mx-auto">
                               {['San José', 'Alajuela', 'Cartago', 'Heredia', 'Guanacaste', 'Puntarenas', 'Limón'].map((tag) => (
                                 <button
@@ -410,7 +506,7 @@ export default function Hero() {
 
                             <div className="mt-5 pt-4 border-t border-slate-100 flex justify-center">
                               <Link
-                                href={`/propiedades?search=${encodeURIComponent(searchValue.trim())}`}
+                                href={`/propiedades?search=${encodeURIComponent(searchValue.trim())}&type=${selectedType}&location=${selectedLocation}`}
                                 className="text-xs font-bold text-emerald-600 hover:text-emerald-700 hover:underline flex items-center gap-1"
                               >
                                 Ver todos los resultados en el catálogo completo ({searchResults.length})
@@ -439,12 +535,12 @@ export default function Hero() {
           >
             <span className="flex items-center gap-1.5 bg-slate-900/60 backdrop-blur-sm border border-slate-800 px-4 py-2 rounded-full text-slate-300">
               <Building2 className="h-4 w-4 text-[#FFFF33] flex-shrink-0" />
-              <span className="font-extrabold text-white">1,500+</span>
+              <span className="font-extrabold text-white">1,502+</span>
               <span className="font-normal text-slate-300">Propiedades vendidas</span>
             </span>
             <span className="flex items-center gap-1.5 bg-slate-900/60 backdrop-blur-sm border border-slate-800 px-4 py-2 rounded-full text-slate-300">
               <Users className="h-4 w-4 text-[#FFFF33] flex-shrink-0" />
-              <span className="font-extrabold text-white">3,000+</span>
+              <span className="font-extrabold text-white">3,200+</span>
               <span className="font-normal text-slate-300">Clientes Satisfechos</span>
             </span>
             <span className="flex items-center gap-1.5 bg-slate-900/60 backdrop-blur-sm border border-slate-800 px-4 py-2 rounded-full text-slate-300">

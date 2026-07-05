@@ -98,12 +98,15 @@ export default async function PropertyDetailPage({ params }: PropertyDetailPageP
     );
   }
 
-  // Get related properties (excluding current one)
+  // Get related properties (excluding current one, matching type)
   let relatedProperties: Property[] = [];
   try {
-    const { data } = await supabase.from('properties').select('*').limit(6);
+    const { data } = await supabase.from('properties').select('*').eq('featured', true).limit(100);
     if (data && data.length > 0) {
-      relatedProperties = data.map(mapDbToProperty).filter((p) => p.id !== property!.id);
+      relatedProperties = data
+        .map(mapDbToProperty)
+        .filter((p) => p.id !== property!.id && p.type === property!.type && p.location === property!.location)
+        .slice(0, 6);
     }
   } catch (err) {
     console.warn("Error fetching related properties from Supabase:", err);

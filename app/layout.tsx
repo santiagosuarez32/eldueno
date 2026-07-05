@@ -50,7 +50,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://elduenovende.com"),
+  metadataBase: new URL("https://www.elduenovende.com"),
   title: "El Dueño Vende | Propiedades Directas Sin Intermediarios",
   description: "La plataforma premium para comprar y vender propiedades directamente entre particulares en Costa Rica. Ahorrá miles de dólares en comisiones inmobiliarias. Trato directo y verificado con el dueño.",
   keywords: "dueño vende, trato directo, sin inmobiliaria, sin comisiones, comprar casa costa rica, vender departamento, alquiler directo, propiedades costa rica",
@@ -65,7 +65,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "El Dueño Vende | Propiedades Directas Sin Intermediarios",
     description: "La plataforma premium para comprar y vender propiedades directamente entre particulares. Ahorrá miles de dólares en comisiones inmobiliarias. Trato directo y verificado con el dueño.",
-    url: "https://elduenovende.com",
+    url: "https://www.elduenovende.com",
     siteName: "El Dueño Vende",
     images: [
       {

@@ -13,36 +13,42 @@ import { Plus, Minus, ArrowUpRight } from 'lucide-react';
 import { FiPhone } from 'react-icons/fi';
 
 export default function WhyChooseUs() {
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [activeIndex, setActiveIndex] = useState<number | null>(0);
 
   const features = [
     {
       title: 'Venta de propiedades',
       description: 'Vende tu propiedad con el respaldo de expertos en bienes raíces.',
-      link: '/publicar',
-      buttonText: 'Más información',
+      link: '/contacto',
+      buttonText: 'Contáctenos',
+      secondaryButtonText: 'Más información',
+      secondaryButtonLink: '/compra-y-venta',
       image: '/services/venta-propiedades.webp',
       counters: [
-        { value: '1500+', label: 'Transacciones' },
+        { value: '1502+', label: 'Transacciones' },
         { value: '0%', label: 'de avalúo' }
       ]
     },
     {
       title: 'Compra de propiedades',
       description: 'Le acompañamos en cada paso hacia la compra de la propiedad que se ajuste a su presupuesto y necesidades.',
-      link: '/propiedades',
-      buttonText: 'Más información',
+      link: '/contacto',
+      buttonText: 'Contáctenos',
+      secondaryButtonText: 'Más información',
+      secondaryButtonLink: '/propiedades',
       image: '/services/correduria.webp',
       counters: [
-        { value: '3200+', label: 'Clientes Satisfechos' },
+        { value: '3,200+', label: 'Clientes Satisfechos' },
         { value: 'CHECK', label: 'Asesoría personalizada' }
       ]
     },
     {
       title: 'Préstamos hipotecarios',
       description: 'Accede a financiamiento y opciones de crédito hipotecario adaptadas a tus necesidades para adquirir tu propiedad rápidamente.',
-      link: '/prestamos',
-      buttonText: 'Consultar Préstamo',
+      link: '/contacto',
+      buttonText: 'Contáctenos',
+      secondaryButtonText: 'Más información',
+      secondaryButtonLink: '/prestamos',
       image: '/services/creditos.webp',
       counters: [
         { value: '90%', label: 'Financiamiento bancario' },
@@ -52,8 +58,10 @@ export default function WhyChooseUs() {
     {
       title: 'Servicios de arquitectura',
       description: 'Dale vida a tus ideas. Consultá por remodelaciones, diseño arquitectónico, planos y dirección de obra profesional.',
-      link: '/arquitectura',
-      buttonText: 'Solicitar Asesoría',
+      link: '/contacto',
+      buttonText: 'Contáctenos',
+      secondaryButtonText: 'Más información',
+      secondaryButtonLink: '/arquitectura',
       image: '/services/arquitectura.webp',
       counters: [
         { value: '150+', label: 'Proyectos Entregados' },
@@ -146,7 +154,7 @@ export default function WhyChooseUs() {
               return (
                 <div key={idx} className="py-6 first:pt-0 last:pb-0">
                   <button 
-                    onClick={() => setActiveIndex(idx)}
+                    onClick={() => setActiveIndex(activeIndex === idx ? null : idx)}
                     className="w-full flex items-center gap-4 text-left font-bold text-slate-950 text-xl sm:text-2xl hover:text-emerald-600 transition-colors py-2"
                   >
                     <div className={`h-10 w-10 rounded-full flex items-center justify-center shrink-0 transition-all duration-300 ${isOpen ? 'bg-slate-950 text-white' : 'bg-slate-50 text-slate-900 border border-slate-200/60'}`}>
@@ -190,10 +198,10 @@ export default function WhyChooseUs() {
                           })}
                         </div>
 
-                        {/* Premium Sliding Button */}
-                        <div className="pt-2">
-                          <Link href={feature.link}>
-                            <button className="relative text-sm font-semibold rounded-full h-12 p-1 ps-6 pr-14 group transition-all duration-500 hover:ps-14 hover:pr-6 w-fit overflow-hidden cursor-pointer flex items-center justify-center bg-[#ffe600] text-slate-950 shadow-md hover:shadow-lg hover:-translate-y-0.5">
+                        {/* Premium Sliding Buttons */}
+                        <div className="pt-2 flex flex-wrap gap-4 items-center">
+                          <Link href={feature.link} onClick={() => window.history.replaceState(null, '', '#servicios')}>
+                            <button className="relative text-sm font-semibold rounded-full h-12 p-1 ps-6 pr-14 group transition-all duration-500 hover:ps-14 hover:pr-6 w-fit overflow-hidden cursor-pointer flex items-center justify-center bg-[#FFFF33] text-slate-950 shadow-md hover:shadow-lg hover:-translate-y-0.5">
                               <span className="relative z-10 transition-all duration-500">
                                 {feature.buttonText}
                               </span>
@@ -202,6 +210,24 @@ export default function WhyChooseUs() {
                               </div>
                             </button>
                           </Link>
+
+                          {/* Secondary Button */}
+                          {'secondaryButtonText' in feature && 'secondaryButtonLink' in feature && (
+                            <Link href={feature.secondaryButtonLink as string} onClick={() => window.history.replaceState(null, '', '#servicios')}>
+                               <button className="h-12 px-6 rounded-full text-sm font-semibold text-white bg-slate-900 hover:bg-slate-800 transition-all duration-300 shadow-sm hover:shadow-md hover:-translate-y-0.5">
+                                 {feature.secondaryButtonText as string}
+                               </button>
+                            </Link>
+                          )}
+                        </div>
+
+                        {/* Mobile Image */}
+                        <div className="mt-6 block lg:hidden w-full h-[180px] sm:h-[250px] rounded-[24px] overflow-hidden shadow-sm bg-slate-100">
+                          <img 
+                            src={feature.image} 
+                            alt={feature.title} 
+                            className="w-full h-full object-cover"
+                          />
                         </div>
                       </div>
                     </div>
@@ -213,7 +239,7 @@ export default function WhyChooseUs() {
 
           {/* Right: Modern Image Display */}
           <div
-            className="why-img lg:col-span-6 relative h-[180px] sm:h-[250px] lg:h-auto lg:aspect-video rounded-[32px] overflow-hidden shadow-md bg-slate-100"
+            className="why-img hidden lg:block lg:col-span-6 relative h-[600px] rounded-[32px] overflow-hidden shadow-md bg-slate-100 lg:sticky lg:top-32"
           >
             {features.map((feature, idx) => (
               <img

@@ -8,7 +8,7 @@ export default async function PropertiesPage() {
   let initialProperties: Property[] = [];
   
   try {
-    const { data, error } = await supabase.from('properties').select('*').order('id');
+    const { data, error } = await supabase.from('properties').select('*').eq('featured', true).order('id');
     if (!error && data && data.length > 0) {
       initialProperties = data.map(mapDbToProperty);
     }

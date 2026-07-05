@@ -72,7 +72,7 @@ export default function BlogPage() {
     <>
       <Navbar />
 
-      <main ref={containerRef} className="flex-grow pt-28 pb-24 bg-slate-950 text-white overflow-hidden">
+      <main id="blog-list" ref={containerRef} className="flex-grow pt-28 pb-24 bg-slate-950 text-white overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           
           {/* Header Section */}
@@ -144,6 +144,7 @@ export default function BlogPage() {
                 >
                   <Link
                     href={`/blog/${post.slug}`}
+                    onClick={() => window.history.replaceState(null, '', '#blog-list')}
                     className="group flex flex-col bg-slate-900/40 rounded-[32px] overflow-hidden border border-slate-800/80 hover:border-slate-700 shadow-sm hover:shadow-xl transition-all duration-300 h-full"
                   >
                     {/* Image Container */}

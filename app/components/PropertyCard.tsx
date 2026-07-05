@@ -66,29 +66,24 @@ export default function PropertyCard({ property, priority = false }: PropertyCar
         <div className="relative aspect-video w-full overflow-hidden bg-slate-100">
           <div className="absolute inset-0 bg-slate-955/5 group-hover:bg-transparent transition-colors duration-300 z-10" />
           
-          {/* Sold/Rented Overlay */}
-          {(property.vendido || property.alquilado) && (
-            <div className="absolute inset-0 z-30 pointer-events-none overflow-hidden">
-              {/* Banner Diagonal */}
-              <div className={`absolute top-6 -right-12 w-48 text-center py-1.5 font-black text-[10px] sm:text-xs tracking-widest text-white transform rotate-45 shadow-lg ${property.vendido ? 'bg-red-600' : 'bg-blue-600'}`}>
-                {property.vendido ? 'VENDIDA' : 'ALQUILADA'}
-              </div>
-              {/* Overlay Semitransparente */}
-              <div className="absolute inset-0 bg-slate-900/20 backdrop-blur-[1px]" />
-            </div>
-          )}
+
           
           {/* Badges */}
-          <div className="absolute top-3 left-3 z-20 flex flex-row items-center gap-1.5 max-w-[calc(100%-24px)] min-w-0">
+          <div className="absolute top-3 left-3 z-40 flex flex-wrap items-center gap-1.5 max-w-[calc(100%-24px)] min-w-0">
             {/* Property Type Badge */}
-            <span className="bg-black text-white text-[9px] sm:text-[10px] font-bold px-2.5 py-1 rounded-full shadow-sm shrink-0">
+            <span className="bg-[#FFFF33] text-slate-950 text-[9px] sm:text-[10px] font-bold px-2.5 py-1 rounded-full shadow-sm shrink-0">
               {typeLabel}
             </span>
-            {/* Location Badge */}
-            <span className="bg-black text-white text-[9px] sm:text-[10px] font-bold px-2.5 py-1 rounded-full flex items-center gap-1 shadow-sm min-w-0">
-              <img src="/icons-filters/ubication.png" className="h-3 w-3 object-contain flex-shrink-0 invert" alt="" />
-              <span className="truncate">{property.neighborhood || property.location}</span>
-            </span>
+            {/* Status Badge */}
+            {property.estado && (
+              <span className={`text-[9px] sm:text-[10px] font-bold px-2.5 py-1 rounded-full shadow-sm shrink-0 ${
+                property.estado === 'vendida' 
+                  ? 'bg-red-600 text-white' 
+                  : 'bg-[#FFFF33] text-slate-950'
+              }`}>
+                {property.estado.charAt(0).toUpperCase() + property.estado.slice(1).toLowerCase()}
+              </span>
+            )}
           </div>
 
           {/* Property Image */}
@@ -107,15 +102,36 @@ export default function PropertyCard({ property, priority = false }: PropertyCar
           </div>
 
           {/* Price Tag Overlay */}
-          <div className="absolute bottom-4 right-4 z-20 bg-slate-950 text-white font-bold px-4 py-2 rounded-2xl shadow-md">
-            {formattedPrice}
+          <div className="absolute bottom-4 right-4 z-40 flex flex-col items-end">
+            {(property.precio_original && property.precio_original > property.price) ? (
+              <span className="text-[#FFFF33] line-through text-xs sm:text-[13px] font-bold mb-0.5 drop-shadow-md bg-black/60 px-2 rounded-md border border-yellow-500/30">
+                {formatPropertyPrice(property.precio_original, property.moneda)}
+              </span>
+            ) : (
+              /* Fallback para rebajadas/remate sin precio original explícito */
+              (property.estado === 'rebajada' || property.estado === 'remate') && (
+                <span className="text-white/90 line-through text-xs sm:text-[13px] font-bold mb-0.5 drop-shadow-md bg-black/40 px-2 rounded-md">
+                  {formatPropertyPrice(property.price * 1.15, property.moneda)}
+                </span>
+              )
+            )}
+            <div className={`flex flex-col items-end px-4 py-2 rounded-2xl shadow-md ${
+              (property.estado === 'rebajada' || property.estado === 'remate' || (property.precio_original && property.precio_original > property.price)) ? 'bg-red-600 text-white' : 'bg-slate-950 text-white'
+            }`}>
+              <span className="font-bold leading-tight">{formattedPrice}</span>
+              {property.precio_usd && (
+                <span className="text-[10px] sm:text-[11px] opacity-90 font-semibold mt-0.5 leading-none">
+                  US$ {property.precio_usd.toLocaleString('es-AR')}
+                </span>
+              )}
+            </div>
           </div>
         </div>
 
         {/* Content */}
         <div className="p-6 flex flex-col flex-grow">
           {/* Neighborhood & Location */}
-          <div className="flex items-center text-xs text-slate-500 mb-2 gap-1.5 font-medium">
+          <div className="flex items-center text-sm text-slate-500 mb-2 gap-1.5 font-medium">
             <img src="/icons-filters/ubication.png" className="h-4 w-4 object-contain shrink-0" alt="" />
             <span>{property.neighborhood}, {property.location}</span>
           </div>
@@ -172,6 +188,12 @@ export default function PropertyCard({ property, priority = false }: PropertyCar
                   <div className="flex flex-col items-center justify-center gap-1 text-center relative after:content-[''] after:absolute after:-right-[10px] sm:after:-right-[15px] after:h-8 after:w-[1px] after:bg-slate-200 last:after:hidden">
                     <img src="/icons-property/baños.png" className="h-4.5 w-4.5 object-contain" alt="" />
                     <span className="font-semibold text-slate-700">{property.baths} Baños</span>
+                  </div>
+                )}
+                {Boolean(property.parkingSpaces) && Number(property.parkingSpaces) > 0 && (
+                  <div className="flex flex-col items-center justify-center gap-1 text-center relative after:content-[''] after:absolute after:-right-[10px] sm:after:-right-[15px] after:h-8 after:w-[1px] after:bg-slate-200 last:after:hidden">
+                    <img src="/icons-property/cochera.png" className="h-4.5 w-4.5 object-contain" alt="" />
+                    <span className="font-semibold text-slate-700">{property.parkingSpaces} Estac.</span>
                   </div>
                 )}
                 {Boolean(property.constructionArea || property.area) && Number(property.constructionArea || property.area) > 0 && (

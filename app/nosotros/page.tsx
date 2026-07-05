@@ -9,6 +9,7 @@ if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
 }
 import Link from 'next/link';
+import Image from 'next/image';
 import { ArrowRight } from 'lucide-react';
 import Navbar from '@/app/components/Navbar';
 import Footer from '@/app/components/Footer';
@@ -57,10 +58,9 @@ function AnimatedCounter({ value, duration = 2, prefix = '', suffix = '' }: Anim
 
 export default function NosotrosPage() {
   const stats = [
-    { value: 1500, prefix: '', suffix: '+', label: 'Propiedades vendidas', desc: 'Casas, apartamentos y terrenos que han encontrado su dueño ideal.' },
-    { value: 3000, prefix: '', suffix: '+', label: 'Clientes Satisfechos', desc: 'Nuestro mayor respaldo.' },
-    { value: 35, prefix: '', suffix: '+ Años', label: 'Trayectoria en el mercado', desc: 'Acompañando a miles de familias y dueños directos a concretar sus objetivos.' },
-    { value: 100, prefix: '', suffix: '%', label: 'Listados verificados', desc: 'Validamos detalladamente cada publicación para garantizar la veracidad de los datos.' }
+    { value: 1502, prefix: '', suffix: '+', label: 'Propiedades vendidas', desc: 'Casas, apartamentos y terrenos que han encontrado su dueño ideal.' },
+    { value: 3200, prefix: '', suffix: '+', label: 'Clientes Satisfechos', desc: 'Nuestro mayor respaldo.' },
+    { value: 35, prefix: '', suffix: '+ Años', label: 'Trayectoria en el mercado', desc: 'Acompañando a miles de familias y dueños directos a concretar sus objetivos.' }
   ];
 
   const mainRef = useRef<HTMLElement>(null);
@@ -155,10 +155,12 @@ export default function NosotrosPage() {
         <section className="relative h-screen flex items-end pb-16 sm:pb-24 overflow-hidden bg-slate-950">
           {/* Background image & overlays */}
           <div className="absolute inset-0 z-0">
-            <img
-              src="https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80"
+            <Image
+              src="/about-hero.webp"
               alt="Luxury minimalist interior architecture with tall arches"
-              className="w-full h-full object-cover object-center"
+              fill
+              priority
+              className="object-cover object-center"
             />
             {/* Left-aligned dark gradient to match Dribbble design */}
             <div 
@@ -223,11 +225,11 @@ export default function NosotrosPage() {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {stats.map((stat, idx) => (
                 <div
                   key={idx}
-                  className="stat-card bg-[#ffe600] rounded-2xl p-6 hover:bg-[#e6cf00] transition-all duration-300 flex flex-col space-y-3 shadow-sm"
+                  className="stat-card bg-[#FFFF33] rounded-2xl p-6 hover:bg-[#e6cf00] transition-all duration-300 flex flex-col space-y-3 shadow-sm"
                 >
                   <div className="text-black flex items-baseline gap-0.5">
                     <AnimatedCounter value={stat.value} prefix={stat.prefix} suffix={stat.suffix} />
@@ -256,12 +258,14 @@ export default function NosotrosPage() {
                 </h2>
                 
                 <div 
-                  className="hist-img-main rounded-[32px] overflow-hidden shadow-xl h-[360px] sm:h-[460px] w-full bg-slate-100"
+                  className="hist-img-main relative rounded-[32px] overflow-hidden shadow-xl h-[360px] sm:h-[460px] w-full bg-slate-100"
                 >
-                  <img
-                    src="/images/about-living-room.webp"
-                    alt="Interior de sala de estar moderna"
-                    className="w-full h-full object-cover"
+                  <Image
+                    src="/about/1.webp"
+                    alt="Lujosa propiedad moderna"
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                    className="object-cover"
                   />
                 </div>
               </div>
@@ -271,21 +275,25 @@ export default function NosotrosPage() {
                 {/* Two side-by-side images */}
                 <div className="grid grid-cols-2 gap-6">
                   <div 
-                    className="hist-img-sub1 rounded-[32px] overflow-hidden shadow-md h-[170px] sm:h-[220px] w-full bg-slate-100"
+                    className="hist-img-sub1 relative rounded-[32px] overflow-hidden shadow-md h-[170px] sm:h-[220px] w-full bg-slate-100"
                   >
-                    <img
-                      src="/images/about-villa-concrete.webp"
-                      alt="Exterior de casa de hormigón moderna"
-                      className="w-full h-full object-cover"
+                    <Image
+                      src="/about/2.webp"
+                      alt="Exterior de casa moderna"
+                      fill
+                      sizes="(max-width: 1024px) 50vw, 25vw"
+                      className="object-cover"
                     />
                   </div>
                   <div 
-                    className="hist-img-sub2 rounded-[32px] overflow-hidden shadow-md h-[170px] sm:h-[220px] w-full bg-slate-100"
+                    className="hist-img-sub2 relative rounded-[32px] overflow-hidden shadow-md h-[170px] sm:h-[220px] w-full bg-slate-100"
                   >
-                    <img
-                      src="/images/about-villa-balcony.webp"
-                      alt="Apartamento moderno con balcón y árboles"
-                      className="w-full h-full object-cover"
+                    <Image
+                      src="/about/oficina-2.jpg"
+                      alt="Oficina El Dueño Vende"
+                      fill
+                      sizes="(max-width: 1024px) 50vw, 25vw"
+                      className="object-cover object-[center_75%]"
                     />
                   </div>
                 </div>
@@ -294,10 +302,10 @@ export default function NosotrosPage() {
                 <div className="space-y-4">
                   <span className="text-base text-slate-500 block">Sobre nosotros</span>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12">
-                    <p className="text-slate-650 text-base leading-relaxed">
-                      <strong>El Dueño Vende</strong> es una compañía especializada en bienes raíces, brindamos la mejor asesoría en compra, venta y renta de propiedades dentro del área metropolitana. También, brindamos oportunidades de inversión y soluciones de crédito.
+                    <p className="text-slate-600 text-lg leading-relaxed">
+                      <strong>El Dueño Vende</strong> es una compañía especializada en bienes raíces, brindamos la mejor asesoría en compra, venta y alquiler de propiedades dentro del área metropolitana. También, brindamos oportunidades de inversión y soluciones de crédito.
                     </p>
-                    <p className="text-slate-555 text-base leading-relaxed">
+                    <p className="text-slate-600 text-lg leading-relaxed">
                       Con más de 35 años de experiencia nos desenvolvemos con agilidad en el mercado de bienes raíces; cientos de personas y empresas que han confiado sus inversiones a El Dueño Vende dan respaldo de nuestra trayectoria.
                     </p>
                   </div>
@@ -307,10 +315,10 @@ export default function NosotrosPage() {
                 <div
                   className="hist-headline pt-6 border-t border-slate-100"
                 >
-                  <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-950 tracking-tight leading-tight mb-3">
+                  <h3 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-950 tracking-tight leading-tight mb-3">
                     Más de tres décadas asesorando con transparencia, agilidad y resultados.
                   </h3>
-                  <p className="text-slate-500 text-base sm:text-lg">
+                  <p className="text-slate-500 text-lg sm:text-xl">
                     Experiencia real, soluciones integrales y un acompañamiento que genera confianza.
                   </p>
                 </div>

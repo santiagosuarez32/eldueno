@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { ArrowRight, ShieldCheck, TrendingUp, Award } from 'lucide-react';
 import { useRef } from 'react';
 import gsap from 'gsap';
@@ -39,22 +40,24 @@ export default function HomeAboutSection() {
   }, { scope: container });
 
   return (
-    <section ref={container} className="py-24 bg-white relative overflow-hidden">
+    <section id="nosotros-section" ref={container} className="py-24 bg-white relative overflow-hidden">
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           
           {/* Left Column: Image */}
           <div className="about-img relative">
-            <div className="aspect-[4/3] rounded-[32px] overflow-hidden shadow-lg border border-slate-100">
-              <img
-                src="/about.png"
+            <div className="relative aspect-[4/3] rounded-[32px] overflow-hidden shadow-lg border border-slate-100">
+              <Image
+                src="/about/3.webp"
                 alt="El Dueño Vende - Asesoría Inmobiliaria"
-                className="w-full h-full object-cover object-center"
+                fill
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                className="object-cover object-center"
               />
             </div>
             {/* Badge overlay */}
             <div className="absolute -bottom-8 -right-8 bg-slate-900 text-white p-8 rounded-[24px] hidden lg:block max-w-[280px] shadow-2xl border border-slate-800">
-              <div className="text-5xl font-bold mb-3 text-[#ffe600] tracking-tighter">35+</div>
+              <div className="text-5xl font-bold mb-3 text-[#FFFF33] tracking-tighter">35+</div>
               <p className="text-sm font-medium leading-relaxed text-slate-300">
                 Años asesorando con transparencia, agilidad y resultados.
               </p>
@@ -68,7 +71,7 @@ export default function HomeAboutSection() {
                 Somos una empresa con historia y resultados
               </h2>
               <p className="text-slate-600 text-xl leading-relaxed pt-2">
-                <span className="font-bold underline decoration-[#ffe600] decoration-4 underline-offset-4">El Dueño Vende</span> es una compañía especializada en bienes raíces. Brindamos la mejor asesoría en compra, venta y alquiler de propiedades dentro del área metropolitana, junto a excelentes oportunidades de inversión y soluciones de crédito.
+                <span className="font-bold underline decoration-[#FFFF33] decoration-4 underline-offset-4">El Dueño Vende</span> es una compañía especializada en bienes raíces. Brindamos la mejor asesoría en compra, venta y alquiler de propiedades dentro del área metropolitana, junto a excelentes oportunidades de inversión y soluciones de crédito.
               </p>
             </div>
 
@@ -78,16 +81,18 @@ export default function HomeAboutSection() {
               {/* Feature 1 */}
               <div className="flex gap-5">
                 <div className="flex-shrink-0 mt-1">
-                  <div className="w-12 h-12 bg-[#ffe600]" style={{
-                    WebkitMaskImage: 'url(/icons-about/confianza.png)',
-                    maskImage: 'url(/icons-about/confianza.png)',
-                    WebkitMaskSize: 'contain',
-                    maskSize: 'contain',
-                    WebkitMaskRepeat: 'no-repeat',
-                    maskRepeat: 'no-repeat',
-                    WebkitMaskPosition: 'center',
-                    maskPosition: 'center'
-                  }} />
+                  <div className="icon-about-animated relative w-16 h-16">
+                    <div className="w-full h-full bg-[#FFFF33]" style={{
+                      WebkitMaskImage: 'url(/icons-about/confianza.png)',
+                      maskImage: 'url(/icons-about/confianza.png)',
+                      WebkitMaskSize: 'contain',
+                      maskSize: 'contain',
+                      WebkitMaskRepeat: 'no-repeat',
+                      maskRepeat: 'no-repeat',
+                      WebkitMaskPosition: 'center',
+                      maskPosition: 'center'
+                    }} />
+                  </div>
                 </div>
                 <div>
                   <h4 className="text-xl font-bold text-slate-900 mb-1">Asesoría y Seguridad</h4>
@@ -100,16 +105,18 @@ export default function HomeAboutSection() {
               {/* Feature 2 */}
               <div className="flex gap-5">
                 <div className="flex-shrink-0 mt-1">
-                  <div className="w-12 h-12 bg-[#ffe600]" style={{
-                    WebkitMaskImage: 'url(/icons-about/ubication.png)',
-                    maskImage: 'url(/icons-about/ubication.png)',
-                    WebkitMaskSize: 'contain',
-                    maskSize: 'contain',
-                    WebkitMaskRepeat: 'no-repeat',
-                    maskRepeat: 'no-repeat',
-                    WebkitMaskPosition: 'center',
-                    maskPosition: 'center'
-                  }} />
+                  <div className="icon-about-animated relative w-16 h-16">
+                    <div className="w-full h-full bg-[#FFFF33]" style={{
+                      WebkitMaskImage: 'url(/icons-about/ubication.png)',
+                      maskImage: 'url(/icons-about/ubication.png)',
+                      WebkitMaskSize: 'contain',
+                      maskSize: 'contain',
+                      WebkitMaskRepeat: 'no-repeat',
+                      maskRepeat: 'no-repeat',
+                      WebkitMaskPosition: 'center',
+                      maskPosition: 'center'
+                    }} />
+                  </div>
                 </div>
                 <div>
                   <h4 className="text-xl font-bold text-slate-900 mb-1">Trayectoria y Confianza</h4>
@@ -122,16 +129,18 @@ export default function HomeAboutSection() {
               {/* Feature 3 */}
               <div className="flex gap-5">
                 <div className="flex-shrink-0 mt-1">
-                  <div className="w-12 h-12 bg-[#ffe600]" style={{
-                    WebkitMaskImage: 'url(/icons-about/inversion.png)',
-                    maskImage: 'url(/icons-about/inversion.png)',
-                    WebkitMaskSize: 'contain',
-                    maskSize: 'contain',
-                    WebkitMaskRepeat: 'no-repeat',
-                    maskRepeat: 'no-repeat',
-                    WebkitMaskPosition: 'center',
-                    maskPosition: 'center'
-                  }} />
+                  <div className="icon-about-animated relative w-16 h-16">
+                    <div className="w-full h-full bg-[#FFFF33]" style={{
+                      WebkitMaskImage: 'url(/icons-about/inversion.png)',
+                      maskImage: 'url(/icons-about/inversion.png)',
+                      WebkitMaskSize: 'contain',
+                      maskSize: 'contain',
+                      WebkitMaskRepeat: 'no-repeat',
+                      maskRepeat: 'no-repeat',
+                      WebkitMaskPosition: 'center',
+                      maskPosition: 'center'
+                    }} />
+                  </div>
                 </div>
                 <div>
                   <h4 className="text-xl font-bold text-slate-900 mb-1">Oportunidades de Inversión</h4>
@@ -146,9 +155,10 @@ export default function HomeAboutSection() {
             <div className="pt-6 border-t border-slate-100">
               <Link
                 href="/nosotros"
+                onClick={() => window.history.replaceState(null, '', '#nosotros-section')}
                 className="inline-flex items-center justify-center gap-2 px-8 h-14 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-full transition-all duration-300 text-sm shadow-sm hover:shadow-md group"
               >
-                Conocer más de nuestra historia
+                Conocé más de nuestra historia
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </Link>
             </div>

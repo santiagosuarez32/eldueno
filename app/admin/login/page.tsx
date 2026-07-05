@@ -7,7 +7,7 @@ import { supabase } from "@/lib/supabase";
 import Navbar from "@/app/components/Navbar";
 import Footer from "@/app/components/Footer";
 
-const BRAND_COLOR = "#ffe600";
+const BRAND_COLOR = "#FFFF33";
 const BRAND_HOVER = "#ffff33";
 
 // Wrapper: solo pone la UI bajo Suspense (requerido por Next para useSearchParams)
@@ -203,7 +203,7 @@ function AdminLoginContent() {
                       required
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      className="w-full rounded-xl border border-slate-200 bg-slate-50 px-10 py-3 text-slate-900 outline-none transition focus:border-[#ffe600] focus:ring-2 focus:ring-[#ffe600]/10"
+                      className="w-full rounded-xl border border-slate-200 bg-slate-50 px-10 py-3 text-slate-900 outline-none transition focus:border-[#FFFF33] focus:ring-2 focus:ring-[#FFFF33]/10"
                       placeholder="tu@email.com"
                     />
                   </div>
@@ -224,7 +224,7 @@ function AdminLoginContent() {
                       required
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      className="w-full rounded-xl border border-slate-200 bg-slate-50 px-10 py-3 pr-11 text-slate-900 outline-none transition focus:border-[#ffe600] focus:ring-2 focus:ring-[#ffe600]/10"
+                      className="w-full rounded-xl border border-slate-200 bg-slate-50 px-10 py-3 pr-11 text-slate-900 outline-none transition focus:border-[#FFFF33] focus:ring-2 focus:ring-[#FFFF33]/10"
                       placeholder="••••••••"
                     />
                     <button
@@ -263,7 +263,7 @@ function AdminLoginContent() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full rounded-full px-6 py-3 font-extrabold text-slate-950 transition-colors disabled:opacity-60 cursor-pointer shadow-md shadow-[#ffe600]/10 hover:shadow-[#ffe600]/25"
+                  className="w-full rounded-full px-6 py-3 font-extrabold text-slate-950 transition-colors disabled:opacity-60 cursor-pointer shadow-md shadow-[#FFFF33]/10 hover:shadow-[#FFFF33]/25"
                   style={{ backgroundColor: BRAND_COLOR }}
                   onMouseEnter={(e) => ((e.currentTarget as HTMLButtonElement).style.backgroundColor = BRAND_HOVER)}
                   onMouseLeave={(e) => ((e.currentTarget as HTMLButtonElement).style.backgroundColor = BRAND_COLOR)}
