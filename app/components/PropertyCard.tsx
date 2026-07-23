@@ -17,12 +17,19 @@ import { getOptimizedImageUrl, supabaseImageLoader } from '@/lib/utils';
 interface PropertyCardProps {
   property: Property;
   priority?: boolean;
+  disableAnimation?: boolean;
 }
 
-export default function PropertyCard({ property, priority = false }: PropertyCardProps) {
+export default function PropertyCard({ property, priority = false, disableAnimation = false }: PropertyCardProps) {
   const cardRef = useRef<HTMLDivElement>(null);
 
   useGSAP(() => {
+    if (disableAnimation) {
+      if (cardRef.current) {
+        gsap.set(cardRef.current, { opacity: 1, y: 0 });
+      }
+      return;
+    }
     if (cardRef.current) {
       setTimeout(() => {
         ScrollTrigger.refresh();
@@ -42,7 +49,7 @@ export default function PropertyCard({ property, priority = false }: PropertyCar
         );
       }, 50);
     }
-  }, { scope: cardRef });
+  }, { scope: cardRef, dependencies: [disableAnimation] });
   // Format price nicely
   const formattedPrice = formatPropertyPrice(property.price, property.moneda);
 
@@ -77,8 +84,10 @@ export default function PropertyCard({ property, priority = false }: PropertyCar
             {/* Status Badge */}
             {property.estado && (
               <span className={`text-[9px] sm:text-[10px] font-bold px-2.5 py-1 rounded-full shadow-sm shrink-0 ${
-                property.estado === 'vendida' 
+                ['vendida', 'reservada', 'alquilada'].includes(property.estado.toLowerCase())
                   ? 'bg-red-600 text-white' 
+                  : property.estado.toLowerCase() === 'disponible'
+                  ? 'bg-green-600 text-white'
                   : 'bg-[#FFFF33] text-slate-950'
               }`}>
                 {property.estado.charAt(0).toUpperCase() + property.estado.slice(1).toLowerCase()}

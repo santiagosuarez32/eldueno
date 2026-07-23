@@ -8,6 +8,7 @@ import { Search, MapPin, Building2, TreePine, X, Users, Award } from 'lucide-rea
 import { FlowButton } from './FlowButton';
 import { mockProperties, Property, mapDbToProperty } from '@/app/data/properties';
 import PropertyCard from './PropertyCard';
+import CustomSelect from './CustomSelect';
 import { supabase } from '@/lib/supabase';
 import { useLenis } from 'lenis/react';
 import gsap from 'gsap';
@@ -103,13 +104,18 @@ export default function Hero() {
   // Prevent body scroll when search modal is open
   useEffect(() => {
     if (isOpenModal) {
+      const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+      document.body.style.paddingRight = `${scrollbarWidth}px`;
       document.body.classList.add('overflow-hidden');
       lenis?.stop();
     } else {
+      document.body.style.paddingRight = '';
       document.body.classList.remove('overflow-hidden');
       lenis?.start();
     }
+
     return () => {
+      document.body.style.paddingRight = '';
       document.body.classList.remove('overflow-hidden');
       lenis?.start();
     };
@@ -404,57 +410,63 @@ export default function Hero() {
 
                   {/* Filters Row */}
                   <div className="flex flex-wrap gap-3 mb-6 px-2">
-                    <select 
-                      value={selectedType}
-                      onChange={(e) => {
-                        setSelectedType(e.target.value);
-                        // Trigger re-filter
-                        const queryNorm = normalizeString(searchValue);
-                        const newType = e.target.value;
-                        setSearchResults(properties.filter(p => {
-                          const tNorm = normalizeString(p.title);
-                          const lNorm = normalizeString(p.location);
-                          const dNorm = normalizeString(p.description);
-                          const searchMatch = queryNorm === '' || tNorm.includes(queryNorm) || lNorm.includes(queryNorm) || dNorm.includes(queryNorm);
-                          const typeMatch = newType === '' || (newType === 'alquiler' ? p.alquilado === true : p.type === newType);
-                          const locMatch = selectedLocation === '' || (p.location || '').toLowerCase().includes(selectedLocation.toLowerCase());
-                          return searchMatch && typeMatch && locMatch;
-                        }));
-                      }}
-                      className="bg-slate-50 border border-slate-200 text-slate-700 text-sm rounded-xl px-4 py-2 focus:outline-none focus:border-emerald-500 cursor-pointer"
-                    >
-                      <option value="" className="text-slate-900 bg-white font-medium">Cualquier Tipo</option>
-                      <option value="casa" className="text-slate-900 bg-white font-medium">Casa</option>
-                      <option value="departamento" className="text-slate-900 bg-white font-medium">Apartamento</option>
-                      <option value="terreno" className="text-slate-900 bg-white font-medium">Terreno</option>
-                      <option value="comercial" className="text-slate-900 bg-white font-medium">Local / Comercial</option>
-                      <option value="alquiler" className="text-slate-900 bg-white font-medium">Alquiler</option>
-                    </select>
+                    <div className="w-[200px]">
+                      <CustomSelect 
+                        value={selectedType}
+                        onChange={(value) => {
+                          setSelectedType(value);
+                          // Trigger re-filter
+                          const queryNorm = normalizeString(searchValue);
+                          const newType = value;
+                          setSearchResults(properties.filter(p => {
+                            const tNorm = normalizeString(p.title);
+                            const lNorm = normalizeString(p.location);
+                            const dNorm = normalizeString(p.description);
+                            const searchMatch = queryNorm === '' || tNorm.includes(queryNorm) || lNorm.includes(queryNorm) || dNorm.includes(queryNorm);
+                            const typeMatch = newType === '' || (newType === 'alquiler' ? p.alquilado === true : p.type === newType);
+                            const locMatch = selectedLocation === '' || (p.location || '').toLowerCase().includes(selectedLocation.toLowerCase());
+                            return searchMatch && typeMatch && locMatch;
+                          }));
+                        }}
+                        placeholder="Cualquier Tipo"
+                        options={[
+                          { value: '', label: 'Cualquier Tipo' },
+                          { value: 'casa', label: 'Casa' },
+                          { value: 'departamento', label: 'Apartamento' },
+                          { value: 'terreno', label: 'Terreno' },
+                          { value: 'comercial', label: 'Local / Comercial' },
+                          { value: 'alquiler', label: 'Alquiler' }
+                        ]}
+                      />
+                    </div>
 
-                    <select 
-                      value={selectedLocation}
-                      onChange={(e) => {
-                        setSelectedLocation(e.target.value);
-                        // Trigger re-filter
-                        const queryNorm = normalizeString(searchValue);
-                        const newLoc = e.target.value;
-                        setSearchResults(properties.filter(p => {
-                          const tNorm = normalizeString(p.title);
-                          const lNorm = normalizeString(p.location);
-                          const dNorm = normalizeString(p.description);
-                          const searchMatch = queryNorm === '' || tNorm.includes(queryNorm) || lNorm.includes(queryNorm) || dNorm.includes(queryNorm);
-                          const typeMatch = selectedType === '' || (selectedType === 'alquiler' ? p.alquilado === true : p.type === selectedType);
-                          const locMatch = newLoc === '' || (p.location || '').toLowerCase().includes(newLoc.toLowerCase());
-                          return searchMatch && typeMatch && locMatch;
-                        }));
-                      }}
-                      className="bg-slate-50 border border-slate-200 text-slate-700 text-sm rounded-xl px-4 py-2 focus:outline-none focus:border-emerald-500 cursor-pointer"
-                    >
-                      <option value="" className="text-slate-900 bg-white font-medium">Cualquier Provincia</option>
-                      {['San José', 'Alajuela', 'Cartago', 'Heredia', 'Guanacaste', 'Puntarenas', 'Limón'].map(loc => (
-                        <option key={loc} value={loc} className="text-slate-900 bg-white font-medium">{loc}</option>
-                      ))}
-                    </select>
+                    <div className="w-[200px]">
+                      <CustomSelect 
+                        value={selectedLocation}
+                        onChange={(value) => {
+                          setSelectedLocation(value);
+                          // Trigger re-filter
+                          const queryNorm = normalizeString(searchValue);
+                          const newLoc = value;
+                          setSearchResults(properties.filter(p => {
+                            const tNorm = normalizeString(p.title);
+                            const lNorm = normalizeString(p.location);
+                            const dNorm = normalizeString(p.description);
+                            const searchMatch = queryNorm === '' || tNorm.includes(queryNorm) || lNorm.includes(queryNorm) || dNorm.includes(queryNorm);
+                            const typeMatch = selectedType === '' || (selectedType === 'alquiler' ? p.alquilado === true : p.type === selectedType);
+                            const locMatch = newLoc === '' || (p.location || '').toLowerCase().includes(newLoc.toLowerCase());
+                            return searchMatch && typeMatch && locMatch;
+                          }));
+                        }}
+                        placeholder="Cualquier Provincia"
+                        options={[
+                          { value: '', label: 'Cualquier Provincia' },
+                          ...['San José', 'Alajuela', 'Cartago', 'Heredia', 'Guanacaste', 'Puntarenas', 'Limón'].map(loc => (
+                            { value: loc, label: loc }
+                          ))
+                        ]}
+                      />
+                    </div>
                   </div>
 
                   {/* Header */}
@@ -500,7 +512,7 @@ export default function Hero() {
                               className="max-h-[550px] overflow-y-auto pr-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 hide-scrollbar pb-2"
                             >
                               {searchResults.map((property) => (
-                                <PropertyCard key={property.id} property={property} />
+                                <PropertyCard key={property.id} property={property} disableAnimation={true} />
                               ))}
                             </div>
 

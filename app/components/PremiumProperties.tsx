@@ -184,14 +184,14 @@ export default function PremiumProperties() {
                         </div>
 
                         {/* Sold/Rented Overlay */}
-                        {(property.vendido || property.alquilado) && (
+                        {(['vendida', 'reservada', 'alquilada'].includes(property.estado?.toLowerCase() || '') || property.vendido || property.alquilado) && (
                           <div className="absolute inset-0 z-30 pointer-events-none overflow-hidden">
                             {/* Banner Diagonal */}
-                            <div className={`absolute top-6 -right-12 w-48 text-center py-1.5 font-black text-[10px] sm:text-xs tracking-widest text-white transform rotate-45 shadow-lg ${property.vendido ? 'bg-red-600' : 'bg-blue-600'}`}>
-                              {property.vendido ? 'VENDIDA' : 'ALQUILADA'}
+                            <div className="absolute top-6 -right-12 w-48 text-center py-1.5 font-black text-[10px] sm:text-xs tracking-widest text-white transform rotate-45 shadow-lg bg-red-600">
+                              {(property.estado?.toLowerCase() === 'reservada') ? 'RESERVADA' : (property.estado?.toLowerCase() === 'alquilada' || property.alquilado) ? 'ALQUILADA' : 'VENDIDA'}
                             </div>
                             {/* Overlay Semitransparente */}
-                            <div className="absolute inset-0 bg-slate-900/20 backdrop-blur-[1px]" />
+                            <div className="absolute inset-0 bg-slate-900/20" />
                           </div>
                         )}
 
@@ -199,7 +199,7 @@ export default function PremiumProperties() {
                         <div className="absolute top-4 left-4 z-10 bg-[#FFFF33] text-slate-955 text-[10px] font-bold px-2.5 py-1 rounded-full tracking-wider shadow-md">
                           Premium
                         </div>
-                        <div className="absolute top-4 right-4 z-10">
+                        <div className={`absolute top-4 right-4 z-10 ${(['vendida', 'reservada', 'alquilada'].includes(property.estado?.toLowerCase() || '') || property.vendido || property.alquilado) ? 'hidden' : ''}`}>
                           <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-900/80 backdrop-blur-sm border border-slate-700/50 text-slate-300 text-[10px] font-semibold">
                             Costa Rica
                           </span>
@@ -263,12 +263,8 @@ export default function PremiumProperties() {
                   <div
                     onMouseEnter={() => setActiveIndex(idx)}
                     onClick={() => {
-                      if (isActive) {
-                        window.history.replaceState(null, '', '#premium-properties');
-                        router.push(`/propiedades/${property.id}`);
-                      } else {
-                        setActiveIndex(idx);
-                      }
+                      window.history.replaceState(null, '', '#premium-properties');
+                      router.push(`/propiedades/${property.id}`);
                     }}
                     className={`hidden lg:flex relative transition-all duration-500 ease-out cursor-pointer flex-col justify-between flex-shrink-0 h-[420px] ${
                       isActive 
@@ -294,14 +290,14 @@ export default function PremiumProperties() {
                     }`} />
 
                     {/* Sold/Rented Overlay */}
-                    {(property.vendido || property.alquilado) && (
+                    {(['vendida', 'reservada', 'alquilada'].includes(property.estado?.toLowerCase() || '') || property.vendido || property.alquilado) && (
                       <div className="absolute inset-0 z-30 pointer-events-none overflow-hidden">
                         {/* Banner Diagonal */}
-                        <div className={`absolute top-6 -right-12 w-48 text-center py-1.5 font-black text-[10px] sm:text-xs tracking-widest text-white transform rotate-45 shadow-lg ${property.vendido ? 'bg-red-600' : 'bg-blue-600'}`}>
-                          {property.vendido ? 'VENDIDA' : 'ALQUILADA'}
+                        <div className="absolute top-6 -right-12 w-48 text-center py-1.5 font-black text-[10px] sm:text-xs tracking-widest text-white transform rotate-45 shadow-lg bg-red-600">
+                          {(property.estado?.toLowerCase() === 'reservada') ? 'RESERVADA' : (property.estado?.toLowerCase() === 'alquilada' || property.alquilado) ? 'ALQUILADA' : 'VENDIDA'}
                         </div>
                         {/* Overlay Semitransparente */}
-                        <div className="absolute inset-0 bg-slate-900/20 backdrop-blur-[1px]" />
+                        <div className="absolute inset-0 bg-slate-900/20" />
                       </div>
                     )}
 
@@ -309,6 +305,10 @@ export default function PremiumProperties() {
                     <div className={`absolute top-3 left-3 z-20 flex flex-row items-center gap-1.5 max-w-[calc(100%-24px)] min-w-0 transition-opacity duration-500 ${
                       isActive ? 'opacity-100' : 'opacity-0 pointer-events-none'
                     }`}>
+                      {/* Premium Tag */}
+                      <span className="bg-[#FFFF33] text-slate-955 text-[9px] sm:text-[10px] font-bold px-2.5 py-0.5 rounded-full tracking-wider shadow-md shrink-0">
+                        Premium
+                      </span>
                       {/* Property Type Badge */}
                       <span className="bg-white/95 backdrop-blur-sm text-slate-700 text-[9px] sm:text-[10px] font-medium px-2 py-0.5 rounded-full border border-slate-200/40 shadow-sm shrink-0">
                         {typeLabel}
@@ -318,13 +318,6 @@ export default function PremiumProperties() {
                         <img src="/icons-filters/ubication.png" className="h-3 w-3 object-contain flex-shrink-0" alt="" />
                         <span className="truncate text-slate-700">{property.location?.split(',')[0] || property.neighborhood}</span>
                       </span>
-                    </div>
-
-                    {/* Premium Tag on Top Right */}
-                    <div className={`absolute top-3 right-3 z-20 bg-[#FFFF33] text-slate-955 text-[10px] font-bold px-2.5 py-1 rounded-full tracking-wider shadow-md transition-opacity duration-500 ${
-                      isActive ? 'opacity-100' : 'opacity-0 pointer-events-none'
-                    }`}>
-                      Premium
                     </div>
 
                     {/* Price Tag Overlay (Bottom Right) */}
