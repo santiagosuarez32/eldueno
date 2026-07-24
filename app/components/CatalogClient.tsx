@@ -12,7 +12,7 @@ import { useRef } from 'react';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 
-function CatalogContent({ initialProperties }: { initialProperties: Property[] }) {
+function CatalogContent({ initialProperties, customTypes, exchangeRate = 510 }: { initialProperties: Property[], customTypes: string[], exchangeRate?: number }) {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
@@ -34,21 +34,18 @@ function CatalogContent({ initialProperties }: { initialProperties: Property[] }
   const [selectedLocation, setSelectedLocation] = useState(initialLocation);
   const [selectedBeds, setSelectedBeds] = useState<number | 'all'>('all');
   const [maxPrice, setMaxPrice] = useState<number>(defaultMaxPrice);
+  const [displayMaxPrice, setDisplayMaxPrice] = useState<number>(defaultMaxPrice);
   const [currentPage, setCurrentPage] = useState(initialPage);
+  
+  useEffect(() => {
+    setDisplayMaxPrice(maxPrice);
+  }, [maxPrice]);
   
   const itemsPerPage = 9;
   const properties = initialProperties;
 
-  const availableTypes = ['casa', 'terreno', 'departamento', 'comercial', 'alquiler'];
-  const typeLabels: Record<string, string> = {
-    casa: 'Casa',
-    departamento: 'Apartamento',
-    terreno: 'Terreno',
-    comercial: 'Local/Edificio comercial',
-    ph: 'PH',
-    loft: 'Loft',
-    alquiler: 'Alquiler'
-  };
+  const availableTypes = customTypes.map(t => t.toLowerCase());
+  const typeLabels: Record<string, string> = Object.fromEntries(customTypes.map(t => [t.toLowerCase(), t]));
 
   const availableLocations = [
     'San José',
@@ -109,7 +106,18 @@ function CatalogContent({ initialProperties }: { initialProperties: Property[] }
     const matchesType = selectedType === '' || (selectedType === 'alquiler' ? property.alquilado === true : property.type === selectedType);
     const matchesLocation = selectedLocation === '' || (property.location || '').toLowerCase().includes(selectedLocation.toLowerCase());
     const matchesBeds = selectedBeds === 'all' || (property.beds && (selectedBeds === 4 ? property.beds >= 4 : property.beds === selectedBeds));
-    const matchesPrice = property.price <= maxPrice;
+    let normalizedPrice = property.price;
+    if (isAlwaysDollar) {
+      if (property.moneda === 'CRC') {
+        normalizedPrice = property.price / exchangeRate;
+      }
+    } else {
+      if (property.moneda !== 'CRC') {
+        normalizedPrice = property.price * exchangeRate;
+      }
+    }
+    const matchesPrice = normalizedPrice <= maxPrice;
+    
     return matchesSearch && matchesType && matchesLocation && (property.type === 'terreno' ? true : matchesBeds) && matchesPrice;
   });
 
@@ -136,8 +144,8 @@ function CatalogContent({ initialProperties }: { initialProperties: Property[] }
   useGSAP(() => {
     if (gridRef.current && filteredProperties.length > 0) {
       gsap.fromTo(gridRef.current.children, 
-        { opacity: 0, y: 15, scale: 0.98 },
-        { opacity: 1, y: 0, scale: 1, duration: 0.4, stagger: 0.05, ease: "power2.out" }
+        { opacity: 0, scale: 0.98 },
+        { opacity: 1, scale: 1, duration: 0.15, ease: "power2.out" }
       );
     }
   }, [paginatedProperties, filteredProperties.length]);
@@ -199,9 +207,19 @@ function CatalogContent({ initialProperties }: { initialProperties: Property[] }
               <div className="space-y-3">
                 <div className="flex items-center justify-between text-xs sm:text-[13px] font-medium text-slate-700">
                   <span className="flex items-center gap-1.5"><img src="/icons-filters/price.png" className="h-4 w-4 object-contain" alt="" /> Precio máximo</span>
-                  <span className="text-slate-955 normal-case font-bold text-sm">{CURRENCY_CONFIG.mode === 'always-dollar' ? 'USD' : '₡'} {new Intl.NumberFormat('en-US').format(maxPrice)}</span>
+                  <span className="text-slate-955 normal-case font-bold text-sm">{CURRENCY_CONFIG.mode === 'always-dollar' ? 'USD' : '₡'} {new Intl.NumberFormat('en-US').format(displayMaxPrice)}</span>
                 </div>
-                <input type="range" min={minPrice} max={maxPriceLimit} step={priceStep} value={maxPrice} onChange={(e) => setMaxPrice(Number(e.target.value))} className="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-emerald-500" />
+                <input 
+                  type="range" 
+                  min={minPrice} 
+                  max={maxPriceLimit} 
+                  step={priceStep} 
+                  value={displayMaxPrice} 
+                  onChange={(e) => setDisplayMaxPrice(Number(e.target.value))} 
+                  onMouseUp={(e) => setMaxPrice(Number((e.target as HTMLInputElement).value))}
+                  onTouchEnd={(e) => setMaxPrice(Number((e.target as HTMLInputElement).value))}
+                  className="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-emerald-500" 
+                />
                 <div className="flex justify-between text-[10px] text-slate-400 font-semibold">
                   <span>{isAlwaysDollar ? 'USD 100k' : '₡ 5M'}</span>
                   <span>{isAlwaysDollar ? 'USD 1M' : '₡ 700M'}</span>
@@ -250,10 +268,10 @@ function CatalogContent({ initialProperties }: { initialProperties: Property[] }
   );
 }
 
-export default function CatalogClient({ initialProperties }: { initialProperties: Property[] }) {
+export default function CatalogClient({ initialProperties, customTypes, exchangeRate }: { initialProperties: Property[], customTypes: string[], exchangeRate?: number }) {
   return (
     <Suspense fallback={<div className="min-h-screen bg-white text-slate-900 flex items-center justify-center font-semibold text-lg">Cargando propiedades directas...</div>}>
-      <CatalogContent initialProperties={initialProperties} />
+      <CatalogContent initialProperties={initialProperties} customTypes={customTypes} exchangeRate={exchangeRate} />
     </Suspense>
   );
 }

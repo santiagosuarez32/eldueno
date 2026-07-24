@@ -100,7 +100,7 @@ export default function PartnersCarousel() {
   };
 
   return (
-    <section className="bg-white py-24 overflow-hidden">
+    <section className="bg-slate-100 py-24 overflow-hidden">
       <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Centered Header */}
@@ -127,8 +127,8 @@ export default function PartnersCarousel() {
           {/* Slider Window */}
           <div className="relative overflow-hidden flex-grow px-2">
             {/* Fade Overlays for smooth edge clipping */}
-            <div className="absolute left-0 top-0 bottom-0 w-6 sm:w-20 bg-gradient-to-r from-white via-white/80 to-transparent z-10 pointer-events-none" />
-            <div className="absolute right-0 top-0 bottom-0 w-6 sm:w-20 bg-gradient-to-l from-white via-white/80 to-transparent z-10 pointer-events-none" />
+            <div className="absolute left-0 top-0 bottom-0 w-6 sm:w-20 bg-gradient-to-r from-slate-100 via-slate-100/80 to-transparent z-10 pointer-events-none" />
+            <div className="absolute right-0 top-0 bottom-0 w-6 sm:w-20 bg-gradient-to-l from-slate-100 via-slate-100/80 to-transparent z-10 pointer-events-none" />
 
             <div
               ref={trackRef}

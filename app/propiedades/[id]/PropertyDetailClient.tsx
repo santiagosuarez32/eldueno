@@ -13,7 +13,8 @@ import {
   CheckCircle,
   Film,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  Image as ImageIcon
 } from 'lucide-react';
 import { Property, formatPropertyPrice } from '@/app/data/properties';
 import { FaWhatsapp } from 'react-icons/fa';
@@ -503,28 +504,36 @@ export default function PropertyDetailClient({ property, relatedProperties }: Pr
 
             </div>
 
-            {/* Property Video (YouTube Embed) */}
-            {property.hasVideo && (
+            {/* Property Video (YouTube Embed) or Fallback Image */}
+            {(property.hasVideo || property.hasFallbackImage) && (
               <div id="video-section" className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-100 shadow-sm space-y-6 scroll-mt-24">
                 <div className="flex items-center justify-between border-b border-slate-100 pb-4">
                   <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2">
-                    <Film className="h-5 w-5 text-slate-700" />
-                    Video de la Propiedad
+                    {property.hasVideo ? <Film className="h-5 w-5 text-slate-700" /> : <ImageIcon className="h-5 w-5 text-slate-700" />}
+                    {property.hasVideo ? "Video de la Propiedad" : "Recorrido de la Propiedad"}
                   </h3>
                   <span className="text-xs text-slate-500 font-medium">
                     {property.neighborhood}, Costa Rica
                   </span>
                 </div>
 
-                {/* YouTube Iframe container */}
+                {/* Media container */}
                 <div className="w-full aspect-video rounded-2xl overflow-hidden bg-slate-100 relative shadow-inner border border-slate-200">
-                  <iframe
-                    className="w-full h-full absolute inset-0 border-0"
-                    src={getEmbedUrl(property.videoUrl) || "https://www.youtube.com/embed/Pj15bLqT40A"}
-                    title="Video de la propiedad"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    allowFullScreen
-                  ></iframe>
+                  {property.hasVideo ? (
+                    <iframe
+                      className="w-full h-full absolute inset-0 border-0"
+                      src={getEmbedUrl(property.videoUrl) || "https://www.youtube.com/embed/Pj15bLqT40A"}
+                      title="Video de la propiedad"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      allowFullScreen
+                    ></iframe>
+                  ) : (
+                    <img
+                      src={property.fallbackImageUrl || "/placeholder-property.jpg"}
+                      alt="Recorrido de la propiedad"
+                      className="w-full h-full absolute inset-0 object-cover"
+                    />
+                  )}
                 </div>
               </div>
             )}

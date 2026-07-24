@@ -133,7 +133,7 @@ export default function PrestamosPage() {
               <h2 className="text-3xl sm:text-4xl lg:text-[46px] font-bold tracking-tight text-slate-900 leading-[1.1]">
                 Nuestros servicios
               </h2>
-              <p className="text-slate-600 text-base lg:text-lg leading-relaxed font-normal">
+              <p className="text-slate-600 text-xl leading-relaxed font-normal">
                 Conozca los tipos de financiamiento y soluciones de crédito diseñados para ayudarle a alcanzar sus metas inmobiliarias con total claridad y seguridad.
               </p>
               <div className="pt-4">
@@ -168,11 +168,11 @@ export default function PrestamosPage() {
                   <ul className="space-y-4 pt-2">
                     <li className="flex items-center gap-3">
                       <img src="/prestamos-hipotecarios/gestion-bonocredito.png" alt="Icono Bono-Credito" className="w-10 h-10 object-contain flex-shrink-0" />
-                      <span className="font-bold text-slate-900 text-lg">Gestión de Bono-Credito</span>
+                      <span className="font-bold text-slate-900 text-xl">Gestión de Bono-Credito</span>
                     </li>
                     <li className="flex items-center gap-3">
                       <img src="/prestamos-hipotecarios/financiamiento.png" alt="Icono Financiamiento" className="w-10 h-10 object-contain flex-shrink-0" />
-                      <span className="font-bold text-slate-900 text-lg">Gestión de Financiamiento - Compra de Vivienda normal</span>
+                      <span className="font-bold text-slate-900 text-xl">Gestión de Financiamiento - Compra de Vivienda normal</span>
                     </li>
                   </ul>
                 </div>
@@ -292,7 +292,7 @@ export default function PrestamosPage() {
         <section id="formulario-prestamo" className="w-full bg-slate-950 scroll-mt-24 mt-20 lg:mt-32">
           <div className="flex flex-col lg:flex-row w-full">
             {/* Left Side (Santiago's area) */}
-            <div className="w-full lg:w-1/2 p-8 lg:p-12 xl:p-16 flex flex-col justify-center text-left relative overflow-hidden">
+            <div className="w-full lg:w-1/2 p-8 lg:p-12 xl:p-16 flex flex-col justify-center text-left relative">
               {/* Background Image */}
               <img
                 src="/techo.png"
@@ -303,14 +303,14 @@ export default function PrestamosPage() {
               <div className="absolute inset-0 bg-slate-950/70 z-0 pointer-events-none" />
 
               {/* Decorative element */}
-              <div className="absolute top-0 right-0 w-64 h-64 bg-yellow-400/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none z-0" />
+              <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#FFFF33]/40 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2 pointer-events-none z-0" />
               
               <div className="max-w-xl ml-auto mr-0 lg:mr-8 xl:mr-12 relative z-10">
                 <span className="inline-flex items-center justify-center px-4 py-1.5 bg-[#FFFF33] text-slate-950 text-base font-bold rounded-full mb-6 w-max">
                   Asesoría experta • Respaldo real
                 </span>
                 <h3 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-[1.1] mb-6 tracking-tight">
-                  Reciba asesoría personalizada
+                  Interés en Préstamo
                 </h3>
                 <p className="text-slate-200 text-xl lg:text-2xl leading-relaxed mb-10">
                   Déjenos sus datos y nuestro equipo se comunicará con usted a la brevedad para brindarle un acompañamiento integral durante todo el proceso.
@@ -333,11 +333,8 @@ export default function PrestamosPage() {
             </div>
 
             {/* Right Side (CRM Form) */}
-            <div className="w-full lg:w-1/2 bg-white p-6 sm:p-8 lg:p-12 relative z-20 rounded-t-[40px] lg:rounded-t-none lg:rounded-l-[40px] shadow-[-10px_0_30px_rgba(0,0,0,0.1)] flex flex-col justify-center">
+            <div className="w-full lg:w-1/2 p-6 sm:p-8 lg:p-12 relative z-20 flex flex-col justify-center">
               <div className="w-full max-w-lg mx-auto lg:ml-8 xl:ml-12">
-                  <h3 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 mb-8 text-center">
-                    Interés en Préstamo
-                  </h3>
                   <div className="w-full min-h-[1077px]">
                     <iframe
                       src="https://crm.elduenovende.com/widget/form/S6iHSWHXhpO9XeNZHIIW"

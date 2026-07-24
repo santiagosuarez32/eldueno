@@ -28,7 +28,7 @@ export default function StatsSection() {
           .eq('published', true)
           .order('created_at', { ascending: false })
           .limit(4);
-        
+
         if (data && data.length > 0) {
           setBlogPosts(data.map(mapDbToBlogPost));
         }
@@ -82,7 +82,7 @@ export default function StatsSection() {
       const firstChild = carouselRef.current.firstElementChild as HTMLElement;
       const cardWidth = firstChild ? firstChild.offsetWidth + 16 : 320;
       const offset = direction === 'left' ? -cardWidth : cardWidth;
-      
+
       carouselRef.current.scrollTo({
         left: scrollLeft + offset,
         behavior: 'smooth',
@@ -93,9 +93,9 @@ export default function StatsSection() {
 
 
   return (
-    <section id="recursos-blog" ref={container} className="bg-slate-50 py-24 text-slate-900 relative overflow-hidden">
+    <section id="recursos-blog" ref={container} className="bg-slate-100 py-24 text-slate-900 relative overflow-hidden">
       <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
-        
+
         {/* Top Text Section */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-24 mb-16 items-start">
           {/* Left: Heading */}
@@ -106,7 +106,7 @@ export default function StatsSection() {
               Recursos y Guías útiles
             </h2>
           </div>
- 
+
           {/* Right: Description & Arrows */}
           <div
             className="stats-desc flex flex-col md:flex-row md:items-end justify-between gap-6"
@@ -134,7 +134,7 @@ export default function StatsSection() {
             </div>
           </div>
         </div>
- 
+
         {/* Bottom Cards Grid / Carousel */}
         <div
           ref={carouselRef}
@@ -154,9 +154,9 @@ export default function StatsSection() {
               <div className="w-full bg-transparent flex flex-col transition-all duration-300 h-full">
                 {/* Image Container */}
                 <div className="relative aspect-[16/11] overflow-hidden bg-slate-100 rounded-[24px]">
-                  <img 
-                    src={post.image} 
-                    alt={post.title} 
+                  <img
+                    src={post.image}
+                    alt={post.title}
                     className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out"
                   />
                   {/* Category Badge */}
@@ -164,25 +164,25 @@ export default function StatsSection() {
                     {post.category}
                   </div>
                 </div>
-                
+
                 {/* Content Box (No side padding, aligns with image) */}
                 <div className="pt-5 flex flex-col flex-grow bg-transparent">
-                  <div className="text-[14px] text-[#538792] font-normal mb-3">
+                  <div className="text-[14px] text-slate-500 font-normal mb-3">
                     {post.date}
                   </div>
-                  
-                  <h3 className="text-[22px] sm:text-[24px] font-bold text-slate-950 tracking-tight group-hover:text-[#FFFF33] transition-colors leading-[1.3] mb-3">
+
+                  <h3 className="text-[22px] sm:text-[24px] font-bold text-slate-950 tracking-tight group-hover:text-slate-500 transition-colors leading-[1.3] mb-3">
                     {post.title}
                   </h3>
-                  
+
                   <p className="text-slate-500 text-[14px] leading-relaxed mb-6 font-normal line-clamp-3">
                     {post.excerpt}
                   </p>
-  
+
                   {/* Bottom link line */}
-                  <div className="mt-auto inline-flex items-center gap-2 text-[15px] font-normal text-slate-700 pb-1 border-b border-slate-300 w-fit group-hover:border-[#FFFF33] group-hover:text-[#FFFF33] transition-colors">
+                  <div className="mt-auto inline-flex items-center gap-2 text-[15px] font-normal text-slate-700 pb-1 border-b border-slate-300 w-fit group-hover:border-slate-500 group-hover:text-slate-500 transition-colors">
                     Consultar
-                    <ArrowUpRight size={14} className="text-slate-400 group-hover:text-[#FFFF33]" />
+                    <ArrowUpRight size={14} className="text-slate-400 group-hover:text-slate-500" />
                   </div>
                 </div>
               </div>

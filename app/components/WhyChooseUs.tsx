@@ -120,7 +120,7 @@ export default function WhyChooseUs() {
   }, { scope: container });
 
   return (
-    <section id="servicios" ref={container} className="bg-slate-50 py-12 text-slate-900 relative overflow-hidden">
+    <section id="servicios" ref={container} className="bg-slate-100 py-12 text-slate-900 relative overflow-hidden">
       <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Top Section Header */}

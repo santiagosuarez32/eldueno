@@ -61,7 +61,8 @@ export default function PropertyCard({ property, priority = false, disableAnimat
     ph: 'PH',
     loft: 'Loft'
   };
-  const typeLabel = typeLabels[property.type] || property.type;
+  const typeLabel = typeLabels[property.type] || 
+    (property.type ? property.type.charAt(0).toUpperCase() + property.type.slice(1) : '');
 
   return (
     <Link href={`/propiedades/${property.id}`} className="block h-full cursor-pointer">

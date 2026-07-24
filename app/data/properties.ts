@@ -48,6 +48,8 @@ export interface Property {
   precio_original?: number;
   precio_usd?: number;
   hasVideo?: boolean;
+  hasFallbackImage?: boolean;
+  fallbackImageUrl?: string;
 }
 
 export const mockProperties: Property[] = [

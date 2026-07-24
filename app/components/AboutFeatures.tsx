@@ -74,7 +74,7 @@ export default function AboutFeatures() {
               <h2 className="inline-block text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-950 tracking-tight leading-tight border-b-4 border-[#FFFF33] pb-2 mb-2">
                 Nuestros Valores
               </h2>
-              <p className="text-slate-600 text-lg leading-relaxed mt-4">
+              <p className="text-slate-600 text-xl leading-relaxed mt-4">
                 En El Dueño Vende, creemos que cada cliente merece una experiencia basada en la confianza, el compromiso y un acompañamiento cercano. Estos son los valores que nos distinguen:
               </p>
             </div>
@@ -86,7 +86,7 @@ export default function AboutFeatures() {
                   </span>
                   {feature.title}
                 </h3>
-                <p className="text-slate-500 text-base sm:text-lg leading-relaxed">
+                <p className="text-slate-500 text-xl leading-relaxed">
                   {feature.description}
                 </p>
               </div>

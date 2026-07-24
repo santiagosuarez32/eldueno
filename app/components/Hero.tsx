@@ -34,6 +34,7 @@ export default function Hero() {
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [isClosingModal, setIsClosingModal] = useState(false);
   const [properties, setProperties] = useState<Property[]>([]);
+  const [customTypes, setCustomTypes] = useState<string[]>([]);
   const [mounted, setMounted] = useState(false);
   const lenis = useLenis();
 
@@ -75,12 +76,22 @@ export default function Hero() {
   useEffect(() => {
     async function load() {
       try {
-        const { data, error } = await supabase.from('properties').select('*');
-        if (error) throw error;
-        if (data && data.length > 0) {
-          setProperties(data.map(mapDbToProperty));
+        const [propsRes, settingsRes] = await Promise.all([
+          supabase.from('properties').select('*'),
+          supabase.from('properties').select('owner').eq('id', 'prop-site-settings').single()
+        ]);
+        
+        if (propsRes.error) throw propsRes.error;
+        if (propsRes.data && propsRes.data.length > 0) {
+          setProperties(propsRes.data.filter(p => p.id !== 'prop-site-settings').map(mapDbToProperty));
         } else {
           setProperties([]);
+        }
+
+        if (settingsRes.data?.owner?.customTypes && Array.isArray(settingsRes.data.owner.customTypes)) {
+          setCustomTypes(settingsRes.data.owner.customTypes);
+        } else {
+          setCustomTypes(["Casa", "Departamento", "PH", "Loft", "Terreno", "Local Comercial", "Alquiler"]);
         }
       } catch (err) {
         console.warn("Error loading properties for search in Hero:", err);
@@ -431,11 +442,7 @@ export default function Hero() {
                         placeholder="Cualquier Tipo"
                         options={[
                           { value: '', label: 'Cualquier Tipo' },
-                          { value: 'casa', label: 'Casa' },
-                          { value: 'departamento', label: 'Apartamento' },
-                          { value: 'terreno', label: 'Terreno' },
-                          { value: 'comercial', label: 'Local / Comercial' },
-                          { value: 'alquiler', label: 'Alquiler' }
+                          ...customTypes.map(t => ({ value: t.toLowerCase(), label: t }))
                         ]}
                       />
                     </div>

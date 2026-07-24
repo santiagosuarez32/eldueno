@@ -62,6 +62,8 @@ type Property = {
   created_at?: string | null;
   hasVideo: boolean | null;
   videoUrl: string | null;
+  hasFallbackImage: boolean | null;
+  fallbackImageUrl: string | null;
 };
 
 type FormState = {
@@ -98,6 +100,9 @@ type FormState = {
   storageFolder: string;
   hasVideo: boolean;
   videoUrl: string;
+  hasFallbackImage: boolean;
+  fallbackImageUrl: string;
+  mediaType: "none" | "video" | "image";
 };
 
 /* ===================== Helpers / UI ===================== */
@@ -155,7 +160,9 @@ function mapDbToAdminProperty(dbProp: any): Property {
     age: dbProp.age !== undefined && dbProp.age !== null ? toInt(dbProp.age) : null,
     created_at: dbProp.created_at || null,
     hasVideo: dbProp.hasVideo !== undefined ? Boolean(dbProp.hasVideo) : Boolean(owner.hasVideo),
-    videoUrl: dbProp.videoUrl || owner.videoUrl || ""
+    videoUrl: dbProp.videoUrl || owner.videoUrl || "",
+    hasFallbackImage: dbProp.hasFallbackImage !== undefined ? Boolean(dbProp.hasFallbackImage) : Boolean(owner.hasFallbackImage),
+    fallbackImageUrl: dbProp.fallbackImageUrl || owner.fallbackImageUrl || ""
   };
 }
 
@@ -187,6 +194,16 @@ function AdminDashboardContent() {
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [confirmBulkDel, setConfirmBulkDel] = useState(false);
   const [toast, setToast] = useState<{ type: "ok" | "err"; msg: string } | null>(null);
+
+  // Custom Filters State
+  const [customFilters, setCustomFilters] = useState<string[]>([]);
+  const [showFiltersModal, setShowFiltersModal] = useState(false);
+  const [newFilterName, setNewFilterName] = useState("");
+  const [editingFilter, setEditingFilter] = useState<{old: string, new: string} | null>(null);
+  
+  const [exchangeRate, setExchangeRate] = useState<number>(510);
+  const [showExchangeModal, setShowExchangeModal] = useState(false);
+  const [newExchangeRate, setNewExchangeRate] = useState<string>("");
 
   // Backup system state
   const [tab, setTab] = useState<"properties" | "premium" | "bestChoice" | "backups" | "blogs" | "users">("properties");
@@ -346,22 +363,131 @@ function AdminDashboardContent() {
 
   const fetchData = async () => {
     setLoading(true);
-    const [countAllRes, countPubRes, list] = await Promise.all([
+    const [countAllRes, countPubRes, list, settingsRes] = await Promise.all([
       supabase.from("properties").select("*", { count: "exact", head: true }),
       supabase.from("properties").select("*", { count: "exact", head: true }).eq("featured", true),
       supabase.from("properties").select("*").order("created_at", { ascending: false }).limit(200),
+      supabase.from("properties").select("owner").eq("id", "prop-site-settings").single(),
     ]);
 
     setTotal(countAllRes.count ?? 0);
     setPublished(countPubRes.count ?? 0);
-    const mappedRows = (list.data ?? []).map(mapDbToAdminProperty);
+    
+    // Filter out the settings row from the main list if it was somehow fetched
+    const filteredList = (list.data ?? []).filter(p => p.id !== "prop-site-settings");
+    const mappedRows = filteredList.map(mapDbToAdminProperty);
     setRows(mappedRows);
+    
+    let filters = ["Casa", "Departamento", "PH", "Loft", "Terreno", "Local Comercial", "Alquiler"];
+    if (settingsRes.data && settingsRes.data.owner && Array.isArray(settingsRes.data.owner.customTypes)) {
+      filters = settingsRes.data.owner.customTypes;
+    }
+    setCustomFilters(filters);
+    
+    if (settingsRes.data && settingsRes.data.owner && typeof settingsRes.data.owner.exchangeRate === 'number') {
+      setExchangeRate(settingsRes.data.owner.exchangeRate);
+    } else {
+      setExchangeRate(510);
+    }
+    
     setLoading(false);
   };
 
   useEffect(() => {
     if (!checking) fetchData();
   }, [checking]);
+
+  const saveSettings = async (updatedFilters: string[], newExchange: number) => {
+    setLoading(true);
+    const payload = {
+      id: "prop-site-settings",
+      title: "Site Settings (DO NOT DELETE)",
+      description: "System record, do not delete.",
+      price: 0,
+      location: "System",
+      neighborhood: "System",
+      type: "casa",
+      image: "system",
+      featured: false,
+      owner: { customTypes: updatedFilters, exchangeRate: newExchange }
+    };
+    
+    // First try to update
+    let { error } = await supabase.from("properties").update(payload).eq("id", "prop-site-settings");
+    
+    // If update fails, insert
+    const { data: existing } = await supabase.from("properties").select("id").eq("id", "prop-site-settings").maybeSingle();
+    
+    if (!existing) {
+      ({ error } = await supabase.from("properties").insert(payload));
+    } else {
+      ({ error } = await supabase.from("properties").update(payload).eq("id", "prop-site-settings"));
+    }
+    
+    if (error) {
+      setToast({ type: "err", msg: "Error al guardar ajustes: " + error.message });
+      console.error("Save settings error:", error);
+    } else {
+      setCustomFilters(updatedFilters);
+      setExchangeRate(newExchange);
+      setToast({ type: "ok", msg: "Ajustes actualizados correctamente." });
+      setNewFilterName("");
+    }
+    setLoading(false);
+  };
+
+  const handleAddFilter = () => {
+    const trimmed = newFilterName.trim();
+    if (!trimmed) return;
+    if (customFilters.some(f => f.toLowerCase() === trimmed.toLowerCase())) {
+      setToast({ type: "err", msg: "Ese filtro ya existe." });
+      return;
+    }
+    saveSettings([...customFilters, trimmed], exchangeRate);
+  };
+
+  const handleRemoveFilter = (filterToRemove: string) => {
+    saveSettings(customFilters.filter(f => f !== filterToRemove), exchangeRate);
+  };
+
+  const handleEditFilterSubmit = async () => {
+    if (!editingFilter) return;
+    const trimmed = editingFilter.new.trim();
+    if (!trimmed || trimmed === editingFilter.old) {
+      setEditingFilter(null);
+      return;
+    }
+    if (customFilters.some(f => f.toLowerCase() === trimmed.toLowerCase() && f.toLowerCase() !== editingFilter.old.toLowerCase())) {
+      setToast({ type: "err", msg: "Ese filtro ya existe." });
+      return;
+    }
+    
+    const updatedFilters = customFilters.map(f => f === editingFilter.old ? trimmed : f);
+    
+    // Update properties that had the old type to use the new type
+    const { error } = await supabase
+      .from("properties")
+      .update({ type: trimmed.toLowerCase() })
+      .eq("type", editingFilter.old.toLowerCase());
+      
+    if (error) {
+      console.error("Error updating properties type:", error);
+    }
+    
+    await saveSettings(updatedFilters, exchangeRate);
+    await fetchData(); // Refetch properties to reflect changes
+    setEditingFilter(null);
+  };
+
+  const handleSaveExchangeRate = () => {
+    const num = parseFloat(newExchangeRate);
+    if (isNaN(num) || num <= 0) {
+      setToast({ type: "err", msg: "Por favor ingresa una cotización válida mayor a 0." });
+      return;
+    }
+    saveSettings(customFilters, num);
+    setShowExchangeModal(false);
+  };
 
   const logout = async () => {
     await supabase.auth.signOut();
@@ -403,6 +529,9 @@ function AdminDashboardContent() {
       storageFolder: folder,
       hasVideo: false,
       videoUrl: "",
+      hasFallbackImage: false,
+      fallbackImageUrl: "",
+      mediaType: "none",
     });
     setShowForm(true);
   };
@@ -442,6 +571,9 @@ function AdminDashboardContent() {
       storageFolder: String(p.id || crypto.randomUUID()),
       hasVideo: Boolean(p.hasVideo),
       videoUrl: p.videoUrl || "",
+      hasFallbackImage: Boolean(p.hasFallbackImage),
+      fallbackImageUrl: p.fallbackImageUrl || "",
+      mediaType: Boolean(p.hasVideo) ? "video" : (Boolean(p.hasFallbackImage) ? "image" : "none"),
     });
     setShowForm(true);
   };
@@ -729,6 +861,8 @@ function AdminDashboardContent() {
         pileta: f.pileta && f.pileta !== "" ? String(f.pileta) : null,
         hasVideo: Boolean(f.hasVideo),
         videoUrl: (f.videoUrl || "").trim() || null,
+        hasFallbackImage: Boolean(f.hasFallbackImage),
+        fallbackImageUrl: (f.fallbackImageUrl || "").trim() || null,
       }
     };
 
@@ -984,15 +1118,29 @@ function AdminDashboardContent() {
                   )}
 
                   {tab === "properties" && (
-                    <button
-                      onClick={newItem}
-                      className="rounded-full px-5 py-2.5 font-bold text-slate-950 transition-colors cursor-pointer text-sm"
-                      style={{ backgroundColor: BRAND_COLOR }}
-                      onMouseEnter={(e) => ((e.currentTarget as HTMLButtonElement).style.backgroundColor = BRAND_HOVER)}
-                      onMouseLeave={(e) => ((e.currentTarget as HTMLButtonElement).style.backgroundColor = BRAND_COLOR)}
-                    >
-                      + Nueva propiedad
-                    </button>
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => setShowExchangeModal(true)}
+                        className="rounded-full px-5 py-2.5 font-bold text-slate-700 bg-slate-100 border border-slate-200 hover:bg-slate-200 transition-colors cursor-pointer text-sm"
+                      >
+                        Cotización USD
+                      </button>
+                      <button
+                        onClick={() => setShowFiltersModal(true)}
+                        className="rounded-full px-5 py-2.5 font-bold text-slate-700 bg-slate-100 border border-slate-200 hover:bg-slate-200 transition-colors cursor-pointer text-sm"
+                      >
+                        + Nuevo filtro
+                      </button>
+                      <button
+                        onClick={newItem}
+                        className="rounded-full px-5 py-2.5 font-bold text-slate-950 transition-colors cursor-pointer text-sm"
+                        style={{ backgroundColor: BRAND_COLOR }}
+                        onMouseEnter={(e) => ((e.currentTarget as HTMLButtonElement).style.backgroundColor = BRAND_HOVER)}
+                        onMouseLeave={(e) => ((e.currentTarget as HTMLButtonElement).style.backgroundColor = BRAND_COLOR)}
+                      >
+                        + Nueva propiedad
+                      </button>
+                    </div>
                   )}
                 </div>
 
@@ -1118,7 +1266,9 @@ function AdminDashboardContent() {
                                   )}
                                 </div>
                                 <p className="truncate text-xs text-slate-500 font-semibold mt-1.5">
-                                  {p.tipo ?? "—"} — {p.ubicacion ?? "—"}
+                                  {p.tipo 
+                                    ? (customFilters.find(f => f.toLowerCase() === p.tipo!.toLowerCase()) || (p.tipo.charAt(0).toUpperCase() + p.tipo.slice(1))) 
+                                    : "—"} — {p.ubicacion ?? "—"}
                                 </p>
                               </div>
                             </div>
@@ -1381,6 +1531,7 @@ function AdminDashboardContent() {
         {showForm && editing && (
           <SideForm
             data={editing}
+            customFilters={customFilters}
             onClose={() => {
               setShowForm(false);
               setEditing(null);
@@ -1517,6 +1668,131 @@ function AdminDashboardContent() {
           />
         )}
 
+        {/* === Custom Filters Modal === */}
+        {showFiltersModal && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/50 backdrop-blur-sm p-4">
+            <div className="w-full max-w-md bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col max-h-[90vh]">
+              <div className="flex items-center justify-between p-5 border-b border-slate-100">
+                <h3 className="text-xl font-extrabold text-slate-900">Filtros Personalizados</h3>
+                <button onClick={() => setShowFiltersModal(false)} className="text-slate-400 hover:text-slate-700">
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+              </div>
+              <div className="p-5 flex-1 overflow-y-auto">
+                <p className="text-sm text-slate-500 mb-4">
+                  Agrega tipos de propiedad personalizados. Estos aparecerán en los filtros de búsqueda y al crear propiedades.
+                </p>
+                <div className="flex gap-2 mb-6">
+                  <input
+                    type="text"
+                    value={newFilterName}
+                    onChange={e => setNewFilterName(e.target.value)}
+                    placeholder="Ej. Propiedad de Inversión"
+                    className="flex-1 rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+                    onKeyDown={e => e.key === 'Enter' && handleAddFilter()}
+                  />
+                  <button
+                    onClick={handleAddFilter}
+                    disabled={loading || !newFilterName.trim()}
+                    className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-bold text-white hover:bg-slate-800 transition-colors disabled:opacity-50"
+                  >
+                    Agregar
+                  </button>
+                </div>
+                
+                <h4 className="text-sm font-bold text-slate-700 mb-3">Filtros actuales:</h4>
+                {customFilters.length === 0 ? (
+                  <p className="text-sm text-slate-500 italic">No hay filtros personalizados aún.</p>
+                ) : (
+                  <ul className="space-y-2">
+                    {customFilters.map(filter => (
+                      <li key={filter} className="flex items-center justify-between bg-slate-50 border border-slate-100 rounded-lg p-3">
+                        {editingFilter?.old === filter ? (
+                          <input
+                            type="text"
+                            value={editingFilter.new}
+                            onChange={(e) => setEditingFilter({ ...editingFilter, new: e.target.value })}
+                            className="flex-1 rounded-lg border border-slate-300 bg-white px-2 py-1 text-sm outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 mr-2"
+                            autoFocus
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter') handleEditFilterSubmit();
+                              if (e.key === 'Escape') setEditingFilter(null);
+                            }}
+                            onBlur={handleEditFilterSubmit}
+                          />
+                        ) : (
+                          <span className="text-sm font-semibold text-slate-800 flex-1">{filter}</span>
+                        )}
+                        <div className="flex gap-3 ml-2 items-center">
+                          {editingFilter?.old !== filter && (
+                            <button
+                              onClick={() => setEditingFilter({ old: filter, new: filter })}
+                              disabled={loading}
+                              className="text-emerald-600 hover:text-emerald-800 text-xs font-bold transition-colors cursor-pointer"
+                            >
+                              Editar
+                            </button>
+                          )}
+                          <button
+                            onClick={() => handleRemoveFilter(filter)}
+                            disabled={loading}
+                            className="text-red-500 hover:text-red-700 text-xs font-bold transition-colors cursor-pointer"
+                          >
+                            Eliminar
+                          </button>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* === Exchange Rate Modal === */}
+        {showExchangeModal && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/50 backdrop-blur-sm p-4">
+            <div className="w-full max-w-sm bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col">
+              <div className="flex items-center justify-between p-5 border-b border-slate-100">
+                <h3 className="text-xl font-extrabold text-slate-900">Cotización USD a Colones</h3>
+                <button onClick={() => setShowExchangeModal(false)} className="text-slate-400 hover:text-slate-700">
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+              </div>
+              <div className="p-5 flex-1 overflow-y-auto">
+                <p className="text-sm text-slate-500 mb-4">
+                  Define el valor actual del Dólar estadounidense en Colones (CRC). Este valor se usará para calcular el filtro de precios máximo en el catálogo de búsqueda.
+                </p>
+                <div className="mb-6">
+                  <label className="block text-sm font-bold text-slate-700 mb-1">
+                    1 USD equivale a:
+                  </label>
+                  <div className="flex gap-2 items-center">
+                    <span className="font-semibold text-slate-500">₡</span>
+                    <input
+                      type="number"
+                      value={newExchangeRate || exchangeRate}
+                      onChange={e => setNewExchangeRate(e.target.value)}
+                      placeholder="Ej. 510"
+                      className="flex-1 rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+                      onKeyDown={e => e.key === 'Enter' && handleSaveExchangeRate()}
+                    />
+                  </div>
+                </div>
+                
+                <button
+                  onClick={handleSaveExchangeRate}
+                  disabled={loading}
+                  className="w-full rounded-lg bg-emerald-600 px-4 py-2.5 text-sm font-bold text-white hover:bg-emerald-700 transition-colors disabled:opacity-50"
+                >
+                  Guardar Cotización
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Confirmar eliminación de backup */}
         {confirmBackupDel && (
           <ConfirmDialog
@@ -1581,16 +1857,19 @@ function TableSkeleton() {
 /* ================ SideForm (crear/editar) + Uploads ================ */
 function SideForm({
   data,
+  customFilters,
   onClose,
   onSave,
 }: {
   data: FormState;
+  customFilters: string[];
   onClose: () => void;
   onSave: (d: FormState) => void;
 }) {
   const [form, setForm] = useState<FormState>(data);
   const [uploadingMain, setUploadingMain] = useState(false);
   const [uploadingGal, setUploadingGal] = useState(false);
+  const [uploadingFallback, setUploadingFallback] = useState(false);
 
   useEffect(() => setForm(data), [data]);
 
@@ -1609,7 +1888,7 @@ function SideForm({
   const set = <K extends keyof FormState>(k: K, v: FormState[K]) => setForm((f) => ({ ...f, [k]: v }));
 
   const fotosText = (form.fotos || []).join("\n");
-  const disableSave = uploadingMain || uploadingGal;
+  const disableSave = uploadingMain || uploadingGal || uploadingFallback;
 
   const currentFolder = form.id ? String(form.id) : form.storageFolder;
 
@@ -1660,6 +1939,21 @@ function SideForm({
       alert("No se pudo subir la imagen principal.");
     } finally {
       setUploadingMain(false);
+      e.target.value = "";
+    }
+  }
+
+  async function onPickFallback(e: React.ChangeEvent<HTMLInputElement>) {
+    const f = e.target.files?.[0];
+    if (!f) return;
+    setUploadingFallback(true);
+    try {
+      const url = await uploadToStorage(f, currentFolder);
+      set("fallbackImageUrl", url);
+    } catch {
+      alert("No se pudo subir la imagen alternativa.");
+    } finally {
+      setUploadingFallback(false);
       e.target.value = "";
     }
   }
@@ -1719,13 +2013,10 @@ function SideForm({
                 required
                 className="w-full rounded-lg border border-slate-350 bg-white px-3 py-2 text-slate-900 outline-none transition focus:ring-1 focus:ring-[#FFFF33]/20 focus:border-[#FFFF33] text-sm cursor-pointer"
               >
-                <option value="" disabled>Seleccionar tipo...</option>
-                <option value="casa">Casa</option>
-                <option value="departamento">Departamento / Apartamento</option>
-                <option value="terreno">Terreno</option>
-                <option value="comercial">Local Comercial</option>
-                <option value="ph">PH</option>
-                <option value="loft">Loft</option>
+                <option value="">Seleccionar...</option>
+                {customFilters.map(filter => (
+                  <option key={filter} value={filter.toLowerCase()}>{filter}</option>
+                ))}
               </select>
             </label>
             <label className="block text-sm">
@@ -1795,22 +2086,73 @@ function SideForm({
             </label>
           </div>
 
-          {/* Video de la Propiedad */}
+          {/* Media Destacada (Video o Imagen Alternativa) */}
           <div className="space-y-4 rounded-xl border border-slate-200 bg-neutral-50 p-4">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
-                <h4 className="text-sm font-bold text-slate-900">Video de la propiedad</h4>
-                <p className="text-xs text-slate-500 mt-1 font-medium">Habilitá esta opción si la propiedad tiene un recorrido en video.</p>
+                <h4 className="text-sm font-bold text-slate-900">Media Destacada</h4>
+                <p className="text-xs text-slate-500 mt-1 font-medium">¿Qué mostrar en el espacio principal si la propiedad no tiene un recorrido en video?</p>
               </div>
-              <Toggle label="Incluir video" checked={Boolean(form.hasVideo)} onChange={(v) => set("hasVideo", v)} />
+              <select
+                value={form.mediaType || "none"}
+                onChange={(e) => {
+                  const val = e.target.value;
+                  set("mediaType", val);
+                  if (val === "video") {
+                    set("hasVideo", true);
+                    set("hasFallbackImage", false);
+                  } else if (val === "image") {
+                    set("hasVideo", false);
+                    set("hasFallbackImage", true);
+                  } else {
+                    set("hasVideo", false);
+                    set("hasFallbackImage", false);
+                  }
+                }}
+                className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition focus:ring-1 focus:ring-[#FFFF33]/20 focus:border-[#FFFF33] cursor-pointer"
+              >
+                <option value="none">Ninguno</option>
+                <option value="video">Video de YouTube</option>
+                <option value="image">Imagen Alternativa</option>
+              </select>
             </div>
-            {form.hasVideo && (
+            
+            {form.mediaType === "video" && (
               <Input
                 label="URL de YouTube (opcional)"
                 value={form.videoUrl}
                 onChange={(v) => set("videoUrl", v)}
                 placeholder="https://www.youtube.com/embed/..."
               />
+            )}
+
+            {form.mediaType === "image" && (
+              <div className="space-y-2 pt-2">
+                <label className="block text-xs font-bold text-slate-700">Subir Imagen Alternativa</label>
+                {form.fallbackImageUrl ? (
+                  <div className="relative h-40 w-full overflow-hidden rounded-lg border border-slate-200 bg-neutral-100">
+                    <img src={form.fallbackImageUrl} alt="Fallback" className="h-full w-full object-cover" />
+                    <div className="absolute inset-x-2 bottom-2 flex gap-2">
+                      <label className="rounded-full bg-white/90 border border-slate-200 px-3 py-1.5 text-xs font-bold text-slate-900 shadow cursor-pointer hover:bg-white transition">
+                        Subir otra
+                        <input type="file" accept="image/*" className="hidden" onChange={onPickFallback} disabled={uploadingFallback} />
+                      </label>
+                      <button
+                        type="button"
+                        className="rounded-full bg-white/90 border border-slate-200 px-3 py-1.5 text-xs font-bold text-slate-900 shadow hover:bg-white cursor-pointer transition"
+                        onClick={() => set("fallbackImageUrl", "")}
+                      >
+                        Quitar
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <label className="flex h-32 cursor-pointer items-center justify-center rounded-lg border border-dashed border-slate-300 text-sm font-bold text-neutral-600 hover:bg-neutral-50 transition duration-200">
+                    <input type="file" accept="image/*" className="hidden" onChange={onPickFallback} disabled={uploadingFallback} />
+                    {uploadingFallback ? "Subiendo…" : "Subir desde tu computadora"}
+                  </label>
+                )}
+              </div>
             )}
           </div>
 

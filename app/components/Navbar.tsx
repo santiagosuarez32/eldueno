@@ -15,7 +15,7 @@ interface MobileAccordionProps {
 
 function MobileAccordion({ label, isOpen, onToggle, items, onNavigate }: MobileAccordionProps) {
   return (
-    <div className="border-b border-white/5">
+    <div className="border-white/5">
       <button
         onClick={onToggle}
         aria-expanded={isOpen}
@@ -33,9 +33,8 @@ function MobileAccordion({ label, isOpen, onToggle, items, onNavigate }: MobileA
         </svg>
       </button>
       <div
-        className={`grid transition-all duration-300 ease-in-out ${
-          isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
-        }`}
+        className={`grid transition-all duration-300 ease-in-out ${isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+          }`}
       >
         <div className="overflow-hidden">
           <div className="ml-3 flex flex-col gap-0.5 border-l border-white/15 pl-3 py-1">
@@ -105,15 +104,15 @@ export default function Navbar() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        shouldShowScrolledState
-          ? 'bg-slate-950 border-b border-slate-800 py-3 shadow-lg'
-          : 'bg-transparent py-5 border-b border-transparent'
-      }`}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${shouldShowScrolledState
+        ? 'bg-slate-950 border-slate-800 py-3 shadow-lg'
+        : 'bg-transparent py-5  border-transparent'
+        }`}
     >
       {/* Hide the floating WhatsApp button while the mobile menu is open so it
           doesn't overlap the "Contáctenos" action at the bottom of the drawer */}
-      <style dangerouslySetInnerHTML={{ __html: `
+      <style dangerouslySetInnerHTML={{
+        __html: `
         body.menu-open .wa-fab {
           opacity: 0 !important;
           pointer-events: none !important;
@@ -137,25 +136,22 @@ export default function Navbar() {
             <Link
               href="/"
               onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-              className={`relative text-[17px] font-medium transition-colors duration-200 py-1.5 after:absolute after:bottom-[3px] after:left-0 after:h-[1.5px] after:w-full after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 after:origin-left ${
-                shouldShowScrolledState ? 'text-white hover:text-[#FFFF33] after:bg-[#FFFF33]' : 'text-slate-300 hover:text-[#FFFF33] after:bg-[#FFFF33]'
-              }`}
+              className={`relative text-[17px] font-medium transition-colors duration-200 py-1.5 after:absolute after:bottom-[3px] after:left-0 after:h-[1.5px] after:w-full after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 after:origin-left ${shouldShowScrolledState ? 'text-white hover:text-[#FFFF33] after:bg-[#FFFF33]' : 'text-slate-300 hover:text-[#FFFF33] after:bg-[#FFFF33]'
+                }`}
             >
               Inicio
             </Link>
             <Link
               href="/nosotros"
-              className={`relative text-[17px] font-medium transition-colors duration-200 py-1.5 after:absolute after:bottom-[3px] after:left-0 after:h-[1.5px] after:w-full after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 after:origin-left ${
-                shouldShowScrolledState ? 'text-white hover:text-[#FFFF33] after:bg-[#FFFF33]' : 'text-slate-300 hover:text-[#FFFF33] after:bg-[#FFFF33]'
-              }`}
+              className={`relative text-[17px] font-medium transition-colors duration-200 py-1.5 after:absolute after:bottom-[3px] after:left-0 after:h-[1.5px] after:w-full after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 after:origin-left ${shouldShowScrolledState ? 'text-white hover:text-[#FFFF33] after:bg-[#FFFF33]' : 'text-slate-300 hover:text-[#FFFF33] after:bg-[#FFFF33]'
+                }`}
             >
               Nosotros
             </Link>
             <Link
               href="/propiedades"
-              className={`relative text-[17px] font-medium transition-colors duration-200 py-1.5 after:absolute after:bottom-[3px] after:left-0 after:h-[1.5px] after:w-full after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 after:origin-left ${
-                shouldShowScrolledState ? 'text-white hover:text-[#FFFF33] after:bg-[#FFFF33]' : 'text-slate-300 hover:text-[#FFFF33] after:bg-[#FFFF33]'
-              }`}
+              className={`relative text-[17px] font-medium transition-colors duration-200 py-1.5 after:absolute after:bottom-[3px] after:left-0 after:h-[1.5px] after:w-full after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 after:origin-left ${shouldShowScrolledState ? 'text-white hover:text-[#FFFF33] after:bg-[#FFFF33]' : 'text-slate-300 hover:text-[#FFFF33] after:bg-[#FFFF33]'
+                }`}
             >
               Propiedades
             </Link>
@@ -163,9 +159,8 @@ export default function Navbar() {
             {/* Desktop Servicios Dropdown */}
             <div className="relative group py-1.5">
               <button
-                className={`flex items-center gap-1 text-[17px] font-medium transition-colors duration-200 relative after:absolute after:bottom-0 after:left-0 after:h-[1.5px] after:w-full after:scale-x-0 group-hover:after:scale-x-100 after:transition-transform after:duration-300 after:origin-left ${
-                  shouldShowScrolledState ? 'text-white hover:text-[#FFFF33] after:bg-[#FFFF33]' : 'text-slate-300 hover:text-[#FFFF33] after:bg-[#FFFF33]'
-                }`}
+                className={`flex items-center gap-1 text-[17px] font-medium transition-colors duration-200 relative after:absolute after:bottom-0 after:left-0 after:h-[1.5px] after:w-full after:scale-x-0 group-hover:after:scale-x-100 after:transition-transform after:duration-300 after:origin-left ${shouldShowScrolledState ? 'text-white hover:text-[#FFFF33] after:bg-[#FFFF33]' : 'text-slate-300 hover:text-[#FFFF33] after:bg-[#FFFF33]'
+                  }`}
               >
                 <span>Servicios</span>
                 <svg
@@ -178,12 +173,12 @@ export default function Navbar() {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
                 </svg>
               </button>
-              
+
               {/* Dropdown Menu Container */}
               <div className="absolute left-1/2 -translate-x-1/2 mt-2 w-64 rounded-2xl bg-white border border-slate-200/80 shadow-xl py-2 z-50 transition-all duration-300 opacity-0 translate-y-2 scale-95 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:scale-100 group-hover:pointer-events-auto origin-top">
                 {/* Transparent bridge to prevent menu from closing when moving mouse */}
                 <div className="absolute -top-3 left-0 right-0 h-4 bg-transparent" />
-                
+
                 <Link
                   href="/compra-y-venta"
                   className="block px-5 py-3 hover:bg-slate-50 transition-colors"
@@ -191,7 +186,7 @@ export default function Navbar() {
                   <div className="font-bold text-slate-900 text-sm hover:text-emerald-600 transition-colors">Compra y Venta de Propiedades</div>
                   <div className="text-xs text-slate-500 font-normal mt-0.5">Encuentra o vende tu hogar ideal.</div>
                 </Link>
-                
+
                 <div className="border-t border-slate-100 my-1 mx-2" />
 
                 <Link
@@ -216,9 +211,8 @@ export default function Navbar() {
 
             <Link
               href="/contacto"
-              className={`relative text-[17px] font-medium transition-colors duration-200 py-1.5 after:absolute after:bottom-[3px] after:left-0 after:h-[1.5px] after:w-full after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 after:origin-left ${
-                shouldShowScrolledState ? 'text-white hover:text-[#FFFF33] after:bg-[#FFFF33]' : 'text-slate-300 hover:text-[#FFFF33] after:bg-[#FFFF33]'
-              }`}
+              className={`relative text-[17px] font-medium transition-colors duration-200 py-1.5 after:absolute after:bottom-[3px] after:left-0 after:h-[1.5px] after:w-full after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 after:origin-left ${shouldShowScrolledState ? 'text-white hover:text-[#FFFF33] after:bg-[#FFFF33]' : 'text-slate-300 hover:text-[#FFFF33] after:bg-[#FFFF33]'
+                }`}
             >
               Contacto
             </Link>
@@ -228,9 +222,8 @@ export default function Navbar() {
           <div className="hidden md:flex items-center space-x-4">
             <Link
               href="/propiedades"
-              className={`px-4 py-2 text-base font-medium transition-colors ${
-                shouldShowScrolledState ? 'text-white hover:text-[#FFFF33]' : 'text-slate-300 hover:text-white'
-              }`}
+              className={`px-4 py-2 text-base font-medium transition-colors ${shouldShowScrolledState ? 'text-white hover:text-[#FFFF33]' : 'text-slate-300 hover:text-white'
+                }`}
             >
               Buscar Propiedades
             </Link>
@@ -249,25 +242,22 @@ export default function Navbar() {
             >
               <span className="relative block h-5 w-7">
                 <span
-                  className={`absolute left-0 block h-[3px] w-7 rounded-full transition-all duration-300 ease-in-out ${
-                    isMobileMenuOpen
-                      ? "top-1/2 -translate-y-1/2 rotate-45 bg-white"
-                      : `top-0 bg-white`
-                  }`}
+                  className={`absolute left-0 block h-[3px] w-7 rounded-full transition-all duration-300 ease-in-out ${isMobileMenuOpen
+                    ? "top-1/2 -translate-y-1/2 rotate-45 bg-white"
+                    : `top-0 bg-white`
+                    }`}
                 />
                 <span
-                  className={`absolute left-0 top-1/2 block h-[3px] w-7 -translate-y-1/2 rounded-full transition-all duration-200 ease-in-out ${
-                    isMobileMenuOpen
-                      ? "scale-x-0 opacity-0 bg-white"
-                      : `scale-x-100 opacity-100 bg-white`
-                  }`}
+                  className={`absolute left-0 top-1/2 block h-[3px] w-7 -translate-y-1/2 rounded-full transition-all duration-200 ease-in-out ${isMobileMenuOpen
+                    ? "scale-x-0 opacity-0 bg-white"
+                    : `scale-x-100 opacity-100 bg-white`
+                    }`}
                 />
                 <span
-                  className={`absolute left-0 block h-[3px] w-7 rounded-full transition-all duration-300 ease-in-out ${
-                    isMobileMenuOpen
-                      ? "top-1/2 -translate-y-1/2 -rotate-45 bg-white"
-                      : `bottom-0 bg-white`
-                  }`}
+                  className={`absolute left-0 block h-[3px] w-7 rounded-full transition-all duration-300 ease-in-out ${isMobileMenuOpen
+                    ? "top-1/2 -translate-y-1/2 -rotate-45 bg-white"
+                    : `bottom-0 bg-white`
+                    }`}
                 />
               </span>
             </button>
@@ -279,22 +269,20 @@ export default function Navbar() {
       <div
         onClick={closeMobileMenu}
         aria-hidden="true"
-        className={`fixed inset-0 z-40 bg-black/60 backdrop-blur-sm transition-opacity duration-300 md:hidden ${
-          isMobileMenuOpen ? "opacity-100" : "opacity-0 pointer-events-none"
-        }`}
+        className={`fixed inset-0 z-40 bg-black/60 backdrop-blur-sm transition-opacity duration-300 md:hidden ${isMobileMenuOpen ? "opacity-100" : "opacity-0 pointer-events-none"
+          }`}
       />
 
       {/* Mobile Menu Drawer */}
       <div
-        className={`fixed inset-y-0 right-0 z-50 flex w-[88%] max-w-sm flex-col bg-slate-950 shadow-2xl transition-transform duration-300 ease-out md:hidden ${
-          isMobileMenuOpen ? "translate-x-0" : "translate-x-full"
-        }`}
+        className={`fixed inset-y-0 right-0 z-50 flex w-[88%] max-w-sm flex-col bg-slate-950 shadow-2xl transition-transform duration-300 ease-out md:hidden ${isMobileMenuOpen ? "translate-x-0" : "translate-x-full"
+          }`}
         style={{ background: "linear-gradient(160deg, #121212 0%, #000000 100%)" }}
       >
         {/* Drawer Header */}
-        <div className="flex shrink-0 items-center border-b border-white/10 px-6 py-5">
-          <Link 
-            href="/" 
+        <div className="flex shrink-0 items-center border-white/10 px-6 py-5">
+          <Link
+            href="/"
             onClick={() => {
               setIsMobileMenuOpen(false);
               window.scrollTo({ top: 0, behavior: 'smooth' });

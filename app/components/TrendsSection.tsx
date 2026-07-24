@@ -82,7 +82,7 @@ export default function TrendsSection() {
   }, { scope: container });
 
   return (
-    <section ref={container} className="bg-white pb-24 pt-12">
+    <section ref={container} className="bg-slate-100 pb-24 pt-12">
       <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Article Header */}
@@ -140,7 +140,7 @@ export default function TrendsSection() {
                     {zone.tag}
                   </div>
                   
-                  <h3 className="text-[22px] sm:text-[24px] font-bold text-slate-950 tracking-tight group-hover:text-[#FFFF33] transition-colors leading-[1.3] mb-3">
+                  <h3 className="text-[22px] sm:text-[24px] font-bold text-slate-950 tracking-tight group-hover:text-slate-600 transition-colors leading-[1.3] mb-3">
                     {zone.title}
                   </h3>
                   

@@ -135,7 +135,7 @@ export default function CompraVentaPage() {
               <h2 className="text-3xl sm:text-4xl lg:text-[46px] font-bold tracking-tight text-slate-900 leading-[1.1]">
                 Nuestros servicios
               </h2>
-              <p className="text-slate-600 text-base lg:text-lg leading-relaxed font-normal">
+              <p className="text-slate-600 text-xl leading-relaxed font-normal">
                 Conozca los servicios y soluciones diseñadas para ayudarle a vender, alquilar o comprar su propiedad ideal con total claridad y seguridad.
               </p>
               <div className="pt-4">
@@ -172,31 +172,31 @@ export default function CompraVentaPage() {
                       <span className="text-[#FFFF33] flex-shrink-0 mt-0.5">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
                       </span>
-                      <span className="text-slate-600 text-lg">Visita y avalúo sin costo, realizados por un profesional con base en el valor real del mercado.</span>
+                      <span className="text-slate-600 text-xl">Visita y avalúo sin costo, realizados por un profesional con base en el valor real del mercado.</span>
                     </li>
                     <li className="flex items-start gap-3">
                       <span className="text-[#FFFF33] flex-shrink-0 mt-0.5">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
                       </span>
-                      <span className="text-slate-600 text-lg">Precalificación de compradores, para recibir únicamente clientes con verdadero interés y capacidad de compra.</span>
+                      <span className="text-slate-600 text-xl">Precalificación de compradores, para recibir únicamente clientes con verdadero interés y capacidad de compra.</span>
                     </li>
                     <li className="flex items-start gap-3">
                       <span className="text-[#FFFF33] flex-shrink-0 mt-0.5">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
                       </span>
-                      <span className="text-slate-600 text-lg">Asesoría legal integral, incluyendo traspasos, opciones de compra-venta y gestión de documentos.</span>
+                      <span className="text-slate-600 text-xl">Asesoría legal integral, incluyendo traspasos, opciones de compra-venta y gestión de documentos.</span>
                     </li>
                     <li className="flex items-start gap-3">
                       <span className="text-[#FFFF33] flex-shrink-0 mt-0.5">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
                       </span>
-                      <span className="text-slate-600 text-lg">Publicidad digital estratégica, con presencia en los principales medios y plataformas inmobiliarias.</span>
+                      <span className="text-slate-600 text-xl">Publicidad digital estratégica, con presencia en los principales medios y plataformas inmobiliarias.</span>
                     </li>
                     <li className="flex items-start gap-3">
                       <span className="text-[#FFFF33] flex-shrink-0 mt-0.5">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
                       </span>
-                      <span className="text-slate-600 text-lg">Respaldo de una empresa inmobiliaria con amplia experiencia, compromiso y atención personalizada.</span>
+                      <span className="text-slate-600 text-xl">Respaldo de una empresa inmobiliaria con amplia experiencia, compromiso y atención personalizada.</span>
                     </li>
                   </ul>
                 </div>
@@ -240,27 +240,27 @@ export default function CompraVentaPage() {
                   <ul className="space-y-4 pt-2">
                     <li className="flex gap-4">
                       <div className="w-8 h-8 rounded-full border-2 border-[#FFFF33] flex items-center justify-center font-bold text-slate-900 flex-shrink-0 mt-0.5">1</div>
-                      <span className="text-slate-600 text-lg">Propiedades dentro del GAM, Estudio registral, Plano catastro, Dirección física y digital, Impuestos municipales al día, Servicios públicos al día.</span>
+                      <span className="text-slate-600 text-xl">Propiedades dentro del GAM, Estudio registral, Plano catastro, Dirección física y digital, Impuestos municipales al día, Servicios públicos al día.</span>
                     </li>
                     <li className="flex gap-4">
                       <div className="w-8 h-8 rounded-full border-2 border-[#FFFF33] flex items-center justify-center font-bold text-slate-900 flex-shrink-0 mt-0.5">2</div>
-                      <span className="text-slate-600 text-lg">Coordinación de visita del perito. Avalúo sin costo.</span>
+                      <span className="text-slate-600 text-xl">Coordinación de visita del perito. Avalúo sin costo.</span>
                     </li>
                     <li className="flex gap-4">
                       <div className="w-8 h-8 rounded-full border-2 border-[#FFFF33] flex items-center justify-center font-bold text-slate-900 flex-shrink-0 mt-0.5">3</div>
-                      <span className="text-slate-600 text-lg">Contrato de exclusividad por un periodo de 6 meses.</span>
+                      <span className="text-slate-600 text-xl">Contrato de exclusividad por un periodo de 6 meses.</span>
                     </li>
                     <li className="flex gap-4">
                       <div className="w-8 h-8 rounded-full border-2 border-[#FFFF33] flex items-center justify-center font-bold text-slate-900 flex-shrink-0 mt-0.5">4</div>
-                      <span className="text-slate-600 text-lg">Visita de nuestro equipo de ventas para toma de fotografías.</span>
+                      <span className="text-slate-600 text-xl">Visita de nuestro equipo de ventas para toma de fotografías.</span>
                     </li>
                     <li className="flex gap-4">
                       <div className="w-8 h-8 rounded-full border-2 border-[#FFFF33] flex items-center justify-center font-bold text-slate-900 flex-shrink-0 mt-0.5">5</div>
-                      <span className="text-slate-600 text-lg">Promoción de tu propiedad en medios y plataformas digitales, mediante campañas de publicidad pagada, sin costo adicional para el cliente.</span>
+                      <span className="text-slate-600 text-xl">Promoción de tu propiedad en medios y plataformas digitales, mediante campañas de publicidad pagada, sin costo adicional para el cliente.</span>
                     </li>
                     <li className="flex gap-4">
                       <div className="w-8 h-8 rounded-full border-2 border-[#FFFF33] flex items-center justify-center font-bold text-slate-900 flex-shrink-0 mt-0.5">6</div>
-                      <span className="text-slate-600 text-lg">Venta finiquitada. Propiedades: costo de honorarios 5% más I.V.A. Alquileres: costo de la primera mensualidad más I.V.A.</span>
+                      <span className="text-slate-600 text-xl">Venta finiquitada. Propiedades: costo de honorarios 5% más I.V.A. Alquileres: costo de la primera mensualidad más I.V.A.</span>
                     </li>
                   </ul>
                 </div>
@@ -286,31 +286,31 @@ export default function CompraVentaPage() {
                       <span className="text-[#FFFF33] flex-shrink-0 mt-0.5">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
                       </span>
-                      <span className="text-slate-600 text-lg">Asesoría personalizada, para ayudarte a encontrar la propiedad que mejor se adapte a tus necesidades y presupuesto.</span>
+                      <span className="text-slate-600 text-xl">Asesoría personalizada, para ayudarte a encontrar la propiedad que mejor se adapte a tus necesidades y presupuesto.</span>
                     </li>
                     <li className="flex items-start gap-3">
                       <span className="text-[#FFFF33] flex-shrink-0 mt-0.5">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
                       </span>
-                      <span className="text-slate-600 text-lg">Amplio portafolio de propiedades, con opciones de casas, apartamentos, lotes y locales comerciales.</span>
+                      <span className="text-slate-600 text-xl">Amplio portafolio de propiedades, con opciones de casas, apartamentos, lotes y locales comerciales.</span>
                     </li>
                     <li className="flex items-start gap-3">
                       <span className="text-[#FFFF33] flex-shrink-0 mt-0.5">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
                       </span>
-                      <span className="text-slate-600 text-lg">Precalificación financiera, para conocer tu capacidad de compra y facilitar el proceso de adquisición de tu propiedad.</span>
+                      <span className="text-slate-600 text-xl">Precalificación financiera, para conocer tu capacidad de compra y facilitar el proceso de adquisición de tu propiedad.</span>
                     </li>
                     <li className="flex items-start gap-3">
                       <span className="text-[#FFFF33] flex-shrink-0 mt-0.5">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
                       </span>
-                      <span className="text-slate-600 text-lg">Acompañamiento legal integral, incluyendo revisión de documentos, opciones de compra-venta y gestión de traspasos.</span>
+                      <span className="text-slate-600 text-xl">Acompañamiento legal integral, incluyendo revisión de documentos, opciones de compra-venta y gestión de traspasos.</span>
                     </li>
                     <li className="flex items-start gap-3">
                       <span className="text-[#FFFF33] flex-shrink-0 mt-0.5">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
                       </span>
-                      <span className="text-slate-600 text-lg">El respaldo de una empresa inmobiliaria con amplia experiencia, compromiso y atención personalizada.</span>
+                      <span className="text-slate-600 text-xl">El respaldo de una empresa inmobiliaria con amplia experiencia, compromiso y atención personalizada.</span>
                     </li>
                   </ul>
 
@@ -331,7 +331,7 @@ export default function CompraVentaPage() {
               <div className="pt-10 flex justify-center w-full">
                 <Link
                   href="/propiedades"
-                  className="inline-flex items-center justify-center px-10 h-14 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-full transition-all duration-300 text-base shadow-lg hover:shadow-xl hover:-translate-y-1"
+                  className="inline-flex items-center justify-center px-10 h-14 bg-[#FFFF33] hover:bg-slate-900 text-slate-950 hover:text-white font-bold rounded-full transition-all duration-300 text-base shadow-lg hover:shadow-xl hover:-translate-y-1"
                 >
                   Explorar todas las propiedades
                 </Link>
@@ -345,7 +345,7 @@ export default function CompraVentaPage() {
         <section id="formulario-compra-venta" className="w-full bg-slate-950 scroll-mt-24 mt-20 lg:mt-32">
           <div className="flex flex-col lg:flex-row w-full">
             {/* Left Side (Santiago's area) */}
-            <div className="w-full lg:w-1/2 p-8 lg:p-12 xl:p-16 flex flex-col justify-center text-left relative overflow-hidden">
+            <div className="w-full lg:w-1/2 p-8 lg:p-12 xl:p-16 flex flex-col justify-center text-left relative">
               {/* Background Image */}
               <img
                 src="/techo.png"
@@ -356,14 +356,14 @@ export default function CompraVentaPage() {
               <div className="absolute inset-0 bg-slate-950/70 z-0 pointer-events-none" />
 
               {/* Decorative element */}
-              <div className="absolute top-0 right-0 w-64 h-64 bg-yellow-400/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none z-0" />
+              <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#FFFF33]/40 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2 pointer-events-none z-0" />
               
               <div className="max-w-xl ml-auto mr-0 lg:mr-8 xl:mr-12 relative z-10">
                 <span className="inline-flex items-center justify-center px-4 py-1.5 bg-[#FFFF33] text-slate-950 text-base font-bold rounded-full mb-6 w-max">
                   Asesoría experta • Respaldo real
                 </span>
                 <h3 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-[1.1] mb-6 tracking-tight">
-                  Reciba asesoría personalizada
+                  Interés en venta o alquiler de mi propiedad
                 </h3>
                 <p className="text-slate-200 text-xl lg:text-2xl leading-relaxed mb-10">
                   Déjenos sus datos y nuestro equipo se comunicará con usted a la brevedad para brindarle un acompañamiento integral durante todo el proceso.
@@ -386,11 +386,8 @@ export default function CompraVentaPage() {
             </div>
 
             {/* Right Side (CRM Form) */}
-            <div className="w-full lg:w-1/2 bg-white p-6 sm:p-8 lg:p-12 relative z-20 rounded-t-[40px] lg:rounded-t-none lg:rounded-l-[40px] shadow-[-10px_0_30px_rgba(0,0,0,0.1)] flex flex-col justify-center">
+            <div className="w-full lg:w-1/2 p-6 sm:p-8 lg:p-12 relative z-20 flex flex-col justify-center">
               <div className="w-full max-w-lg mx-auto lg:ml-8 xl:ml-12">
-                <h3 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 mb-8 text-center">
-                  Interés en venta o alquiler de mi propiedad
-                </h3>
                 <div className="w-full min-h-[747px]">
                   <iframe
                     src="https://crm.elduenovende.com/widget/form/u3QrthKIOTQruMw3nQYm"

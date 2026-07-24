@@ -220,7 +220,7 @@ export default function NosotrosPage() {
           <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center max-w-3xl mx-auto space-y-4 mb-14">
               <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-slate-950">Nuestra trayectoria marca la diferencia</h2>
-              <p className="text-slate-500 text-base sm:text-lg">
+              <p className="text-slate-500 text-xl">
                 El Dueño Vende, se distingue por su sólida presencia en el mercado inmobiliario costarricense y por la confianza que ha construido a lo largo de los años. Nos caracterizamos por brindar un servicio transparente, responsable y orientado a resultados.
               </p>
             </div>
@@ -235,8 +235,8 @@ export default function NosotrosPage() {
                     <AnimatedCounter value={stat.value} prefix={stat.prefix} suffix={stat.suffix} />
                   </div>
                   <div className="space-y-1">
-                    <h4 className="text-base sm:text-lg font-bold text-black leading-snug">{stat.label}</h4>
-                    <p className="text-xs sm:text-sm text-slate-900 leading-relaxed">{stat.desc}</p>
+                    <h4 className="text-xl sm:text-2xl font-bold text-black leading-snug">{stat.label}</h4>
+                    <p className="text-xl text-slate-900 leading-relaxed">{stat.desc}</p>
                   </div>
                 </div>
               ))}
@@ -302,10 +302,10 @@ export default function NosotrosPage() {
                 <div className="space-y-4">
                   <span className="text-base text-slate-500 block">Sobre nosotros</span>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12">
-                    <p className="text-slate-600 text-lg leading-relaxed">
+                    <p className="text-slate-600 text-xl leading-relaxed">
                       <strong>El Dueño Vende</strong> es una compañía especializada en bienes raíces, brindamos la mejor asesoría en compra, venta y alquiler de propiedades dentro del área metropolitana. También, brindamos oportunidades de inversión y soluciones de crédito.
                     </p>
-                    <p className="text-slate-600 text-lg leading-relaxed">
+                    <p className="text-slate-600 text-xl leading-relaxed">
                       Con más de 35 años de experiencia nos desenvolvemos con agilidad en el mercado de bienes raíces; cientos de personas y empresas que han confiado sus inversiones a El Dueño Vende dan respaldo de nuestra trayectoria.
                     </p>
                   </div>
