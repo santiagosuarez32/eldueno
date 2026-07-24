@@ -2096,7 +2096,7 @@ function SideForm({
               <select
                 value={form.mediaType || "none"}
                 onChange={(e) => {
-                  const val = e.target.value;
+                  const val = e.target.value as "video" | "image" | "none";
                   set("mediaType", val);
                   if (val === "video") {
                     set("hasVideo", true);
