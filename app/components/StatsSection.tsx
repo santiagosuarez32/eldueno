@@ -93,7 +93,7 @@ export default function StatsSection() {
 
 
   return (
-    <section id="recursos-blog" ref={container} className="bg-white py-24 text-slate-900 relative overflow-hidden">
+    <section id="recursos-blog" ref={container} className="bg-slate-50 py-24 text-slate-900 relative overflow-hidden">
       <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Top Text Section */}
@@ -151,7 +151,7 @@ export default function StatsSection() {
               onClick={() => window.history.replaceState(null, '', '#recursos-blog')}
               className="w-[85vw] sm:w-[320px] lg:w-auto shrink-0 snap-center px-4 lg:shrink lg:snap-align-none lg:px-0 block cursor-pointer flex flex-col group"
             >
-              <div className="w-full bg-white flex flex-col transition-all duration-300 h-full">
+              <div className="w-full bg-transparent flex flex-col transition-all duration-300 h-full">
                 {/* Image Container */}
                 <div className="relative aspect-[16/11] overflow-hidden bg-slate-100 rounded-[24px]">
                   <img 
@@ -166,7 +166,7 @@ export default function StatsSection() {
                 </div>
                 
                 {/* Content Box (No side padding, aligns with image) */}
-                <div className="pt-5 flex flex-col flex-grow bg-white">
+                <div className="pt-5 flex flex-col flex-grow bg-transparent">
                   <div className="text-[14px] text-[#538792] font-normal mb-3">
                     {post.date}
                   </div>
