@@ -104,7 +104,7 @@ export default function FeaturedProperties() {
             
             {/* View Listings Button */}
             <div className="pt-2">
-              <Link href="/propiedades" onClick={() => window.history.replaceState(null, '', '#featured-properties')}>
+              <Link href="/propiedades">
                 <button className="relative text-sm font-medium rounded-full h-12 p-1 ps-6 pe-14 group transition-all duration-500 hover:ps-14 hover:pe-6 w-fit overflow-hidden cursor-pointer flex items-center justify-center bg-emerald-500 text-slate-950 shadow-md hover:shadow-lg hover:-translate-y-0.5">
                   <span className="relative z-10 transition-all duration-500">
                     Ver Catálogo
@@ -158,7 +158,6 @@ export default function FeaturedProperties() {
               return (
                 <div
                   key={property.id}
-                  onClick={() => window.history.replaceState(null, '', '#featured-properties')}
                   className="w-[85vw] sm:w-[75vw] shrink-0 snap-center lg:w-[calc(25%-15px)] lg:shrink-0 lg:snap-start block h-full featured-card"
                 >
                   <PropertyCard property={property} priority={index < 4} />

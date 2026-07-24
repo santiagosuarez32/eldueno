@@ -169,7 +169,6 @@ export default function PremiumProperties() {
                   {/* MOBILE CARD (Matches FeaturedProperties) */}
                   <Link
                     href={`/propiedades/${property.id}`}
-                    onClick={() => window.history.replaceState(null, '', '#premium-properties')}
                     className="block lg:hidden w-[85vw] sm:w-[75vw] h-auto cursor-pointer"
                   >
                     <div className="w-full bg-white border border-slate-200 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.08)] hover:shadow-[0_20px_50px_-10px_rgba(0,0,0,0.12)] hover:-translate-y-1 rounded-[32px] overflow-hidden flex flex-col group transition-all duration-300 h-full">
@@ -263,7 +262,6 @@ export default function PremiumProperties() {
                   <div
                     onMouseEnter={() => setActiveIndex(idx)}
                     onClick={() => {
-                      window.history.replaceState(null, '', '#premium-properties');
                       router.push(`/propiedades/${property.id}`);
                     }}
                     className={`hidden lg:flex relative transition-all duration-500 ease-out cursor-pointer flex-col justify-between flex-shrink-0 h-[420px] ${
@@ -378,7 +376,6 @@ export default function PremiumProperties() {
 
                       <Link
                         href={`/propiedades/${property.id}`}
-                        onClick={() => window.history.replaceState(null, '', '#premium-properties')}
                         className="inline-flex items-center gap-1 text-[11px] font-extrabold text-[#cccc00] hover:text-[#b3b300] transition-colors"
                       >
                         Ver detalle
