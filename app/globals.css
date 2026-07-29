@@ -85,6 +85,11 @@ html.lenis, html.lenis body {
   pointer-events: none;
 }
 
+iframe {
+  border: none !important;
+  outline: none !important;
+}
+
 /* Premium gradient utility classes */
 .text-gradient-gold {
   background: linear-gradient(135deg, #fef08a 0%, #fbbf24 50%, #d97706 100%);

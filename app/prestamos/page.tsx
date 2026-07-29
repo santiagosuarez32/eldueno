@@ -12,15 +12,15 @@ if (typeof window !== 'undefined') {
 }
 import Navbar from '@/app/components/Navbar';
 import Footer from '@/app/components/Footer';
+import { useCrmFormUrl } from '@/lib/crmForms';
 
 export default function PrestamosPage() {
+  const crmFormUrl = useCrmFormUrl('prestamos');
   // Force body background to white for light theme feel
   useEffect(() => {
-    document.body.classList.add('bg-white', 'text-slate-900');
-    document.body.classList.remove('bg-slate-955', 'text-slate-100');
+    document.body.classList.add('bg-slate-950');
     return () => {
-      document.body.classList.remove('bg-white', 'text-slate-900');
-      document.body.classList.add('bg-slate-955', 'text-slate-100');
+      document.body.classList.remove('bg-slate-950');
     };
   }, []);
 
@@ -78,7 +78,7 @@ export default function PrestamosPage() {
   return (
     <>
       <Navbar />
-      <main ref={container} className="flex-grow bg-white text-slate-900">
+      <main ref={container} className="flex-grow bg-slate-950 text-slate-900">
 
         {/* HERO SECTION - Dark premium style matching "Nosotros" */}
         <section className="relative h-[70vh] min-h-[500px] flex items-end pb-16 sm:pb-24 overflow-hidden bg-slate-950">
@@ -288,76 +288,66 @@ export default function PrestamosPage() {
           </div>
         </section>
 
-        {/* CRM Form Section - Full Viewport Width */}
-        <section id="formulario-prestamo" className="w-full bg-slate-950 scroll-mt-24 mt-20 lg:mt-32">
-          <div className="flex flex-col lg:flex-row w-full">
-            {/* Left Side (Santiago's area) */}
-            <div className="w-full lg:w-1/2 p-8 lg:p-12 xl:p-16 flex flex-col justify-center text-left relative">
-              {/* Background Image */}
-              <img
-                src="/techo.png"
-                alt="Fondo Techo"
-                className="absolute inset-0 w-full h-full object-contain opacity-40 mix-blend-luminosity z-0 pointer-events-none"
-              />
-              {/* Dark Overlay */}
-              <div className="absolute inset-0 bg-slate-950/70 z-0 pointer-events-none" />
-
-              {/* Decorative element */}
-              <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#FFFF33]/40 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2 pointer-events-none z-0" />
+        {/* CRM Form Section - 100% Viewport Height */}
+        <section id="formulario-prestamo" className="w-full bg-slate-950 min-h-[calc(100vh-80px)] flex items-center py-8 lg:py-12 relative overflow-hidden">
+          <div className="max-w-[1500px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
               
-              <div className="max-w-xl ml-auto mr-0 lg:mr-8 xl:mr-12 relative z-10">
-                <span className="inline-flex items-center justify-center px-4 py-1.5 bg-[#FFFF33] text-slate-950 text-base font-bold rounded-full mb-6 w-max">
-                  Asesoría experta • Respaldo real
-                </span>
-                <h3 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-[1.1] mb-6 tracking-tight">
-                  Interés en Préstamo
-                </h3>
-                <p className="text-slate-200 text-xl lg:text-2xl leading-relaxed mb-10">
-                  Déjenos sus datos y nuestro equipo se comunicará con usted a la brevedad para brindarle un acompañamiento integral durante todo el proceso.
-                </p>
-                <ul className="space-y-6 mb-8">
-                  <li className="flex items-start gap-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-[#FFFF33] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                    <span className="text-white font-medium text-lg lg:text-xl">Respuesta rápida, sin compromiso.</span>
-                  </li>
-                  <li className="flex items-start gap-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-[#FFFF33] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                    <span className="text-white font-medium text-lg lg:text-xl">Acompañamiento experto en cada paso.</span>
-                  </li>
-                  <li className="flex items-start gap-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-[#FFFF33] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                    <span className="text-white font-medium text-lg lg:text-xl">Total confidencialidad y seguridad.</span>
-                  </li>
-                </ul>
-              </div>
-            </div>
+              {/* Left Side (Text & Info) */}
+              <div className="lg:col-span-6 p-2 sm:p-4 lg:p-6 flex flex-col justify-center text-left relative">
+                {/* Background Image */}
+                <img
+                  src="/techo.png"
+                  alt="Fondo Techo"
+                  className="absolute inset-0 w-full h-full object-contain opacity-40 mix-blend-luminosity z-0 pointer-events-none"
+                />
+                {/* Dark Overlay */}
+                <div className="absolute inset-0 bg-slate-950/70 z-0 pointer-events-none" />
 
-            {/* Right Side (CRM Form) */}
-            <div className="w-full lg:w-1/2 p-6 sm:p-8 lg:p-12 relative z-20 flex flex-col justify-center">
-              <div className="w-full max-w-lg mx-auto lg:ml-8 xl:ml-12">
-                  <div className="w-full min-h-[1077px]">
-                    <iframe
-                      src="https://crm.elduenovende.com/widget/form/S6iHSWHXhpO9XeNZHIIW"
-                      style={{ width: '100%', height: '100%', border: 'none', borderRadius: '8px' }}
-                      id="inline-S6iHSWHXhpO9XeNZHIIW" 
-                      data-layout="{'id':'INLINE'}"
-                      data-trigger-type="alwaysShow"
-                      data-trigger-value=""
-                      data-activation-type="alwaysActivated"
-                      data-activation-value=""
-                      data-deactivation-type="neverDeactivate"
-                      data-deactivation-value=""
-                      data-form-name="Interés en préstamo"
-                      data-height="1077"
-                      data-layout-iframe-id="inline-S6iHSWHXhpO9XeNZHIIW"
-                      data-form-id="S6iHSWHXhpO9XeNZHIIW"
-                      title="Interés en préstamo"
-                    >
-                    </iframe>
-                    <Script src="https://crm.elduenovende.com/js/form_embed.js" strategy="lazyOnload" />
-                  </div>
+                {/* Decorative element */}
+                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#FFFF33]/40 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2 pointer-events-none z-0" />
+                
+                <div className="max-w-xl relative z-10">
+                  <span className="inline-flex items-center justify-center px-4 py-1.5 bg-[#FFFF33] text-slate-950 text-base font-bold rounded-full mb-6 w-max">
+                    Asesoría experta • Respaldo real
+                  </span>
+                  <h3 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white leading-[1.1] mb-5 tracking-tight">
+                    Te ayudamos a encontrar la solución financiera que mejor se adapta a vos.
+                  </h3>
+                  <p className="text-slate-200 text-base lg:text-lg leading-relaxed mb-6">
+                    Solicitá una asesoría sin compromiso. Completá tus datos y uno de nuestros asesores se pondrá en contacto con vos para conocer tu situación, resolver tus dudas y ayudarte a encontrar la opción de financiamiento que mejor se adapte a tus necesidades.
+                  </p>
+                  <ul className="space-y-3 mb-6">
+                    <li className="flex items-start gap-3">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-[#FFFF33] shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                      <span className="text-slate-200 font-medium text-sm lg:text-base">Evaluación personalizada de tu caso.</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-[#FFFF33] shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                      <span className="text-slate-200 font-medium text-sm lg:text-base">Opciones de financiamiento para mejorar tu liquidez.</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-[#FFFF33] shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                      <span className="text-slate-200 font-medium text-sm lg:text-base">Atención confidencial y acompañamiento durante todo el proceso.</span>
+                    </li>
+                  </ul>
                 </div>
               </div>
+
+              {/* Right Side (CRM Form Card) */}
+              <div className="lg:col-span-6 relative z-20 flex flex-col justify-center items-center lg:items-end w-full">
+                <div className="w-full max-w-2xl rounded-3xl overflow-hidden">
+                  <iframe
+                    src={crmFormUrl}
+                    style={{ width: '100%', height: '580px', border: '0', outline: 'none', borderRadius: '24px', background: 'transparent' }}
+                    className="w-full h-[580px] block border-0 outline-none"
+                    id="inline-S6iHSWHXhpO9XeNZHIIW" 
+                    title="Interés en préstamo"
+                  />
+                </div>
+              </div>
+
+            </div>
           </div>
         </section>
 

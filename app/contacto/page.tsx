@@ -6,24 +6,25 @@ import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import Navbar from '@/app/components/Navbar';
 import Footer from '@/app/components/Footer';
-import Script from 'next/script';
+import { useCrmFormUrl } from '@/lib/crmForms';
 import { 
-  Send, 
-  Check, 
-  Loader2, 
-  Building,
-  ArrowRight,
-  Phone,
-  Mail,
-  MapPin,
-  Clock
+  Phone, 
+  Mail, 
+  MapPin 
 } from 'lucide-react';
 import { FaFacebookF, FaInstagram, FaLinkedinIn, FaYoutube, FaTiktok } from 'react-icons/fa';
 
 export default function ContactoPage() {
-  // Using default dark theme
+  const crmFormUrl = useCrmFormUrl('contacto');
 
-  // Form logic uses the CRM iframe
+  useEffect(() => {
+    document.body.classList.add('bg-slate-800', 'text-slate-900');
+    document.body.classList.remove('bg-slate-950', 'text-slate-100');
+    return () => {
+      document.body.classList.remove('bg-slate-800', 'text-slate-900');
+      document.body.classList.add('bg-slate-950', 'text-slate-100');
+    };
+  }, []);
 
   const container = useRef<HTMLDivElement>(null);
 
@@ -49,25 +50,21 @@ export default function ContactoPage() {
     });
   }, { scope: container });
 
-
   return (
-    <div ref={container} className="bg-slate-950 min-h-screen relative overflow-hidden">
-      {/* Decorative Top Right Glow */}
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#FFFF33]/30 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/3 pointer-events-none z-0" />
-      {/* Decorative Bottom Left Glow */}
-      <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-[#FFFF33]/20 rounded-full blur-[120px] translate-y-1/3 -translate-x-1/4 pointer-events-none z-0" />
+    <div ref={container} className="bg-gradient-to-b from-white via-slate-400 to-slate-800 text-slate-900 min-h-screen relative overflow-hidden">
+      {/* Decorative Glows */}
+      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[#FFFF33]/25 rounded-full blur-[130px] -translate-y-1/3 translate-x-1/3 pointer-events-none z-0" />
+      <div className="absolute bottom-0 left-0 w-[700px] h-[700px] bg-slate-400/20 rounded-full blur-[140px] translate-y-1/3 -translate-x-1/4 pointer-events-none z-0" />
       <Navbar />
       
       {/* 1. HERO TYPOGRAPHY HEADER */}
       <section className="pt-24 pb-6 sm:pt-28 sm:pb-8 relative z-10">
-        <div className="max-w-6xl mx-auto px-12">
-          <div
-            className="hero-text max-w-4xl"
-          >
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-white leading-[1.1] mb-3">
-              Hablemos de tu <span className="text-[#FFFF33]">próximo paso.</span>
+        <div className="max-w-6xl mx-auto px-6 sm:px-12">
+          <div className="hero-text max-w-4xl">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-slate-900 leading-[1.1] mb-3">
+              Hablemos de tu <span className="text-slate-950 underline decoration-[#FFFF33] decoration-[6px] underline-offset-4">próximo paso.</span>
             </h1>
-            <p className="text-slate-300 text-sm sm:text-base leading-relaxed max-w-2xl">
+            <p className="text-slate-600 text-base sm:text-lg leading-relaxed max-w-2xl">
               Nuestro equipo está listo para asesorarte de manera personalizada y directa. Completá el formulario o contáctanos por cualquiera de nuestros canales oficiales.
             </p>
           </div>
@@ -76,12 +73,12 @@ export default function ContactoPage() {
 
       {/* 2. CONTACT INFO & FORM */}
       <section className="pb-24 relative z-10">
-        <div className="max-w-6xl mx-auto px-12">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start">
+        <div className="max-w-[1450px] mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
             
             {/* Left Column: Bold Yellow Info Card */}
             <div className="order-2 lg:order-1 lg:col-span-5 contact-info-col">
-              <div className="bg-[#FFFF33] rounded-[32px] p-8 sm:p-10 flex flex-col relative overflow-hidden shadow-sm">
+              <div className="bg-[#FFFF33] rounded-[32px] p-8 sm:p-10 flex flex-col relative overflow-hidden shadow-md border border-yellow-300/40">
                 {/* Decorative background element */}
                 <div className="absolute -top-24 -right-24 w-72 h-72 bg-[#FFFF33]/60 rounded-full blur-[100px]" />
                 
@@ -144,35 +141,22 @@ export default function ContactoPage() {
               </div>
             </div>
 
-            {/* Right Column: CRM Form */}
-            <div className="order-1 lg:order-2 lg:col-span-7 flex justify-start lg:pl-12 contact-form-col">
-              <div className="py-2 sm:py-4 lg:py-6 w-full max-w-xl min-h-[733px]">
+            {/* Right Column: Direct CRM Form Iframe */}
+            <div className="order-1 lg:order-2 lg:col-span-7 flex justify-start contact-form-col w-full">
+              <div className="w-full rounded-3xl overflow-hidden">
                 <iframe
-                    src="https://crm.elduenovende.com/widget/form/gnolY2xzWsk8vN2HW0Lc"
-                    style={{ width: '100%', height: '100%', border: 'none', borderRadius: '8px' }}
-                    id="inline-gnolY2xzWsk8vN2HW0Lc" 
-                    data-layout="{'id':'INLINE'}"
-                    data-trigger-type="alwaysShow"
-                    data-trigger-value=""
-                    data-activation-type="alwaysActivated"
-                    data-activation-value=""
-                    data-deactivation-type="neverDeactivate"
-                    data-deactivation-value=""
-                    data-form-name="Consultas"
-                    data-height="733"
-                    data-layout-iframe-id="inline-gnolY2xzWsk8vN2HW0Lc"
-                    data-form-id="gnolY2xzWsk8vN2HW0Lc"
-                    title="Consultas"
-                >
-                </iframe>
-                <Script src="https://crm.elduenovende.com/js/form_embed.js" strategy="lazyOnload" />
+                  src={crmFormUrl}
+                  style={{ width: '100%', height: '670px', border: '0', outline: 'none', borderRadius: '24px', background: 'transparent' }}
+                  className="w-full h-[670px] block border-0 outline-none"
+                  id="inline-gnolY2xzWsk8vN2HW0Lc" 
+                  title="Consultas"
+                />
               </div>
             </div>
 
           </div>
         </div>
       </section>
-
 
       <Footer />
     </div>

@@ -10,7 +10,7 @@ interface FooterProps {
 
 export default function Footer({ showCTA = true }: FooterProps) {
   return (
-    <div className="relative bg-transparent pt-8 sm:pt-12">
+    <div className={`relative ${showCTA ? 'bg-transparent pt-8 sm:pt-12' : 'bg-slate-950'}`}>
       {/* Call to Action (CTA) Section */}
       {showCTA && (
         <div className="max-w-[1200px] mx-auto px-4 sm:px-6 relative z-20 mb-[-70px] md:mb-[-90px]">

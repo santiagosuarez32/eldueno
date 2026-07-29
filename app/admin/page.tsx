@@ -21,7 +21,8 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import BlogsAdminTab from "./BlogsAdminTab";
 import UsersAdminTab from "./UsersAdminTab";
-import { LayoutDashboard, Star, Archive, FileText, Sparkles, Users, ExternalLink } from "lucide-react";
+import CrmAdminTab from "./CrmAdminTab";
+import { LayoutDashboard, Star, Archive, FileText, Sparkles, Users, ExternalLink, Link as LinkIcon } from "lucide-react";
 
 const BRAND_COLOR = "#FFFF33";
 const BRAND_HOVER = "#ffff33";
@@ -206,7 +207,7 @@ function AdminDashboardContent() {
   const [newExchangeRate, setNewExchangeRate] = useState<string>("");
 
   // Backup system state
-  const [tab, setTab] = useState<"properties" | "premium" | "bestChoice" | "backups" | "blogs" | "users">("properties");
+  const [tab, setTab] = useState<"properties" | "premium" | "bestChoice" | "backups" | "blogs" | "users" | "crm">("properties");
   const [selectionFilter, setSelectionFilter] = useState<"marked" | "all">("marked");
   const [backups, setBackups] = useState<BackupItem[]>([]);
   const [loadingBackups, setLoadingBackups] = useState(false);
@@ -1033,6 +1034,22 @@ function AdminDashboardContent() {
               {role !== "editor" && (
                 <button
                   type="button"
+                  onClick={() => setTab("crm")}
+                  className={cx(
+                    "flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-sm font-semibold transition cursor-pointer",
+                    tab === "crm"
+                      ? "text-neutral-900 bg-slate-100"
+                      : "text-neutral-600 hover:bg-neutral-50"
+                  )}
+                >
+                  <LinkIcon className={cx("h-4 w-4 shrink-0", tab === "crm" ? "text-neutral-900" : "text-neutral-400")} />
+                  <span className="flex-1 text-left">Formularios CRM</span>
+                  <span className="text-xs text-neutral-400 font-semibold text-right">CRM</span>
+                </button>
+              )}
+              {role !== "editor" && (
+                <button
+                  type="button"
                   onClick={() => setTab("backups")}
                   className={cx(
                     "flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-sm font-semibold transition cursor-pointer",
@@ -1062,6 +1079,8 @@ function AdminDashboardContent() {
               <UsersAdminTab setToast={setToast} />
             ) : tab === "blogs" ? (
               <BlogsAdminTab setToast={setToast} triggerAutoBackup={triggerAutoBackup} userRole={role} />
+            ) : tab === "crm" ? (
+              <CrmAdminTab setToast={setToast} />
             ) : tab === "properties" || tab === "premium" || tab === "bestChoice" ? (
               <>
                 {/* Métricas */}
