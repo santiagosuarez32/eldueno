@@ -400,6 +400,19 @@ function AdminDashboardContent() {
 
   const saveSettings = async (updatedFilters: string[], newExchange: number) => {
     setLoading(true);
+
+    // Fetch existing site settings owner data to avoid overwriting crmForms
+    const { data: existingData } = await supabase
+      .from("properties")
+      .select("owner")
+      .eq("id", "prop-site-settings")
+      .maybeSingle();
+
+    const currentOwner = existingData?.owner || {};
+    const updatedOwner = typeof currentOwner === 'object' && currentOwner !== null
+      ? { ...currentOwner, customTypes: updatedFilters, exchangeRate: newExchange }
+      : { customTypes: updatedFilters, exchangeRate: newExchange };
+
     const payload = {
       id: "prop-site-settings",
       title: "Site Settings (DO NOT DELETE)",
@@ -410,15 +423,12 @@ function AdminDashboardContent() {
       type: "casa",
       image: "system",
       featured: false,
-      owner: { customTypes: updatedFilters, exchangeRate: newExchange }
+      owner: updatedOwner
     };
     
-    // First try to update
-    let { error } = await supabase.from("properties").update(payload).eq("id", "prop-site-settings");
-    
-    // If update fails, insert
     const { data: existing } = await supabase.from("properties").select("id").eq("id", "prop-site-settings").maybeSingle();
     
+    let error = null;
     if (!existing) {
       ({ error } = await supabase.from("properties").insert(payload));
     } else {
