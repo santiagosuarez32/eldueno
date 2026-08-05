@@ -89,7 +89,7 @@ export default function FeaturedProperties() {
   };
 
   return (
-    <section id="featured-properties" ref={sectionRef} className="bg-white py-24 text-slate-900 relative overflow-hidden">
+    <section id="featured-properties" ref={sectionRef} className="bg-white py-12 sm:py-16 text-slate-900 relative overflow-hidden">
       <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Header Section */}

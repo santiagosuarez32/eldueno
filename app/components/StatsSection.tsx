@@ -93,11 +93,11 @@ export default function StatsSection() {
 
 
   return (
-    <section id="recursos-blog" ref={container} className="bg-slate-100 py-24 text-slate-900 relative overflow-hidden">
+    <section id="recursos-blog" ref={container} className="bg-slate-100 py-12 sm:py-16 text-slate-900 relative overflow-hidden">
       <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Top Text Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-24 mb-16 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-24 mb-8 sm:mb-10 items-start">
           {/* Left: Heading */}
           <div
             className="stats-head"

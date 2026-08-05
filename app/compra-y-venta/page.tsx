@@ -341,9 +341,12 @@ export default function CompraVentaPage() {
           </div>
         </section>
 
-        {/* CRM Form Section - 100% Viewport Height */}
+        {/* Grey Divider Line */}
+        <div className="w-full border-t border-slate-700/80" />
+
+        {/* CRM Form Section - Fits inside Viewport */}
         <section id="formulario-compra-venta" className="w-full bg-slate-950 min-h-[calc(100vh-80px)] flex items-center py-8 lg:py-12 relative overflow-hidden">
-          <div className="max-w-[1500px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
+          <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
               
               {/* Left Side (Text & Info) */}
@@ -357,10 +360,13 @@ export default function CompraVentaPage() {
                 {/* Dark Overlay */}
                 <div className="absolute inset-0 bg-slate-950/70 z-0 pointer-events-none" />
 
-                {/* Decorative element */}
+                {/* Decorative element (Top Right Glow) */}
                 <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#FFFF33]/40 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2 pointer-events-none z-0" />
+                {/* Bottom Right Yellow & White Glow */}
+                <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-[#FFFF33]/30 rounded-full blur-[140px] translate-y-1/3 translate-x-1/3 pointer-events-none z-0" />
+                <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-white/20 rounded-full blur-[120px] translate-y-1/2 translate-x-1/2 pointer-events-none z-0" />
                 
-                <div className="max-w-xl relative z-10">
+                <div className="max-w-2xl relative z-10">
                   <span className="inline-flex items-center justify-center px-4 py-1.5 bg-[#FFFF33] text-slate-950 text-base font-bold rounded-full mb-6 w-max">
                     Asesoría experta • Respaldo real
                   </span>
@@ -390,13 +396,26 @@ export default function CompraVentaPage() {
                 </div>
               </div>
 
-              {/* Right Side (CRM Form Card) */}
+              {/* Right Side (CRM Form Card with Viewport-constrained height + internal scrollbar) */}
               <div className="lg:col-span-6 relative z-20 flex flex-col justify-center items-center lg:items-end w-full">
-                <div className="w-full max-w-2xl rounded-3xl overflow-hidden">
+                <div className="w-full max-w-2xl bg-slate-900/90 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl relative">
+                  {/* Top helper indicator bar */}
+                  <div className="flex items-center justify-between bg-slate-900 border-b border-slate-800/80 px-5 py-2.5 text-xs text-slate-300 font-semibold">
+                    <span className="flex items-center gap-2 text-[#FFFF33] font-bold">
+                      <span className="w-2 h-2 rounded-full bg-[#FFFF33] animate-ping inline-block" />
+                      Formulario de Venta / Alquiler
+                    </span>
+                    <span className="flex items-center gap-1.5 text-[11px] text-slate-200 bg-slate-800/90 px-3 py-1 rounded-full border border-slate-700/60 shadow-sm">
+                      Desliza para ver más campos
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5 text-[#FFFF33] animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" /></svg>
+                    </span>
+                  </div>
+
                   <iframe
                     src={crmFormUrl}
-                    style={{ width: '100%', height: '580px', border: '0', outline: 'none', borderRadius: '24px', background: 'transparent' }}
-                    className="w-full h-[580px] block border-0 outline-none"
+                    style={{ width: '100%', height: '580px', border: '0', outline: 'none', background: 'transparent' }}
+                    className="w-full h-[540px] sm:h-[560px] lg:h-[580px] block border-0 outline-none"
+                    scrolling="yes"
                     id="inline-u3QrthKIOTQruMw3nQYm" 
                     title="Interés en venta o alquiler de mi propiedad"
                   />

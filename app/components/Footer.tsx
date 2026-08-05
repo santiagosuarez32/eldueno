@@ -53,7 +53,7 @@ export default function Footer({ showCTA = true }: FooterProps) {
       )}
 
       {/* Footer Element */}
-      <footer className={`bg-slate-950 text-slate-400 ${showCTA ? 'pt-40' : 'pt-16'} pb-8 relative z-10 w-full`}>
+      <footer className={`bg-slate-950 text-slate-400 ${showCTA ? 'pt-28 sm:pt-32' : 'pt-12 sm:pt-16'} pb-8 relative z-10 w-full`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           
           {/* Main heading in footer as requested / as in screenshot */}
@@ -100,7 +100,13 @@ export default function Footer({ showCTA = true }: FooterProps) {
               </div>
             </div>
             
-            <div className="flex flex-col items-start md:items-end gap-2">
+            <div className="flex flex-col items-start md:items-end gap-4 w-full md:w-auto">
+              <Link 
+                href="/contacto"
+                className="w-full md:w-auto inline-flex items-center justify-center gap-2 px-8 h-13 rounded-full font-bold text-slate-950 bg-[#FFFF33] hover:bg-[#e6e600] transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5 text-base cursor-pointer"
+              >
+                Contáctenos
+              </Link>
               <Link 
                 href="/propiedades"
                 onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}

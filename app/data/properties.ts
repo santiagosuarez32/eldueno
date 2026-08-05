@@ -301,6 +301,11 @@ export function mapDbToProperty(dbProp: any): Property {
   const precio_original = Number(dbProp.precio_original || owner.precio_original || 0);
   const precio_usd = Number(dbProp.precio_usd || owner.precio_usd || 0);
 
+  const videoUrl = dbProp.videoUrl || owner.videoUrl || dbProp.video_url || owner.video_url || undefined;
+  const fallbackImageUrl = dbProp.fallbackImageUrl || owner.fallbackImageUrl || dbProp.fallback_image_url || owner.fallback_image_url || dbProp.recorrido_imagen || owner.recorrido_imagen || undefined;
+  const hasVideo = Boolean(videoUrl) || (dbProp.hasVideo !== undefined ? Boolean(dbProp.hasVideo) : Boolean(owner.hasVideo));
+  const hasFallbackImage = Boolean(fallbackImageUrl) || (dbProp.hasFallbackImage !== undefined ? Boolean(dbProp.hasFallbackImage) : Boolean(owner.hasFallbackImage));
+
   return {
     id: dbProp.id,
     title,
@@ -343,8 +348,10 @@ export function mapDbToProperty(dbProp: any): Property {
     precio_usd: precio_usd > 0 ? precio_usd : undefined,
     age: dbProp.age !== undefined && dbProp.age !== null ? Number(dbProp.age) : undefined,
     created_at: dbProp.created_at || undefined,
-    hasVideo: dbProp.hasVideo !== undefined ? Boolean(dbProp.hasVideo) : (owner.hasVideo !== undefined ? Boolean(owner.hasVideo) : false),
-    videoUrl: dbProp.videoUrl || owner.videoUrl || undefined
+    hasVideo,
+    videoUrl,
+    hasFallbackImage,
+    fallbackImageUrl
   };
 }
 

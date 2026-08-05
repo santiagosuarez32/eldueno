@@ -209,13 +209,7 @@ export default function Navbar() {
               </div>
             </div>
 
-            <Link
-              href="/contacto"
-              className={`relative text-[17px] font-medium transition-colors duration-200 py-1.5 after:absolute after:bottom-[3px] after:left-0 after:h-[1.5px] after:w-full after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 after:origin-left ${shouldShowScrolledState ? 'text-white hover:text-[#FFFF33] after:bg-[#FFFF33]' : 'text-slate-300 hover:text-[#FFFF33] after:bg-[#FFFF33]'
-                }`}
-            >
-              Contacto
-            </Link>
+
           </nav>
 
           {/* CTA Buttons */}

@@ -100,11 +100,11 @@ export default function PartnersCarousel() {
   };
 
   return (
-    <section className="bg-slate-100 py-24 overflow-hidden">
+    <section className="bg-slate-100 py-10 sm:py-14 overflow-hidden">
       <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Centered Header */}
-        <div className="text-center max-w-3xl mx-auto space-y-3 mb-12">
+        <div className="text-center max-w-3xl mx-auto space-y-3 mb-6 sm:mb-8">
           <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-slate-900">
             Nuestros Aliados
           </h2>

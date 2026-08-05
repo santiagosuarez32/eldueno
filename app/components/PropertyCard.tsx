@@ -141,30 +141,30 @@ export default function PropertyCard({ property, priority = false, disableAnimat
         {/* Content */}
         <div className="p-6 flex flex-col flex-grow">
           {/* Neighborhood & Location */}
-          <div className="flex items-center text-sm text-slate-500 mb-2 gap-1.5 font-medium">
+          <div className="flex items-center text-sm text-slate-500 mb-2 gap-1.5 font-medium truncate">
             <img src="/icons-filters/ubication.png" className="h-4 w-4 object-contain shrink-0" alt="" />
-            <span>{property.neighborhood}, {property.location}</span>
+            <span className="truncate">{property.neighborhood}, {property.location}</span>
           </div>
 
           {/* Title */}
-          <h3 className="text-lg font-bold text-slate-950 mb-2 leading-snug group-hover:text-emerald-600 transition-colors line-clamp-1">
+          <h3 className="text-lg font-bold text-slate-950 mb-2 leading-snug group-hover:text-emerald-600 transition-colors line-clamp-1 min-h-[28px]">
             {property.title}
           </h3>
 
           {/* Description */}
-          <p className="text-slate-500 text-sm line-clamp-2 mb-6 flex-grow leading-relaxed font-normal">
+          <p className="text-slate-500 text-sm line-clamp-2 mb-6 flex-grow leading-relaxed font-normal min-h-[40px]">
             {property.description}
           </p>
 
-          {/* Property Specs */}
-          <div className="flex items-center justify-center gap-4 sm:gap-6 py-4 border-t border-slate-100 text-slate-650 text-xs">
+          {/* Property Specs (fixed height container for 100% uniform card sizes) */}
+          <div className="flex items-center justify-center gap-4 sm:gap-6 py-3.5 border-t border-slate-100 text-slate-650 text-xs mt-auto h-[60px] shrink-0">
             {property.type === 'terreno' ? (
-              (property.landArea || property.area) ? (
-                <div className="flex items-center justify-center gap-2">
-                  <img src="/icons-property/m2.png" className="h-4.5 w-4.5 object-contain" alt="" />
-                  <span className="font-semibold text-slate-700">Terreno de {property.landArea || property.area} m²</span>
-                </div>
-              ) : null
+              <div className="flex flex-col items-center justify-center gap-1 text-center">
+                <img src="/icons-property/m2.png" className="h-4.5 w-4.5 object-contain" alt="" />
+                <span className="font-semibold text-slate-700">
+                  {(property.landArea || property.area) ? `Terreno de ${property.landArea || property.area} m²` : 'Terreno'}
+                </span>
+              </div>
             ) : property.type === 'comercial' ? (
               <>
                 {Boolean(property.aposentos) && Number(property.aposentos) > 0 && (

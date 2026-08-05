@@ -5,11 +5,11 @@ import { FiPhone } from 'react-icons/fi';
 
 export default function GoogleReviewsWidget() {
   return (
-    <section className="bg-white py-16 lg:py-24 relative overflow-hidden">
+    <section className="bg-white py-10 lg:py-14 relative overflow-hidden">
       <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
-        <div className="text-center mb-12 lg:mb-16">
+        <div className="text-center mb-8 lg:mb-10">
           <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-slate-950 tracking-tight leading-[1.1]">
             Testimonios de nuestros clientes
           </h2>

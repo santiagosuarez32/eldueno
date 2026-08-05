@@ -4,12 +4,13 @@ import { useState, useRef } from 'react';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { ChevronDown } from 'lucide-react';
+import Link from 'next/link';
+import Image from 'next/image';
 
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
 }
-import { ChevronDown } from 'lucide-react';
-import Link from 'next/link';
 
 const faqs = [
   {
@@ -84,29 +85,44 @@ export default function FAQ() {
   }, { scope: container });
 
   return (
-    <section ref={container} className="bg-white pt-20 pb-10 md:pt-32 md:pb-12">
+    <section ref={container} className="bg-white py-10 md:py-14">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="grid gap-10 md:grid-cols-5 md:gap-16">
+        <div className="grid gap-10 md:grid-cols-5 md:gap-16 items-start">
 
-          {/* Left: Title */}
+          {/* Left: Title & Photo Card */}
           <div
-            className="faq-head md:col-span-2"
+            className="faq-head md:col-span-2 flex flex-col justify-between h-full"
           >
-            <h2 className="text-4xl font-bold text-slate-950 tracking-tight">
-              Preguntas Frecuentes
-            </h2>
-            <p className="text-slate-500 mt-4 text-lg text-balance">
-              Tus preguntas, respondidas
-            </p>
-            <p className="text-slate-500 mt-6 hidden md:block">
-              ¿No encontrás lo que buscás? Contactá a nuestro{' '}
-              <Link
-                href="/contacto"
-                className="text-black font-bold underline decoration-[#FFFF33] decoration-[3px] underline-offset-4 hover:text-black transition-colors"
-              >
-                equipo
-              </Link>
-            </p>
+            <div>
+              <h2 className="text-4xl font-bold text-slate-950 tracking-tight">
+                Preguntas Frecuentes
+              </h2>
+              <p className="text-slate-500 mt-4 text-lg text-balance">
+                Tus preguntas, respondidas
+              </p>
+              <p className="text-slate-500 mt-6 hidden md:block">
+                ¿No encontrás lo que buscás? Contactá a nuestro{' '}
+                <Link
+                  href="/contacto"
+                  className="text-black font-bold underline decoration-[#FFFF33] decoration-[3px] underline-offset-4 hover:text-black transition-colors"
+                >
+                  equipo
+                </Link>
+              </p>
+            </div>
+
+            {/* Company Photo Card to fill left column space */}
+            <div className="mt-8 hidden md:block">
+              <div className="relative w-full aspect-[4/3] rounded-[24px] overflow-hidden shadow-md border border-slate-200">
+                <Image
+                  src="/about/oficina-2.jpg"
+                  alt="El Dueño Vende - Asesoría Inmobiliaria"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 30vw"
+                  className="object-cover object-center"
+                />
+              </div>
+            </div>
           </div>
 
           {/* Right: Accordion */}

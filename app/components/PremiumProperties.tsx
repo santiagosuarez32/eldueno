@@ -87,7 +87,7 @@ export default function PremiumProperties() {
 
 
   return (
-    <section id="premium-properties" className="relative py-12 text-white overflow-hidden rounded-[40px] mx-4 sm:mx-6 lg:mx-8 my-12 shadow-2xl bg-gradient-to-br from-black via-black to-[#807300] border border-[#fbbf24]/20">
+    <section id="premium-properties" className="relative py-8 sm:py-10 text-white overflow-hidden rounded-[40px] mx-4 sm:mx-6 lg:mx-8 my-6 sm:my-8 shadow-2xl bg-gradient-to-br from-black via-black to-[#807300] border border-[#fbbf24]/20">
       
       {/* Background radial glows for extra depth */}
       <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-[#fbbf24] opacity-[0.05] rounded-full blur-[100px] pointer-events-none transform translate-x-1/4 -translate-y-1/4" />
@@ -199,8 +199,8 @@ export default function PremiumProperties() {
                           Premium
                         </div>
                         <div className={`absolute top-4 right-4 z-10 ${(['vendida', 'reservada', 'alquilada'].includes(property.estado?.toLowerCase() || '') || property.vendido || property.alquilado) ? 'hidden' : ''}`}>
-                          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-900/80 backdrop-blur-sm border border-slate-700/50 text-slate-300 text-[10px] font-semibold">
-                            Costa Rica
+                          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-900/80 backdrop-blur-sm border border-slate-700/50 text-white text-[10px] font-bold shadow-sm">
+                            {property.estado ? (property.estado.charAt(0).toUpperCase() + property.estado.slice(1).toLowerCase()) : (property.alquilado ? 'Alquiler' : 'Venta')}
                           </span>
                         </div>
                         <div className="absolute bottom-4 right-4 z-10 bg-slate-950 text-white font-bold px-4 py-2 rounded-2xl shadow-md text-sm">
@@ -259,11 +259,9 @@ export default function PremiumProperties() {
                   </Link>
 
                   {/* DESKTOP CARD (Original code wrapped to hide on mobile) */}
-                  <div
+                  <Link
+                    href={`/propiedades/${property.id}`}
                     onMouseEnter={() => setActiveIndex(idx)}
-                    onClick={() => {
-                      router.push(`/propiedades/${property.id}`);
-                    }}
                     className={`hidden lg:flex relative transition-all duration-500 ease-out cursor-pointer flex-col justify-between flex-shrink-0 h-[420px] ${
                       isActive 
                         ? 'w-[480px] bg-white border border-slate-100/80 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.08)] p-3.5 rounded-[32px]' 
@@ -374,16 +372,13 @@ export default function PremiumProperties() {
                         )}
                       </div>
 
-                      <Link
-                        href={`/propiedades/${property.id}`}
-                        className="inline-flex items-center gap-1 text-[11px] font-extrabold text-[#cccc00] hover:text-[#b3b300] transition-colors"
-                      >
+                      <span className="inline-flex items-center gap-1 text-[11px] font-extrabold text-[#cccc00] hover:text-[#b3b300] transition-colors">
                         Ver detalle
                         <ArrowRight className="h-3.5 w-3.5" />
-                      </Link>
+                      </span>
                     </div>
                   </div>
-                  </div>
+                  </Link>
                 </div>
               );
             })

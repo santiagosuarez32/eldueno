@@ -505,12 +505,12 @@ export default function PropertyDetailClient({ property, relatedProperties }: Pr
             </div>
 
             {/* Property Video (YouTube Embed) or Fallback Image */}
-            {(property.hasVideo || property.hasFallbackImage) && (
+            {(property.hasVideo || property.hasFallbackImage || Boolean(property.videoUrl) || Boolean(property.fallbackImageUrl)) && (
               <div id="video-section" className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-100 shadow-sm space-y-6 scroll-mt-24">
                 <div className="flex items-center justify-between border-b border-slate-100 pb-4">
                   <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2">
-                    {property.hasVideo ? <Film className="h-5 w-5 text-slate-700" /> : <ImageIcon className="h-5 w-5 text-slate-700" />}
-                    {property.hasVideo ? "Video de la Propiedad" : "Recorrido de la Propiedad"}
+                    {property.hasVideo || property.videoUrl ? <Film className="h-5 w-5 text-slate-700" /> : <ImageIcon className="h-5 w-5 text-slate-700" />}
+                    {property.hasVideo || property.videoUrl ? "Video de la Propiedad" : "Recorrido de la Propiedad"}
                   </h3>
                   <span className="text-xs text-slate-500 font-medium">
                     {property.neighborhood}, Costa Rica
@@ -519,7 +519,7 @@ export default function PropertyDetailClient({ property, relatedProperties }: Pr
 
                 {/* Media container */}
                 <div className="w-full aspect-video rounded-2xl overflow-hidden bg-slate-100 relative shadow-inner border border-slate-200">
-                  {property.hasVideo ? (
+                  {property.hasVideo || property.videoUrl ? (
                     <iframe
                       className="w-full h-full absolute inset-0 border-0"
                       src={getEmbedUrl(property.videoUrl) || "https://www.youtube.com/embed/Pj15bLqT40A"}
@@ -616,7 +616,7 @@ export default function PropertyDetailClient({ property, relatedProperties }: Pr
                     className="w-full bg-slate-50 border border-slate-200 hover:bg-slate-100 text-slate-800 font-bold py-3.5 px-6 rounded-2xl transition-all duration-200 flex items-center justify-center gap-2 text-sm cursor-pointer"
                   >
                     <Phone className="h-4 w-4 text-slate-500" />
-                    Llamar al +50622806665
+                    Llamar al +506 2280 6665
                   </a>
                 </div>
               </div>
