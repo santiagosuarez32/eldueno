@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import Navbar from '@/app/components/Navbar';
 import Footer from '@/app/components/Footer';
-import { Property, mapDbToProperty } from '@/app/data/properties';
+import { Property, mapDbToProperty, mockProperties } from '@/app/data/properties';
 import { AlertTriangle } from 'lucide-react';
 import PropertyDetailClient from './PropertyDetailClient';
 import { supabase } from '@/lib/supabase';
@@ -28,6 +28,9 @@ export async function generateMetadata({
     console.warn("Error fetching metadata from Supabase:", err);
   }
 
+  if (!property) {
+    property = mockProperties.find((p) => p.id === id);
+  }
 
   if (!property) {
     return {
@@ -36,7 +39,9 @@ export async function generateMetadata({
   }
 
   const title = `${property.title} | El Dueño Vende`;
-  const description = `${property.description.slice(0, 155)}...`;
+  const description = property.description
+    ? `${property.description.slice(0, 155).replace(/[\r\n]+/g, ' ')}...`
+    : 'Propiedad destacada en El Dueño Vende.';
 
   return {
     title,
@@ -45,7 +50,8 @@ export async function generateMetadata({
       title,
       description,
       type: 'article',
-      url: `https://elduenovende.com/propiedades/${id}`,
+      url: `https://www.elduenovende.com/propiedades/${id}`,
+      siteName: 'El Dueño Vende',
       images: [
         {
           url: property.image,
@@ -75,6 +81,10 @@ export default async function PropertyDetailPage({ params }: PropertyDetailPageP
     console.warn("Error fetching property details from Supabase:", err);
   }
 
+
+  if (!property) {
+    property = mockProperties.find((p) => p.id === id);
+  }
 
   if (!property) {
     return (

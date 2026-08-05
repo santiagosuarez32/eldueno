@@ -245,11 +245,8 @@ export default function ArquitecturaPage() {
                 {/* Dark Overlay */}
                 <div className="absolute inset-0 bg-slate-950/70 z-0 pointer-events-none" />
 
-                {/* Decorative element (Top Right Glow) */}
-                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#FFFF33]/40 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2 pointer-events-none z-0" />
-                {/* Bottom Right Yellow & White Glow */}
-                <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-[#FFFF33]/30 rounded-full blur-[140px] translate-y-1/3 translate-x-1/3 pointer-events-none z-0" />
-                <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-white/20 rounded-full blur-[120px] translate-y-1/2 translate-x-1/2 pointer-events-none z-0" />
+                {/* Soft directional glow from bottom-right corner towards center */}
+                <div className="absolute -bottom-10 -right-10 w-[550px] h-[550px] sm:w-[750px] sm:h-[750px] bg-[#FFFF33]/18 rounded-full blur-[110px] pointer-events-none z-0" />
                 
                 <div className="max-w-2xl relative z-10">
                   <span className="inline-flex items-center justify-center px-4 py-1.5 bg-[#FFFF33] text-slate-950 text-base font-bold rounded-full mb-6 w-max">
@@ -262,20 +259,28 @@ export default function ArquitecturaPage() {
                     Déjanos tus datos y uno de nuestros arquitectos se pondrá en contacto con vos para brindarte una asesoría personalizada y ayudarte a hacer realidad tu proyecto.
                   </p>
                   <ul className="space-y-3 mb-6">
-                    <li className="flex items-start gap-3">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-[#FFFF33] shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    <li className="flex items-center gap-3">
+                      <span className="flex-shrink-0 w-7 h-7 rounded-full bg-slate-900 text-[#FFFF33] border border-slate-700/80 flex items-center justify-center shadow-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                      </span>
                       <span className="text-slate-200 font-medium text-sm lg:text-base">Diseño a la medida según tus necesidades y expectativas.</span>
                     </li>
-                    <li className="flex items-start gap-3">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-[#FFFF33] shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    <li className="flex items-center gap-3">
+                      <span className="flex-shrink-0 w-7 h-7 rounded-full bg-slate-900 text-[#FFFF33] border border-slate-700/80 flex items-center justify-center shadow-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                      </span>
                       <span className="text-slate-200 font-medium text-sm lg:text-base">Acompañamiento durante todas las etapas del proyecto.</span>
                     </li>
-                    <li className="flex items-start gap-3">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-[#FFFF33] shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    <li className="flex items-center gap-3">
+                      <span className="flex-shrink-0 w-7 h-7 rounded-full bg-slate-900 text-[#FFFF33] border border-slate-700/80 flex items-center justify-center shadow-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                      </span>
                       <span className="text-slate-200 font-medium text-sm lg:text-base">Compromiso con la calidad y los tiempos de ejecución.</span>
                     </li>
-                    <li className="flex items-start gap-3">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-[#FFFF33] shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    <li className="flex items-center gap-3">
+                      <span className="flex-shrink-0 w-7 h-7 rounded-full bg-slate-900 text-[#FFFF33] border border-slate-700/80 flex items-center justify-center shadow-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                      </span>
                       <span className="text-slate-200 font-medium text-sm lg:text-base">Arquitectos incorporados al CFIA.</span>
                     </li>
                   </ul>
@@ -284,7 +289,7 @@ export default function ArquitecturaPage() {
 
               {/* Right Side (CRM Form Card with Viewport-constrained height + internal scrollbar) */}
               <div className="lg:col-span-6 relative z-20 flex flex-col justify-center items-center lg:items-end w-full">
-                <div className="w-full max-w-2xl bg-slate-900/90 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl relative">
+                <div className="w-full max-w-[580px] bg-slate-900/90 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl relative">
                   {/* Top helper indicator bar */}
                   <div className="flex items-center justify-between bg-slate-900 border-b border-slate-800/80 px-5 py-2.5 text-xs text-slate-300 font-semibold">
                     <span className="flex items-center gap-2 text-[#FFFF33] font-bold">

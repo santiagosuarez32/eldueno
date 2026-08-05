@@ -84,6 +84,9 @@ export const metadata: Metadata = {
     description: "La plataforma premium para comprar y vender propiedades directamente entre particulares. Ahorrá miles de dólares en comisiones inmobiliarias. Trato directo y verificado con el dueño.",
     images: ["/og.webp"],
   },
+  verification: {
+    google: "QuGStCp0KARccjVXdJPpvGi0A07pj8s4l1UABwML5Rs",
+  },
 };
 
 export default function RootLayout({
