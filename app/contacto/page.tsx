@@ -160,7 +160,7 @@ export default function ContactoPage() {
 
             {/* Right Column: Direct CRM Form Iframe with relaxed padding */}
             <div className="order-1 lg:order-2 lg:col-span-7 flex justify-center lg:justify-end contact-form-col w-full px-2 sm:px-6">
-              <div className="w-full max-w-xl bg-slate-900/90 border border-slate-800/90 rounded-3xl overflow-hidden shadow-2xl p-1 sm:p-2">
+              <div className="w-full max-w-[700px] bg-slate-900/90 border border-slate-800/90 rounded-3xl overflow-hidden shadow-2xl p-1 sm:p-2">
                 <iframe
                   src={crmFormUrl}
                   style={{ width: '100%', height: '580px', border: '0', outline: 'none', background: 'transparent' }}

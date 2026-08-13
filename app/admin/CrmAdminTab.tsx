@@ -33,6 +33,7 @@ export default function CrmAdminTab({ setToast }: CrmAdminTabProps) {
           prestamos: data.owner.crmForms.prestamos || DEFAULT_CRM_FORMS.prestamos,
           arquitectura: data.owner.crmForms.arquitectura || DEFAULT_CRM_FORMS.arquitectura,
           contacto: data.owner.crmForms.contacto || DEFAULT_CRM_FORMS.contacto,
+          propiedad: data.owner.crmForms.propiedad || DEFAULT_CRM_FORMS.propiedad,
         });
       }
     } catch (err) {
@@ -180,7 +181,7 @@ export default function CrmAdminTab({ setToast }: CrmAdminTabProps) {
         </div>
 
         {/* Item 4: Página de Contacto */}
-        <div className="space-y-2 pb-2">
+        <div className="space-y-2 border-b border-slate-100 pb-6">
           <label className="block text-sm font-bold text-slate-900 flex items-center justify-between">
             <span>Formulario Página de Contacto <span className="text-slate-400 font-normal">(/contacto)</span></span>
             <a href={forms.contacto} target="_blank" rel="noopener noreferrer" className="text-xs text-blue-600 hover:underline flex items-center gap-1 font-normal">
@@ -191,6 +192,23 @@ export default function CrmAdminTab({ setToast }: CrmAdminTabProps) {
             type="url"
             value={forms.contacto}
             onChange={(e) => setForms({ ...forms, contacto: e.target.value })}
+            placeholder="https://crm.elduenovende.com/widget/form/..."
+            className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-[#FFFF33] focus:ring-2 focus:ring-[#FFFF33]/30 transition-all font-mono text-slate-800"
+          />
+        </div>
+
+        {/* Item 5: Detalle de Propiedad */}
+        <div className="space-y-2 pb-2">
+          <label className="block text-sm font-bold text-slate-900 flex items-center justify-between">
+            <span>Formulario Detalle de Propiedad <span className="text-slate-400 font-normal">(/propiedades/[id])</span></span>
+            <a href={forms.propiedad} target="_blank" rel="noopener noreferrer" className="text-xs text-blue-600 hover:underline flex items-center gap-1 font-normal">
+              Probar enlace <ExternalLink className="w-3 h-3" />
+            </a>
+          </label>
+          <input
+            type="url"
+            value={forms.propiedad}
+            onChange={(e) => setForms({ ...forms, propiedad: e.target.value })}
             placeholder="https://crm.elduenovende.com/widget/form/..."
             className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-[#FFFF33] focus:ring-2 focus:ring-[#FFFF33]/30 transition-all font-mono text-slate-800"
           />

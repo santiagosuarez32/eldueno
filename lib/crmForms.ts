@@ -6,6 +6,7 @@ export const DEFAULT_CRM_FORMS = {
   prestamos: "https://crm.elduenovende.com/widget/form/S6iHSWHXhpO9XeNZHIIW",
   arquitectura: "https://crm.elduenovende.com/widget/form/AN9vf1chdm2GEz4xFLVX",
   contacto: "https://crm.elduenovende.com/widget/form/gnolY2xzWsk8vN2HW0Lc",
+  propiedad: "https://crm.elduenovende.com/widget/form/gnolY2xzWsk8vN2HW0Lc",
 };
 
 export type CrmFormType = keyof typeof DEFAULT_CRM_FORMS;

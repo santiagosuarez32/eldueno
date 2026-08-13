@@ -1,18 +1,18 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: "Sobre Nosotros | El Dueño Vende",
-  description: "Conocé la trayectoria, valores y propuesta de El Dueño Vende. Facilitamos la conexión directa entre compradores y dueños de inmuebles, eliminando las comisiones inmobiliarias en Costa Rica.",
+  title: "Propiedades en Costa Rica",
+  description: "Encuentra propiedades en venta y alquiler en las principales zonas de Costa Rica.",
   openGraph: {
-    title: "Sobre Nosotros | El Dueño Vende",
-    description: "Conocé la trayectoria, valores y propuesta de El Dueño Vende. Facilitamos la conexión directa entre compradores y dueños de inmuebles, eliminando las comisiones inmobiliarias.",
+    title: "EL DUEÑO VENDE | Propiedades en Costa Rica",
+    description: "Encuentra propiedades en venta y alquiler en las principales zonas de Costa Rica.",
     url: "https://elduenovende.com/nosotros",
     images: [
       {
         url: "/og.webp",
         width: 1200,
         height: 630,
-        alt: "El Dueño Vende - Nosotros",
+        alt: "EL DUEÑO VENDE | Propiedades en Costa Rica",
       },
     ],
   },

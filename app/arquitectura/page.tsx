@@ -289,7 +289,7 @@ export default function ArquitecturaPage() {
 
               {/* Right Side (CRM Form Card with Viewport-constrained height + internal scrollbar) */}
               <div className="lg:col-span-6 relative z-20 flex flex-col justify-center items-center lg:items-end w-full">
-                <div className="w-full max-w-[580px] bg-slate-900/90 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl relative">
+                <div className="w-full max-w-[700px] bg-slate-900/90 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl relative">
                   {/* Top helper indicator bar */}
                   <div className="flex items-center justify-between bg-slate-900 border-b border-slate-800/80 px-5 py-2.5 text-xs text-slate-300 font-semibold">
                     <span className="flex items-center gap-2 text-[#FFFF33] font-bold">

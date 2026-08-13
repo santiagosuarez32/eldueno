@@ -51,8 +51,11 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.elduenovende.com"),
-  title: "El Dueño Vende | Propiedades Directas Sin Intermediarios",
-  description: "La plataforma premium para comprar y vender propiedades directamente entre particulares en Costa Rica. Ahorrá miles de dólares en comisiones inmobiliarias. Trato directo y verificado con el dueño.",
+  title: {
+    default: "EL DUEÑO VENDE / BIENES RAÍCES",
+    template: "EL DUEÑO VENDE | %s",
+  },
+  description: "La propiedad que buscas está aquí. Empresa inmobiliaria con más de 15 años de trayectoria, especializada en Compra, Venta, Alquiler, Arquitectura y Préstamos hipotecarios en el Gran Área Metropolitana.",
   keywords: "dueño vende, trato directo, sin inmobiliaria, sin comisiones, comprar casa costa rica, vender departamento, alquiler directo, propiedades costa rica",
   robots: {
     index: true,
@@ -63,8 +66,8 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: "El Dueño Vende | Propiedades Directas Sin Intermediarios",
-    description: "La plataforma premium para comprar y vender propiedades directamente entre particulares. Ahorrá miles de dólares en comisiones inmobiliarias. Trato directo y verificado con el dueño.",
+    title: "EL DUEÑO VENDE / BIENES RAÍCES",
+    description: "La propiedad que buscas está aquí. Empresa inmobiliaria con más de 15 años de trayectoria, especializada en Compra, Venta, Alquiler, Arquitectura y Préstamos hipotecarios en el Gran Área Metropolitana.",
     url: "https://www.elduenovende.com",
     siteName: "El Dueño Vende",
     images: [
@@ -72,7 +75,7 @@ export const metadata: Metadata = {
         url: "/og.webp",
         width: 1200,
         height: 630,
-        alt: "El Dueño Vende - Propiedades Directas Sin Intermediarios",
+        alt: "EL DUEÑO VENDE / BIENES RAÍCES",
       },
     ],
     locale: "es_CR",
@@ -80,8 +83,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "El Dueño Vende | Propiedades Directas Sin Intermediarios",
-    description: "La plataforma premium para comprar y vender propiedades directamente entre particulares. Ahorrá miles de dólares en comisiones inmobiliarias. Trato directo y verificado con el dueño.",
+    title: "EL DUEÑO VENDE / BIENES RAÍCES",
+    description: "La propiedad que buscas está aquí. Empresa inmobiliaria con más de 15 años de trayectoria, especializada en Compra, Venta, Alquiler, Arquitectura y Préstamos hipotecarios en el Gran Área Metropolitana.",
     images: ["/og.webp"],
   },
   verification: {

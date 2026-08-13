@@ -21,6 +21,7 @@ import { FaWhatsapp } from 'react-icons/fa';
 import LightboxGallery from '@/app/components/LightboxGallery';
 import Image from 'next/image';
 import { getOptimizedImageUrl, supabaseImageLoader } from '@/lib/utils';
+import { useCrmFormUrl } from '@/lib/crmForms';
 import ReactDOM from 'react-dom';
 
 interface PropertyDetailClientProps {
@@ -29,6 +30,9 @@ interface PropertyDetailClientProps {
 }
 
 export default function PropertyDetailClient({ property, relatedProperties }: PropertyDetailClientProps) {
+  const crmFormUrl = useCrmFormUrl('propiedad');
+  const formId = crmFormUrl ? crmFormUrl.split('/').pop() || 'gnolY2xzWsk8vN2HW0Lc' : 'gnolY2xzWsk8vN2HW0Lc';
+
   // Dynamics to force body background to white for light theme feel
   useEffect(() => {
     document.body.classList.add('bg-white', 'text-slate-900');
@@ -549,9 +553,9 @@ export default function PropertyDetailClient({ property, relatedProperties }: Pr
               </h3>
               <div className="w-full min-h-[674px]">
                 <iframe
-                  src="https://crm.elduenovende.com/widget/form/gnolY2xzWsk8vN2HW0Lc"
+                  src={crmFormUrl}
                   style={{ width: '100%', height: '100%', border: 'none', borderRadius: '8px' }}
-                  id="inline-gnolY2xzWsk8vN2HW0Lc" 
+                  id={`inline-${formId}`} 
                   data-layout="{'id':'INLINE'}"
                   data-trigger-type="alwaysShow"
                   data-trigger-value=""
@@ -561,8 +565,8 @@ export default function PropertyDetailClient({ property, relatedProperties }: Pr
                   data-deactivation-value=""
                   data-form-name="Consultas"
                   data-height="674"
-                  data-layout-iframe-id="inline-gnolY2xzWsk8vN2HW0Lc"
-                  data-form-id="gnolY2xzWsk8vN2HW0Lc"
+                  data-layout-iframe-id={`inline-${formId}`}
+                  data-form-id={formId}
                   title="Consultas"
                 >
                 </iframe>

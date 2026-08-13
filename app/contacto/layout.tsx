@@ -1,18 +1,18 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: "Contactanos | El Dueño Vende",
-  description: "Contactate de forma directa con el equipo de El Dueño Vende. Consultá sobre publicaciones de casas, departamentos, terrenos y locales sin comisiones en Costa Rica.",
+  title: "Contacto",
+  description: "Contáctanos para recibir asesoría personalizada...",
   openGraph: {
-    title: "Contactanos | El Dueño Vende",
-    description: "Contactate de forma directa con el equipo de El Dueño Vende. Consultá sobre publicaciones de casas, departamentos, terrenos y locales sin comisiones.",
+    title: "EL DUEÑO VENDE | Contacto",
+    description: "Contáctanos para recibir asesoría personalizada...",
     url: "https://elduenovende.com/contacto",
     images: [
       {
         url: "/og.webp",
         width: 1200,
         height: 630,
-        alt: "El Dueño Vende - Contacto",
+        alt: "EL DUEÑO VENDE | Contacto",
       },
     ],
   },
